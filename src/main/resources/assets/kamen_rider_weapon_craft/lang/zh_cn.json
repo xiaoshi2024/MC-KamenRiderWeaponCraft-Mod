@@ -1,0 +1,23 @@
+{
+  "item group.kamen_rider_weapon_craft_tab": "假面骑士武器集合模组",
+  "item.kamen_rider_weapon_craft.ohma_advent_record": "封魔降临录",
+  "kamen_rider_weapon_craft.landing": "假面骑士武器集合已加载",
+  "item.kamen_rider_weapon_craft.sonicarrow": "音速弓~",
+  "item.kamen_rider_weapon_craft.daidaimaru": "大橙丸",
+  "item.kamen_rider_weapon_craft.musousaberd": "无双军刀镰大橙丸",
+  "item.kamen_rider_weapon_craft.gangunsaber": "幽灵眼剑枪",
+  "item.kamen_rider_weapon_craft.ridebooker": "骑士卡盒枪剑",
+  "KEY.kamen_rider_weapon_craft.kamen_rider_weapon_craft": "假面骑士物品切换",
+  "KEY.kamen_rider_weapon_craft.change_over": "切换物品形态",
+  "KEY.kamen_rider_weapon_craft.open_lockseed_gui": "开打锁种装载",
+  "item.sonic_bow.desc": "描述",
+  "item.sonic_bow.strength": "强度",
+  "item.sonicarrow.ammo": "水果能量",
+  "item group.kamen_rider_weapon_craft_prop_tab": "假面骑士里武器的联动道具",
+  "item.kamen_rider_weapon_craft.melon": "蜜瓜能量锁种",
+  "item.kamen_rider_weapon_craft.sonicarrow-melon": "音速弓(蜜瓜)",
+  "item.kamen_rider_weapon_craft.sonicx_arrow": "能量音速箭矢",
+  "container.open_lockseed_gui": "这是锁种",
+  "gui.kamen_rider_weapon_craft.open_lockseed_gui.label_energy": "已加载的果汁儿",
+  "gui.kamen_rider_weapon_craft.open_lockseed_gui.button_button_lock": "点击加载锁种"
+}
