@@ -16,8 +16,5 @@
   "item group.kamen_rider_weapon_craft_prop_tab": "kamen_rider_weapon_craft_prop_tab",
   "item.kamen_rider_weapon_craft.melon": "Melon energy-seed",
   "item.kamen_rider_weapon_craft.sonicarrow-melon": "Sonic Arrow(melon energy-seed)",
-  "item.kamen_rider_weapon_craft.sonicx_arrow": "sonicx arrow",
-  "container.open_lockseed_gui": "this lockseed",
-  "gui.kamen_rider_weapon_craft.open_lockseed_gui.label_energy": "Loaded juices",
-  "gui.kamen_rider_weapon_craft.open_lockseed_gui.button_button_lock": "Click Load Lock"
+  "item.kamen_rider_weapon_craft.sonicx_arrow": "sonicx arrow"
 }

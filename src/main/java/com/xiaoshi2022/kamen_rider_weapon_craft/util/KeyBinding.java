@@ -1,8 +1,13 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.util;
 
 import com.mojang.blaze3d.platform.InputConstants;
+import com.xiaoshi2022.kamen_rider_weapon_craft.kamen_rider_weapon_craft;
 import net.minecraft.client.KeyMapping;
+import net.minecraft.client.Minecraft;
+import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.settings.KeyConflictContext;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 import org.lwjgl.glfw.GLFW;
 
 public class KeyBinding {

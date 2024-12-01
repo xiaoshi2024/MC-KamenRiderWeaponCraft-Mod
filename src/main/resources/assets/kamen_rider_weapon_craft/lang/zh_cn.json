@@ -16,8 +16,5 @@
   "item group.kamen_rider_weapon_craft_prop_tab": "假面骑士里武器的联动道具",
   "item.kamen_rider_weapon_craft.melon": "蜜瓜能量锁种",
   "item.kamen_rider_weapon_craft.sonicarrow-melon": "音速弓(蜜瓜)",
-  "item.kamen_rider_weapon_craft.sonicx_arrow": "能量音速箭矢",
-  "container.open_lockseed_gui": "这是锁种",
-  "gui.kamen_rider_weapon_craft.open_lockseed_gui.label_energy": "已加载的果汁儿",
-  "gui.kamen_rider_weapon_craft.open_lockseed_gui.button_button_lock": "点击加载锁种"
+  "item.kamen_rider_weapon_craft.sonicx_arrow": "能量音速箭矢"
 }
