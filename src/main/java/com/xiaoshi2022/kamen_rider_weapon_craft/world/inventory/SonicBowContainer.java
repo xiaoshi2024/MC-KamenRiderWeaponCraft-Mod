@@ -47,7 +47,7 @@ public class SonicBowContainer extends AbstractContainerMenu implements Supplier
     private int progress = 0;
 
     public SonicBowContainer(int id, Inventory inv, FriendlyByteBuf extraData) {
-        super(ModContainers.SONIC_BOW_CONTAINER.get(), id);
+        super(ModContainers.SSONIC.get(), id);
         this.entity = inv.player;
         this.world = inv.player.level();
         this.internal = new ItemStackHandler(1);
@@ -88,7 +88,7 @@ public class SonicBowContainer extends AbstractContainerMenu implements Supplier
                     });
             }
         }
-        this.customSlots.put(0, this.addSlot(new SlotItemHandler(internal, 0, 30, 28) {
+        this.customSlots.put(0, this.addSlot(new SlotItemHandler(internal, 0, 25, 26) {
             private final int slot = 0;
 
             @Override
@@ -96,11 +96,8 @@ public class SonicBowContainer extends AbstractContainerMenu implements Supplier
                 return ModItems.MELON.get().asItem() == stack.getItem();
             }
         }));
-        for (int i = 0; i < 3; ++i)
-            for (int j = 0; j < 9; ++j)
-                this.addSlot(new Slot(inv, j + (i + 1) * 9, 0 + 8 + j * 18, 0 + 84 + i * 18));
-        for (int i = 0; i < 9; ++i)
-            this.addSlot(new Slot(inv, i, 0 + 8 + i * 18, 0 + 142));
+        addPlayerHotbar(inv);
+        addPlayerInventory(inv);
     }
 
     @Override
@@ -137,6 +134,19 @@ public class SonicBowContainer extends AbstractContainerMenu implements Supplier
             slot.onTake(playerIn, itemstack1);
         }
         return itemstack;
+    }
+    private void addPlayerInventory(Inventory playerInventory) {
+        for (int i = 0; i < 3; ++i) {
+            for (int l = 0; l < 9; ++l) {
+                this.addSlot(new Slot(playerInventory, l + i * 9 + 10, 8 + l * 18, 84 + i * 18));
+            }
+        }
+    }
+
+    private void addPlayerHotbar(Inventory playerInventory) {
+        for (int i = 0; i < 9; ++i) {
+            this.addSlot(new Slot(playerInventory, i, 8 + i * 18, 142));
+        }
     }
 
 //

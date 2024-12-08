@@ -1,16 +1,11 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft;
 
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.prop.arrowx.AonicxEntity;
-import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.sonicarrow;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.prop.items.AonicxItem;
-import com.xiaoshi2022.kamen_rider_weapon_craft.gui.SonicBowGuiScreen;
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModContainers;
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModItems;
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModentityR;
 import com.xiaoshi2022.kamen_rider_weapon_craft.tab.ModTab;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
@@ -40,7 +35,8 @@ public class kamen_rider_weapon_craft {
         AonicxItem.init(modEventBus);
         AonicxEntity.init(modEventBus);
 
-        ModContainers.register(modEventBus); // 注册MenuType
+        //初始化容器
+        ModContainers.REGISTRY.register(modEventBus);
 
         //初始化MODEntityR
         ModentityR.ENTITIES(modEventBus);
