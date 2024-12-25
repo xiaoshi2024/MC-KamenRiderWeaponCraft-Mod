@@ -6,6 +6,7 @@ import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.*;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.prop.custom.Melon;
 import com.xiaoshi2022.kamen_rider_weapon_craft.kamen_rider_weapon_craft;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -29,6 +30,7 @@ public class ModItems {
     //武器联动道具
     public static final RegistryObject<Melon> MELON = ITEMS.register("melon",
             () -> new Melon(new Item.Properties()));
+
 
     //弹药
     //合体道具

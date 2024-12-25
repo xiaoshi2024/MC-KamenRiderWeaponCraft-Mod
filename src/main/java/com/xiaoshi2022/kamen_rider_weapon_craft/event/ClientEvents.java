@@ -1,6 +1,7 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.event;
 
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.prop.arrowx.AonicxEntity;
+import com.xiaoshi2022.kamen_rider_weapon_craft.Item.prop.custom.Melon;
 import com.xiaoshi2022.kamen_rider_weapon_craft.gui.SonicBowGuiScreen;
 import com.xiaoshi2022.kamen_rider_weapon_craft.kamen_rider_weapon_craft;
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModItems;
@@ -17,6 +18,7 @@ import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraftforge.event.entity.item.ItemTossEvent;
 import net.minecraftforge.network.NetworkHooks;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
@@ -41,61 +43,48 @@ public class ClientEvents {
             if (KeyBinding.CHANGE_KEY.consumeClick()) {
                 Minecraft.getInstance().player.sendSystemMessage(Component.literal("hhhh"));
             }
-            // 如果副手为音速弓且按下y打开GUI
-            if (OPEN_LOCKSEED.consumeClick()) {
-                Minecraft minecraft = Minecraft.getInstance();
-                Player player = minecraft.player;
-                if (player != null && player.getOffhandItem().getItem() == ModItems.SONICARROW.get()) {
-                    // 创建一个新的SonicBowContainer实例，传递三个参数
-                    SonicBowContainer container = new SonicBowContainer(0, player.getInventory(), new FriendlyByteBuf(Unpooled.buffer()));
-                    // 使用Minecraft.setScreen打开GUI
-                    minecraft.setScreen(new SonicBowGuiScreen(
-                            container, player.getInventory(), Component.literal("Sonic Bow")));
-                }
-            }
         }
 
 
-
-        @SubscribeEvent
-        public static void onPlayerInteract(PlayerInteractEvent.RightClickItem event) {
-            if (event.getHand() == InteractionHand.OFF_HAND) {
-                ItemStack mainHandItem = event.getEntity().getMainHandItem();
-                ItemStack offHandItem = event.getEntity().getOffhandItem();
-
-                // 检查副手物品是否为"sonicarrow"，并且主手物品是否为"melon"
-                if (mainHandItem.getItem() == ModItems.MELON.get() && offHandItem.getItem() == ModItems.SONICARROW.get()) {
-
-                    //把sonicarrow替换为sonicarrow-melon
-                    event.getEntity().setItemInHand(InteractionHand.OFF_HAND, new ItemStack(ModItems.SONICARROW_MELON.get()));
-                    // 改变sonicarrow的名称
-
-//                    mainHandItem.setHoverName(Component.literal("sonicarrow-melon"));
-
-                    // 消耗一个"melon"
-                    mainHandItem.shrink(1);
-
-                    // 复制sonicarrow的NBT耐久和附魔到新sonicarrow-melon
-                    CompoundTag offHandTag = offHandItem.getTag();
-
-                    if (offHandTag != null) {
-
-                        ItemStack newItem = new ItemStack(ModItems.SONICARROW_MELON.get());
-                        newItem.setTag(offHandTag);
-                        event.getEntity().setItemInHand(InteractionHand.OFF_HAND, newItem);
-
-                        // 取消事件
-
-                        event.setCancellationResult(SUCCESS);
-
-                        event.setCanceled(true);
-                    }
-
-                    event.setCancellationResult(SUCCESS);
-                    event.setCanceled(true);
-                }
-            }
-        }
+//        @SubscribeEvent
+//        public static void onPlayerInteract(PlayerInteractEvent.RightClickItem event) {
+//            if (event.getHand() == InteractionHand.OFF_HAND) {
+//                ItemStack mainHandItem = event.getEntity().getMainHandItem();
+//                ItemStack offHandItem = event.getEntity().getOffhandItem();
+//
+//                // 检查副手物品是否为"sonicarrow"，并且主手物品是否为"melon"
+//                if (mainHandItem.getItem() == ModItems.MELON.get() && offHandItem.getItem() == ModItems.SONICARROW.get()) {
+//
+//                    //把sonicarrow替换为sonicarrow-melon
+//                    event.getEntity().setItemInHand(InteractionHand.OFF_HAND, new ItemStack(ModItems.SONICARROW_MELON.get()));
+//                    // 改变sonicarrow的名称
+//
+////                    mainHandItem.setHoverName(Component.literal("sonicarrow-melon"));
+//
+//                    // 消耗一个"melon"
+//                    mainHandItem.shrink(1);
+//
+//                    // 复制sonicarrow的NBT耐久和附魔到新sonicarrow-melon
+//                    CompoundTag offHandTag = offHandItem.getTag();
+//
+//                    if (offHandTag != null) {
+//
+//                        ItemStack newItem = new ItemStack(ModItems.SONICARROW_MELON.get());
+//                        newItem.setTag(offHandTag);
+//                        event.getEntity().setItemInHand(InteractionHand.OFF_HAND, newItem);
+//
+//                        // 取消事件
+//
+//                        event.setCancellationResult(SUCCESS);
+//
+//                        event.setCanceled(true);
+//                    }
+//
+//                    event.setCancellationResult(SUCCESS);
+//                    event.setCanceled(true);
+//                }
+//            }
+//        }
     }
 
     @Mod.EventBusSubscriber(modid = kamen_rider_weapon_craft.MOD_ID, value = Dist.CLIENT,bus = Mod.EventBusSubscriber.Bus.MOD)

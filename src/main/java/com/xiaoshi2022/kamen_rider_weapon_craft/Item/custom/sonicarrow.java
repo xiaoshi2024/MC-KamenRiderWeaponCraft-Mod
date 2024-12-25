@@ -4,9 +4,11 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.client.sonicarrow.sonicarrowRenderer;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.prop.arrowx.AonicxEntity;
+import com.xiaoshi2022.kamen_rider_weapon_craft.Item.prop.custom.Melon;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.prop.items.AonicxItem;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
@@ -24,6 +26,8 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.*;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.ItemStackHandler;
 import software.bernie.geckolib.animatable.GeoItem;
 import software.bernie.geckolib.animatable.SingletonGeoAnimatable;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -42,7 +46,6 @@ import java.util.function.Consumer;
  * @see sonicarrowRenderer
  */
 public class sonicarrow extends SwordItem implements GeoItem {
-
     // 定义近战攻击的属性
     private final float meleeDamage;
     private final float attackSpeed;
@@ -64,6 +67,10 @@ private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(t
         //将我们的项目注册为服务器端处理的。
         //这将启用动画数据同步和服务器端动画触发
         SingletonGeoAnimatable.registerSyncedAnimatable(this);
+    }
+
+    public sonicarrow() {
+        this(7.0F, -2.4F, new Properties().stacksTo(1).durability(201));
     }
 
 
@@ -120,8 +127,6 @@ private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(t
             }
         });
     }
-
-
 
 
 
@@ -186,7 +191,23 @@ private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(t
                 arrow.setXRot(shooter.getXRot());
             }
         }
+    }
 
+    // 果汁进度条
+    private int juiceProgress = 100;
+
+    public <PlayerEntity, World> void shootArrow(World world, PlayerEntity player, ItemStack bow) {
+        if (bow.getUseDuration() >= 20) { // 假设20是拉满弓的条件
+            if (this.juiceProgress >= 6) { // 假设每次发射消耗6点果汁
+                this.juiceProgress -= 6;
+                // 发射箭矢逻辑
+//                shootArrowEntity(world, player);
+            } else {
+                // 果汁不足，不能发射
+            }
+        } else {
+            // 未拉满弓
+        }
     }
 
 
