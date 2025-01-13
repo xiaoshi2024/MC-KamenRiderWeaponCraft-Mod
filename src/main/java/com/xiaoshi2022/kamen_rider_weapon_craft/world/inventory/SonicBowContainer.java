@@ -1,250 +1,119 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.world.inventory;
 
-import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.sonicarrow;
-import com.xiaoshi2022.kamen_rider_weapon_craft.Item.prop.custom.Melon;
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModContainers;
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModItems;
-import net.minecraft.client.resources.sounds.SoundInstance;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
-import net.minecraftforge.items.SlotItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.inventory.Slot;
-import net.minecraft.world.inventory.ContainerLevelAccess;
-import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.core.BlockPos;
+import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.items.SlotItemHandler;
 
-
-import java.util.function.Supplier;
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Supplier;
 
 public class SonicBowContainer extends AbstractContainerMenu implements Supplier<Map<Integer, Slot>> {
     public final static HashMap<String, Object> guistate = new HashMap<>();
-    public final Level world;
     public final Player entity;
-    public int x, y, z;
-    private ContainerLevelAccess access = ContainerLevelAccess.NULL;
-    public IItemHandler internal;
+    public ItemStackHandler internal;
     private final Map<Integer, Slot> customSlots = new HashMap<>();
-    private boolean bound = false;
-    private Supplier<Boolean> boundItemMatcher = null;
-    private Entity boundEntity = null;
-    private BlockEntity boundBlockEntity = null;
 
     public SonicBowContainer(int id, Inventory inv, FriendlyByteBuf extraData) {
         super(ModContainers.SSONIC.get(), id);
         this.entity = inv.player;
-        this.world = inv.player.level();
-        this.internal = new ItemStackHandler(4);
-        BlockPos pos = null;
-        if (extraData != null) {
-            pos = extraData.readBlockPos();
-            this.x = pos.getX();
-            this.y = pos.getY();
-            this.z = pos.getZ();
-            access = ContainerLevelAccess.create(world, pos);
-        }
-        if (pos != null) {
-            if (extraData.readableBytes() == 1) { // bound to item
-                byte hand = extraData.readByte();
-                ItemStack itemstack = hand == 0 ? this.entity.getMainHandItem() : this.entity.getOffhandItem();
-                this.boundItemMatcher = () -> itemstack == (hand == 0 ? this.entity.getMainHandItem() : this.entity.getOffhandItem());
-                itemstack.getCapability(ForgeCapabilities.ITEM_HANDLER, null).ifPresent(capability -> {
-                    this.internal = capability;
-                    this.bound = true;
-                });
-            } else if (extraData.readableBytes() > 1) { // bound to entity
-                extraData.readByte(); // drop padding
-                boundEntity = world.getEntity(extraData.readVarInt());
-                if (boundEntity != null)
-                    boundEntity.getCapability(ForgeCapabilities.ITEM_HANDLER, null).ifPresent(capability -> {
-                        this.internal = capability;
-                        this.bound = true;
-                    });
-            } else { // might be bound to block
-                boundBlockEntity = this.world.getBlockEntity(pos);
-                if (boundBlockEntity != null)
-                    boundBlockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER, null).ifPresent(capability -> {
-                        this.internal = capability;
-                        this.bound = true;
-                    });
+
+        // 获取玩家左手上的物品
+        ItemStack offhandStack = entity.getOffhandItem();
+        if (offhandStack.getItem() == ModItems.SONICARROW.get()) { // 确保是特定物品
+            CompoundTag tag = offhandStack.getOrCreateTag();
+            this.internal = new ItemStackHandler(1); // 只有一个槽位
+            if (tag.contains("Inventory")) {
+                this.internal.deserializeNBT(tag.getCompound("Inventory")); // 反序列化 NBT
             }
+        } else {
+            this.internal = new ItemStackHandler(1); // 备用处理
         }
 
-        this.customSlots.put(3, this.addSlot(new SlotItemHandler(internal, 3, 30, 28) {
-            private final int slot = 3;
+        // 添加输入槽位
+        this.customSlots.put(0, this.addSlot(new SlotItemHandler(internal, 0, 30, 28) {
+            @Override
+            public int getMaxStackSize() {
+                return 1; // 设置为64使其兼容堆叠物品
+            }
 
             @Override
             public boolean mayPlace(ItemStack stack) {
-                return ModItems.MELON.get() == stack.getItem();
+                return true; // 允许放置任何数量的物品
+            }
+
+            @Override
+            public int getMaxStackSize(ItemStack stack) {
+                return 1; // 限制每次只能放入一个物品
             }
         }));
-        for (int si = 0; si < 3; ++si)
-            for (int sj = 0; sj < 9; ++sj)
-                this.addSlot(new Slot(inv, sj + (si + 1) * 9, 0 + 8 + sj * 18, 0 + 84 + si * 18));
-        for (int si = 0; si < 9; ++si)
-            this.addSlot(new Slot(inv, si, 0 + 8 + si * 18, 0 + 142));
+
+        // 添加玩家背包槽位
+        for (int si = 0; si < 3; ++si) {
+            for (int sj = 0; sj < 9; ++sj) {
+                this.addSlot(new Slot(inv, sj + (si + 1) * 9, 8 + sj * 18, 84 + si * 18));
+            }
+        }
+        for (int si = 0; si < 9; ++si) {
+            this.addSlot(new Slot(inv, si, 8 + si * 18, 142));
+        }
     }
 
     @Override
     public boolean stillValid(Player player) {
-        if (this.bound) {
-            if (this.boundItemMatcher != null)
-                return this.boundItemMatcher.get();
-            else if (this.boundBlockEntity != null)
-                return AbstractContainerMenu.stillValid(this.access, player, this.boundBlockEntity.getBlockState().getBlock());
-            else if (this.boundEntity != null)
-                return this.boundEntity.isAlive();
-        }
-        return true;
+        return true; // 容器始终有效
     }
-
 
     @Override
     public ItemStack quickMoveStack(Player playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
-        Slot slot = (Slot) this.slots.get(index);
+        Slot slot = this.slots.get(index);
         if (slot != null && slot.hasItem()) {
             ItemStack itemstack1 = slot.getItem();
             itemstack = itemstack1.copy();
             if (index < 1) {
-                if (!this.moveItemStackTo(itemstack1, 1, this.slots.size(), true))
+                if (!this.moveItemStackTo(itemstack1, 1, this.slots.size(), true)) {
                     return ItemStack.EMPTY;
-                slot.onQuickCraft(itemstack1, itemstack);
-            } else if (!this.moveItemStackTo(itemstack1, 0, 1, false)) {
-                if (index < 1 + 27) {
-                    if (!this.moveItemStackTo(itemstack1, 1 + 27, this.slots.size(), true))
-                        return ItemStack.EMPTY;
-                } else {
-                    if (!this.moveItemStackTo(itemstack1, 1, 1 + 27, false))
-                        return ItemStack.EMPTY;
                 }
+            } else if (!this.moveItemStackTo(itemstack1, 0, 1, false)) {
                 return ItemStack.EMPTY;
             }
-            if (itemstack1.getCount() == 0)
+            if (itemstack1.isEmpty()) {
                 slot.set(ItemStack.EMPTY);
-            else
+            } else {
                 slot.setChanged();
-            if (itemstack1.getCount() == itemstack.getCount())
-                return ItemStack.EMPTY;
-            slot.onTake(playerIn, itemstack1);
+            }
         }
         return itemstack;
     }
 
-
-
     @Override
-    protected boolean moveItemStackTo(ItemStack p_38904_, int p_38905_, int p_38906_, boolean p_38907_) {
-        boolean flag = false;
-        int i = p_38905_;
-        if (p_38907_) {
-            i = p_38906_ - 1;
+    public void removed(Player player) {
+        super.removed(player);
+        syncInventoryToNBT();
+    }
+
+    // 同步槽位物品到 NBT 数据
+    public void  syncInventoryToNBT(){
+        ItemStack offhandStack = entity.getOffhandItem();
+        if (offhandStack.getItem() == ModItems.SONICARROW.get()) {
+            CompoundTag tag = offhandStack.getOrCreateTag();
+            CompoundTag inventoryTag = this.internal.serializeNBT();
+            tag.put("Inventory", inventoryTag); // 序列化 NBT
+            offhandStack.setTag(tag);
         }
-        if (p_38904_.isStackable()) {
-            while (!p_38904_.isEmpty()) {
-                if (p_38907_) {
-                    if (i < p_38905_) {
-                        break;
-                    }
-                } else if (i >= p_38906_) {
-                    break;
-                }
-                Slot slot = this.slots.get(i);
-                ItemStack itemstack = slot.getItem();
-                if (slot.mayPlace(itemstack) && !itemstack.isEmpty() && ItemStack.isSameItemSameTags(p_38904_, itemstack)) {
-                    int j = itemstack.getCount() + p_38904_.getCount();
-                    int maxSize = Math.min(slot.getMaxStackSize(), p_38904_.getMaxStackSize());
-                    if (j <= maxSize) {
-                        p_38904_.setCount(0);
-                        itemstack.setCount(j);
-                        slot.set(itemstack);
-                        flag = true;
-                    } else if (itemstack.getCount() < maxSize) {
-                        p_38904_.shrink(maxSize - itemstack.getCount());
-                        itemstack.setCount(maxSize);
-                        slot.set(itemstack);
-                        flag = true;
-                    }
-                }
-                if (p_38907_) {
-                    --i;
-                } else {
-                    ++i;
-                }
-            }
-        }
-        if (!p_38904_.isEmpty()) {
-            if (p_38907_) {
-                i = p_38906_ - 1;
-            } else {
-                i = p_38905_;
-            }
-            while (true) {
-                if (p_38907_) {
-                    if (i < p_38905_) {
-                        break;
-                    }
-                } else if (i >= p_38906_) {
-                    break;
-                }
-                Slot slot1 = this.slots.get(i);
-                ItemStack itemstack1 = slot1.getItem();
-                if (itemstack1.isEmpty() && slot1.mayPlace(p_38904_)) {
-                    if (p_38904_.getCount() > slot1.getMaxStackSize()) {
-                        slot1.setByPlayer(p_38904_.split(slot1.getMaxStackSize()));
-                    } else {
-                        slot1.setByPlayer(p_38904_.split(p_38904_.getCount()));
-                    }
-                    slot1.setChanged();
-                    flag = true;
-                    break;
-                }
-                if (p_38907_) {
-                    --i;
-                } else {
-                    ++i;
-                }
-            }
-        }
-        return flag;
     }
 
     @Override
-    public void removed(Player playerIn) {
-        super.removed(playerIn);
-        // 检查是否绑定以及是否是服务器玩家
-        if (!this.bound && playerIn instanceof ServerPlayer serverPlayer) {
-            // 检查玩家是否还活着或者是否已经断开连接
-            if (!serverPlayer.isAlive() || serverPlayer.hasDisconnected()) {
-                // 如果玩家不在线或者已经死亡，那么丢弃所有物品
-                for (int j = 0; j < this.internal.getSlots(); ++j) {
-                    playerIn.drop(this.internal.extractItem(j, this.internal.getStackInSlot(j).getCount(), false), false);
-                }
-            } else {
-                // 如果玩家在线且未死亡，那么将物品保留在容器中，不返回到背包
-                // 这里不需要做任何操作，因为我们不希望物品返回到背包
-            }
-        }
-    }
-
     public Map<Integer, Slot> get() {
         return customSlots;
     }
-
-
 }

@@ -1,3 +1,4 @@
+/*
 package com.xiaoshi2022.kamen_rider_weapon_craft.Item.combineds.client.combineds.sonicarrow_melon;
 
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.client.daidaimaru.daidaimaruModel;
@@ -12,3 +13,4 @@ public class sonicarrowMelonRenderer extends GeoItemRenderer<sonicarrow_melon> {
         super(new sonicarrowMelonModel(new ResourceLocation(kamen_rider_weapon_craft.MOD_ID,"sonicarrow_melon")));
     }
 }
+*/

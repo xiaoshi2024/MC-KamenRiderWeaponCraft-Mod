@@ -41,31 +41,29 @@ import java.util.List;
 import java.util.UUID;
 import java.util.function.Consumer;
 
-/**
- * Example {@link GeoItem} in the form of a "shootable" pistol.
- * @see sonicarrowRenderer
- */
 public class sonicarrow extends SwordItem implements GeoItem {
-    // 定义近战攻击的属性
     private final float meleeDamage;
     private final float attackSpeed;
-
     private static final UUID ATTACK_DAMAGE_MODIFIER = UUID.randomUUID();
     private static final UUID ATTACK_SPEED_MODIFIER = UUID.randomUUID();
     private static final RawAnimation BOWBLADE = RawAnimation.begin().thenPlay("bowblade");
     private static final RawAnimation PULLBACK = RawAnimation.begin().thenPlay("pullback");
     private static final RawAnimation DRAW = RawAnimation.begin().thenPlay("draw");
-private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
+    private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
+
+    // 定义模式枚举
+    public enum Mode {
+        DEFAULT,
+        MELON
+    }
+
+    // 当前模式
+    private Mode currentMode = Mode.DEFAULT;
 
     public sonicarrow(float meleeDamage, float attackSpeed, Properties properties) {
         super(Tiers.NETHERITE, 3, -2.4F, properties);
-        //将我们的项目注册为服务器端处理的。
-        //这将启用动画数据同步和服务器端动画触发
-//        super(new Properties().stacksTo(1).durability(201));
         this.meleeDamage = meleeDamage;
         this.attackSpeed = attackSpeed;
-        //将我们的项目注册为服务器端处理的。
-        //这将启用动画数据同步和服务器端动画触发
         SingletonGeoAnimatable.registerSyncedAnimatable(this);
     }
 
@@ -73,46 +71,23 @@ private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(t
         this(7.0F, -2.4F, new Properties().stacksTo(1).durability(201));
     }
 
+    // 切换模式的方法
+    public void switchMode(ItemStack stack, Mode mode) {
+        CompoundTag tag = stack.getOrCreateTag();
+        currentMode = mode;
+        tag.putString("Mode", currentMode.name()); // 保存当前模式到 NBT
+        stack.setTag(tag);
+    }
 
-    //定义弓的近战和攻击速度
-    @Override
-    public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack) {
-        Multimap<Attribute, AttributeModifier> multimap = HashMultimap.create();
-
-        if (slot == EquipmentSlot.MAINHAND) {
-            // 设置攻击点和攻击速度
-            multimap.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", this.meleeDamage, AttributeModifier.Operation.ADDITION));
-            multimap.put(Attributes.ATTACK_SPEED, new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", this.attackSpeed, AttributeModifier.Operation.ADDITION));
+    // 获取当前模式
+    public Mode getCurrentMode(ItemStack stack) {
+        CompoundTag tag = stack.getOrCreateTag();
+        if (tag.contains("Mode")) {
+            return Mode.valueOf(tag.getString("Mode"));
         }
-
-        return multimap;
+        return Mode.DEFAULT; // 默认模式
     }
 
-    //为已设置攻击点添加减少耐久方法
-    @Override
-    public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-        stack.hurtAndBreak(1, attacker, e -> e.broadcastBreakEvent(attacker.getUsedItemHand()));
-        return true;
-    }
-
-    //设置当玩家攻击到实体后有几率播放动画bowblade
-    @Override
-    public boolean onLeftClickEntity(ItemStack stack, Player player, Entity entity) {
-        if (!player.level().isClientSide) {
-            if (player.getRandom().nextInt(10) == 0) {
-                triggerAnim(player, GeoItem.getOrAssignId(stack, (ServerLevel) player.level()), "bowblade", "bowblade");
-            }
-        }
-        return super.onLeftClickEntity(stack, player, entity);
-    }
-
-    //使音速弓能在生存模式下可以附魔上剑和弓的附魔效果并能成功使用
-    @Override
-    public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
-        return enchantment.category == EnchantmentCategory.BOW || enchantment.category == EnchantmentCategory.WEAPON;
-    }
-
-    //利用现有的forge钩子来定义我们的自定义渲染器(我们在createRenderer中创建的)
     @Override
     public void initializeClient(Consumer<IClientItemExtensions> consumer) {
         consumer.accept(new IClientItemExtensions() {
@@ -128,9 +103,40 @@ private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(t
         });
     }
 
+    @Override
+    public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack) {
+        Multimap<Attribute, AttributeModifier> multimap = HashMultimap.create();
 
+        if (slot == EquipmentSlot.MAINHAND) {
+            // 设置攻击点和攻击速度
+            multimap.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", this.meleeDamage, AttributeModifier.Operation.ADDITION));
+            multimap.put(Attributes.ATTACK_SPEED, new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", this.attackSpeed, AttributeModifier.Operation.ADDITION));
+        }
 
-    // 注册我们的动画控制器
+        return multimap;
+    }
+
+    @Override
+    public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
+        stack.hurtAndBreak(1, attacker, e -> e.broadcastBreakEvent(attacker.getUsedItemHand()));
+        return true;
+    }
+
+    @Override
+    public boolean onLeftClickEntity(ItemStack stack, Player player, Entity entity) {
+        if (!player.level().isClientSide) {
+            if (player.getRandom().nextInt(10) == 0) {
+                triggerAnim(player, GeoItem.getOrAssignId(stack, (ServerLevel) player.level()), "bowblade", "bowblade");
+            }
+        }
+        return super.onLeftClickEntity(stack, player, entity);
+    }
+
+    @Override
+    public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
+        return enchantment.category == EnchantmentCategory.BOW || enchantment.category == EnchantmentCategory.WEAPON;
+    }
+
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
         controllers.add(new AnimationController<>(this, "draw", 20, state -> PlayState.STOP)
@@ -139,20 +145,17 @@ private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(t
                 .triggerableAnim("pullback", PULLBACK));
         controllers.add(new AnimationController<>(this, "bowblade", 20, state -> PlayState.STOP)
                 .triggerableAnim("bowblade", BOWBLADE));
-        // 我们已经将“射击”动画标记为可从服务器触发
     }
 
-    // 单击后开始“使用”该项目
     @Override
     public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
         player.startUsingItem(hand);
         if (world instanceof ServerLevel serverLevel)
             triggerAnim(player, GeoItem.getOrAssignId(player.getItemInHand(hand), serverLevel), "draw", "draw");
 
-
         return InteractionResultHolder.consume(player.getItemInHand(hand));
     }
-    // 释放鼠标按钮时发射箭头并播放动画
+
     @Override
     public void releaseUsing(ItemStack stack, Level level, LivingEntity shooter, int ticksRemaining) {
         if (shooter instanceof Player player) {
@@ -167,7 +170,6 @@ private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(t
                 arrow.tickCount = 35;
 
                 // 检查音速弓是否附魔了火焰附加
-
                 if (stack.isEnchanted() && stack.getEnchantmentLevel(Enchantments.FLAMING_ARROWS) > 0) {
                     arrow.setSecondsOnFire(5);
                 }
@@ -193,25 +195,6 @@ private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(t
         }
     }
 
-    // 果汁进度条
-    private int juiceProgress = 100;
-
-    public <PlayerEntity, World> void shootArrow(World world, PlayerEntity player, ItemStack bow) {
-        if (bow.getUseDuration() >= 20) { // 假设20是拉满弓的条件
-            if (this.juiceProgress >= 6) { // 假设每次发射消耗6点果汁
-                this.juiceProgress -= 6;
-                // 发射箭矢逻辑
-//                shootArrowEntity(world, player);
-            } else {
-                // 果汁不足，不能发射
-            }
-        } else {
-            // 未拉满弓
-        }
-    }
-
-
-    // 使用普通动画来“拉回”手枪，同时给它充能
     @Override
     public UseAnim getUseAnimation(ItemStack stack) {
         return UseAnim.BOW;
@@ -227,7 +210,6 @@ private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(t
         return 72000;
     }
 
-    // 让我们给工具提示添加一些弹药文本
     @Override
     public void appendHoverText(ItemStack stack, Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
         tooltip.add(Component.translatable("item.sonicarrow.ammo",
