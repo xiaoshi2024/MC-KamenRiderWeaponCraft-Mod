@@ -4,7 +4,7 @@ import com.xiaoshi2022.kamen_rider_weapon_craft.Item.ModTires;
 //import com.xiaoshi2022.kamen_rider_weapon_craft.Item.combineds.client.combined.sonicarrow_melon;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.*;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.prop.custom.Melon;
-import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.SatanSabre;
+import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.satan_sabre;
 import com.xiaoshi2022.kamen_rider_weapon_craft.kamen_rider_weapon_craft;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.registries.DeferredRegister;
@@ -15,8 +15,8 @@ public class ModItems {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, kamen_rider_weapon_craft.MOD_ID);
 
     // 注册 SatanSaber
-    public static final RegistryObject<SatanSabre> SATAN_SABER = ITEMS.register("satan_saber",
-            () -> new SatanSabre());
+    public static final RegistryObject<satan_sabre> SATAN_SABRE = ITEMS.register("satan_sabre",
+            () -> new satan_sabre());
 
     // 其他物品注册
     public static final RegistryObject<sonicarrow> SONICARROW = ITEMS.register("sonicarrow",

@@ -23,7 +23,7 @@ public class ModTab {
                 output.accept(MUSOUSABERD.get());
                 output.accept(GANGUNSABER.get());
                 output.accept(RIDEBOOKER.get());
-                output.accept(SATAN_SABER.get());
+                output.accept(SATAN_SABRE.get());
             })).build());
     public static final RegistryObject<CreativeModeTab> T_TAB = TABS.register("kamen_rider_weapon_craft_prop_tab", () -> CreativeModeTab.builder()
             .icon(() -> MELON.get().getDefaultInstance())
