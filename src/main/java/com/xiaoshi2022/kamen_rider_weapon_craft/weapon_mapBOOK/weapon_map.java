@@ -1,5 +1,7 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.weapon_mapBOOK;
 
+import com.xiaoshi2022.kamen_rider_weapon_craft.kamen_rider_weapon_craft;
+import com.xiaoshi2022.kamen_rider_weapon_craft.network.CloseMapPacket;
 import com.xiaoshi2022.kamen_rider_weapon_craft.weapon_mapBOOK.weapon_mapx.weapon_mapRenderer;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.resources.ResourceLocation;
@@ -88,12 +90,12 @@ public class weapon_map extends Item implements GeoItem {
     // 注册动画控制器
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, "open", 20, state -> PlayState.CONTINUE)
+        controllers.add(new AnimationController<>(this, "open", 20, state -> PlayState.STOP)
                 .triggerableAnim("open", OPEN_ANIMATION)
                 // 标记动画可由服务器触发
                 .setSoundKeyframeHandler(state -> {
                 }));
-        controllers.add(new AnimationController<>(this, "close", 20, state -> PlayState.CONTINUE)
+        controllers.add(new AnimationController<>(this, "close", 20, state -> PlayState.STOP)
                 .triggerableAnim("close", CLOSE_ANIMATION)
                 // 标记动画可由服务器触发
                 .setSoundKeyframeHandler(state -> {
@@ -104,6 +106,10 @@ public class weapon_map extends Item implements GeoItem {
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {
         return this.cache;
+    }
+
+    public void triggerCloseAnimation(Player player, ItemStack stack) {
+        triggerAnim(player, GeoItem.getOrAssignId(stack, (ServerLevel) player.level()), "close", "close");
     }
 }
 

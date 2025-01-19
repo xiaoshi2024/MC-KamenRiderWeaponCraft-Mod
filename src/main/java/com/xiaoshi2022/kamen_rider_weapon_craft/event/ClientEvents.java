@@ -4,6 +4,7 @@ import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.prop.arrowx.AonicxEn
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.prop.custom.Melon;
 import com.xiaoshi2022.kamen_rider_weapon_craft.gui.SonicBowGuiScreen;
 import com.xiaoshi2022.kamen_rider_weapon_craft.kamen_rider_weapon_craft;
+import com.xiaoshi2022.kamen_rider_weapon_craft.network.CloseMapPacket;
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModItems;
 import com.xiaoshi2022.kamen_rider_weapon_craft.util.KeyBinding;
 import com.xiaoshi2022.kamen_rider_weapon_craft.weapon_mapBOOK.weapon_map;
@@ -43,12 +44,19 @@ import com.xiaoshi2022.kamen_rider_weapon_craft.Item.prop.client.arrowx.AonicxRe
 public class ClientEvents {
     @Mod.EventBusSubscriber(modid = kamen_rider_weapon_craft.MOD_ID,value = Dist.CLIENT)
     public static class ClientForgeEvents {
-//        @SubscribeEvent
-//        public static void onKeyInput(InputEvent.Key event) {
-//            if (KeyBinding.CHANGE_KEY.consumeClick()) {
-//                Minecraft.getInstance().player.sendSystemMessage(Component.literal("hhhh"));
-//            }
-    //        }
+        @SubscribeEvent
+        public static void onKeyInput(InputEvent.Key event) {
+            if (KeyBinding.CHANGE_KEY.consumeClick()) {
+                Minecraft mc = Minecraft.getInstance();
+                LocalPlayer player = mc.player;
+                if (player != null) {
+                    ItemStack stack = player.getMainHandItem();
+                    if (stack.getItem() instanceof weapon_map) {
+                        kamen_rider_weapon_craft.PACKET_HANDLER.sendToServer(new CloseMapPacket());
+                    }
+                }
+            }
+        }
     }
 
 
