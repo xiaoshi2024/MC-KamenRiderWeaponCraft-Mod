@@ -1,10 +1,10 @@
 {
   "name": "Test Entry",
   "icon": "minecraft:writable_book",
-  "category": "your_book_namespace_change_me:test_category",
+  "category": "weapon_map:test_category",
   "pages": [
     {
-      "type": "patchouli:text",
+      "type": "kamen_rider_weapon_craft:weapon_map",
       "text": "This is a test entry, but it should show up!"
     }
   ]

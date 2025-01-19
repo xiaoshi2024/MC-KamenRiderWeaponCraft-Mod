@@ -6,17 +6,21 @@
   "item.kamen_rider_weapon_craft.gangunsaber": "Gan Gun Saber",
   "item.kamen_rider_weapon_craft.melon": "Melon energy-seed",
   "item.kamen_rider_weapon_craft.musousaberd": "musousaber-daidaimaru",
-  "item.kamen_rider_weapon_craft.ohma_advent_record": "ohma_advent_record",
+  "item.kamen_rider_weapon_craft.weapon_map": "Ride Weapon map",
   "item.kamen_rider_weapon_craft.ridebooker": "Ride Booker",
   "item.kamen_rider_weapon_craft.satan_sabre": "Satan Saber",
   "item.kamen_rider_weapon_craft.sonicarrow": "Sonic Arrow",
   "item.kamen_rider_weapon_craft.sonicarrow-melon": "Sonic Arrow(melon energy-seed)",
   "item.kamen_rider_weapon_craft.sonicx_arrow": "sonicx arrow",
+  "item.kamen_rider_weapon_craft.gavvwhipir": "Gavv Whipir",
   "item.sonic_bow.desc": "desc",
   "item.sonic_bow.strength": "strength",
   "item.sonicarrow.ammo": "Fruit energy",
   "kamen_rider_weapon_craft.landing": "kamenRiderWeaponCraft.Loaded",
   "KEY.kamen_rider_weapon_craft.change_over": "Switch the item of goods",
   "KEY.kamen_rider_weapon_craft.kamen_rider_weapon_craft": "kamen_rider_weapon_craft change over",
-  "KEY.kamen_rider_weapon_craft.open_lockseed_gui": "Open lockSeed box"
+  "KEY.kamen_rider_weapon_craft.open_lockseed_gui": "Open lockSeed box",
+
+  "item.kamen_rider_weapon_craft.sonicarrow.desc": "The Sonic Arrow can be used for both melee combat and shooting.",
+  "item.kamen_rider_weapon_craft.daidaimaru.desc": "Daidaimaru has a throwing animation (not fully implemented yet), with 5 points of melee damage and 5.5 attack speed."
 }

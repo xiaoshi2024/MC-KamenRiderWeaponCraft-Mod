@@ -41,7 +41,7 @@ public class satan_sabre extends SwordItem implements GeoItem {
 			}
 
 			public float getAttackDamageBonus() {
-				return 16f;
+				return 10f;
 			}
 
 			public int getLevel() {

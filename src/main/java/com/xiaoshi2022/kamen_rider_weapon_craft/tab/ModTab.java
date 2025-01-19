@@ -18,12 +18,14 @@ public class ModTab {
             .icon(() -> SONICARROW.get().getDefaultInstance())
             .title(Component.translatable("item group.kamen_rider_weapon_craft_tab"))
             .displayItems(((parameters, output) -> {
+                output.accept(WEAPON_MAP.get());
                 output.accept(SONICARROW.get());
                 output.accept(DAIDAIMARU.get());
                 output.accept(MUSOUSABERD.get());
                 output.accept(GANGUNSABER.get());
                 output.accept(RIDEBOOKER.get());
                 output.accept(SATAN_SABRE.get());
+                output.accept(GAVVWHIPIR.get());
             })).build());
     public static final RegistryObject<CreativeModeTab> T_TAB = TABS.register("kamen_rider_weapon_craft_prop_tab", () -> CreativeModeTab.builder()
             .icon(() -> MELON.get().getDefaultInstance())
