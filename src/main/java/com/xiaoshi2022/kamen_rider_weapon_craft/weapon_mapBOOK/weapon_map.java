@@ -90,12 +90,12 @@ public class weapon_map extends Item implements GeoItem {
     // 注册动画控制器
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, "open", 20, state -> PlayState.STOP)
+        controllers.add(new AnimationController<>(this, "open", 20, state -> PlayState.CONTINUE)
                 .triggerableAnim("open", OPEN_ANIMATION)
                 // 标记动画可由服务器触发
                 .setSoundKeyframeHandler(state -> {
                 }));
-        controllers.add(new AnimationController<>(this, "close", 20, state -> PlayState.STOP)
+        controllers.add(new AnimationController<>(this, "close", 20, state -> PlayState.CONTINUE)
                 .triggerableAnim("close", CLOSE_ANIMATION)
                 // 标记动画可由服务器触发
                 .setSoundKeyframeHandler(state -> {

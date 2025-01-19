@@ -47,7 +47,8 @@ public class SonicBowContainer extends AbstractContainerMenu implements Supplier
 
             @Override
             public boolean mayPlace(ItemStack stack) {
-                return true; // 允许放置任何数量的物品
+                //只能放入melon
+                return stack.getItem() == ModItems.MELON.get();
             }
 
             @Override
