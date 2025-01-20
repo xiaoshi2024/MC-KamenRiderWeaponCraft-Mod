@@ -1,12 +1,11 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.weapon_mapBOOK;
 
-import com.xiaoshi2022.kamen_rider_weapon_craft.kamen_rider_weapon_craft;
-import com.xiaoshi2022.kamen_rider_weapon_craft.network.CloseMapPacket;
 import com.xiaoshi2022.kamen_rider_weapon_craft.weapon_mapBOOK.weapon_mapx.weapon_mapRenderer;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.BookItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.InteractionHand;
@@ -28,12 +27,13 @@ import vazkii.patchouli.api.PatchouliAPI;
 import java.util.function.Consumer;
 
 // 假设这里的 GeoItem 是自定义接口，包含了相关的动画方法
-public class weapon_map extends Item implements GeoItem {
+public class weapon_map extends BookItem implements GeoItem {
     // 定义动画实例缓存
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     // 定义一些动画常量
     private static final RawAnimation OPEN_ANIMATION = RawAnimation.begin().thenPlay("open");
     private static final RawAnimation CLOSE_ANIMATION = RawAnimation.begin().thenPlay("close");
+    private static final RawAnimation EMERGE_ANIMATION = RawAnimation.begin().thenPlay("emerge");
 
     public weapon_map(Properties properties) {
         super(new Item.Properties());
@@ -63,12 +63,12 @@ public class weapon_map extends Item implements GeoItem {
         ItemStack stack = player.getItemInHand(hand);
 
 
-        // 确保物品有 NBT 标签
-        if (!stack.hasTag()) {
-            stack.setTag(new CompoundTag());
-        }
-        // 标记物品已打开
-        stack.getTag().putBoolean("opened", true);
+//        // 确保物品有 NBT 标签
+//        if (!stack.hasTag()) {
+//            stack.setTag(new CompoundTag());
+//        }
+//        // 标记物品已打开
+//        stack.getTag().putBoolean("opened", true);
 
 
         // 如果是服务器世界实例，触发动画
@@ -81,9 +81,7 @@ public class weapon_map extends Item implements GeoItem {
         if (!level.isClientSide()) {
             PatchouliAPI.get().openBookGUI((ServerPlayer) player, new ResourceLocation("kamen_rider_weapon_craft:weapon_map"));
         }
-
-
-        return InteractionResultHolder.success(stack);
+        return InteractionResultHolder.sidedSuccess(stack, level.isClientSide());
     }
 
 
@@ -97,6 +95,11 @@ public class weapon_map extends Item implements GeoItem {
                 }));
         controllers.add(new AnimationController<>(this, "close", 20, state -> PlayState.CONTINUE)
                 .triggerableAnim("close", CLOSE_ANIMATION)
+                // 标记动画可由服务器触发
+                .setSoundKeyframeHandler(state -> {
+                }));
+        controllers.add(new AnimationController<>(this, "emerge", 20, state -> PlayState.CONTINUE)
+                .triggerableAnim("emerge", EMERGE_ANIMATION)
                 // 标记动画可由服务器触发
                 .setSoundKeyframeHandler(state -> {
                 }));
