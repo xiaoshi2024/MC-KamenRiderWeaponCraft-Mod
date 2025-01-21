@@ -17,6 +17,8 @@
   "item.sonic_bow.strength": "strength",
   "item.sonicarrow.ammo": "Fruit energy",
   "kamen_rider_weapon_craft.landing": "kamenRiderWeaponCraft To Loaded",
+  "weapon_map": "WeaponMap",
+
   "KEY.kamen_rider_weapon_craft.change_over": "Switch the item of goods",
   "KEY.kamen_rider_weapon_craft.kamen_rider_weapon_craft": "kamen_rider_weapon_craft change over",
   "KEY.kamen_rider_weapon_craft.open_lockseed_gui": "Open lockSeed box",

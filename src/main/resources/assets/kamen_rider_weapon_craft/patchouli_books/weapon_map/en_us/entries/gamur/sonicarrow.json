@@ -1,0 +1,15 @@
+{
+  "name": "sonicarrow",
+  "icon": "kamen_rider_weapon_craft:sonicarrow",
+  "category": "kamen_rider_weapon_craft:gamur",
+  "pages": [
+    {
+      "type": "text",
+      "text": "This can be melee and ranged weapon sonicarrow, the bow wing is very sharp,When you place this weapon in the secondary, press the Y key to open the GUI, where you can put a lock such as melon"
+    },
+    {
+      "type": "image",
+      "images": ["kamen_rider_weapon_craft:textures/gui/entries/sonicarrow.png"]
+    }
+  ]
+}

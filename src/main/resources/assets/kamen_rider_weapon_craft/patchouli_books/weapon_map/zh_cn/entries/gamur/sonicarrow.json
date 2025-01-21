@@ -1,0 +1,15 @@
+{
+  "name": "音速弓",
+  "icon": "kamen_rider_weapon_craft:sonicarrow",
+  "category": "kamen_rider_weapon_craft:gamur",
+  "pages": [
+    {
+      "type": "text",
+      "text": "这可以是近战和远程武器，弓翼非常锋利，当你把此武器放在副手时 按下Y键 可以打开GUI，在GUI中可以放入锁种如melon"
+    },
+    {
+      "type": "image",
+      "images": ["kamen_rider_weapon_craft:textures/gui/entries/sonicarrow.png"]
+    }
+  ]
+}

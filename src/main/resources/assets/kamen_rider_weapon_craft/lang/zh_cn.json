@@ -16,7 +16,9 @@
   "item.sonic_bow.desc": "描述",
   "item.sonic_bow.strength": "强度",
   "item.sonicarrow.ammo": "水果能量",
-  "kamen_rider_weapon_craft.landing": "假面骑士武器集合已加载",
+  "kamen_rider_weapon_craft.landing": "欢迎安装假面骑士武器集合并加载",
+  "weapon_map": "骑士武器大全图鉴",
+
   "KEY.kamen_rider_weapon_craft.change_over": "切换物品形态",
   "KEY.kamen_rider_weapon_craft.kamen_rider_weapon_craft": "假面骑士物品切换",
   "KEY.kamen_rider_weapon_craft.open_lockseed_gui": "开打锁种装载",

@@ -2,7 +2,7 @@
   "name": "weapon_map",
   "landing_text": "kamen_rider_weapon_craft.landing",
   "version": "0.0.2",
-  "creative_tab": "minecraft:tools_and_utilities",
+  "editor": ["xiaoshi2022"],
   "use_resource_pack": true,
   "dont_generate_book": true,
   "custom_book_item": "kamen_rider_weapon_craft:weapon_map"
