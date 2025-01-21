@@ -12,7 +12,7 @@
   "item.kamen_rider_weapon_craft.sonicarrow": "音速弓~",
   "item.kamen_rider_weapon_craft.sonicarrow-melon": "音速弓(蜜瓜)",
   "item.kamen_rider_weapon_craft.sonicx_arrow": "能量音速箭矢",
-  "item.kamen_rider_weapon_craft.gavvwhipir": "加布 奶油枪",
+  "item.kamen_rider_weapon_craft.gavvwhipir": "加布掼奶油枪",
   "item.sonic_bow.desc": "描述",
   "item.sonic_bow.strength": "强度",
   "item.sonicarrow.ammo": "水果能量",
@@ -20,9 +20,6 @@
   "weapon_map": "骑士武器大全图鉴",
 
   "KEY.kamen_rider_weapon_craft.change_over": "切换物品形态",
-  "KEY.kamen_rider_weapon_craft.kamen_rider_weapon_craft": "假面骑士物品切换",
-  "KEY.kamen_rider_weapon_craft.open_lockseed_gui": "开打锁种装载",
-
-  "item.kamen_rider_weapon_craft.sonicarrow.desc": "音速弓既可以用于近战，也可以进行射击。",
-  "item.kamen_rider_weapon_craft.daidaimaru.desc": "大橙丸有抛投动画（尚未完全实现），近战伤害为 5 点，攻击速度为 5.5。"
+  "KEY.kamen_rider_weapon_craft.kamen_rider_weapon_craft": "假面骑士切换",
+  "KEY.kamen_rider_weapon_craft.open_lockseed_gui": "开打锁种装载"
 }

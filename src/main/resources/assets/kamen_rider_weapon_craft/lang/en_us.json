@@ -1,7 +1,7 @@
 {
   "gui.cs.ssonic.button_increase_juice": "Juicing",
-  "item group.kamen_rider_weapon_craft_prop_tab": "kamen_rider_weapon_craft_prop_tab",
-  "item group.kamen_rider_weapon_craft_tab": "kamen_rider_weapon_craft_tab",
+  "item group.kamen_rider_weapon_craft_prop_tab": "KamenRiderWeaponCraft Prop Tab",
+  "item group.kamen_rider_weapon_craft_tab": "KamenRiderWeaponCraft Tab",
   "item.kamen_rider_weapon_craft.daidaimaru": "daidaimaru",
   "item.kamen_rider_weapon_craft.gangunsaber": "Gan Gun Saber",
   "item.kamen_rider_weapon_craft.melon": "Melon energy-seed",
@@ -20,9 +20,6 @@
   "weapon_map": "WeaponMap",
 
   "KEY.kamen_rider_weapon_craft.change_over": "Switch the item of goods",
-  "KEY.kamen_rider_weapon_craft.kamen_rider_weapon_craft": "kamen_rider_weapon_craft change over",
-  "KEY.kamen_rider_weapon_craft.open_lockseed_gui": "Open lockSeed box",
-
-  "item.kamen_rider_weapon_craft.sonicarrow.desc": "The Sonic Arrow can be used for both melee combat and shooting.",
-  "item.kamen_rider_weapon_craft.daidaimaru.desc": "Daidaimaru has a throwing animation (not fully implemented yet), with 5 points of melee damage and 5.5 attack speed."
+  "KEY.kamen_rider_weapon_craft.kamen_rider_weapon_craft": "KamenRiderWeaponCraft Change Over",
+  "KEY.kamen_rider_weapon_craft.open_lockseed_gui": "Open lockSeed box"
 }

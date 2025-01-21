@@ -1,0 +1,11 @@
+{
+  "name": "加布掼奶油枪",
+  "icon": "kamen_rider_weapon_craft:gavvwhipir",
+  "category": "kamen_rider_weapon_craft:gavv",
+  "pages": [
+    {
+      "type": "text",
+      "text": "这是一把假面骑士加布的蛋糕王的奶油枪，持有此武器按下右键可以动画"
+    }
+  ]
+}
