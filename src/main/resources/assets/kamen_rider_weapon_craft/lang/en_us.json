@@ -1,23 +1,33 @@
 {
   "gui.cs.ssonic.button_increase_juice": "Juicing",
+
   "item group.kamen_rider_weapon_craft_prop_tab": "KamenRiderWeaponCraft Prop Tab",
   "item group.kamen_rider_weapon_craft_tab": "KamenRiderWeaponCraft Tab",
+
   "item.kamen_rider_weapon_craft.daidaimaru": "daidaimaru",
   "item.kamen_rider_weapon_craft.gangunsaber": "Gan Gun Saber",
-  "item.kamen_rider_weapon_craft.melon": "Melon energy-seed",
   "item.kamen_rider_weapon_craft.musousaberd": "musousaber-daidaimaru",
   "item.kamen_rider_weapon_craft.weapon_map": "Ride Weapon map",
   "item.kamen_rider_weapon_craft.ridebooker": "Ride Booker",
   "item.kamen_rider_weapon_craft.satan_sabre": "Satan Saber",
   "item.kamen_rider_weapon_craft.sonicarrow": "Sonic Arrow",
-  "item.kamen_rider_weapon_craft.sonicarrow-melon": "Sonic Arrow(melon energy-seed)",
-  "item.kamen_rider_weapon_craft.sonicx_arrow": "sonicx arrow",
   "item.kamen_rider_weapon_craft.gavvwhipir": "Gavv Whipir",
+
+  "item.kamen_rider_weapon_craft.sonicx_arrow": "sonicx arrow",
+  "item.kamen_rider_weapon_craft.melon": "Melon energy-seed",
+
   "item.sonic_bow.desc": "desc",
   "item.sonic_bow.strength": "strength",
   "item.sonicarrow.ammo": "Fruit energy",
   "kamen_rider_weapon_craft.landing": "kamenRiderWeaponCraft To Loaded",
   "weapon_map": "WeaponMap",
+
+  "advancement.kamen_rider_weapon_craft.ridebooker.title": "Too many cards",
+  "advancement.kamen_rider_weapon_craft.ridebooker.desc": "Abominable Decade",
+  "advancement.kamen_rider_weapon_craft.daidaimaru.title": "Throw Orange Sword?",
+  "advancement.kamen_rider_weapon_craft.daidaimaru.desc": "Disposable Items ~",
+  "advancement.kamen_rider_weapon_craft.kamen_rider_weapon_craft.title": "Welcome to Play KamenRiderWeaponCraft Mod",
+  "advancement.kamen_rider_weapon_craft.kamen_rider_weapon_craft.desc": "Start your fun!",
 
   "KEY.kamen_rider_weapon_craft.change_over": "Switch the item of goods",
   "KEY.kamen_rider_weapon_craft.kamen_rider_weapon_craft": "KamenRiderWeaponCraft Change Over",

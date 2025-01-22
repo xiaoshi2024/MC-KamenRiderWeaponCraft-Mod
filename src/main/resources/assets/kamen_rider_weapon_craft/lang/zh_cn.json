@@ -1,23 +1,33 @@
 {
   "gui.cs.ssonic.button_increase_juice": "榨汁",
+
   "item group.kamen_rider_weapon_craft_prop_tab": "假面骑士里武器的联动道具",
   "item group.kamen_rider_weapon_craft_tab": "假面骑士武器集合模组",
+
   "item.kamen_rider_weapon_craft.daidaimaru": "大橙丸",
   "item.kamen_rider_weapon_craft.gangunsaber": "幽灵眼剑枪",
-  "item.kamen_rider_weapon_craft.melon": "蜜瓜能量锁种",
   "item.kamen_rider_weapon_craft.musousaberd": "无双军刀镰大橙丸",
   "item.kamen_rider_weapon_craft.weapon_map": "骑士武器图鉴",
   "item.kamen_rider_weapon_craft.ridebooker": "骑士卡盒枪剑",
   "item.kamen_rider_weapon_craft.satan_sabre": "撒旦军刀",
   "item.kamen_rider_weapon_craft.sonicarrow": "音速弓~",
-  "item.kamen_rider_weapon_craft.sonicarrow-melon": "音速弓(蜜瓜)",
-  "item.kamen_rider_weapon_craft.sonicx_arrow": "能量音速箭矢",
   "item.kamen_rider_weapon_craft.gavvwhipir": "加布掼奶油枪",
+
+  "item.kamen_rider_weapon_craft.sonicx_arrow": "能量音速箭矢",
+  "item.kamen_rider_weapon_craft.melon": "蜜瓜能量锁种",
+
   "item.sonic_bow.desc": "描述",
   "item.sonic_bow.strength": "强度",
   "item.sonicarrow.ammo": "水果能量",
   "kamen_rider_weapon_craft.landing": "欢迎安装假面骑士武器集合并加载",
   "weapon_map": "骑士武器大全图鉴",
+
+  "advancement.kamen_rider_weapon_craft.ridebooker.title": "卡牌已经数不清了是吧",
+  "advancement.kamen_rider_weapon_craft.ridebooker.desc": "可恶的帝骑哥！",
+  "advancement.kamen_rider_weapon_craft.daidaimaru.title": "又扔大橙丸?",
+  "advancement.kamen_rider_weapon_craft.daidaimaru.desc": "一次性物品是吧？（剧中操作！）",
+  "advancement.kamen_rider_weapon_craft.kamen_rider_weapon_craft.title": "欢迎 游玩 假面骑士武器大全",
+  "advancement.kamen_rider_weapon_craft.kamen_rider_weapon_craft.desc": "现在 ！启动你的玩法！",
 
   "KEY.kamen_rider_weapon_craft.change_over": "切换物品形态",
   "KEY.kamen_rider_weapon_craft.kamen_rider_weapon_craft": "假面骑士切换",
