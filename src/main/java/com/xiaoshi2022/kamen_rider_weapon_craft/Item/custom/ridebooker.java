@@ -1,6 +1,7 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom;
 
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.client.ridebooker.ridebookerRenderer;
+import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModSounds;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -22,6 +23,7 @@ import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.util.ClientUtils;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.List;
@@ -67,6 +69,11 @@ public class ridebooker extends SwordItem implements GeoItem {
                 .triggerableAnim("sabre", SABRE)
                 // We've marked the "box_open" animation as being triggerable from the server
                 .setSoundKeyframeHandler(state -> {
+                    // 使用帮助程序方法避免在公共类中使用客户端代码
+                    Player player = ClientUtils.getClientPlayer();
+                    if (player != null) {
+                        player.playSound(ModSounds.RIDERBOOKERSWORD.get(), 1.0F, 1.0F);
+                    }
                 }));
         controllers.add(new AnimationController<>(this, "take", 20, state -> PlayState.STOP)
                 .triggerableAnim("take", TAKE)
@@ -87,6 +94,11 @@ public class ridebooker extends SwordItem implements GeoItem {
                 .triggerableAnim("sabrerx", SABRERX)
                 // We've marked the "box_open" animation as being triggerable from the server
                 .setSoundKeyframeHandler(state -> {
+                    // 使用帮助程序方法避免在公共类中使用客户端代码
+                    Player player = ClientUtils.getClientPlayer();
+                    if (player != null) {
+                        player.playSound(ModSounds.RIDERBOOKERSWORD.get(), 1.0F, 1.0F);
+                    }
                 }));
     }
 
@@ -101,6 +113,9 @@ public class ridebooker extends SwordItem implements GeoItem {
             if (level instanceof ServerLevel) {
                     triggerAnim(player, GeoItem.getOrAssignId(player.getItemInHand(hand), serverLevel), "sabrerx", "sabrerx");//同步首播放,次播放（又和首播放同时播放）
                 }
+            }
+            else {
+                player.playSound(ModSounds.RIDERBOOKERSWORD.get(), 1.0F, 1.0F);
             }
         }
             return super.use(level, player, hand);

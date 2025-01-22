@@ -6,6 +6,7 @@ import com.xiaoshi2022.kamen_rider_weapon_craft.network.CloseMapPacket;
 import com.xiaoshi2022.kamen_rider_weapon_craft.network.LockseedManager;
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModContainers;
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModItems;
+import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModSounds;
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModentityR;
 import com.xiaoshi2022.kamen_rider_weapon_craft.tab.ModTab;
 import net.minecraft.network.FriendlyByteBuf;
@@ -51,6 +52,7 @@ public class kamen_rider_weapon_craft {
     public kamen_rider_weapon_craft() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
+        ModSounds.REGISTRY.register(modEventBus);
         ModItems.ITEMS.register(modEventBus);
         ModTab.TABS.register(modEventBus);
 

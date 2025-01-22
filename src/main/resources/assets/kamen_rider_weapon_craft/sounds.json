@@ -1,0 +1,20 @@
+{
+  "gavvwhipir_start_tone": {
+    "subtitle": "subtitles.gavvwhipir_start_tone",
+    "sounds": [
+      {
+        "name": "kamen_rider_weapon_craft:gavvwhipir_start_tone",
+        "stream": false
+      }
+    ]
+  },
+  "riderbookersword": {
+    "subtitle": "subtitles.riderbookersword",
+    "sounds": [
+      {
+        "name": "kamen_rider_weapon_craft:riderbookersword",
+        "stream": false
+      }
+    ]
+  }
+}

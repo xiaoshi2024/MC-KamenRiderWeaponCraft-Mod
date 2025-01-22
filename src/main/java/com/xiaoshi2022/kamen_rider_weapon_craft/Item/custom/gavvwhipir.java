@@ -1,6 +1,7 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom;
 
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.client.gavvwhipir.gavvwhipirRenderer;
+import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModSounds;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
@@ -14,6 +15,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
+import software.bernie.example.registry.SoundRegistry;
 import software.bernie.geckolib.animatable.GeoItem;
 import software.bernie.geckolib.animatable.SingletonGeoAnimatable;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -21,6 +23,7 @@ import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.util.ClientUtils;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.function.Consumer;
@@ -89,14 +92,22 @@ public class gavvwhipir extends SwordItem implements GeoItem {
         controllers.add(new AnimationController<>(this, "extruding", 20, state -> PlayState.CONTINUE)
                 .triggerableAnim("extruding", EXTRUDING)
                 // 标记动画可由服务器触发
+                //我们已将“GAVVWHIPIR_START_TONE”动画标记为可从服务器触发
                 .setSoundKeyframeHandler(state -> {
+                    // 使用帮助程序方法避免在公共类中使用客户端代码
+                    Player player = ClientUtils.getClientPlayer();
+                    if (player != null) {
+                        player.playSound(ModSounds.GAVVWHIPIR_START_TONE.get(), 1.0F, 1.0F);
+                    }
                 }));
     }
     // 处理物品使用方法，右键点击时触发动画
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
-        if (level instanceof ServerLevel serverLevel) {
+        if (level instanceof ServerLevel serverLevel)
             triggerAnim(player, GeoItem.getOrAssignId(player.getItemInHand(hand), serverLevel), "extruding", "extruding");
+        else { // 如果是客户端
+            player.playSound(ModSounds.GAVVWHIPIR_START_TONE.get(), 1.0F, 1.0F);
         }
         return super.use(level, player, hand);
     }
