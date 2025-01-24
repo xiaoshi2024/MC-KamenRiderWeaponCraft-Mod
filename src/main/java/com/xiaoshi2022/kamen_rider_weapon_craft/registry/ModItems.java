@@ -30,6 +30,8 @@ public class ModItems {
             () -> new ridebooker(ModTires.DAIMARU, 4, 1.9F, new Item.Properties()));
     public static final RegistryObject<gavvwhipir> GAVVWHIPIR = ITEMS.register("gavvwhipir",
             () -> new gavvwhipir());
+    public static final RegistryObject<destroy_fifty_swords> DESTROY_FIFTY_SWORDS = ITEMS.register("destroy_fifty_swords",
+            () -> new destroy_fifty_swords());
 
     //方块物品
     public static final RegistryObject<Item> HELHEIM_CRACK_ITEM = ITEMS.register("helheim_crack",

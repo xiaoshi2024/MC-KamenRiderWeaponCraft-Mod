@@ -1,0 +1,11 @@
+{
+  "name": "Destroy 50 Swords",
+  "icon": "kamen_rider_weapon_craft:destroy_fifty_swords",
+  "category": "kamen_rider_weapon_craft:revice",
+  "pages": [
+    {
+      "type": "text",
+      "text": "Produced by Kamen Rider REVIVE, the Seal Ripper is the final form of the Seal Knight, with a powerful blade that can destroy everything."
+    }
+  ]
+}
