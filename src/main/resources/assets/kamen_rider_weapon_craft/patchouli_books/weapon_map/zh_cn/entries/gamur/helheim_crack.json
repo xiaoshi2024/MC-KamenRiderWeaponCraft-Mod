@@ -1,0 +1,15 @@
+{
+  "name": "赫尔海姆维度裂缝",
+  "icon": "kamen_rider_weapon_craft:helheim_crack",
+  "category": "kamen_rider_weapon_craft:gamur",
+  "pages": [
+    {
+      "type": "text",
+      "text": "melon锁种的力量 右键联动道具中的 蜜瓜锁种 有几率触发在玩家附近4格左右生成 一个 赫尔海姆维度裂缝，玩家右键可以进入那个维度，也可以出来，但是不知道什么原因一个裂缝大多数是单程票，所以请别落下你的锁种，防止回不了家！对了，每个次只能召唤5次传送门，不然就会炸掉玩家3点血噢，这也是不可控力原因呢~"
+    },
+    {
+      "type": "image",
+      "images": ["kamen_rider_weapon_craft:textures/gui/entries/helheim_crack.png"]
+    }
+  ]
+}

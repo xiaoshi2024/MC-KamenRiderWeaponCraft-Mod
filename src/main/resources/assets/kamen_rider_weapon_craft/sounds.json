@@ -16,5 +16,23 @@
         "stream": false
       }
     ]
+  },
+  "melonenergy": {
+    "subtitle": "subtitles.melonenergy",
+    "sounds": [
+      {
+        "name": "kamen_rider_weapon_craft:melonenergy",
+        "stream": false
+      }
+    ]
+  },
+  "opendlock": {
+    "subtitle": "subtitles.opendlock",
+    "sounds": [
+      {
+        "name": "kamen_rider_weapon_craft:opendlock",
+        "stream": false
+      }
+    ]
   }
 }

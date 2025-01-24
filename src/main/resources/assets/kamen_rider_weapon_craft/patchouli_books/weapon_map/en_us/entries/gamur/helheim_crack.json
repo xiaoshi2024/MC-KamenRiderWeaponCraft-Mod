@@ -1,0 +1,15 @@
+{
+  "name": "helheimDimensionalRift",
+  "icon": "kamen_rider_weapon_craft:helheim_crack",
+  "category": "kamen_rider_weapon_craft:gamur",
+  "pages": [
+    {
+      "type": "text",
+      "text": "The power of the melon lock seed The melon lock seed in the right-click linkage item has a chance to trigger a Helheim dimension crack that spawns around 4 squares near the player, the player can right-click to enter that dimension, or come out, but I don't know why most of the cracks are one-way tickets, so please don't leave your lock seed behind, in case you can't go home! By the way, you can only summon 5 portals each time, otherwise it will blow up the player's 3 points of blood, which is also the reason for the uncontrollable force~"
+    },
+    {
+      "type": "image",
+      "images": ["kamen_rider_weapon_craft:textures/gui/entries/helheim_crack.png"]
+    }
+  ]
+}

@@ -7,6 +7,7 @@ import com.xiaoshi2022.kamen_rider_weapon_craft.Item.prop.custom.Melon;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.satan_sabre;
 import com.xiaoshi2022.kamen_rider_weapon_craft.kamen_rider_weapon_craft;
 import com.xiaoshi2022.kamen_rider_weapon_craft.weapon_mapBOOK.weapon_map;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -29,6 +30,10 @@ public class ModItems {
             () -> new ridebooker(ModTires.DAIMARU, 4, 1.9F, new Item.Properties()));
     public static final RegistryObject<gavvwhipir> GAVVWHIPIR = ITEMS.register("gavvwhipir",
             () -> new gavvwhipir());
+
+    //方块物品
+    public static final RegistryObject<Item> HELHEIM_CRACK_ITEM = ITEMS.register("helheim_crack",
+            () -> new BlockItem(ModBlocks.HELHEIM_CRACK_BLOCK.get(), new Item.Properties()));
 
     // 武器联动道具
     public static final RegistryObject<Melon> MELON = ITEMS.register("melon",

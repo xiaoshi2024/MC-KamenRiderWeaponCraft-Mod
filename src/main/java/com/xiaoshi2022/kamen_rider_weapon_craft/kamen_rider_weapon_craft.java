@@ -4,10 +4,7 @@ import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.prop.arrowx.AonicxEn
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.prop.items.AonicxItem;
 import com.xiaoshi2022.kamen_rider_weapon_craft.network.CloseMapPacket;
 import com.xiaoshi2022.kamen_rider_weapon_craft.network.LockseedManager;
-import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModContainers;
-import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModItems;
-import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModSounds;
-import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModentityR;
+import com.xiaoshi2022.kamen_rider_weapon_craft.registry.*;
 import com.xiaoshi2022.kamen_rider_weapon_craft.tab.ModTab;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -54,7 +51,9 @@ public class kamen_rider_weapon_craft {
 
         ModSounds.REGISTRY.register(modEventBus);
         ModItems.ITEMS.register(modEventBus);
+        ModBlocks.BLOCKS.register(modEventBus);
         ModTab.TABS.register(modEventBus);
+        ModBlockEntities.BLOCK_ENTITIES.register(modEventBus);
 
         MinecraftForge.EVENT_BUS.register(this);
         GeckoLib.initialize();

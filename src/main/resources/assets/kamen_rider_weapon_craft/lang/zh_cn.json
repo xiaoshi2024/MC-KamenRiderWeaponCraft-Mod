@@ -4,6 +4,8 @@
   "item group.kamen_rider_weapon_craft_prop_tab": "假面骑士里武器的联动道具",
   "item group.kamen_rider_weapon_craft_tab": "假面骑士武器集合模组",
 
+  "block.kamen_rider_weapon_craft.helheim_crack_block": "赫尔海姆裂缝",
+
   "item.kamen_rider_weapon_craft.daidaimaru": "大橙丸",
   "item.kamen_rider_weapon_craft.gangunsaber": "幽灵眼剑枪",
   "item.kamen_rider_weapon_craft.musousaberd": "无双军刀镰大橙丸",
@@ -24,6 +26,8 @@
 
   "subtitles.gavvwhipir_start_tone": "加布掼奶油枪~!",
   "subtitles.riderbookersword": "咔修!",
+  "subtitles.opendlock": "滋 ~滋~（拉链拉动）",
+  "subtitles.melonenergy": "蜜瓜-能量!",
 
   "advancement.kamen_rider_weapon_craft.ridebooker.title": "卡牌已经数不清了是吧",
   "advancement.kamen_rider_weapon_craft.ridebooker.desc": "可恶的帝骑哥！",

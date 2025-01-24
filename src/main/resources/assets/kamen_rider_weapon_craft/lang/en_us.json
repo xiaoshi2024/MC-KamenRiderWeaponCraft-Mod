@@ -4,6 +4,8 @@
   "item group.kamen_rider_weapon_craft_prop_tab": "KamenRiderWeaponCraft Prop Tab",
   "item group.kamen_rider_weapon_craft_tab": "KamenRiderWeaponCraft Tab",
 
+  "block.kamen_rider_weapon_craft.helheim_crack_block": "helheim_crack",
+
   "item.kamen_rider_weapon_craft.daidaimaru": "daidaimaru",
   "item.kamen_rider_weapon_craft.gangunsaber": "Gan Gun Saber",
   "item.kamen_rider_weapon_craft.musousaberd": "musousaber-daidaimaru",
@@ -24,6 +26,8 @@
 
   "subtitles.gavvwhipir_start_tone": "gavvwhipir!",
   "subtitles.riderbookersword": "Casheu!",
+  "subtitles.opendlock": "crunch ~",
+  "subtitles.melonenergy": "Melon-Energy!",
 
   "advancement.kamen_rider_weapon_craft.ridebooker.title": "Too many cards",
   "advancement.kamen_rider_weapon_craft.ridebooker.desc": "Abominable Decade",

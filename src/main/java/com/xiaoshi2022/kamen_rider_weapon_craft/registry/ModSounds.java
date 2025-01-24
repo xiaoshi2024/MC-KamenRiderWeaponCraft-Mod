@@ -12,6 +12,10 @@ public class ModSounds {
 
         public static final RegistryObject<SoundEvent> GAVVWHIPIR_START_TONE = REGISTRY.register("gavvwhipir_start_tone",
                 () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_weapon_craft", "gavvwhipir_start_tone")));
-       public static final RegistryObject<SoundEvent> RIDERBOOKERSWORD = REGISTRY.register("riderbookersword",
+        public static final RegistryObject<SoundEvent> RIDERBOOKERSWORD = REGISTRY.register("riderbookersword",
                 () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_weapon_craft", "riderbookersword")));
+        public static final RegistryObject<SoundEvent> MELONENERGY = REGISTRY.register("melonenergy",
+                () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_weapon_craft", "melonenergy")));
+        public static final RegistryObject<SoundEvent> OPENDLOCK = REGISTRY.register("opendlock",
+                () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_weapon_craft", "opendlock")));
 }

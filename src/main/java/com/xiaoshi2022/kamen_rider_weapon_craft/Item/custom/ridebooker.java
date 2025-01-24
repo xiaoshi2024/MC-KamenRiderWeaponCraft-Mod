@@ -6,6 +6,7 @@ import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
@@ -104,22 +105,23 @@ public class ridebooker extends SwordItem implements GeoItem {
 
     // Let's handle our use method so that we activate the animation when right-clicking while holding the box
     @Override
-    public InteractionResultHolder<ItemStack> use(Level level,Player player,InteractionHand hand) {
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         if (player.isShiftKeyDown()) {
             CompoundTag tag = player.getItemInHand(hand).getTag();
             tag.putFloat("close", tag.getFloat("close") == 1 ? 0 : 1);
-            if (level instanceof ServerLevel serverLevel) {
-                triggerAnim(player, GeoItem.getOrAssignId(player.getItemInHand(hand), serverLevel), "sabre", "sabre");//首播放
             if (level instanceof ServerLevel) {
+                ServerLevel serverLevel = (ServerLevel) level;
+                triggerAnim(player, GeoItem.getOrAssignId(player.getItemInHand(hand), serverLevel), "sabre", "sabre");//首播放
+                serverLevel.playSound(null, player.getX(), player.getY(), player.getZ(), ModSounds.RIDERBOOKERSWORD.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
+                if (level instanceof ServerLevel) {
                     triggerAnim(player, GeoItem.getOrAssignId(player.getItemInHand(hand), serverLevel), "sabrerx", "sabrerx");//同步首播放,次播放（又和首播放同时播放）
                 }
-            }
-            else {
+            } else {
                 player.playSound(ModSounds.RIDERBOOKERSWORD.get(), 1.0F, 1.0F);
             }
         }
-            return super.use(level, player, hand);
-        }
+        return super.use(level, player, hand);
+    }
     //添加"close“标签
     @Override
     public void inventoryTick(ItemStack itemStack,Level level, Entity entity, int i,boolean b){
