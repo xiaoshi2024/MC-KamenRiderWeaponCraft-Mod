@@ -1,7 +1,5 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.tab;
 
-import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.prop.arrowx.AonicxEntity;
-import com.xiaoshi2022.kamen_rider_weapon_craft.Item.prop.items.AonicxItem;
 import com.xiaoshi2022.kamen_rider_weapon_craft.kamen_rider_weapon_craft;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;

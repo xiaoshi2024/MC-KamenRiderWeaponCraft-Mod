@@ -1,9 +1,8 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft;
 
-import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.prop.arrowx.AonicxEntity;
-import com.xiaoshi2022.kamen_rider_weapon_craft.Item.prop.items.AonicxItem;
 import com.xiaoshi2022.kamen_rider_weapon_craft.network.CloseMapPacket;
 import com.xiaoshi2022.kamen_rider_weapon_craft.network.LockseedManager;
+import com.xiaoshi2022.kamen_rider_weapon_craft.particle.ModParticles;
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.*;
 import com.xiaoshi2022.kamen_rider_weapon_craft.tab.ModTab;
 import net.minecraft.network.FriendlyByteBuf;
@@ -54,19 +53,19 @@ public class kamen_rider_weapon_craft {
         ModBlocks.BLOCKS.register(modEventBus);
         ModTab.TABS.register(modEventBus);
         ModBlockEntities.BLOCK_ENTITIES.register(modEventBus);
-
+        ModParticles.REGISTRY.register(modEventBus);
         MinecraftForge.EVENT_BUS.register(this);
         GeckoLib.initialize();
 
-        // 初始化音速箭
-        AonicxItem.init(modEventBus);
-        AonicxEntity.init(modEventBus);
+//        // 初始化音速箭
+//        AonicxItem.init(modEventBus);
+//        AonicxEntity.init(modEventBus);
 
         // 初始化容器
         ModContainers.REGISTRY.register(modEventBus);
 
         // 初始化MODEntityR
-        ModentityR.ENTITIES(modEventBus);
+        ModEntityTypes.ENTITIES.register(modEventBus);
 
         // 初始化Mixin系统
         MixinBootstrap.init();

@@ -3,14 +3,14 @@ package com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.client.sonicarrow.sonicarrowRenderer;
-import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.prop.arrowx.AonicxEntity;
-import com.xiaoshi2022.kamen_rider_weapon_craft.Item.prop.custom.Melon;
-import com.xiaoshi2022.kamen_rider_weapon_craft.Item.prop.items.AonicxItem;
+import com.xiaoshi2022.kamen_rider_weapon_craft.Item.prop.client.entity.LaserBeamEntity;
+import com.xiaoshi2022.kamen_rider_weapon_craft.particle.ModParticles;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
@@ -164,36 +164,41 @@ public class sonicarrow extends SwordItem implements GeoItem {
 
             // 增加冷却时间，这样你就不能快速开火了
             player.getCooldowns().addCooldown(this, 15);
-
             if (!level.isClientSide) {
-                AonicxEntity arrow = new AonicxEntity(shooter, level, AonicxItem.SONICX_ARROW.get());
-                arrow.tickCount = 35;
+                // 获取玩家的射箭角度
+                float yaw = player.getYRot();
+                float pitch = player.getXRot();
 
+                // 激光束的飞行速度
+                float laserVelocity = 4.8f;
+
+                // 计算激光束的初始速度
+                double xSpeed = -Mth.sin(yaw * (float) Math.PI / 180.0F) * Mth.cos(pitch * (float) Math.PI / 180.0F) * laserVelocity;
+                double ySpeed = -Mth.sin(pitch * (float) Math.PI / 180.0F) * laserVelocity;
+                double zSpeed = Mth.cos(yaw * (float) Math.PI / 180.0F) * Mth.cos(pitch * (float) Math.PI / 180.0F) * laserVelocity;
+
+                // 创建激光束实体
+                LaserBeamEntity laserBeam = new LaserBeamEntity(level, player, xSpeed, ySpeed, zSpeed);
+                laserBeam.setPos(player.getX(), player.getY() + player.getEyeHeight(), player.getZ());
+                laserBeam.setDeltaMovement(xSpeed, ySpeed, zSpeed);
+
+                // 设置激光束的基础伤害为9点
+                laserBeam.damage = 9.0D;
+
+                // 将激光束实体添加到世界中
+                level.addFreshEntity(laserBeam);
+                //减少物品耐久
+                stack.hurtAndBreak(1, player, e -> e.broadcastBreakEvent(player.getUsedItemHand()));
                 // 检查音速弓是否附魔了火焰附加
                 if (stack.isEnchanted() && stack.getEnchantmentLevel(Enchantments.FLAMING_ARROWS) > 0) {
-                    arrow.setSecondsOnFire(5);
+                    laserBeam.setSecondsOnFire(5);
                 }
-
-                // 修改箭矢的飞行力度
-                float arrowVelocity = 4.8f;
-                float pull = 1.9f;
-                arrow.shootFromRotation(player, player.getXRot(), player.getYRot(), arrowVelocity, pull, 1);
-                arrow.setBaseDamage(2.5);
-                arrow.isNoGravity();
-                arrow.setCritArrow(true);
-
-                // 减少物品耐久
-                stack.hurtAndBreak(1, shooter, p -> p.broadcastBreakEvent(shooter.getUsedItemHand()));
-
-                level.addFreshEntity(arrow);
+                // 播放动画
                 triggerAnim(shooter, GeoItem.getOrAssignId(stack, (ServerLevel)shooter.level()), "pullback", "pullback");
-
-                // 设置箭矢的旋转角度
-                arrow.setYRot(shooter.getYRot());
-                arrow.setXRot(shooter.getXRot());
             }
         }
     }
+
 
     @Override
     public UseAnim getUseAnimation(ItemStack stack) {

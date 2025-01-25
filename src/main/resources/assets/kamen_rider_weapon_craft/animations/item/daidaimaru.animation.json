@@ -1,43 +1,21 @@
 {
 	"format_version": "1.8.0",
 	"animations": {
+		"rawanimation": {
+			"animation_length": 0.04167
+		},
 		"throw": {
-			"animation_length": 3,
+			"animation_length": 0.25,
 			"bones": {
 				"Daidaimaru": {
 					"rotation": {
-						"0.0": {
-							"vector": [0, 0, 0]
-						},
-						"0.9167": {
-							"vector": [37.5, 0, 0]
-						},
-						"1.9167": {
-							"vector": [93.25353, -52.42899, -94.10228]
-						},
-						"2.7917": {
-							"vector": [129.98322, 2.84228, -7.26591]
-						}
-					},
-					"position": {
-						"0.0": {
-							"vector": [0, 0, 0]
-						},
-						"1.9167": {
-							"vector": [-14, 18.9, 0]
-						},
-						"2.7917": {
-							"vector": [-14, 8.9, -7]
-						}
-					},
-					"scale": {
-						"vector": [1, 1, 1]
+						"0.0": [-2.5, 0, 0],
+						"0.0833": [0, -27.5, 0],
+						"0.1667": [-6.30269, 21.24185, -0.76919],
+						"0.25": [-2.5, 0, 0]
 					}
 				}
 			}
-		},
-		"rawanimation": {
-			"animation_length": 0.04167
 		}
 	},
 	"geckolib_format_version": 2

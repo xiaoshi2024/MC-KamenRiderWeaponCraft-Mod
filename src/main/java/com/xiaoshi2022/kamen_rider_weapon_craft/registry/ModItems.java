@@ -19,9 +19,9 @@ public class ModItems {
     public static final RegistryObject<satan_sabre> SATAN_SABRE = ITEMS.register("satan_sabre",
             () -> new satan_sabre());
     public static final RegistryObject<sonicarrow> SONICARROW = ITEMS.register("sonicarrow",
-            () -> new sonicarrow(13.2f, 1.5f, new Item.Properties()));
+            () -> new sonicarrow(10.2f, 1.5f, new Item.Properties()));
     public static final RegistryObject<daidaimaru> DAIDAIMARU = ITEMS.register("daidaimaru",
-            () -> new daidaimaru(ModTires.DAIMARU, 2, 1.5F, new Item.Properties()));
+            () -> new daidaimaru(ModTires.DAIMARU, 3, 2.5F, new Item.Properties()));
     public static final RegistryObject<musousaberd> MUSOUSABERD = ITEMS.register("musousaberd",
             () -> new musousaberd(ModTires.DAIMARU, 3, 2.5F, new Item.Properties()));
     public static final RegistryObject<gangunsaber> GANGUNSABER = ITEMS.register("gangunsaber",

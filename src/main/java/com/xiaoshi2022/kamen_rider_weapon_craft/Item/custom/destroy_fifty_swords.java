@@ -35,11 +35,11 @@ public class destroy_fifty_swords extends SwordItem implements GeoItem {
             }
 
             public float getSpeed() {
-                return 10f; // 武器的攻击速度
+                return 1f; // 武器的攻击速度
             }
 
             public float getAttackDamageBonus() {
-                return 5f; // 武器的额外攻击伤害
+                return 6f; // 武器的额外攻击伤害
             }
 
             public int getLevel() {
@@ -53,7 +53,7 @@ public class destroy_fifty_swords extends SwordItem implements GeoItem {
             public Ingredient getRepairIngredient() {
                 return Ingredient.of();
             }
-        }, 3, -2.4f, new Item.Properties());
+        }, 4, 2.4f, new Item.Properties());
         SingletonGeoAnimatable.registerSyncedAnimatable(this);
     }
 
