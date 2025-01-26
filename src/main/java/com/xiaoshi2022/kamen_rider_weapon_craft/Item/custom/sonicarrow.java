@@ -5,7 +5,6 @@ import com.google.common.collect.Multimap;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.client.sonicarrow.sonicarrowRenderer;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.prop.client.entity.LaserBeamEntity;
 import com.xiaoshi2022.kamen_rider_weapon_craft.particle.ModParticles;
-import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModEntityTypes;
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModSounds;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
@@ -23,10 +22,8 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.*;
-import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import software.bernie.geckolib.animatable.GeoItem;
@@ -42,6 +39,7 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 import java.util.List;
 import java.util.UUID;
 import java.util.function.Consumer;
+
 
 public class sonicarrow extends SwordItem implements GeoItem {
     private final float meleeDamage;
@@ -163,8 +161,9 @@ public class sonicarrow extends SwordItem implements GeoItem {
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         if (!level.isClientSide) {
             player.startUsingItem(hand);
-            if (level instanceof ServerLevel serverLevel)
+            if (level instanceof ServerLevel serverLevel) {
                 triggerAnim(player, GeoItem.getOrAssignId(player.getItemInHand(hand), serverLevel), "draw", "draw");
+            }
         }
         return InteractionResultHolder.consume(player.getItemInHand(hand));
     }
