@@ -2,6 +2,7 @@ package com.xiaoshi2022.kamen_rider_weapon_craft.gui;
 
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.sonicarrow;
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModItems;
+import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModSounds;
 import com.xiaoshi2022.kamen_rider_weapon_craft.world.inventory.SonicBowContainer;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.components.Button;
@@ -153,6 +154,9 @@ public class SonicBowGuiScreen extends AbstractContainerScreen<SonicBowContainer
                     // 开始进度条动画
                     isProgressing = true;
                     progressTicks = 0;
+
+                    // 播放音效
+                    entity.playSound(ModSounds.LOCK_ON.get(), 1.0F, 1.0F);
                 }
             }
         }).bounds(this.leftPos + 79, this.topPos + 55, 72, 20).build();

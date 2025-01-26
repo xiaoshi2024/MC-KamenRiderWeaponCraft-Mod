@@ -29,6 +29,12 @@
   "subtitles.riderbookersword": "Casheu!",
   "subtitles.opendlock": "crunch ~",
   "subtitles.melonenergy": "Melon-Energy!",
+  "subtitles.lock_on": "lock ~ on~!",
+  "subtitles.lock_seed_put_in": "lock_seed_put_in",
+  "subtitles.pull_standby": "pull_standby",
+  "subtitles.slash": "slash",
+  "subtitles.sonicarrow_boot_sound": "Genesis-Sonicarrow",
+  "subtitles.sonicarrow_shoot": "Xiu~",
 
   "advancement.kamen_rider_weapon_craft.ridebooker.title": "Too many cards",
   "advancement.kamen_rider_weapon_craft.ridebooker.desc": "Abominable Decade",

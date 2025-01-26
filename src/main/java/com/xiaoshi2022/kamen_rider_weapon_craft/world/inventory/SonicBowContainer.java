@@ -2,6 +2,10 @@ package com.xiaoshi2022.kamen_rider_weapon_craft.world.inventory;
 
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModContainers;
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModItems;
+import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModSounds;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -66,6 +70,11 @@ public class SonicBowContainer extends AbstractContainerMenu implements Supplier
         for (int si = 0; si < 9; ++si) {
             this.addSlot(new Slot(inv, si, 8 + si * 18, 142));
         }
+
+        // 播放音效
+        if (!entity.level().isClientSide) {
+            ((ServerLevel) entity.level()).playSound(null, entity.blockPosition(), ModSounds.LOCK_SEED_PUT_IN.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
+        }
     }
 
     @Override
@@ -116,5 +125,11 @@ public class SonicBowContainer extends AbstractContainerMenu implements Supplier
     @Override
     public Map<Integer, Slot> get() {
         return customSlots;
+    }
+
+    @Override
+    public void slotsChanged(Container container) {
+        super.slotsChanged(container);
+        syncInventoryToNBT();
     }
 }

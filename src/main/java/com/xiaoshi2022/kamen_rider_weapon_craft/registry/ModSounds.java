@@ -18,4 +18,16 @@ public class ModSounds {
                 () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_weapon_craft", "melonenergy")));
         public static final RegistryObject<SoundEvent> OPENDLOCK = REGISTRY.register("opendlock",
                 () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_weapon_craft", "opendlock")));
+        public static final RegistryObject<SoundEvent> SONICARROW_SHOOT = REGISTRY.register("sonicarrow_shoot",
+                () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_weapon_craft", "sonicarrow_shoot")));
+        public static final RegistryObject<SoundEvent> SONICARROW_BOOT_SOUND = REGISTRY.register("sonicarrow_boot_sound",
+                () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_weapon_craft", "sonicarrow_boot_sound")));
+        public static final RegistryObject<SoundEvent> SLASH = REGISTRY.register("slash",
+                () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_weapon_craft", "slash")));
+        public static final RegistryObject<SoundEvent> PULL_STANDBY = REGISTRY.register("pull_standby",
+                () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_weapon_craft", "pull_standby")));
+        public static final RegistryObject<SoundEvent> LOCK_SEED_PUT_IN = REGISTRY.register("lock_seed_put_in",
+                () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_weapon_craft", "lock_seed_put_in")));
+        public static final RegistryObject<SoundEvent> LOCK_ON = REGISTRY.register("lock_on",
+                () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_weapon_craft", "lock_on")));
 }

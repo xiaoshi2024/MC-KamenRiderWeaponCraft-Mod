@@ -34,5 +34,59 @@
         "stream": false
       }
     ]
+  },
+  "lock_on": {
+    "subtitle": "subtitles.lock_on",
+    "sounds": [
+      {
+        "name": "kamen_rider_weapon_craft:lock_on",
+        "stream": false
+      }
+    ]
+  },
+  "lock_seed_put_in": {
+    "subtitle": "subtitles.lock_seed_put_in",
+    "sounds": [
+      {
+        "name": "kamen_rider_weapon_craft:lock_seed_put_in",
+        "stream": false
+      }
+    ]
+  },
+  "pull_standby": {
+    "subtitle": "subtitles.pull_standby",
+    "sounds": [
+      {
+        "name": "kamen_rider_weapon_craft:pull_standby",
+        "stream": false
+      }
+    ]
+  },
+  "slash": {
+    "subtitle": "subtitles.slash",
+    "sounds": [
+      {
+        "name": "kamen_rider_weapon_craft:slash",
+        "stream": false
+      }
+    ]
+  },
+  "sonicarrow_boot_sound": {
+    "subtitle": "subtitles.sonicarrow_boot_sound",
+    "sounds": [
+      {
+        "name": "kamen_rider_weapon_craft:sonicarrow_boot_sound",
+        "stream": false
+      }
+    ]
+  },
+  "sonicarrow_shoot": {
+    "subtitle": "subtitles.sonicarrow_shoot",
+    "sounds": [
+      {
+        "name": "kamen_rider_weapon_craft:sonicarrow_shoot",
+        "stream": false
+      }
+    ]
   }
 }
