@@ -5,6 +5,7 @@ import com.google.common.collect.Multimap;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.client.sonicarrow.sonicarrowRenderer;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.prop.client.entity.LaserBeamEntity;
 import com.xiaoshi2022.kamen_rider_weapon_craft.particle.ModParticles;
+import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModEntityTypes;
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModSounds;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
@@ -22,8 +23,10 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.*;
+import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import software.bernie.geckolib.animatable.GeoItem;
@@ -61,7 +64,7 @@ public class sonicarrow extends SwordItem implements GeoItem {
     private Mode currentMode = Mode.DEFAULT;
 
     public sonicarrow(float meleeDamage, float attackSpeed, Properties properties) {
-        super(Tiers.NETHERITE, 3, -2.4F, properties);
+        super((Tier) Tiers.GOLD, (int) meleeDamage, attackSpeed, properties);
         this.meleeDamage = meleeDamage;
         this.attackSpeed = attackSpeed;
         SingletonGeoAnimatable.registerSyncedAnimatable(this);
@@ -190,8 +193,8 @@ public class sonicarrow extends SwordItem implements GeoItem {
                 // 计算蓄力时间（单位：秒）
                 float chargeTime = (float) (this.getUseDuration(stack) - ticksRemaining) / 20.0F;
 
-                // 创建激光束实体
-                LaserBeamEntity laserBeam = new LaserBeamEntity(level, player, ModParticles.AONICX_PARTICLE.get(), chargeTime);
+                // 创建激光束实体，确保传递玩家手中的武器 stack
+                LaserBeamEntity laserBeam = new LaserBeamEntity(level, player, ModParticles.AONICX_PARTICLE.get(), chargeTime, stack);
                 laserBeam.setPos(player.getX(), player.getY() + player.getEyeHeight(), player.getZ());
                 laserBeam.setDeltaMovement(xSpeed, ySpeed, zSpeed);
 
@@ -211,12 +214,16 @@ public class sonicarrow extends SwordItem implements GeoItem {
                 if (stack.isEnchanted() && stack.getEnchantmentLevel(Enchantments.FLAMING_ARROWS) > 0) {
                     laserBeam.setSecondsOnFire(5);
                 }
+                // 检查音速弓是否附魔了力量
+                if (stack.isEnchanted() && stack.getEnchantmentLevel(Enchantments.POWER_ARROWS) > 0) {
+                    laserBeam.damage += stack.getEnchantmentLevel(Enchantments.POWER_ARROWS);
+                }
+
                 // 播放动画
                 triggerAnim(shooter, GeoItem.getOrAssignId(stack, (ServerLevel)shooter.level()), "pullback", "pullback");
             }
         }
     }
-
 
     @Override
     public UseAnim getUseAnimation(ItemStack stack) {
