@@ -2,7 +2,9 @@ package com.xiaoshi2022.kamen_rider_weapon_craft.procedures;
 
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.sonicarrow;
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModSounds;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -20,10 +22,6 @@ public class PullSounds {
             if (player.isUsingItem() && player.getUseItem().getItem() instanceof sonicarrow) {
                 // 在服务器端播放音效
                 player.playSound(ModSounds.PULL_STANDBY.get(),  1.0F, 1.0F);
-                // 在客户端播放音效
-                if (player.level().isClientSide) {
-                    player.playSound(ModSounds.PULL_STANDBY.get(), 1.0F, 1.0F);
-                }
             }
         }
     }

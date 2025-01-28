@@ -2,8 +2,10 @@ package com.xiaoshi2022.kamen_rider_weapon_craft.procedures;
 
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.sonicarrow;
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModSounds;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -22,10 +24,6 @@ public class SonicarrowBoot {
         if (currentTime - lastPlayed >= INTERVAL) {
             // 播放音效
             player.playSound(ModSounds.SONICARROW_BOOT_SOUND.get(),  1.0F, 1.0F);
-            // 在客户端播放音效
-            if (player.level().isClientSide) {
-                player.playSound(ModSounds.SONICARROW_BOOT_SOUND.get(), 1.0F, 1.0F);
-            }
             // 更新玩家最后一次播放音效的时间
             player.getPersistentData().putLong("lastPlayedSound", currentTime);
         } else {

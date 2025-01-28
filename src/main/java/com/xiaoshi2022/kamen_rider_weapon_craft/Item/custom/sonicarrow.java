@@ -9,6 +9,7 @@ import com.xiaoshi2022.kamen_rider_weapon_craft.particle.ModParticles;
 import com.xiaoshi2022.kamen_rider_weapon_craft.procedures.PullSounds;
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModSounds;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -251,6 +252,7 @@ public class sonicarrow extends SwordItem implements GeoItem {
             }
         }
     }
+
 
     private static boolean isHoldingSonicArrow(Player player) {
         return player.getMainHandItem().getItem() instanceof sonicarrow ||
