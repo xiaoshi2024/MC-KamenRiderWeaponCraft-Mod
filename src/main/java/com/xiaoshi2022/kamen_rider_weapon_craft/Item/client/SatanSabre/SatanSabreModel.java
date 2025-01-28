@@ -30,7 +30,7 @@ public class SatanSabreModel<T extends GeoAnimatable> extends DefaultedGeoModel<
      */
     @Override
     public SatanSabreModel<T> withAltModel(ResourceLocation altPath) {
-        return (SatanSabreModel<T>)super.withAltModel(new ResourceLocation(kamen_rider_weapon_craft.MOD_ID,"geo/item/satan_sabre.geo.json"));
+        return (SatanSabreModel<T>)super.withAltModel(new ResourceLocation(kamen_rider_weapon_craft.MOD_ID,"geo/item/satan_saber.geo.json"));
     }
 
     /**
@@ -39,7 +39,7 @@ public class SatanSabreModel<T extends GeoAnimatable> extends DefaultedGeoModel<
      */
     @Override
     public SatanSabreModel<T> withAltAnimations(ResourceLocation altPath) {
-        return (SatanSabreModel<T>)super.withAltAnimations(new ResourceLocation(kamen_rider_weapon_craft.MOD_ID,"animations/item/satan_sabre.animation.json"));
+        return (SatanSabreModel<T>)super.withAltAnimations(new ResourceLocation(kamen_rider_weapon_craft.MOD_ID,"animations/item/satan_saber.animation.json"));
     }
 
     /**
@@ -48,7 +48,7 @@ public class SatanSabreModel<T extends GeoAnimatable> extends DefaultedGeoModel<
      */
     @Override
     public SatanSabreModel<T> withAltTexture(ResourceLocation altPath) {
-        return (SatanSabreModel<T>)super.withAltTexture(new ResourceLocation(kamen_rider_weapon_craft.MOD_ID,"textures/item/satan_sabre.png"));
+        return (SatanSabreModel<T>)super.withAltTexture(new ResourceLocation(kamen_rider_weapon_craft.MOD_ID,"textures/item/satan_saber.png"));
     }
 }
 

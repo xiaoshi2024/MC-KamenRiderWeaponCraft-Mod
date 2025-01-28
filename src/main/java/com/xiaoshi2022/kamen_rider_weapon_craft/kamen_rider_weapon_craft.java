@@ -2,7 +2,11 @@ package com.xiaoshi2022.kamen_rider_weapon_craft;
 
 import com.xiaoshi2022.kamen_rider_weapon_craft.network.CloseMapPacket;
 import com.xiaoshi2022.kamen_rider_weapon_craft.network.LockseedManager;
+import com.xiaoshi2022.kamen_rider_weapon_craft.network.NetworkHandler;
+import com.xiaoshi2022.kamen_rider_weapon_craft.network.ServerSound;
 import com.xiaoshi2022.kamen_rider_weapon_craft.particle.ModParticles;
+import com.xiaoshi2022.kamen_rider_weapon_craft.procedures.PullSounds;
+import com.xiaoshi2022.kamen_rider_weapon_craft.procedures.SonicarrowBoot;
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.*;
 import com.xiaoshi2022.kamen_rider_weapon_craft.tab.ModTab;
 import net.minecraft.resources.ResourceLocation;
@@ -24,9 +28,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
-
-import static org.openjdk.nashorn.internal.runtime.regexp.joni.constants.OPSize.INDEX;
-
 
 @Mod("kamen_rider_weapon_craft")
 @Mod.EventBusSubscriber(modid = "kamen_rider_weapon_craft")
@@ -52,9 +53,8 @@ public class kamen_rider_weapon_craft {
         MinecraftForge.EVENT_BUS.register(this);
         GeckoLib.initialize();
 
-//        // 初始化音速箭
-//        AonicxItem.init(modEventBus);
-//        AonicxEntity.init(modEventBus);
+        MinecraftForge.EVENT_BUS.register(PullSounds.class);
+        MinecraftForge.EVENT_BUS.register(SonicarrowBoot.class);
 
         // 初始化容器
         ModContainers.REGISTRY.register(modEventBus);
@@ -69,17 +69,28 @@ public class kamen_rider_weapon_craft {
 
         // 注册网络包
         registerNetworkMessages();
+
+        // 注册 NetworkHandler
+        NetworkHandler.register();
     }
 
     private void registerNetworkMessages() {
         int id = 0;
         PACKET_HANDLER.registerMessage(id++, LockseedManager.class, LockseedManager::buffer, LockseedManager::new, LockseedManager::handler);
         PACKET_HANDLER.registerMessage(
-                INDEX,
+                id++,
                 CloseMapPacket.class,
                 CloseMapPacket::encode,
                 CloseMapPacket::decode,
                 CloseMapPacket::handle
+        );
+        // 注册 SeverSound 数据包
+        PACKET_HANDLER.registerMessage(
+                id++,
+                ServerSound.class,
+                ServerSound::encode,
+                ServerSound::decode,
+                ServerSound::handle
         );
     }
 

@@ -4,13 +4,16 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.client.sonicarrow.sonicarrowRenderer;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.prop.client.entity.LaserBeamEntity;
+import com.xiaoshi2022.kamen_rider_weapon_craft.network.ServerSound;
 import com.xiaoshi2022.kamen_rider_weapon_craft.particle.ModParticles;
+import com.xiaoshi2022.kamen_rider_weapon_craft.procedures.PullSounds;
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModSounds;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
@@ -26,6 +29,9 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.*;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
+import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 import software.bernie.geckolib.animatable.GeoItem;
 import software.bernie.geckolib.animatable.SingletonGeoAnimatable;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -40,7 +46,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.function.Consumer;
 
-
+@Mod.EventBusSubscriber(modid = "kamen_rider_weapon_craft")
 public class sonicarrow extends SwordItem implements GeoItem {
     private final float meleeDamage;
     private final float attackSpeed;
@@ -51,14 +57,11 @@ public class sonicarrow extends SwordItem implements GeoItem {
     private static final RawAnimation DRAW = RawAnimation.begin().thenPlay("draw");
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
-
-    // 定义模式枚举
     public enum Mode {
         DEFAULT,
         MELON
     }
 
-    // 当前模式
     private Mode currentMode = Mode.DEFAULT;
 
     public sonicarrow(float meleeDamage, float attackSpeed, Properties properties) {
@@ -69,24 +72,22 @@ public class sonicarrow extends SwordItem implements GeoItem {
     }
 
     public sonicarrow() {
-        this(7.0F, -2.4F, new Properties().stacksTo(1).durability(201));
+        this(9.0F, 4.4F, new Properties().stacksTo(1).durability(980));
     }
 
-    // 切换模式的方法
     public void switchMode(ItemStack stack, Mode mode) {
         CompoundTag tag = stack.getOrCreateTag();
         currentMode = mode;
-        tag.putString("Mode", currentMode.name()); // 保存当前模式到 NBT
+        tag.putString("Mode", currentMode.name());
         stack.setTag(tag);
     }
 
-    // 获取当前模式
     public Mode getCurrentMode(ItemStack stack) {
         CompoundTag tag = stack.getOrCreateTag();
         if (tag.contains("Mode")) {
             return Mode.valueOf(tag.getString("Mode"));
         }
-        return Mode.DEFAULT; // 默认模式
+        return Mode.DEFAULT;
     }
 
     @Override
@@ -109,7 +110,6 @@ public class sonicarrow extends SwordItem implements GeoItem {
         Multimap<Attribute, AttributeModifier> multimap = HashMultimap.create();
 
         if (slot == EquipmentSlot.MAINHAND) {
-            // 设置攻击点和攻击速度
             multimap.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", this.meleeDamage, AttributeModifier.Operation.ADDITION));
             multimap.put(Attributes.ATTACK_SPEED, new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", this.attackSpeed, AttributeModifier.Operation.ADDITION));
         }
@@ -126,9 +126,8 @@ public class sonicarrow extends SwordItem implements GeoItem {
     @Override
     public boolean onLeftClickEntity(ItemStack stack, Player player, Entity entity) {
         if (!player.level().isClientSide) {
-            if (player.getRandom().nextInt(10) == 0) { // 10% 的几率
+            if (player.getRandom().nextInt(10) == 0) {
                 triggerAnim(player, GeoItem.getOrAssignId(stack, (ServerLevel) player.level()), "bowblade", "bowblade");
-                // 在服务器端播放音效
                 ((ServerLevel) player.level()).playSound(null, player.blockPosition(), ModSounds.SLASH.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
             }
         }
@@ -149,7 +148,6 @@ public class sonicarrow extends SwordItem implements GeoItem {
         controllers.add(new AnimationController<>(this, "bowblade", 20, state -> PlayState.STOP)
                 .triggerableAnim("bowblade", BOWBLADE)
                 .setSoundKeyframeHandler(state -> {
-                    // 使用帮助程序方法避免在公共类中使用客户端代码
                     Player player = ClientUtils.getClientPlayer();
                     if (player != null) {
                         player.playSound(ModSounds.SLASH.get(), 1.0F, 1.0F);
@@ -159,67 +157,56 @@ public class sonicarrow extends SwordItem implements GeoItem {
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+        ItemStack stack = player.getItemInHand(hand);
         if (!level.isClientSide) {
             player.startUsingItem(hand);
             if (level instanceof ServerLevel serverLevel) {
-                triggerAnim(player, GeoItem.getOrAssignId(player.getItemInHand(hand), serverLevel), "draw", "draw");
+                triggerAnim(player, GeoItem.getOrAssignId(stack, serverLevel), "draw", "draw");
+                // 发送网络包，开始播放 pull_standby 音效
+                ServerSound.sendToServer(new ServerSound(ServerSound.SoundType.START_STANDBY));
             }
         }
-        return InteractionResultHolder.consume(player.getItemInHand(hand));
+        return InteractionResultHolder.consume(stack);
     }
 
     @Override
     public void releaseUsing(ItemStack stack, Level level, LivingEntity shooter, int ticksRemaining) {
         if (shooter instanceof Player player) {
+            // 发送网络包，停止播放 pull_standby 音效
+            ServerSound.sendToServer(new ServerSound(ServerSound.SoundType.STOP_STANDBY));
             if (stack.getDamageValue() >= stack.getMaxDamage() - 1)
                 return;
 
-            // 增加冷却时间，这样你就不能快速开火了
             player.getCooldowns().addCooldown(this, 30);
             if (!level.isClientSide) {
-                // 获取玩家的射箭角度
                 float yaw = player.getYRot();
                 float pitch = player.getXRot();
+                float laserVelocity = 2f;
 
-                // 激光束的飞行速度(不能太快！)
-                float laserVelocity = 1f;
-
-                // 计算激光束的初始速度
                 double xSpeed = -Mth.sin(yaw * (float) Math.PI / 180.0F) * Mth.cos(pitch * (float) Math.PI / 180.0F) * laserVelocity;
                 double ySpeed = -Mth.sin(pitch * (float) Math.PI / 180.0F) * laserVelocity;
                 double zSpeed = Mth.cos(yaw * (float) Math.PI / 180.0F) * Mth.cos(pitch * (float) Math.PI / 180.0F) * laserVelocity;
 
-                // 计算蓄力时间（单位：秒）
                 float chargeTime = (float) (this.getUseDuration(stack) - ticksRemaining) / 20.0F;
 
-                // 创建激光束实体，确保传递玩家手中的武器 stack
                 LaserBeamEntity laserBeam = new LaserBeamEntity(level, player, ModParticles.AONICX_PARTICLE.get(), chargeTime, stack);
                 laserBeam.setPos(player.getX(), player.getY() + player.getEyeHeight(), player.getZ());
                 laserBeam.setDeltaMovement(xSpeed, ySpeed, zSpeed);
-
-                // 设置激光束的基础伤害为9点
                 laserBeam.damage = 9.0D;
 
-                // 将激光束实体添加到世界中
                 level.addFreshEntity(laserBeam);
-
-                // 播放音效
                 ((ServerLevel) player.level()).playSound(null, player.blockPosition(), ModSounds.SONICARROW_SHOOT.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
 
-                // 减少物品耐久
                 stack.hurtAndBreak(1, player, e -> e.broadcastBreakEvent(player.getUsedItemHand()));
 
-                // 检查音速弓是否附魔了火焰附加
                 if (stack.isEnchanted() && stack.getEnchantmentLevel(Enchantments.FLAMING_ARROWS) > 0) {
                     laserBeam.setSecondsOnFire(5);
                 }
-                // 检查音速弓是否附魔了力量
                 if (stack.isEnchanted() && stack.getEnchantmentLevel(Enchantments.POWER_ARROWS) > 0) {
                     laserBeam.damage += stack.getEnchantmentLevel(Enchantments.POWER_ARROWS);
                 }
 
-                // 播放动画
-                triggerAnim(shooter, GeoItem.getOrAssignId(stack, (ServerLevel)shooter.level()), "pullback", "pullback");
+                triggerAnim(shooter, GeoItem.getOrAssignId(stack, (ServerLevel) shooter.level()), "pullback", "pullback");
             }
         }
     }
@@ -250,5 +237,23 @@ public class sonicarrow extends SwordItem implements GeoItem {
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {
         return this.cache;
+    }
+
+    // 每隔 2 秒检查一次标识符，播放 pull_standby 音效
+    @SubscribeEvent
+    public static void onServerTick(TickEvent.ServerTickEvent event) {
+        if (event.phase == TickEvent.Phase.END && ServerSound.isPlayingStandbySound()) {
+            for (ServerPlayer player : event.getServer().getPlayerList().getPlayers()) {
+                if (isHoldingSonicArrow(player)) {
+                    // 调用 PullSounds 类中的方法播放 pull_standby 音效
+                    PullSounds.playPullStandbySound(player);
+                }
+            }
+        }
+    }
+
+    private static boolean isHoldingSonicArrow(Player player) {
+        return player.getMainHandItem().getItem() instanceof sonicarrow ||
+               player.getOffhandItem().getItem() instanceof sonicarrow;
     }
 }

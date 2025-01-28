@@ -2,30 +2,27 @@ package com.xiaoshi2022.kamen_rider_weapon_craft.procedures;
 
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.sonicarrow;
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModSounds;
-import net.minecraft.client.Minecraft;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 
-@Mod.EventBusSubscriber
 public class PullSounds {
     private static final int SOUND_INTERVAL = 20; // 1秒 = 20 ticks
     private static long lastPlayedTime = 0;
 
-    @SubscribeEvent
-    public static void onClientTick(TickEvent.ClientTickEvent event) {
-        Level level = Minecraft.getInstance().level;
-        if (level != null) {
-            long currentTime = level.getGameTime();
-            if (currentTime - lastPlayedTime >= SOUND_INTERVAL) {
-                lastPlayedTime = currentTime;
+    public static void playPullStandbySound(ServerPlayer player) {
+        Level level = player.level();
+        long currentTime = level.getGameTime();
+        if (currentTime - lastPlayedTime >= SOUND_INTERVAL) {
+            lastPlayedTime = currentTime;
 
-                Player player = Minecraft.getInstance().player;
-                if (player != null && player.isUsingItem() && player.getUseItem().getItem() instanceof sonicarrow) {
-                   player.playSound(ModSounds.PULL_STANDBY.get(), 1.0F, 1.0F);
+            if (player.isUsingItem() && player.getUseItem().getItem() instanceof sonicarrow) {
+                // 在服务器端播放音效
+                player.playSound(ModSounds.PULL_STANDBY.get(),  1.0F, 1.0F);
+                // 在客户端播放音效
+                if (player.level().isClientSide) {
+                    player.playSound(ModSounds.PULL_STANDBY.get(), 1.0F, 1.0F);
                 }
             }
         }
