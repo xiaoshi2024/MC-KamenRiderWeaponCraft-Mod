@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "kamen_rider_weapon_craft:hikaristudio",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 36,
+    "separation": 18,
+    "salt": 293712331
+  }
+}
