@@ -31,5 +31,6 @@ public class ModTab {
             .title(Component.translatable("item group.kamen_rider_weapon_craft_prop_tab"))
             .displayItems(((parameters, output) -> {
                 output.accept(MELON.get());
+                output.accept(TIME_TRAVELER_STUDIO_BLOCK_ITEM.get());
             })).build());
 }

@@ -4,7 +4,10 @@
   "item group.kamen_rider_weapon_craft_prop_tab": "KamenRiderWeaponCraft Prop Tab",
   "item group.kamen_rider_weapon_craft_tab": "KamenRiderWeaponCraft Tab",
 
-  "block.kamen_rider_weapon_craft.helheim_crack_block": "helheim_crack",
+  "block.kamen_rider_weapon_craft.helheim_crack_block": "helheimCrack",
+  "block.kamen_rider_weapon_craft.time_traveler_studio_block": "timeTraveler Studio Block",
+
+  "entity.minecraft.villager.kamen_rider_weapon_craft.time_traveler_profession": "theWillOfTimeTravel",
 
   "item.kamen_rider_weapon_craft.daidaimaru": "daidaimaru",
   "item.kamen_rider_weapon_craft.gangunsaber": "Gan Gun Saber",

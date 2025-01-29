@@ -5,6 +5,10 @@
   "item group.kamen_rider_weapon_craft_tab": "假面骑士武器集合模组",
 
   "block.kamen_rider_weapon_craft.helheim_crack_block": "赫尔海姆裂缝",
+  "block.kamen_rider_weapon_craft.time_traveler_studio_block": "时空旅行照相馆",
+
+  "entity.minecraft.villager.kamen_rider_weapon_craft.time_traveler_profession": "时空旅行意志者",
+
 
   "item.kamen_rider_weapon_craft.daidaimaru": "大橙丸",
   "item.kamen_rider_weapon_craft.gangunsaber": "幽灵眼剑枪",

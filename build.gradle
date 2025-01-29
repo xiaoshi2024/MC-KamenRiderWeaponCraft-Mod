@@ -155,6 +155,9 @@ minecraft {
             name = 'GeckoLib'
             url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
         }
+        maven {
+            url "https://cursemaven.com"
+        }
         maven { url 'https://maven.blamejared.com' }
         // Put repositories for dependencies here
         // ForgeGradle automatically adds the Forge maven and Maven Central for you
@@ -167,6 +170,8 @@ minecraft {
     }
 
     dependencies {
+        implementation fg.deobf("curse.maven:minecraft-comes-alive-reborn-535291:6127389")
+        implementation fg.deobf("curse.maven:architectury-api-419699:5137938")
         implementation fg.deobf('software.bernie.geckolib:geckolib-forge-1.20.1:4.4.9')
         compileOnly fg.deobf("vazkii.patchouli:Patchouli:[1.20.1-81-FORGE]:api")
         runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:[1.20.1-81-FORGE]")

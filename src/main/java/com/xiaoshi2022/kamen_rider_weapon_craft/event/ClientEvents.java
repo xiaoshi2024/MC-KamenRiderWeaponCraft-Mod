@@ -1,31 +1,25 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.event;
 
-import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.sonicarrow;
 import com.xiaoshi2022.kamen_rider_weapon_craft.kamen_rider_weapon_craft;
 import com.xiaoshi2022.kamen_rider_weapon_craft.network.CloseMapPacket;
 import com.xiaoshi2022.kamen_rider_weapon_craft.particle.ModParticles;
 import com.xiaoshi2022.kamen_rider_weapon_craft.particle.custom.AonicxParticles;
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModBlockEntities;
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModEntityTypes;
-import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModSounds;
 import com.xiaoshi2022.kamen_rider_weapon_craft.util.KeyBinding;
 import com.xiaoshi2022.kamen_rider_weapon_craft.weapon_mapBOOK.weapon_map;
 import net.minecraft.client.Minecraft;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.prop.client.arrowx.LaserBeamEntityRenderer;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.entity.EntityRenderers;
-import net.minecraft.network.chat.Component;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.client.daidaimaru.ThrownDaidaimaruRenderer;
 import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
-import net.minecraftforge.event.TickEvent;
+import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.client.Time_traveler_studio_block.Time_traveler_studio_blockRenderer;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -69,6 +63,7 @@ public class ClientEvents {
         @SubscribeEvent
         public static void registerRenderers(final EntityRenderersEvent.RegisterRenderers event) {
             event.registerBlockEntityRenderer(ModBlockEntities.HELHEIM_CRACK_BLOCK_ENTITY.get(), helheim_crackBlockRenderer::new);
+            event.registerBlockEntityRenderer(ModBlockEntities.TIME_TRAVELER_STUDIO_BLOCK_ENTITY.get(), Time_traveler_studio_blockRenderer::new);
         }
         @SubscribeEvent
         public static void onEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {

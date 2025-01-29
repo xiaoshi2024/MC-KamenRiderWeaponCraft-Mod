@@ -1,0 +1,15 @@
+{
+  "name": "时空旅行者意志人",
+  "icon": "kamen_rider_weapon_craft:time_traveler_studio_block",
+  "category": "kamen_rider_weapon_craft:decade",
+  "pages": [
+    {
+      "type": "text",
+      "text": "在剧中时空旅行者小明哥的职业一直飘忽不定，但是今天你可以使用新增的遗迹“hikaristudio”里面可以找到time_traveler_studio_block让村民也当一次小明哥！"
+    },
+    {
+      "type": "image",
+      "images": ["kamen_rider_weapon_craft:textures/gui/entries/timeTravelerWillMan.png"]
+    }
+  ]
+}

@@ -9,6 +9,7 @@ import com.xiaoshi2022.kamen_rider_weapon_craft.procedures.PullSounds;
 import com.xiaoshi2022.kamen_rider_weapon_craft.procedures.SonicarrowBoot;
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.*;
 import com.xiaoshi2022.kamen_rider_weapon_craft.tab.ModTab;
+import com.xiaoshi2022.kamen_rider_weapon_craft.villagers.TimeTravelerProfession;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
@@ -55,6 +56,10 @@ public class kamen_rider_weapon_craft {
 
         MinecraftForge.EVENT_BUS.register(PullSounds.class);
         MinecraftForge.EVENT_BUS.register(SonicarrowBoot.class);
+
+        //自定义村民职业
+        TimeTravelerProfession.POI_TYPE.register(modEventBus);
+        TimeTravelerProfession.PROFESSION.register(modEventBus);
 
         // 初始化容器
         ModContainers.REGISTRY.register(modEventBus);

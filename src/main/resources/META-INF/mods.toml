@@ -5,7 +5,7 @@ license="MIT"
 [[mods]]
 modId="kamen_rider_weapon_craft"
 logoFile="kamen_rider_weapon_craft.png"
-version="0.0.3beta-b"
+version="0.0.3beta-c"
 displayName="KamenRiderWeaponCraft"
 displayURL="https://space.bilibili.com/1410016591"
 authors="xiaoshi2022,emm_114514(json develop),xiaohaoxiaohao(Partial models),cjiangqiu"
