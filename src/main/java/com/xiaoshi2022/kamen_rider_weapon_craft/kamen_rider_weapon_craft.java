@@ -54,6 +54,7 @@ public class kamen_rider_weapon_craft {
         MinecraftForge.EVENT_BUS.register(this);
         GeckoLib.initialize();
 
+
         MinecraftForge.EVENT_BUS.register(PullSounds.class);
         MinecraftForge.EVENT_BUS.register(SonicarrowBoot.class);
 

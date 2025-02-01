@@ -9,6 +9,17 @@
 
   "entity.minecraft.villager.kamen_rider_weapon_craft.time_traveler_profession": "theWillOfTimeTravel",
 
+  "dialogue.just_passing_by/1": "I'm going to be the destroyer of the world（DCD）",
+  "dialogue.just_passing_by/2": "The journey continues",
+  "dialogue.main.just_passing_by/1": "Who Are You?",
+  "dialogue.just_passing_by.how": "Who told you that?",
+  "dialogue.just_passing_by.win.how": "I found a hikari_studio structure at %2$s.",
+  "dialogue.just_passing_by.off.how": "You shouldn't ask that?",
+  "dialogue.just_passing_by.win.street": "passing travelers",
+  "dialogue.just_passing_by.street": "Who are you?",
+  "dialogue.location.hikari_studio/1": "I found a structure at %2$s.",
+  "gui.destiny.hikari_studio": "Hikari Studio",
+
   "item.kamen_rider_weapon_craft.daidaimaru": "daidaimaru",
   "item.kamen_rider_weapon_craft.gangunsaber": "Gan Gun Saber",
   "item.kamen_rider_weapon_craft.musousaberd": "musousaber-daidaimaru",

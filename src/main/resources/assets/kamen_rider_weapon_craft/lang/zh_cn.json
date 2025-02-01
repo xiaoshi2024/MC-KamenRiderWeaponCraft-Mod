@@ -9,6 +9,17 @@
 
   "entity.minecraft.villager.kamen_rider_weapon_craft.time_traveler_profession": "时空旅行意志者",
 
+  "dialogue.just_passing_by/1": "我要成为世界的破坏者(DCD)",
+  "dialogue.just_passing_by/2": "旅途仍在继续",
+  "dialogue.main.just_passing_by/1": "你是谁?",
+  "dialogue.just_passing_by.how": "谁告诉你的?",
+  "dialogue.just_passing_by.win.how": "我在 %2$s 处找到了一个hikari_studio结构。",
+  "dialogue.just_passing_by.off.how": "你不应该问那个?",
+  "dialogue.just_passing_by.win.street": "路过的旅行者罢了",
+  "dialogue.just_passing_by.street": "你到底是谁?",
+  "dialogue.location.hikari_studio/1": "噢~没记错的话，我在 %2$s 找到了这个个房屋.",
+  "gui.destiny.hikari_studio": "光照相馆",
+
 
   "item.kamen_rider_weapon_craft.daidaimaru": "大橙丸",
   "item.kamen_rider_weapon_craft.gangunsaber": "幽灵眼剑枪",
