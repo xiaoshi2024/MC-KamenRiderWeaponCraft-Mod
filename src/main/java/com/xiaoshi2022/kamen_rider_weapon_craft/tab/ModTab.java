@@ -16,7 +16,6 @@ public class ModTab {
             .icon(() -> SONICARROW.get().getDefaultInstance())
             .title(Component.translatable("item group.kamen_rider_weapon_craft_tab"))
             .displayItems(((parameters, output) -> {
-                output.accept(WEAPON_MAP.get());
                 output.accept(SONICARROW.get());
                 output.accept(DAIDAIMARU.get());
                 output.accept(MUSOUSABERD.get());
@@ -30,7 +29,9 @@ public class ModTab {
             .icon(() -> MELON.get().getDefaultInstance())
             .title(Component.translatable("item group.kamen_rider_weapon_craft_prop_tab"))
             .displayItems(((parameters, output) -> {
+                output.accept(WEAPON_MAP.get());
                 output.accept(MELON.get());
                 output.accept(TIME_TRAVELER_STUDIO_BLOCK_ITEM.get());
+                output.accept(RIDERFUSIONMACHINE_ITEM.get());
             })).build());
 }

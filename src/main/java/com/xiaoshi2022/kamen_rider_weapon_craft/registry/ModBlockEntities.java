@@ -1,5 +1,6 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.registry;
 
+import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.client.RiderFusionMachineBlockEntity;
 import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.client.Time_traveler_studio_blockEntity;
 import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.client.helheim_crackBlockEntity;
 import com.xiaoshi2022.kamen_rider_weapon_craft.world.inventory.SonicBowContainer;
@@ -16,4 +17,7 @@ public class ModBlockEntities {
 
     public static final RegistryObject<BlockEntityType<Time_traveler_studio_blockEntity>> TIME_TRAVELER_STUDIO_BLOCK_ENTITY = BLOCK_ENTITIES.register("time_traveler_studio_block_entity", () ->
             BlockEntityType.Builder.of(Time_traveler_studio_blockEntity::new, ModBlocks.TIME_TRAVELER_STUDIO_BLOCK.get()).build(null));
+    public static final RegistryObject<BlockEntityType<RiderFusionMachineBlockEntity>> RIDER_FUSION_MACHINE_BLOCK_ENTITY = BLOCK_ENTITIES.register("rider_fusion_machine_block_entity",
+            () -> BlockEntityType.Builder.of(RiderFusionMachineBlockEntity::new, ModBlocks.RIDER_FUSION_MACHINE_BLOCK.get()).build(null));
+
 }

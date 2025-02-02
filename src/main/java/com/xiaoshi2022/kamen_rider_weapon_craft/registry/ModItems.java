@@ -1,9 +1,9 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.registry;
 
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.ModTires;
-//import com.xiaoshi2022.kamen_rider_weapon_craft.Item.combineds.client.combined.sonicarrow_melon;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.*;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.prop.custom.Melon;
+import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.display.rider_fusion_machine_item;
 import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.display.time_traveler_studio_item;
 import com.xiaoshi2022.kamen_rider_weapon_craft.kamen_rider_weapon_craft;
 import com.xiaoshi2022.kamen_rider_weapon_craft.weapon_mapBOOK.weapon_map;
@@ -38,6 +38,8 @@ public class ModItems {
             () -> new BlockItem(ModBlocks.HELHEIM_CRACK_BLOCK.get(), new Item.Properties()));
     public static final RegistryObject<Item> TIME_TRAVELER_STUDIO_BLOCK_ITEM = ITEMS.register("time_traveler_studio_item",
             () -> new time_traveler_studio_item(ModBlocks.TIME_TRAVELER_STUDIO_BLOCK.get(), new Item.Properties()));
+    public static final RegistryObject<Item> RIDERFUSIONMACHINE_ITEM = ITEMS.register("rider_fusion_machine_item",
+            () -> new rider_fusion_machine_item(ModBlocks.RIDER_FUSION_MACHINE_BLOCK.get(), new Item.Properties()));
 
     // 武器联动道具
     public static final RegistryObject<Melon> MELON = ITEMS.register("melon",

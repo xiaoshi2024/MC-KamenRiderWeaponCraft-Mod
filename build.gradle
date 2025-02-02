@@ -159,6 +159,7 @@ minecraft {
             url "https://cursemaven.com"
         }
         maven { url 'https://maven.blamejared.com' }
+        maven { url 'https://modmaven.dev/' }
         // Put repositories for dependencies here
         // ForgeGradle automatically adds the Forge maven and Maven Central for you
 
@@ -170,6 +171,15 @@ minecraft {
     }
 
     dependencies {
+
+        compileOnly "mekanism:Mekanism:${mekanism_version}:api"
+
+        // If you want to test/use Mekanism & its modules during `runClient` invocation, use the following
+        runtimeOnly fg.deobf("mekanism:Mekanism:${mekanism_version}")// core
+        runtimeOnly fg.deobf("mekanism:Mekanism:${mekanism_version}:additions")// Mekanism: Additions
+        runtimeOnly fg.deobf("mekanism:Mekanism:${mekanism_version}:generators")// Mekanism: Generators
+        runtimeOnly fg.deobf("mekanism:Mekanism:${mekanism_version}:tools")// Mekanism: Tools
+
         implementation fg.deobf("curse.maven:minecraft-comes-alive-reborn-535291:6127389")
         implementation fg.deobf("curse.maven:architectury-api-419699:5137938")
         implementation fg.deobf('software.bernie.geckolib:geckolib-forge-1.20.1:4.4.9')
