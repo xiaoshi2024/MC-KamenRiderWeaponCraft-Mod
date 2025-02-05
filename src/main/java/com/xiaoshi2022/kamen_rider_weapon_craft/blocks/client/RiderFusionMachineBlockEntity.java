@@ -5,6 +5,7 @@ import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModBlockEntities;
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModItems;
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModRecipes;
 import com.xiaoshi2022.kamen_rider_weapon_craft.world.inventory.RiderFusionMachineContainer;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.crafting.Recipe;
@@ -56,6 +57,7 @@ public class RiderFusionMachineBlockEntity extends RandomizableContainerBlockEnt
         }
     };
 
+    private boolean isCrafting = false; // 是否正在合成
     private int craftingProgress = 0; // 合成进度
     private int maxCraftingProgress = 60; // 最大合成进度（3秒）
     private boolean isProgressing = false;
@@ -117,37 +119,32 @@ public class RiderFusionMachineBlockEntity extends RandomizableContainerBlockEnt
         data.add(new AnimationController<RiderFusionMachineBlockEntity>(this, "procedurecontroller", 0, this::procedurePredicate));
     }
 
-    // 添加服务端启动合成的方法
+    // 启动合成过程
     public void startCrafting() {
-        if (!isProgressing && hasValidRecipe()) {
-            isProgressing = true;
+        if (!isCrafting && canCraft()) {
+            isCrafting = true;
             craftingProgress = 0;
-            setChanged(); // 标记数据变化
+            maxCraftingProgress = 200; // 可以根据需要调整
+            setChanged();
         }
     }
 
-    // 修改 serverTick 方法
+    // 服务器tick，更新合成进度
     public void serverTick(Level level, BlockPos pos, BlockState state) {
-        if (isProgressing && hasEnergy() && hasValidRecipe()) {
+        if (isCrafting) {
             craftingProgress++;
-            setChanged(); // 同步数据
             if (craftingProgress >= maxCraftingProgress) {
                 completeCrafting();
-                isProgressing = false;
+                isCrafting = false;
                 craftingProgress = 0;
             }
-        } else {
-            isProgressing = false;
-            craftingProgress = 0;
+            setChanged();
         }
     }
 
     // 在方块实体中绑定容器
     public void setContainer(RiderFusionMachineContainer container) {
         this.container = container;
-        // 初始化进度同步（关键修复）
-        container.craftingProgress = this.craftingProgress;
-        container.maxCraftingProgress = this.maxCraftingProgress;
     }
 
     public void completeCrafting() {
@@ -159,10 +156,11 @@ public class RiderFusionMachineBlockEntity extends RandomizableContainerBlockEnt
             if (recipe.matches(container, level)) {
                 ItemStack result = recipe.assemble(container, level.registryAccess());
                 if (!result.isEmpty()) {
-                    itemHandler.insertItem(3, result, false);
+                    itemHandler.insertItem(4, result, false);
                     itemHandler.extractItem(0, itemHandler.getStackInSlot(0).getCount(), false);
                     itemHandler.extractItem(1, itemHandler.getStackInSlot(1).getCount(), false);
                     itemHandler.extractItem(2, itemHandler.getStackInSlot(2).getCount(), false);
+                    itemHandler.extractItem(3, itemHandler.getStackInSlot(3).getCount(), false);
                 }
             }
         }
@@ -219,14 +217,23 @@ public class RiderFusionMachineBlockEntity extends RandomizableContainerBlockEnt
         return ClientboundBlockEntityDataPacket.create(this);
     }
 
-    @Override
-    public CompoundTag getUpdateTag() {
-        return this.saveWithoutMetadata();
+    public boolean hasValidRecipe() {
+        Container container = new SimpleContainer(itemHandler.getSlots());
+        for (int i = 0; i < itemHandler.getSlots(); i++) {
+            container.setItem(i, itemHandler.getStackInSlot(i));
+        }
+        return level.getRecipeManager().getRecipeFor(ModRecipes.RIDER_FUSION_RECIPE.get(), container, level).isPresent();
     }
 
     @Override
     public void handleUpdateTag(CompoundTag tag) {
-        this.load(tag);
+        super.handleUpdateTag(tag);
+        load(tag);
+    }
+
+    @Override
+    public CompoundTag getUpdateTag() {
+        return this.saveWithoutMetadata();
     }
 
     @Override
@@ -339,5 +346,18 @@ public class RiderFusionMachineBlockEntity extends RandomizableContainerBlockEnt
         super.setRemoved();
         for (LazyOptional<? extends IItemHandler> handler : handlers)
             handler.invalidate();
+    }
+
+    private boolean canCraft() {
+        Container container = new SimpleContainer(itemHandler.getSlots());
+        for (int i = 0; i < itemHandler.getSlots(); i++) {
+            container.setItem(i, itemHandler.getStackInSlot(i));
+        }
+        for (Recipe<Container> recipe : level.getRecipeManager().getAllRecipesFor(ModRecipes.RIDER_FUSION_RECIPE.get())) {
+            if (recipe.matches(container, level)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

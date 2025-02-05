@@ -76,15 +76,6 @@ public class RiderFusionMachineContainer extends AbstractContainerMenu implement
         broadcastChanges(); // 确保进度条状态同步到客户端
     }
 
-    // 删除原有的 tryCraft 方法，改为向服务端发送数据包
-    public void tryCraft() {
-        if (this.world instanceof ServerLevel serverLevel) {
-            BlockEntity blockEntity = serverLevel.getBlockEntity(new BlockPos(x, y, z));
-            if (blockEntity instanceof RiderFusionMachineBlockEntity be) {
-                be.startCrafting(); // 调用方块实体的服务端方法
-            }
-        }
-    }
 
     // 新增方法：从data中获取进度值
     @Override
@@ -148,7 +139,7 @@ public class RiderFusionMachineContainer extends AbstractContainerMenu implement
 
         this.customSlots.put(2, this.addSlot(new SlotItemHandler(internal, 2, 73, 23) { // 槽位2: 可选材料
         }));
-        this.customSlots.put(3, this.addSlot(new SlotItemHandler(internal, 3, 153, 23) {
+        this.customSlots.put(4, this.addSlot(new SlotItemHandler(internal, 4, 153, 23) {
             @Override
             public boolean mayPlace(ItemStack stack) {
                 return false;
@@ -159,7 +150,7 @@ public class RiderFusionMachineContainer extends AbstractContainerMenu implement
                 // 当从输出槽位取出物品时，不执行任何操作
             }
         }));
-        this.customSlots.put(4, this.addSlot(new SlotItemHandler(internal, 4, 153, 43) { // 槽位4: 能量输入槽
+        this.customSlots.put(3, this.addSlot(new SlotItemHandler(internal, 3, 153, 43) { // 槽位4: 能量输入槽
             @Override
             public boolean mayPlace(ItemStack stack) {
                 return stack.getItem() == Items.COAL || stack.getItem() == Items.CHARCOAL; // 只允许放置煤炭或木炭
@@ -214,6 +205,23 @@ public class RiderFusionMachineContainer extends AbstractContainerMenu implement
                 this.broadcastChanges();
             }
         }
+    }
+
+    public ItemStack tryCraft() {
+        if (this.world instanceof ServerLevel serverLevel) {
+            BlockEntity blockEntity = serverLevel.getBlockEntity(new BlockPos(x, y, z));
+            if (blockEntity instanceof RiderFusionMachineBlockEntity be) {
+                if (canCraft()) { // 添加一个方法来检查是否满足合成条件
+                    be.startCrafting();
+                    isProgressing = true; // 开始合成
+                }
+            }
+        }
+        return ItemStack.EMPTY;
+    }
+
+    private boolean canCraft() {
+        return false;
     }
 
     @Override
@@ -385,5 +393,13 @@ public class RiderFusionMachineContainer extends AbstractContainerMenu implement
 
     public int getMaxCraftingProgress() {
         return maxCraftingProgress;
+    }
+
+
+    // 启动合成过程
+    public void startCrafting() {
+        if (this.boundBlockEntity instanceof RiderFusionMachineBlockEntity) {
+            ((RiderFusionMachineBlockEntity) this.boundBlockEntity).startCrafting();
+        }
     }
 }

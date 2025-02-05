@@ -64,10 +64,6 @@ public class RiderFusionMachineBlock extends BaseEntityBlock implements EntityBl
     @Override
     public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
         super.tick(state, level, pos, random);
-        BlockEntity blockEntity = level.getBlockEntity(pos);
-        if (blockEntity instanceof RiderFusionMachineBlockEntity) {
-            ((RiderFusionMachineBlockEntity) blockEntity).serverTick(level, pos, state);
-        }
     }
 
     @Override
