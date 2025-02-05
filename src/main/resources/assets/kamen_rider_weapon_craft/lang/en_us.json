@@ -20,6 +20,7 @@
   "dialogue.just_passing_by.street": "Who are you?",
   "dialogue.location.hikari_studio/1": "I found a structure at %2$s.",
   "gui.destiny.hikari_studio": "Hikari Studio",
+  "gui.kamen_rider_weapon_craft.rider_fusion_machines.button_controls": "stir",
 
   "item.kamen_rider_weapon_craft.daidaimaru": "daidaimaru",
   "item.kamen_rider_weapon_craft.gangunsaber": "Gan Gun Saber",
@@ -33,6 +34,8 @@
 
   "item.kamen_rider_weapon_craft.sonicx_arrow": "sonicx arrow",
   "item.kamen_rider_weapon_craft.melon": "Melon energy-seed",
+  "item.kamen_rider_weapon_craft.rider_forging_alloy_ore": "Rider Forging alloy",
+  "item.kamen_rider_weapon_craft.rider_circuit_board": "Rider Board",
 
   "item.sonic_bow.desc": "desc",
   "item.sonic_bow.strength": "strength",

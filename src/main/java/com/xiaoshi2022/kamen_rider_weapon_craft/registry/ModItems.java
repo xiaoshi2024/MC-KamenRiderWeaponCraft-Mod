@@ -7,6 +7,7 @@ import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.display.rider_fusion_mach
 import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.display.time_traveler_studio_item;
 import com.xiaoshi2022.kamen_rider_weapon_craft.kamen_rider_weapon_craft;
 import com.xiaoshi2022.kamen_rider_weapon_craft.weapon_mapBOOK.weapon_map;
+import com.xiaoshi2022.kamen_rider_weapon_craft.world.inventory.SonicBowContainer;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.registries.DeferredRegister;
@@ -48,4 +49,9 @@ public class ModItems {
     //说明书
     public static final RegistryObject<weapon_map> WEAPON_MAP = ITEMS.register("weapon_map",
             () -> new weapon_map(new Item.Properties()));
+    //电路板
+    public static final RegistryObject<Item> RIDER_FORGING_ALLOY_ORE = ITEMS.register("rider_forging_alloy_ore",
+            () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> RIDER_CIRCUIT_BOARD = ITEMS.register("rider_circuit_board",
+            () -> new Item(new Item.Properties()));
 }

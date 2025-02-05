@@ -1,9 +1,14 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.blocks.portals;
 
 import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.client.RiderFusionMachineBlockEntity;
+import com.xiaoshi2022.kamen_rider_weapon_craft.procedures.RiderFusionMachineDangYouJiFangKuaiShiProcedure;
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModBlockEntities;
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModBlocks;
-
+import com.xiaoshi2022.kamen_rider_weapon_craft.world.inventory.RiderFusionMachineContainer;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.*;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -11,6 +16,7 @@ import net.minecraftforge.api.distmarker.Dist;
 
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
@@ -35,8 +41,7 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.MenuProvider;
-import net.minecraft.world.Containers;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.core.Direction;
 import net.minecraft.core.BlockPos;
 import net.minecraft.client.renderer.BiomeColors;
@@ -54,6 +59,15 @@ public class RiderFusionMachineBlock extends BaseEntityBlock implements EntityBl
         super(BlockBehaviour.Properties.of().instrument(NoteBlockInstrument.BASEDRUM).sound(SoundType.METAL).strength(5.3f, 10f).lightLevel(s -> 2).requiresCorrectToolForDrops().noOcclusion().pushReaction(PushReaction.PUSH_ONLY)
                 .isRedstoneConductor((bs, br, bp) -> false));
         this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH));
+    }
+
+    @Override
+    public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
+        super.tick(state, level, pos, random);
+        BlockEntity blockEntity = level.getBlockEntity(pos);
+        if (blockEntity instanceof RiderFusionMachineBlockEntity) {
+            ((RiderFusionMachineBlockEntity) blockEntity).serverTick(level, pos, state);
+        }
     }
 
     @Override
@@ -123,6 +137,22 @@ public class RiderFusionMachineBlock extends BaseEntityBlock implements EntityBl
             return dropsOriginal;
         return Collections.singletonList(new ItemStack(ModBlocks.RIDER_FUSION_MACHINE_BLOCK.get()));
     }
+
+    @Override
+    public InteractionResult use(BlockState blockstate, Level world, BlockPos pos, Player entity, InteractionHand hand, BlockHitResult hit) {
+        super.use(blockstate, world, pos, entity, hand, hit);
+        int x = pos.getX();
+        int y = pos.getY();
+        int z = pos.getZ();
+        double hitX = hit.getLocation().x;
+        double hitY = hit.getLocation().y;
+        double hitZ = hit.getLocation().z;
+        Direction direction = hit.getDirection();
+
+        RiderFusionMachineDangYouJiFangKuaiShiProcedure.execute(world, x, y, z, entity);
+        return InteractionResult.SUCCESS;
+    }
+
 
     @Override
     public MenuProvider getMenuProvider(BlockState state, Level worldIn, BlockPos pos) {

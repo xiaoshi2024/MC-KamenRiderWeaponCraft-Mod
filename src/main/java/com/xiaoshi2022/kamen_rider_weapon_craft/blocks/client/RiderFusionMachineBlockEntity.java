@@ -2,6 +2,14 @@ package com.xiaoshi2022.kamen_rider_weapon_craft.blocks.client;
 
 import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.portals.RiderFusionMachineBlock;
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModBlockEntities;
+import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModItems;
+import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModRecipes;
+import com.xiaoshi2022.kamen_rider_weapon_craft.world.inventory.RiderFusionMachineContainer;
+import net.minecraft.world.Container;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.items.ItemStackHandler;
 import software.bernie.geckolib.util.GeckoLibUtil;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.core.animation.RawAnimation;
@@ -41,6 +49,18 @@ import javax.annotation.Nullable;
 import java.util.stream.IntStream;
 
 public class RiderFusionMachineBlockEntity extends RandomizableContainerBlockEntity implements GeoBlockEntity, WorldlyContainer {
+    private final ItemStackHandler itemHandler = new ItemStackHandler(4) { // 总共有4个槽位，3个输入槽位，1个输出槽位
+        @Override
+        protected void onContentsChanged(int slot) {
+            setChanged();
+        }
+    };
+
+    private int craftingProgress = 0; // 合成进度
+    private int maxCraftingProgress = 60; // 最大合成进度（3秒）
+    private boolean isProgressing = false;
+
+    private RiderFusionMachineContainer container;
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     private NonNullList<ItemStack> stacks = NonNullList.<ItemStack>withSize(9, ItemStack.EMPTY);
     private final LazyOptional<? extends IItemHandler>[] handlers = SidedInvWrapper.create(this, Direction.values());
@@ -48,6 +68,11 @@ public class RiderFusionMachineBlockEntity extends RandomizableContainerBlockEnt
     public RiderFusionMachineBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.RIDER_FUSION_MACHINE_BLOCK_ENTITY.get(), pos, state);
     }
+
+    public RiderFusionMachineContainer getContainer() {
+        return container;
+    }
+
 
     private PlayState predicate(AnimationState event) {
         String animationprocedure = ("" + this.getBlockState().getValue(RiderFusionMachineBlock.ANIMATION));
@@ -78,15 +103,93 @@ public class RiderFusionMachineBlockEntity extends RandomizableContainerBlockEnt
         return PlayState.CONTINUE;
     }
 
+    // 假设这里有一个方法用于处理输出骑士电路板的逻辑
+    public void outputRiderCircuitBoard() {
+        ItemStack circuitBoardStack = new ItemStack(ModItems.RIDER_CIRCUIT_BOARD.get());
+        if (itemHandler.getStackInSlot(3).isEmpty()) { // 假设槽位3是输出槽位
+            itemHandler.insertItem(3, circuitBoardStack, false);
+        }
+    }
+
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar data) {
         data.add(new AnimationController<RiderFusionMachineBlockEntity>(this, "controller", 0, this::predicate));
         data.add(new AnimationController<RiderFusionMachineBlockEntity>(this, "procedurecontroller", 0, this::procedurePredicate));
     }
 
+    // 添加服务端启动合成的方法
+    public void startCrafting() {
+        if (!isProgressing && hasValidRecipe()) {
+            isProgressing = true;
+            craftingProgress = 0;
+            setChanged(); // 标记数据变化
+        }
+    }
+
+    // 修改 serverTick 方法
+    public void serverTick(Level level, BlockPos pos, BlockState state) {
+        if (isProgressing && hasEnergy() && hasValidRecipe()) {
+            craftingProgress++;
+            setChanged(); // 同步数据
+            if (craftingProgress >= maxCraftingProgress) {
+                completeCrafting();
+                isProgressing = false;
+                craftingProgress = 0;
+            }
+        } else {
+            isProgressing = false;
+            craftingProgress = 0;
+        }
+    }
+
+    // 在方块实体中绑定容器
+    public void setContainer(RiderFusionMachineContainer container) {
+        this.container = container;
+        // 初始化进度同步（关键修复）
+        container.craftingProgress = this.craftingProgress;
+        container.maxCraftingProgress = this.maxCraftingProgress;
+    }
+
+    public void completeCrafting() {
+        for (Recipe<Container> recipe : level.getRecipeManager().getAllRecipesFor(ModRecipes.RIDER_FUSION_RECIPE.get())) {
+            Container container = new SimpleContainer(itemHandler.getSlots());
+            for (int i = 0; i < itemHandler.getSlots(); i++) {
+                container.setItem(i, itemHandler.getStackInSlot(i));
+            }
+            if (recipe.matches(container, level)) {
+                ItemStack result = recipe.assemble(container, level.registryAccess());
+                if (!result.isEmpty()) {
+                    itemHandler.insertItem(3, result, false);
+                    itemHandler.extractItem(0, itemHandler.getStackInSlot(0).getCount(), false);
+                    itemHandler.extractItem(1, itemHandler.getStackInSlot(1).getCount(), false);
+                    itemHandler.extractItem(2, itemHandler.getStackInSlot(2).getCount(), false);
+                }
+            }
+        }
+        craftingProgress = 0;
+        setChanged();
+    }
+
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {
         return this.cache;
+    }
+
+    public IItemHandler getItemHandler() {
+        return itemHandler;
+    }
+
+    public int getCraftingProgress() {
+        return craftingProgress;
+    }
+
+    public void setCraftingProgress(int progress) {
+        this.craftingProgress = progress;
+        setChanged();
+    }
+
+    public int getMaxCraftingProgress() {
+        return maxCraftingProgress;
     }
 
     @Override
@@ -118,7 +221,12 @@ public class RiderFusionMachineBlockEntity extends RandomizableContainerBlockEnt
 
     @Override
     public CompoundTag getUpdateTag() {
-        return this.saveWithFullMetadata();
+        return this.saveWithoutMetadata();
+    }
+
+    @Override
+    public void handleUpdateTag(CompoundTag tag) {
+        this.load(tag);
     }
 
     @Override
@@ -176,6 +284,12 @@ public class RiderFusionMachineBlockEntity extends RandomizableContainerBlockEnt
 
     @Override
     public boolean canTakeItemThroughFace(int index, ItemStack stack, Direction direction) {
+        if (index == 3) { // 输出槽位
+            // 清空输入槽位
+            for (int i = 0; i < 3; i++) {
+                itemHandler.extractItem(i, itemHandler.getStackInSlot(i).getCount(), false);
+            }
+        }
         return true;
     }
 

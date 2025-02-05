@@ -41,7 +41,7 @@
 				}
 			}
 		},
-		"operation": {
+		"1": {
 			"animation_length": 2.875,
 			"bones": {
 				"cover": {

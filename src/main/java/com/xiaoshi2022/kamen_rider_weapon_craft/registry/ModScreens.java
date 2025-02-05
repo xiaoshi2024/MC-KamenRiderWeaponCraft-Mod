@@ -1,6 +1,8 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.registry;
 
+import com.xiaoshi2022.kamen_rider_weapon_craft.gui.RiderFusionMachinesScreen;
 import com.xiaoshi2022.kamen_rider_weapon_craft.gui.SonicBowGuiScreen;
+import com.xiaoshi2022.kamen_rider_weapon_craft.world.inventory.RiderFusionMachineContainer;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -15,6 +17,7 @@ public class ModScreens {
     public static void clientLoad(FMLClientSetupEvent event) {
         event.enqueueWork(() -> {
             MenuScreens.register(ModContainers.SSONIC.get(), SonicBowGuiScreen::new);
+            MenuScreens.register(ModContainers.RIDER_FUSION_MACHINE.get(), RiderFusionMachinesScreen::new);
         });
     }
 }

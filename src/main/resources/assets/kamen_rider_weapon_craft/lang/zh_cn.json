@@ -20,6 +20,8 @@
   "dialogue.just_passing_by.street": "你到底是谁?",
   "dialogue.location.hikari_studio/1": "噢~没记错的话，我在 %2$s 找到了这个个房屋.",
   "gui.destiny.hikari_studio": "光照相馆",
+  "gui.kamen_rider_weapon_craft.rider_fusion_machines.button_controls": "交融",
+
 
 
   "item.kamen_rider_weapon_craft.daidaimaru": "大橙丸",
@@ -34,6 +36,8 @@
 
   "item.kamen_rider_weapon_craft.sonicx_arrow": "能量音速箭矢",
   "item.kamen_rider_weapon_craft.melon": "蜜瓜能量锁种",
+  "item.kamen_rider_weapon_craft.rider_forging_alloy_ore": "骑士合金材料",
+  "item.kamen_rider_weapon_craft.rider_circuit_board": "骑士电路板",
 
   "item.sonic_bow.desc": "描述",
   "item.sonic_bow.strength": "强度",

@@ -1,5 +1,6 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft;
 
+import com.xiaoshi2022.kamen_rider_weapon_craft.recipe.ModRecipeSerializers;
 import com.xiaoshi2022.kamen_rider_weapon_craft.network.CloseMapPacket;
 import com.xiaoshi2022.kamen_rider_weapon_craft.network.LockseedManager;
 import com.xiaoshi2022.kamen_rider_weapon_craft.network.NetworkHandler;
@@ -54,6 +55,8 @@ public class kamen_rider_weapon_craft {
         MinecraftForge.EVENT_BUS.register(this);
         GeckoLib.initialize();
 
+        ModRecipes.RECIPE_TYPES.register(modEventBus);
+        ModRecipeSerializers.RECIPE_SERIALIZERS.register(modEventBus);
 
         MinecraftForge.EVENT_BUS.register(PullSounds.class);
         MinecraftForge.EVENT_BUS.register(SonicarrowBoot.class);
