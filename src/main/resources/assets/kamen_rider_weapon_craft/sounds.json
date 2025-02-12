@@ -88,5 +88,50 @@
         "stream": false
       }
     ]
+  },
+  "progrise_hopper_blade_boot": {
+    "subtitle": "subtitles.progrise_hopper_blade_boot",
+    "sounds": [
+      {
+        "name": "kamen_rider_weapon_craft:progrise_hopper_blade_boot",
+        "stream": false
+      }
+    ]
+  },
+  "progrise_hopper_blade_press": {
+    "subtitle": "subtitles.progrise_hopper_blade_press",
+    "sounds": [
+      {
+        "name": "kamen_rider_weapon_craft:progrise_hopper_blade_press",
+        "stream": false
+      }
+    ]
+  },
+  "finish_rise": {
+    "subtitle": "subtitles.finish_rise",
+    "sounds": [
+      {
+        "name": "kamen_rider_weapon_craft:finish_rise",
+        "stream": false
+      }
+    ]
+  },
+  "pro_standby_tone": {
+    "subtitle": "subtitles.pro_standby_tone",
+    "sounds": [
+      {
+        "name": "kamen_rider_weapon_craft:pro_standby_tone",
+        "stream": false
+      }
+    ]
+  },
+  "progrising_strash": {
+    "subtitle": "subtitles.progrising_strash",
+    "sounds": [
+      {
+        "name": "kamen_rider_weapon_craft:progrising_strash",
+        "stream": false
+      }
+    ]
   }
 }

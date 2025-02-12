@@ -1,5 +1,6 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft;
 
+import com.xiaoshi2022.kamen_rider_weapon_craft.event.LivingHurtHandler;
 import com.xiaoshi2022.kamen_rider_weapon_craft.recipe.ModRecipeSerializers;
 import com.xiaoshi2022.kamen_rider_weapon_craft.network.CloseMapPacket;
 import com.xiaoshi2022.kamen_rider_weapon_craft.network.LockseedManager;
@@ -7,7 +8,7 @@ import com.xiaoshi2022.kamen_rider_weapon_craft.network.NetworkHandler;
 import com.xiaoshi2022.kamen_rider_weapon_craft.network.ServerSound;
 import com.xiaoshi2022.kamen_rider_weapon_craft.particle.ModParticles;
 import com.xiaoshi2022.kamen_rider_weapon_craft.procedures.PullSounds;
-import com.xiaoshi2022.kamen_rider_weapon_craft.procedures.SonicarrowBoot;
+import com.xiaoshi2022.kamen_rider_weapon_craft.procedures.KRWBoot;
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.*;
 import com.xiaoshi2022.kamen_rider_weapon_craft.tab.ModTab;
 import com.xiaoshi2022.kamen_rider_weapon_craft.villagers.TimeTravelerProfession;
@@ -55,11 +56,13 @@ public class kamen_rider_weapon_craft {
         MinecraftForge.EVENT_BUS.register(this);
         GeckoLib.initialize();
 
+        MinecraftForge.EVENT_BUS.register(LivingHurtHandler.class);
+
         ModRecipes.RECIPE_TYPES.register(modEventBus);
         ModRecipeSerializers.RECIPE_SERIALIZERS.register(modEventBus);
 
         MinecraftForge.EVENT_BUS.register(PullSounds.class);
-        MinecraftForge.EVENT_BUS.register(SonicarrowBoot.class);
+        MinecraftForge.EVENT_BUS.register(KRWBoot.class);
 
         //自定义村民职业
         TimeTravelerProfession.POI_TYPE.register(modEventBus);

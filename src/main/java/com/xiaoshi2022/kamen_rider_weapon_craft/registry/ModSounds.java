@@ -30,4 +30,14 @@ public class ModSounds {
                 () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_weapon_craft", "lock_seed_put_in")));
         public static final RegistryObject<SoundEvent> LOCK_ON = REGISTRY.register("lock_on",
                 () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_weapon_craft", "lock_on")));
+        public static final RegistryObject<SoundEvent> PROGRISE_HOPPER_BLADE_BOOT = REGISTRY.register("progrise_hopper_blade_boot",
+                () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_weapon_craft", "progrise_hopper_blade_boot")));
+        public static final RegistryObject<SoundEvent> PROGRISE_HOPPER_BLADE_PRESS = REGISTRY.register("progrise_hopper_blade_press",
+                () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_weapon_craft", "progrise_hopper_blade_press")));
+        public static final RegistryObject<SoundEvent> FINISH_RISE = REGISTRY.register("finish_rise",
+                () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_weapon_craft", "finish_rise")));
+        public static final RegistryObject<SoundEvent> PRO_STANDBY_TONE = REGISTRY.register("pro_standby_tone",
+                () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_weapon_craft", "pro_standby_tone")));
+        public static final RegistryObject<SoundEvent> PROGRISING_STRASH = REGISTRY.register("progrising_strash",
+                () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_weapon_craft", "progrising_strash")));
 }

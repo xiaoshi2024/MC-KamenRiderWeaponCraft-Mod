@@ -31,6 +31,8 @@
   "item.kamen_rider_weapon_craft.sonicarrow": "Sonic Arrow",
   "item.kamen_rider_weapon_craft.gavvwhipir": "Gavv Whipir",
   "item.kamen_rider_weapon_craft.destroy_fifty_swords": "Destroy 50 Swords",
+  "item.kamen_rider_weapon_craft.authorize_buster": "Authorize Buster",
+  "item.kamen_rider_weapon_craft.progrise_hopper_blade": "Progrise Hopper Blade",
 
   "item.kamen_rider_weapon_craft.sonicx_arrow": "sonicx arrow",
   "item.kamen_rider_weapon_craft.melon": "Melon energy-seed",
@@ -53,6 +55,11 @@
   "subtitles.slash": "slash",
   "subtitles.sonicarrow_boot_sound": "Genesis-Sonicarrow",
   "subtitles.sonicarrow_shoot": "Xiu~",
+  "subtitles.progrise_hopper_blade_boot": "Progrise Hopper Blade~!",
+  "subtitles.progrise_hopper_blade_press": "crack~",
+  "subtitles.finish_rise": "Finish Rise!",
+  "subtitles.pro_standby_tone": "Pro Standbys~",
+  "subtitles.progrising_strash": "Progrising Strash！",
 
   "advancement.kamen_rider_weapon_craft.ridebooker.title": "Too many cards",
   "advancement.kamen_rider_weapon_craft.ridebooker.desc": "Abominable Decade",

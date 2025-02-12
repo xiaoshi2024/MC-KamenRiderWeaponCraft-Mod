@@ -1,5 +1,6 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.registry;
 
+import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.progrise_hopper_blade;
 import com.xiaoshi2022.kamen_rider_weapon_craft.kamen_rider_weapon_craft;
 import com.xiaoshi2022.kamen_rider_weapon_craft.network.LockseedManager;
 import com.xiaoshi2022.kamen_rider_weapon_craft.network.ServerSound;
@@ -45,6 +46,11 @@ public class KeyMappings {
                     if (player.getMainHandItem().getItem() instanceof sonicarrow ||
                         player.getOffhandItem().getItem() instanceof sonicarrow) {
                         // 发送网络包到服务端，播放 SONICARROW_BOOT_SOUND 音效
+                        ServerSound.sendToServer(new ServerSound(ServerSound.SoundType.BOOT));
+                    }
+                    if (player.getMainHandItem().getItem() instanceof progrise_hopper_blade ||
+                        player.getOffhandItem().getItem() instanceof progrise_hopper_blade) {
+                        // 发送网络包到服务端，播放 PROGRISE_BOOT 音效
                         ServerSound.sendToServer(new ServerSound(ServerSound.SoundType.BOOT));
                     }
                 }

@@ -33,6 +33,10 @@
   "item.kamen_rider_weapon_craft.sonicarrow": "音速弓~",
   "item.kamen_rider_weapon_craft.gavvwhipir": "加布掼奶油枪",
   "item.kamen_rider_weapon_craft.destroy_fifty_swords": "五十破坏割裂者",
+  "item.kamen_rider_weapon_craft.authorize_buster": "授权-破坏者",
+  "item.kamen_rider_weapon_craft.progrise_hopper_blade": "升程蝗虫砍击者",
+
+
 
   "item.kamen_rider_weapon_craft.sonicx_arrow": "能量音速箭矢",
   "item.kamen_rider_weapon_craft.melon": "蜜瓜能量锁种",
@@ -55,6 +59,14 @@
   "subtitles.slash": "砍击~",
   "subtitles.sonicarrow_boot_sound": "创世纪- 音速弓~！",
   "subtitles.sonicarrow_shoot": "XIu~",
+  "subtitles.progrise_hopper_blade_boot": "升华蝗虫杀毒剑~!",
+  "subtitles.progrise_hopper_blade_press": "拉动（喀嚓~",
+  "subtitles.finish_rise": "蝗虫跃升!",
+  "subtitles.pro_standby_tone": "蝗虫待机中~",
+  "subtitles.progrising_strash": "蝗虫悦升击~！",
+
+
+
 
   "advancement.kamen_rider_weapon_craft.ridebooker.title": "卡牌已经数不清了是吧",
   "advancement.kamen_rider_weapon_craft.ridebooker.desc": "可恶的帝骑哥！",

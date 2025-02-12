@@ -1,15 +1,12 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.network;
 
+import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.progrise_hopper_blade;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.sonicarrow;
-import com.xiaoshi2022.kamen_rider_weapon_craft.procedures.PullSounds;
-import com.xiaoshi2022.kamen_rider_weapon_craft.procedures.SonicarrowBoot;
-import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModSounds;
+import com.xiaoshi2022.kamen_rider_weapon_craft.procedures.KRWBoot;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.network.NetworkEvent;
-import net.minecraftforge.network.PacketDistributor;
 
 import java.util.function.Supplier;
 
@@ -49,9 +46,11 @@ public class ServerSound {
                         isPlayingStandbySound = false; // 设置标识符为 false
                         break;
                     case BOOT:
-                        if (isHoldingSonicArrow(player)) {
-                            // 调用 SonicarrowBoot 类中的方法播放 sonicarrow_boot 音效
-                            SonicarrowBoot.playSonicarrowBootSound(player);
+                        if (isHoldingItem(player, sonicarrow.class)) {
+                            KRWBoot.playSonicarrowBootSound(player);
+                        }
+                        if (isHoldingItem(player, progrise_hopper_blade.class)) {
+                            KRWBoot.playProgriseHopperBladeBoot(player);
                         }
                         break;
                 }
@@ -60,9 +59,9 @@ public class ServerSound {
         ctx.get().setPacketHandled(true);
     }
 
-    private static boolean isHoldingSonicArrow(Player player) {
-        return player.getMainHandItem().getItem() instanceof sonicarrow ||
-                player.getOffhandItem().getItem() instanceof sonicarrow;
+    private static boolean isHoldingItem(Player player, Class<?> itemClass) {
+        return itemClass.isInstance(player.getMainHandItem().getItem()) ||
+                itemClass.isInstance(player.getOffhandItem().getItem());
     }
 
     public static boolean isPlayingStandbySound() {
