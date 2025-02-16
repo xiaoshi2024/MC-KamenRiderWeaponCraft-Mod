@@ -1,0 +1,15 @@
+{
+  "name": "骑士交融器",
+  "icon": "kamen_rider_weapon_craft:rider_fusion_machine_block",
+  "category": "kamen_rider_weapon_craft:fusion",
+  "pages": [
+    {
+      "type": "text",
+      "text": "这是一张武器材料合成表，合成公式见图"
+    },
+    {
+      "type": "image",
+      "images": ["kamen_rider_weapon_craft:textures/gui/entries/RiderFusionMachineBlock.png"]
+    }
+  ]
+}

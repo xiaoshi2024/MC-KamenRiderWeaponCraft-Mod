@@ -1,14 +1,11 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft;
 
 import com.xiaoshi2022.kamen_rider_weapon_craft.event.LivingHurtHandler;
+import com.xiaoshi2022.kamen_rider_weapon_craft.procedures.KRWBoot;
 import com.xiaoshi2022.kamen_rider_weapon_craft.recipe.ModRecipeSerializers;
-import com.xiaoshi2022.kamen_rider_weapon_craft.network.CloseMapPacket;
-import com.xiaoshi2022.kamen_rider_weapon_craft.network.LockseedManager;
-import com.xiaoshi2022.kamen_rider_weapon_craft.network.NetworkHandler;
-import com.xiaoshi2022.kamen_rider_weapon_craft.network.ServerSound;
+import com.xiaoshi2022.kamen_rider_weapon_craft.network.*;
 import com.xiaoshi2022.kamen_rider_weapon_craft.particle.ModParticles;
 import com.xiaoshi2022.kamen_rider_weapon_craft.procedures.PullSounds;
-import com.xiaoshi2022.kamen_rider_weapon_craft.procedures.KRWBoot;
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.*;
 import com.xiaoshi2022.kamen_rider_weapon_craft.tab.ModTab;
 import com.xiaoshi2022.kamen_rider_weapon_craft.villagers.TimeTravelerProfession;
@@ -64,17 +61,17 @@ public class kamen_rider_weapon_craft {
         MinecraftForge.EVENT_BUS.register(PullSounds.class);
         MinecraftForge.EVENT_BUS.register(KRWBoot.class);
 
-        //自定义村民职业
+        // 自定义村民职业
         TimeTravelerProfession.POI_TYPE.register(modEventBus);
         TimeTravelerProfession.PROFESSION.register(modEventBus);
 
         // 初始化容器
         ModContainers.REGISTRY.register(modEventBus);
 
-        // 初始化MODEntityR
+        // 初始化 MODEntity
         ModEntityTypes.ENTITIES.register(modEventBus);
 
-        // 初始化Mixin系统
+        // 初始化 Mixin 系统
         MixinBootstrap.init();
         MixinEnvironment.getDefaultEnvironment().setSide(MixinEnvironment.Side.CLIENT);
         MixinEnvironment.getEnvironment(MixinEnvironment.Phase.DEFAULT);
@@ -118,6 +115,7 @@ public class kamen_rider_weapon_craft {
     @SubscribeEvent
     public void tick(TickEvent.ServerTickEvent event) {
         if (event.phase == TickEvent.Phase.END) {
+            // 处理任务队列
             List<AbstractMap.SimpleEntry<Runnable, Integer>> actions = new ArrayList<>();
             workQueue.forEach(work -> {
                 work.setValue(work.getValue() - 1);
@@ -127,6 +125,7 @@ public class kamen_rider_weapon_craft {
             });
             actions.forEach(e -> e.getKey().run());
             workQueue.removeAll(actions);
+
         }
     }
 }

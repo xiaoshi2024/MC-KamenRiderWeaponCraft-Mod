@@ -113,7 +113,7 @@
 			}
 		},
 		"rotate": {
-			"loop": true,
+			"loop": false,
 			"animation_length": 2,
 			"bones": {
 				"cover": {

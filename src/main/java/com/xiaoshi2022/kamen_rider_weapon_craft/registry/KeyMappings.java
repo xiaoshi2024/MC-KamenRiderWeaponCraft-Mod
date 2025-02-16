@@ -44,12 +44,12 @@ public class KeyMappings {
                 if (player != null) {
                     // 检查玩家左右手是否持有音速弓
                     if (player.getMainHandItem().getItem() instanceof sonicarrow ||
-                        player.getOffhandItem().getItem() instanceof sonicarrow) {
+                            player.getOffhandItem().getItem() instanceof sonicarrow) {
                         // 发送网络包到服务端，播放 SONICARROW_BOOT_SOUND 音效
                         ServerSound.sendToServer(new ServerSound(ServerSound.SoundType.BOOT));
                     }
                     if (player.getMainHandItem().getItem() instanceof progrise_hopper_blade ||
-                        player.getOffhandItem().getItem() instanceof progrise_hopper_blade) {
+                            player.getOffhandItem().getItem() instanceof progrise_hopper_blade) {
                         // 发送网络包到服务端，播放 PROGRISE_BOOT 音效
                         ServerSound.sendToServer(new ServerSound(ServerSound.SoundType.BOOT));
                     }
