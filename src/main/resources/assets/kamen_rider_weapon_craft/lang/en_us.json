@@ -7,6 +7,7 @@
   "block.kamen_rider_weapon_craft.helheim_crack_block": "helheimCrack",
   "block.kamen_rider_weapon_craft.time_traveler_studio_block": "timeTraveler Studio Block",
   "block.kamen_rider_weapon_craft.rider_fusion_machine_block": "Rider Fusion Machine",
+  "block.kamen_rider_weapon_craft.riderforgingalloymineral": "Rider Forging Alloy mineral",
 
   "entity.minecraft.villager.kamen_rider_weapon_craft.time_traveler_profession": "theWillOfTimeTravel",
 
@@ -38,6 +39,8 @@
   "item.kamen_rider_weapon_craft.melon": "Melon energy-seed",
   "item.kamen_rider_weapon_craft.rider_forging_alloy_ore": "Rider Forging alloy",
   "item.kamen_rider_weapon_craft.rider_circuit_board": "Rider Board",
+  "item.kamen_rider_weapon_craft.rider_basic_weapon": "rider base weapon material",
+
 
   "item.sonic_bow.desc": "desc",
   "item.sonic_bow.strength": "strength",

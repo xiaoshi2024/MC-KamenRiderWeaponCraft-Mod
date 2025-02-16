@@ -1,0 +1,8 @@
+{
+  "type": "forge:add_features",
+  "biomes": {
+    "type": "forge:any"
+  },
+  "features": "kamen_rider_weapon_craft:riderforgingalloymineral",
+  "step": "underground_ores"
+}

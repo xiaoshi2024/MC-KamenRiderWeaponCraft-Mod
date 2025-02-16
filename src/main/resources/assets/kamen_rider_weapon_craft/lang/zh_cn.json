@@ -7,6 +7,8 @@
   "block.kamen_rider_weapon_craft.helheim_crack_block": "赫尔海姆裂缝",
   "block.kamen_rider_weapon_craft.time_traveler_studio_block": "时空旅行照相馆",
   "block.kamen_rider_weapon_craft.rider_fusion_machine_block": "骑士交融器",
+  "block.kamen_rider_weapon_craft.riderforgingalloymineral": "骑士合金矿",
+
 
   "entity.minecraft.villager.kamen_rider_weapon_craft.time_traveler_profession": "时空旅行意志者",
 
@@ -42,6 +44,7 @@
   "item.kamen_rider_weapon_craft.melon": "蜜瓜能量锁种",
   "item.kamen_rider_weapon_craft.rider_forging_alloy_ore": "骑士合金材料",
   "item.kamen_rider_weapon_craft.rider_circuit_board": "骑士电路板",
+  "item.kamen_rider_weapon_craft.rider_basic_weapon": "骑士基础武器材料",
 
   "item.sonic_bow.desc": "描述",
   "item.sonic_bow.strength": "强度",

@@ -1,11 +1,11 @@
 {
-  "name": "骑士交融器",
+  "name": "RiderFusionMachineBlock",
   "icon": "kamen_rider_weapon_craft:rider_fusion_machine_item",
   "category": "kamen_rider_weapon_craft:fusion",
   "pages": [
     {
       "type": "text",
-      "text": "这是一张武器材料合成表，合成公式见图"
+      "text": "This is a weapon synthesis table, synthesis formula see the picture"
     },
     {
       "type": "image",

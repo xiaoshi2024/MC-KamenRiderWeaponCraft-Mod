@@ -37,5 +37,7 @@ public class ModTab {
                 output.accept(RIDERFUSIONMACHINE_ITEM.get());
                 output.accept(RIDER_CIRCUIT_BOARD.get());
                 output.accept(RIDER_FORGING_ALLOY_ORE.get());
+                output.accept(RIDER_BASIC_WEAPON.get());
+                output.accept(RIDERFORGINGALLOYMINERAL.get());
             })).build());
 }

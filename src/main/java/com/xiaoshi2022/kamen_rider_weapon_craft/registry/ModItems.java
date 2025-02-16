@@ -10,9 +10,12 @@ import com.xiaoshi2022.kamen_rider_weapon_craft.weapon_mapBOOK.weapon_map;
 import com.xiaoshi2022.kamen_rider_weapon_craft.world.inventory.SonicBowContainer;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+
+import static net.minecraft.world.phys.shapes.Shapes.block;
 
 public class ModItems {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, kamen_rider_weapon_craft.MOD_ID);
@@ -46,9 +49,19 @@ public class ModItems {
     public static final RegistryObject<Item> RIDERFUSIONMACHINE_ITEM = ITEMS.register("rider_fusion_machine_item",
             () -> new rider_fusion_machine_item(ModBlocks.RIDER_FUSION_MACHINE_BLOCK.get(), new Item.Properties()));
 
+    public static final RegistryObject<Item> RIDERFORGINGALLOYMINERAL = block(ModBlocks.RIDERFORGINGALLOYMINERAL);
+
+    private static RegistryObject<Item> block(RegistryObject<Block> block) {
+        return ITEMS.register(block.getId().getPath(), () -> new BlockItem(block.get(), new Item.Properties()));
+    }
+
+
+
     // 武器联动道具
     public static final RegistryObject<Melon> MELON = ITEMS.register("melon",
             () -> new Melon(new Item.Properties()));
+    public static final RegistryObject<Item> RIDER_BASIC_WEAPON = ITEMS.register("rider_basic_weapon",
+            () -> new Item(new Item.Properties()));
 
     //说明书
     public static final RegistryObject<weapon_map> WEAPON_MAP = ITEMS.register("weapon_map",
