@@ -8,6 +8,7 @@ import net.minecraft.world.item.ItemStack;
 import com.mojang.blaze3d.vertex.PoseStack;
 import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.renderer.GeoItemRenderer;
+import software.bernie.geckolib.renderer.layer.AutoGlowingGeoLayer;
 
 public class sonicarrowRenderer extends GeoItemRenderer<sonicarrow> {
     private final sonicarrowModel defaultModel;
@@ -17,6 +18,7 @@ public class sonicarrowRenderer extends GeoItemRenderer<sonicarrow> {
         super(new sonicarrowModel()); // 默认模型
         this.defaultModel = new sonicarrowModel();
         this.melonModel = new sonicarrowMelonModel();
+        addRenderLayer(new AutoGlowingGeoLayer<>(this));
     }
 
     @Override

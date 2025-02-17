@@ -3,5 +3,15 @@
     "profession": "kamen_rider_weapon_craft:time_traveler_profession",
     "chance": 100,
     "temperature": 0
+  },
+  "kamen_rider_weapon_craft:skins/clothing/normal/neutral/cultist/cultist.png": {
+    "profession": "mca:cultist",
+    "chance": 54,
+    "temperature": 0
+  },
+  "kamen_rider_weapon_craft:skins/clothing/normal/neutral/cultist/cultist2.png": {
+    "profession": "mca:cultist",
+    "chance": 42,
+    "temperature": 1
   }
 }
