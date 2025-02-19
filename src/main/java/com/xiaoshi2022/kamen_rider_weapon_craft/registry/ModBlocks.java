@@ -8,6 +8,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.portals.plant.HelheimVine;
 
 public class ModBlocks {
     // 创建一个 DeferredRegister 实例用于注册方块
@@ -24,5 +25,8 @@ public class ModBlocks {
             "rider_fusion_machine_block", RiderFusionMachineBlock::new);
 
     public static final RegistryObject<Block> RIDERFORGINGALLOYMINERAL = BLOCKS.register("riderforgingalloymineral", RiderforgingalloymineralBlock::new);
+
+    public static final RegistryObject<HelheimVine> HELHEIMVINE = BLOCKS.register("helheimvine",
+            () -> new HelheimVine(Block.Properties.of().noCollission().randomTicks().instabreak()));
 
 }

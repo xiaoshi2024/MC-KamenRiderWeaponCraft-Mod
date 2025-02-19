@@ -38,6 +38,11 @@ public class RiderFusionRecipe implements Recipe<Container> {
     }
 
     @Override
+    public NonNullList<Ingredient> getIngredients() {
+        return ingredients;
+    }
+
+    @Override
     public boolean matches(Container inv, Level level) {
         System.out.println("[Recipe] Checking recipe match...");
         for (int slot = 0; slot < 4; slot++) {

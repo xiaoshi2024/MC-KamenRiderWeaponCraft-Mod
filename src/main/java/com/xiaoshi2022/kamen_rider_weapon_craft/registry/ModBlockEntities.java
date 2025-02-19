@@ -3,6 +3,7 @@ package com.xiaoshi2022.kamen_rider_weapon_craft.registry;
 import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.client.RiderFusionMachineBlockEntity;
 import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.client.Time_traveler_studio_blockEntity;
 import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.client.helheim_crackBlockEntity;
+import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.client.plant.HelheimVineBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -19,4 +20,6 @@ public class ModBlockEntities {
     public static final RegistryObject<BlockEntityType<RiderFusionMachineBlockEntity>> RIDER_FUSION_MACHINE_BLOCK_ENTITY = BLOCK_ENTITIES.register("rider_fusion_machine_block_entity",
             () -> BlockEntityType.Builder.of(RiderFusionMachineBlockEntity::new, ModBlocks.RIDER_FUSION_MACHINE_BLOCK.get()).build(null));
 
+    public static final RegistryObject<BlockEntityType<HelheimVineBlockEntity>> HELHEIM_VINE_ENTITY = BLOCK_ENTITIES.register("helheim_vine_entity",
+            () -> BlockEntityType.Builder.of(HelheimVineBlockEntity::new, ModBlocks.HELHEIMVINE.get()).build(null));
 }

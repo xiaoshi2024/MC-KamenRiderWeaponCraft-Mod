@@ -44,6 +44,8 @@ public class ModItems {
     //方块物品
     public static final RegistryObject<Item> HELHEIM_CRACK_ITEM = ITEMS.register("helheim_crack",
             () -> new BlockItem(ModBlocks.HELHEIM_CRACK_BLOCK.get(), new Item.Properties()));
+    public static final RegistryObject<Item> HELHEIMVINE_ITEM = ITEMS.register("helheimvine",
+            () -> new BlockItem(ModBlocks.HELHEIMVINE.get(), new Item.Properties()));
     public static final RegistryObject<Item> TIME_TRAVELER_STUDIO_BLOCK_ITEM = ITEMS.register("time_traveler_studio_item",
             () -> new time_traveler_studio_item(ModBlocks.TIME_TRAVELER_STUDIO_BLOCK.get(), new Item.Properties()));
     public static final RegistryObject<Item> RIDERFUSIONMACHINE_ITEM = ITEMS.register("rider_fusion_machine_item",
