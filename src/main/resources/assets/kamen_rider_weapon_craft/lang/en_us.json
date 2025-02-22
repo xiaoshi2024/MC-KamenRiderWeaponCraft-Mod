@@ -3,12 +3,20 @@
 
   "item group.kamen_rider_weapon_craft_prop_tab": "KamenRiderWeaponCraft Prop Tab",
   "item group.kamen_rider_weapon_craft_tab": "KamenRiderWeaponCraft Tab",
+  "item group.kamen_rider_weapon_craft_misc_tab": "kamen rider weapon set of clutter",
+
 
   "block.kamen_rider_weapon_craft.helheim_crack_block": "helheimCrack",
   "block.kamen_rider_weapon_craft.time_traveler_studio_block": "timeTraveler Studio Block",
   "block.kamen_rider_weapon_craft.rider_fusion_machine_block": "Rider Fusion Machine",
   "block.kamen_rider_weapon_craft.riderforgingalloymineral": "Rider Forging Alloy mineral",
   "block.kamen_rider_weapon_craft.helheimvine": "Helheim Vine",
+
+  "block.kamen_rider_weapon_craft.pine_wood": "helheim Wood",
+  "block.kamen_rider_weapon_craft.pine_leaves": "helheim Leaves",
+  "block.kamen_rider_weapon_craft.pine_sapling": "helheim Sapling",
+  "block.kamen_rider_weapon_craft.pine_log": "helheim Log",
+  "block.kamen_rider_weapon_craft.pine_planks": "helheim Planks",
 
   "entity.minecraft.villager.kamen_rider_weapon_craft.time_traveler_profession": "theWillOfTimeTravel",
 

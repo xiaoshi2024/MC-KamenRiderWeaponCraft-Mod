@@ -15,6 +15,9 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static net.minecraft.world.phys.shapes.Shapes.block;
 
 public class ModItems {
@@ -42,6 +45,21 @@ public class ModItems {
             () -> new destroy_fifty_swords());
 
     //方块物品
+    // 存储注册的物品的 RegistryObject 列表
+    public static final List<RegistryObject<Item>> HELHEIM_PLANT_ITEMS = new ArrayList<>();
+
+    static {
+        // 遍历 ModBlocks 中的植物方块列表
+        for (RegistryObject<net.minecraft.world.level.block.Block> plantBlock : ModBlocks.HELHEIM_PLANTS) {
+            // 为每个方块创建对应的物品并注册
+            RegistryObject<Item> plantItem = ITEMS.register(plantBlock.getId().getPath(), () -> {
+                Item.Properties properties = new Item.Properties();
+                return new BlockItem(plantBlock.get(), properties);
+            });
+            HELHEIM_PLANT_ITEMS.add(plantItem);
+        }
+    }
+
     public static final RegistryObject<Item> HELHEIM_CRACK_ITEM = ITEMS.register("helheim_crack",
             () -> new BlockItem(ModBlocks.HELHEIM_CRACK_BLOCK.get(), new Item.Properties()));
     public static final RegistryObject<Item> HELHEIMVINE_ITEM = ITEMS.register("helheimvine",
@@ -73,4 +91,26 @@ public class ModItems {
             () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> RIDER_CIRCUIT_BOARD = ITEMS.register("rider_circuit_board",
             () -> new Item(new Item.Properties()));
+
+    //植物的杂七杂八
+    public static final RegistryObject<BlockItem> PINE_PLANKS_ITEM = ITEMS.register(
+"pine_planks", () -> new BlockItem(ModBlocks.PINE_PLANKS.get(), new Item.Properties()));
+    public static final RegistryObject<BlockItem> PINE_LOG_ITEM = ITEMS.register(
+"pine_log", () -> new BlockItem(ModBlocks.PINE_LOG.get(), new Item.Properties()));
+    public static final RegistryObject<BlockItem> PINE_LEAVES_ITEM = ITEMS.register(
+"pine_leaves", () -> new BlockItem(ModBlocks.PINE_LEAVES.get(), new Item.Properties()));
+    public static final RegistryObject<BlockItem> PINE_WOOD_ITEM = ITEMS.register(
+"pine_wood", () -> new BlockItem(ModBlocks.PINE_WOOD.get(), new Item.Properties()));
+    public static final RegistryObject<BlockItem> STRIPPED_PINE_LOG_ITEM = ITEMS.register(
+"stripped_pine_log", () -> new BlockItem(ModBlocks.STRIPPED_PINE_LOG.get(), new Item.Properties()));
+    public static final RegistryObject<BlockItem> STRIPPED_PINE_WOOD_ITEM = ITEMS.register(
+"stripped_pine_wood", () -> new BlockItem(ModBlocks.STRIPPED_PINE_WOOD.get(), new Item.Properties()));
+//    public static final RegistryObject<BlockItem> PINE_HANGING_SIGN_ITEM = ITEMS.register(
+//"pine_hanging_sign", () -> new BlockItem(ModBlocks.PINE_HANGING_SIGN.get(), new Item.Properties()));
+//        public static final RegistryObject<BlockItem> PINE_WALL_HANGING_SIGN_ITEM = ITEMS.register(
+//"pine_wall_hanging_sign", () -> new BlockItem(ModBlocks.PINE_WALL_HANGING_SIGN.get(), new Item.Properties()));
+
+    //树苗
+    public static final RegistryObject<BlockItem> PINE_SAPLING_ITEM = ITEMS.register(
+"pine_sapling", () -> new BlockItem(ModBlocks.PINE_SAPLING.get(), new Item.Properties()));
 }

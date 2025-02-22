@@ -3,6 +3,7 @@
 
   "item group.kamen_rider_weapon_craft_prop_tab": "假面骑士里武器的联动道具",
   "item group.kamen_rider_weapon_craft_tab": "假面骑士武器集合模组",
+  "item group.kamen_rider_weapon_craft_misc_tab": "假面骑士武器集的杂物",
 
   "block.kamen_rider_weapon_craft.helheim_crack_block": "赫尔海姆裂缝",
   "block.kamen_rider_weapon_craft.time_traveler_studio_block": "时空旅行照相馆",
@@ -10,6 +11,11 @@
   "block.kamen_rider_weapon_craft.riderforgingalloymineral": "骑士合金矿",
   "block.kamen_rider_weapon_craft.helheimvine": "赫尔海姆藤曼",
 
+  "block.kamen_rider_weapon_craft.pine_wood": "赫尔海姆木材",
+  "block.kamen_rider_weapon_craft.pine_leaves": "赫尔海姆树叶",
+  "block.kamen_rider_weapon_craft.pine_sapling": "赫尔海姆树苗",
+  "block.kamen_rider_weapon_craft.pine_log": "赫尔海姆原木",
+  "block.kamen_rider_weapon_craft.pine_planks": "赫尔海姆木板",
 
 
   "entity.minecraft.villager.kamen_rider_weapon_craft.time_traveler_profession": "时空旅行意志者",

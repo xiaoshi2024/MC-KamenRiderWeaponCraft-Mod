@@ -9,6 +9,8 @@ import com.xiaoshi2022.kamen_rider_weapon_craft.procedures.PullSounds;
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.*;
 import com.xiaoshi2022.kamen_rider_weapon_craft.tab.ModTab;
 import com.xiaoshi2022.kamen_rider_weapon_craft.villagers.TimeTravelerProfession;
+import com.xiaoshi2022.kamen_rider_weapon_craft.worldgen.tree.ModFoliagePlacers;
+import com.xiaoshi2022.kamen_rider_weapon_craft.worldgen.tree.ModTrunkPlacerTypes;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
@@ -61,6 +63,10 @@ public class kamen_rider_weapon_craft {
         MinecraftForge.EVENT_BUS.register(PullSounds.class);
         MinecraftForge.EVENT_BUS.register(KRWBoot.class);
 
+        //树苗的注册
+        ModFoliagePlacers.register(modEventBus);
+        ModTrunkPlacerTypes.register(modEventBus);
+
         // 自定义村民职业
         TimeTravelerProfession.POI_TYPE.register(modEventBus);
         TimeTravelerProfession.PROFESSION.register(modEventBus);
@@ -75,6 +81,8 @@ public class kamen_rider_weapon_craft {
         MixinBootstrap.init();
         MixinEnvironment.getDefaultEnvironment().setSide(MixinEnvironment.Side.CLIENT);
         MixinEnvironment.getEnvironment(MixinEnvironment.Phase.DEFAULT);
+
+
 
         // 注册网络包
         registerNetworkMessages();

@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "kamen_rider_weapon_craft:item/pine_hanging_sign"
+  }
+}

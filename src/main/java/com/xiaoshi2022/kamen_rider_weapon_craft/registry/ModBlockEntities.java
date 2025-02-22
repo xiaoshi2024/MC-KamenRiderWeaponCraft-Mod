@@ -4,6 +4,7 @@ import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.client.RiderFusionMachine
 import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.client.Time_traveler_studio_blockEntity;
 import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.client.helheim_crackBlockEntity;
 import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.client.plant.HelheimVineBlockEntity;
+//import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.entity.ModHangingSignBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -22,4 +23,10 @@ public class ModBlockEntities {
 
     public static final RegistryObject<BlockEntityType<HelheimVineBlockEntity>> HELHEIM_VINE_ENTITY = BLOCK_ENTITIES.register("helheim_vine_entity",
             () -> BlockEntityType.Builder.of(HelheimVineBlockEntity::new, ModBlocks.HELHEIMVINE.get()).build(null));
+
+//    public static final RegistryObject<BlockEntityType<ModHangingSignBlockEntity>> MOD_HANGING_SIGN =
+//            BLOCK_ENTITIES.register("mod_hanging_sign", () ->
+//                    BlockEntityType.Builder.of(ModHangingSignBlockEntity::new,
+//                            ModBlocks.PINE_HANGING_SIGN.get(), ModBlocks.PINE_WALL_HANGING_SIGN.get()).build(null));
+
 }

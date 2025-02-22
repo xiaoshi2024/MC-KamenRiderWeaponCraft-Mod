@@ -40,4 +40,18 @@ public class ModTab {
                 output.accept(RIDER_BASIC_WEAPON.get());
                 output.accept(RIDERFORGINGALLOYMINERAL.get());
             })).build());
+    public static final RegistryObject<CreativeModeTab> Z_TAB = TABS.register("kamen_rider_weapon_craft_misc_tab", () -> CreativeModeTab.builder()
+            .icon(() -> PINE_SAPLING_ITEM.get().getDefaultInstance())
+            .title(Component.translatable("item group.kamen_rider_weapon_craft_misc_tab"))
+            .displayItems(((parameters, output) -> {
+                output.accept(PINE_PLANKS_ITEM.get());
+                output.accept(PINE_LOG_ITEM.get());
+                output.accept(PINE_LEAVES_ITEM.get());
+                output.accept(PINE_WOOD_ITEM.get());
+                output.accept(STRIPPED_PINE_LOG_ITEM.get());
+                output.accept(STRIPPED_PINE_WOOD_ITEM.get());
+//                output.accept(PINE_HANGING_SIGN_ITEM.get());
+//                output.accept(PINE_WALL_HANGING_SIGN_ITEM.get());
+                output.accept(PINE_SAPLING_ITEM.get());
+            })).build());
 }

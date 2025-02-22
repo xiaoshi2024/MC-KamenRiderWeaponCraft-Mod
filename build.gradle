@@ -98,7 +98,7 @@ minecraft {
             arg '-mixin.config=xiaoshi2022.mixins.json'
 
             mods {
-                re8joymod {
+                kamen_rider_weapon_craft {
                     source sourceSets.main
                 }
             }
@@ -112,7 +112,7 @@ minecraft {
             //服务端中指定你资源包中的mixin文件
             arg '-mixin.config=xiaoshi2022.mixins.json'
             mods {
-                re8joymod {
+                kamen_rider_weapon_craft {
                     source sourceSets.main
                 }
             }
@@ -254,6 +254,12 @@ tasks.named('jar', Jar).configure {
 
     // This is the preferred method to reobfuscate your jar file
     finalizedBy 'reobfJar'
+}
+
+mixin {
+    add sourceSets.main, "xiaoshi2022.refmap.json"
+    config "xiaoshi2022.mixins.json"
+    debug.export = true
 }
 
 // However if you are in a multi-project build, dev time needs unobfed jar files, so you can delay the obfuscation until publishing by doing:
