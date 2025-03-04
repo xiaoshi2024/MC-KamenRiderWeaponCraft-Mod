@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "kamen_rider_weapon_craft:rider_fusion_machine_block"
+    "kamen_rider_weapon_craft:rider_fusion_machine_block",
+    "kamen_rider_weapon_craft:riderforgingalloymineral"
   ]
 }

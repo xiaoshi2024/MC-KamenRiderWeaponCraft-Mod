@@ -10,6 +10,14 @@
     {
       "type": "image",
       "images": ["kamen_rider_weapon_craft:textures/gui/entries/helheim_crack.png"]
+    },
+    {
+      "type": "image",
+      "images": ["kamen_rider_weapon_craft:textures/gui/entries/helheim_yj.png"]
+    },
+    {
+      "type": "text",
+      "text": "如果，你进入赫尔海姆冥界后可以找到，一些树上的果实，如果想吃可以摘下来，当然如果看过这个部骑士的话，不会这样做？"
     }
   ]
 }

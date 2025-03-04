@@ -12,6 +12,7 @@ public class ModTags {
         // 添加自定义树干到 minecraft:logs 标签
         public static final TagKey<Block> LOGS = BlockTags.create(new ResourceLocation("minecraft", "logs"));
         public static final TagKey<Block> LOGS_THAT_CAN_SUSTAIN_LEAVES = BlockTags.create(new ResourceLocation("minecraft", "logs_that_sustain_leaves"));
+        public static final TagKey<Block> LEAVES = BlockTags.create(new ResourceLocation("minecraft", "leaves"));
 
         private static TagKey<Block> tag(String name) {
             return BlockTags.create(new ResourceLocation(kamen_rider_weapon_craft.MOD_ID, name));

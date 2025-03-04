@@ -174,6 +174,9 @@ dependencies {
 
     compileOnly "mekanism:Mekanism:${mekanism_version}:api"
 
+    implementation fg.deobf("com.github.glitchfiend:TerraBlender-forge:${minecraft_version}-${terrablender_version}")
+
+
     // If you want to test/use Mekanism & its modules during `runClient` invocation, use the following
     runtimeOnly fg.deobf("mekanism:Mekanism:${mekanism_version}")// core
     runtimeOnly fg.deobf("mekanism:Mekanism:${mekanism_version}:additions")// Mekanism: Additions
@@ -228,6 +231,7 @@ tasks.named('processResources', ProcessResources).configure {
             loader_version_range: loader_version_range,
             mod_id              : mod_id, mod_name: mod_name, mod_license: mod_license, mod_version: mod_version,
             mod_authors         : mod_authors, mod_description: mod_description,
+            terrablender_version_range: terrablender_version_range
     ]
     inputs.properties replaceProperties
 

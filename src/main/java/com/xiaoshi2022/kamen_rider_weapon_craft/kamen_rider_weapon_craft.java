@@ -9,6 +9,7 @@ import com.xiaoshi2022.kamen_rider_weapon_craft.procedures.PullSounds;
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.*;
 import com.xiaoshi2022.kamen_rider_weapon_craft.tab.ModTab;
 import com.xiaoshi2022.kamen_rider_weapon_craft.villagers.TimeTravelerProfession;
+import com.xiaoshi2022.kamen_rider_weapon_craft.worldgen.biome.ModTerrablender;
 import com.xiaoshi2022.kamen_rider_weapon_craft.worldgen.tree.ModFoliagePlacers;
 import com.xiaoshi2022.kamen_rider_weapon_craft.worldgen.tree.ModTrunkPlacerTypes;
 import net.minecraft.resources.ResourceLocation;
@@ -82,7 +83,7 @@ public class kamen_rider_weapon_craft {
         MixinEnvironment.getDefaultEnvironment().setSide(MixinEnvironment.Side.CLIENT);
         MixinEnvironment.getEnvironment(MixinEnvironment.Phase.DEFAULT);
 
-
+        ModTerrablender.registerBiomes();
 
         // 注册网络包
         registerNetworkMessages();
@@ -90,6 +91,14 @@ public class kamen_rider_weapon_craft {
         // 注册 NetworkHandler
         NetworkHandler.register();
     }
+
+//    private void commonSetup(final FMLCommonSetupEvent event) {
+//        event.enqueueWork(() -> {
+//            // 注册地表规则
+//            SurfaceRuleManager.addSurfaceRules(SurfaceRuleManager.RuleCategory.OVERWORLD, MOD_ID, ModSurfaceRules.makeRules());
+//        });
+//    }
+
 
     private void registerNetworkMessages() {
         int id = 0;

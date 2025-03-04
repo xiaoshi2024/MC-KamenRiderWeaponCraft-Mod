@@ -2,14 +2,12 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    [
-      {
-        "item": "kamen_rider_weapon_craft:pine_planks"
-      },
-      {
-        "item": "kamen_rider_weapon_craft:pine_planks"
-      }
-    ]
+    {
+      "item": "kamen_rider_weapon_craft:pine_planks"
+    },
+    {
+      "item": "kamen_rider_weapon_craft:pine_planks"
+    }
   ],
   "result": {
     "count": 4,

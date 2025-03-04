@@ -1,9 +1,9 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.worldgen.tree.custom;
 
-import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModBlocks;
+import com.xiaoshi2022.kamen_rider_weapon_craft.worldgen.dimension.ModDimensions;
 import com.xiaoshi2022.kamen_rider_weapon_craft.worldgen.tree.ModFoliagePlacers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -18,7 +18,6 @@ import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacer;
 import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacerType;
 
 import java.util.*;
-import java.util.function.BiConsumer;
 
 public class PineFoliagePlacer extends FoliagePlacer {
     public static final Codec<PineFoliagePlacer> CODEC = RecordCodecBuilder.create(instance -> foliagePlacerParts(instance).apply(instance, PineFoliagePlacer::new));
@@ -36,8 +35,9 @@ public class PineFoliagePlacer extends FoliagePlacer {
     protected void createFoliage(LevelSimulatedReader level, FoliageSetter setter, RandomSource random, TreeConfiguration config, int freeTreeHeight, FoliageAttachment foliageAttachment, int foliageHeight, int foliageRadius, int offset) {
         BlockPos pos = foliageAttachment.pos();
 
+        // 生成树叶逻辑
         for (int i = 0; i < foliageHeight; i++) {
-            int currentRadius = foliageRadius - (i / 2); // Reduce radius as height increases
+            int currentRadius = foliageRadius - (i / 2); // 随高度增加减少半径
             for (int x = -currentRadius; x <= currentRadius; x++) {
                 for (int z = -currentRadius; z <= currentRadius; z++) {
                     if (Math.abs(x) + Math.abs(z) <= currentRadius) {
@@ -56,22 +56,79 @@ public class PineFoliagePlacer extends FoliagePlacer {
                         }
 
                         setter.set(leafPos, leafState);
+                    }
+                }
+            }
+        }
 
-                        // 随机生成藤蔓
-                        if (Math.abs(x) == currentRadius || Math.abs(z) == currentRadius) {
-                            if (random.nextFloat() < 0.3f) { // 30% 概率生成藤蔓
-                                for (Direction direction : Direction.Plane.HORIZONTAL) {
-                                    BlockPos vinePos = leafPos.relative(direction);
-                                    if (random.nextFloat() < 0.6f) { // 60% 概率在每个方向生成藤蔓
-                                        setter.set(vinePos, ModBlocks.HELHEIMVINE.get().defaultBlockState());
-                                    }
-                                }
-                            }
+        // 检查是否在赫尔海姆维度
+        if (isInHelheimDimension((LevelReader) level)) {
+            // 在所有树上生成赫尔海姆藤蔓
+            generateHelheimVines(level, setter, random, pos, foliageRadius, foliageHeight);
+        }
+
+
+        // 赫尔海姆藤蔓的“直线落雨式”生成逻辑
+        // 随机选择几条路径生成藤蔓
+        int numVinesToGenerate = random.nextInt(5) + 2; // 随机生成2到5条藤蔓
+
+        for (int vineIndex = 0; vineIndex < numVinesToGenerate; vineIndex++) {
+            // 随机选择一条路径的起始位置
+            int startX = random.nextInt(foliageRadius * 2 + 1) - foliageRadius;
+            int startZ = random.nextInt(foliageRadius * 2 + 1) - foliageRadius;
+
+            // 确保起始位置在树叶范围内
+            if (Math.abs(startX) + Math.abs(startZ) <= foliageRadius) {
+                BlockPos startVinePos = pos.offset(startX, 0, startZ); // 从第一层开始
+
+                // 检查起始位置是否有树叶
+                if (((LevelReader) level).getBlockState(startVinePos).getBlock() == ModBlocks.PINE_LEAVES.get()) {
+                    BlockPos currentPos = startVinePos;
+
+                    // 沿路径生成藤蔓
+                    for (int y = 0; y < foliageHeight; y++) {
+                        currentPos = currentPos.below(1); // 向下生成
+                        if (((LevelReader) level).getBlockState(currentPos).isAir()) {
+                            setter.set(currentPos, ModBlocks.HELHEIMVINE.get().defaultBlockState());
                         }
                     }
                 }
             }
         }
+    }
+
+    // 在 PineFoliagePlacer 类中添加一个通用方法
+    private void generateHelheimVines(LevelSimulatedReader level, FoliageSetter setter, RandomSource random, BlockPos pos, int foliageRadius, int foliageHeight) {
+        int numVinesToGenerate = random.nextInt(5) + 2; // 随机生成2到5条藤蔓
+
+        for (int vineIndex = 0; vineIndex < numVinesToGenerate; vineIndex++) {
+            // 随机选择一条路径的起始位置
+            int startX = random.nextInt(foliageRadius * 2 + 1) - foliageRadius;
+            int startZ = random.nextInt(foliageRadius * 2 + 1) - foliageRadius;
+
+            // 确保起始位置在树叶范围内
+            if (Math.abs(startX) + Math.abs(startZ) <= foliageRadius) {
+                BlockPos startVinePos = pos.offset(startX, 0, startZ); // 从第一层开始
+
+                // 检查起始位置是否有树叶
+                if (((LevelReader) level).getBlockState(startVinePos).getBlock() instanceof LeavesBlock) {
+                    BlockPos currentPos = startVinePos;
+
+                    // 沿路径生成藤蔓
+                    for (int y = 0; y < foliageHeight; y++) {
+                        currentPos = currentPos.below(1); // 向下生成
+                        if (((LevelReader) level).getBlockState(currentPos).isAir()) {
+                            setter.set(currentPos, ModBlocks.HELHEIMVINE.get().defaultBlockState());
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private boolean isInHelheimDimension(LevelReader level) {
+        // 检查当前维度是否为赫尔海姆维度
+        return level == ModDimensions.HELHEIM_DIMENSION_TYPE;
     }
 
     private boolean isConnectedToTrunk(LevelSimulatedReader level, BlockPos leafPos, BlockPos trunkPos) {

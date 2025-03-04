@@ -2,6 +2,7 @@ package com.xiaoshi2022.kamen_rider_weapon_craft.registry;
 
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.ModTires;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.*;
+import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.food.HelheimFruit;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.prop.custom.Melon;
 import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.display.rider_fusion_machine_item;
 import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.display.time_traveler_studio_item;
@@ -46,19 +47,31 @@ public class ModItems {
 
     //方块物品
     // 存储注册的物品的 RegistryObject 列表
-    public static final List<RegistryObject<Item>> HELHEIM_PLANT_ITEMS = new ArrayList<>();
 
-    static {
-        // 遍历 ModBlocks 中的植物方块列表
-        for (RegistryObject<net.minecraft.world.level.block.Block> plantBlock : ModBlocks.HELHEIM_PLANTS) {
-            // 为每个方块创建对应的物品并注册
-            RegistryObject<Item> plantItem = ITEMS.register(plantBlock.getId().getPath(), () -> {
-                Item.Properties properties = new Item.Properties();
-                return new BlockItem(plantBlock.get(), properties);
-            });
-            HELHEIM_PLANT_ITEMS.add(plantItem);
-        }
-    }
+    //食物
+    public static final RegistryObject<HelheimFruit> HELHEIMFRUIT = ITEMS.register("helheimfruit",
+            ()-> new HelheimFruit(new Item.Properties()));
+
+    public static final RegistryObject<BlockItem> HELHEIM_PLANT_ITEMS = ITEMS.register("helheim_plant",
+            () -> new BlockItem(ModBlocks.HELHEIM_PLANT.get(), new Item.Properties()));
+    public static final RegistryObject<BlockItem> HELHEIM_PLANT_2_ITEMS = ITEMS.register("helheim_plant_2",
+            () -> new BlockItem(ModBlocks.HELHEIM_PLANT.get(), new Item.Properties()));
+    public static final RegistryObject<BlockItem> HELHEIM_PLANT_3_ITEMS = ITEMS.register("helheim_plant_3",
+            () -> new BlockItem(ModBlocks.HELHEIM_PLANT.get(), new Item.Properties()));
+    public static final RegistryObject<BlockItem> HELHEIM_PLANT_4_ITEMS = ITEMS.register("helheim_plant_4",
+            () -> new BlockItem(ModBlocks.HELHEIM_PLANT.get(), new Item.Properties()));
+
+//    static {
+//        // 遍历 ModBlocks 中的植物方块列表
+//        for (RegistryObject<net.minecraft.world.level.block.Block> plantBlock : ModBlocks.HELHEIM_PLANTS) {
+//            // 为每个方块创建对应的物品并注册
+//            RegistryObject<Item> plantItem = ITEMS.register(plantBlock.getId().getPath(), () -> {
+//                Item.Properties properties = new Item.Properties();
+//                return new BlockItem(plantBlock.get(), properties);
+//            });
+//            HELHEIM_PLANT_ITEMS.add(plantItem);
+//        }
+//    }
 
     public static final RegistryObject<Item> HELHEIM_CRACK_ITEM = ITEMS.register("helheim_crack",
             () -> new BlockItem(ModBlocks.HELHEIM_CRACK_BLOCK.get(), new Item.Properties()));

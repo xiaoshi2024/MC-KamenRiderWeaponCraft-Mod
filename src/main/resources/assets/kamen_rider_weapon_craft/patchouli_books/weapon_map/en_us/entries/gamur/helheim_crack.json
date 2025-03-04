@@ -10,6 +10,14 @@
     {
       "type": "image",
       "images": ["kamen_rider_weapon_craft:textures/gui/entries/helheim_crack.png"]
+    },
+    {
+      "type": "image",
+      "images": ["kamen_rider_weapon_craft:textures/gui/entries/helheim_yj.png"]
+    },
+    {
+    "type": "text",
+    "text": "What if, when you enter the underworld of Helheim, you can find some fruit from a tree that you can pick if you want, which, of course, you wouldn't have done if you'd seen this knight?"
     }
   ]
 }

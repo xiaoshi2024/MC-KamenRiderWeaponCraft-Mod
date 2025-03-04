@@ -38,7 +38,11 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
         // 添加自定义树干方块到 minecraft:logs_that_sustain_leaves 标签
         this.tag(ModTags.Blocks.LOGS_THAT_CAN_SUSTAIN_LEAVES)
                 .add(ModBlocks.PINE_LOG.get());
-
-        // 更多标签注册...
+        // 添加自定义树叶到自定义标签
+        this.tag(ModTags.Blocks.LEAVES)
+                .add(ModBlocks.PINE_LEAVES.get());
+        // 添加自定义树叶到 minecraft:leaves 标签
+        this.tag(BlockTags.LEAVES)
+                .add(ModBlocks.PINE_LEAVES.get());
     }
 }

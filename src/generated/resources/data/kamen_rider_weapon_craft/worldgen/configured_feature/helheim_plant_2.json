@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:simple_block",
+  "config": {
+    "to_place": {
+      "type": "minecraft:simple_state_provider",
+      "state": {
+        "Name": "kamen_rider_weapon_craft:helheim_plant_2",
+        "Properties": {
+          "age": "0"
+        }
+      }
+    }
+  }
+}

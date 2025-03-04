@@ -11,6 +11,7 @@ import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.portals.plant.helheim_pla
 import com.xiaoshi2022.kamen_rider_weapon_craft.worldgen.tree.PineTreeGrower;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -101,16 +102,24 @@ public class ModBlocks {
     public static final RegistryObject<Block> PINE_SAPLING = BLOCKS.register("pine_sapling",
             () -> new SaplingBlock(new PineTreeGrower(), BlockBehaviour.Properties.copy(Blocks.OAK_SAPLING)));
 
-    // 存储注册的方块的 RegistryObject 列表
-    public static final List<RegistryObject<Block>> HELHEIM_PLANTS = new ArrayList<>();
-
-    static {
-        // 定义植物的名称数组
-        String[] plantNames = {"helheim_plant", "helheim_plant_2", "helheim_plant_3", "helheim_plant_4"};
-        for (String name : plantNames) {
-            // 注册方块并将 RegistryObject 添加到列表中
-            RegistryObject<Block> plant = BLOCKS.register(name, helheim_plant::new);
-            HELHEIM_PLANTS.add(plant);
-        }
-    }
+//    // 存储注册的方块的 RegistryObject 列表
+//    public static final List<RegistryObject<Block>> HELHEIM_PLANTS = new ArrayList<>();
+//
+//    static {
+//        // 定义植物的名称数组
+//        String[] plantNames = {"helheim_plant", "helheim_plant_2", "helheim_plant_3", "helheim_plant_4"};
+//        for (String name : plantNames) {
+//            // 注册方块并将 RegistryObject 添加到列表中
+//            RegistryObject<Block> plant = BLOCKS.register(name, helheim_plant::new);
+//            HELHEIM_PLANTS.add(plant);
+//        }
+//    }
+    public static final RegistryObject<Block> HELHEIM_PLANT = BLOCKS.register("helheim_plant",
+            () -> new helheim_plant(BlockBehaviour.Properties.copy(Blocks.WHEAT)));
+    public static final RegistryObject<Block> HELHEIM_PLANT_2 = BLOCKS.register("helheim_plant_2",
+            () -> new helheim_plant(BlockBehaviour.Properties.copy(Blocks.WHEAT)));
+    public static final RegistryObject<Block> HELHEIM_PLANT_3 = BLOCKS.register("helheim_plant_3",
+            () -> new helheim_plant(BlockBehaviour.Properties.copy(Blocks.WHEAT)));
+    public static final RegistryObject<Block> HELHEIM_PLANT_4 = BLOCKS.register("helheim_plant_4",
+            () -> new helheim_plant(BlockBehaviour.Properties.copy(Blocks.WHEAT)));
 }

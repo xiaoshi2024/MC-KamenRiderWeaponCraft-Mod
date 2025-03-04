@@ -4,6 +4,8 @@ import com.xiaoshi2022.kamen_rider_weapon_craft.kamen_rider_weapon_craft;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 
@@ -53,5 +55,15 @@ public class ModTab {
 //                output.accept(PINE_HANGING_SIGN_ITEM.get());
 //                output.accept(PINE_WALL_HANGING_SIGN_ITEM.get());
                 output.accept(PINE_SAPLING_ITEM.get());
+                output.accept(HELHEIMFRUIT.get());
+//                for (RegistryObject<Item> plantItem : HELHEIM_PLANT_ITEMS) {
+//                    output.accept(new ItemStack(plantItem.get()));
+//                }
+                output.accept(HELHEIM_PLANT_4_ITEMS.get());
+                output.accept(HELHEIM_PLANT_3_ITEMS.get());
+                output.accept(HELHEIM_PLANT_2_ITEMS.get());
+                output.accept(HELHEIM_PLANT_ITEMS.get());
+                output.accept(HELHEIMVINE_ITEM.get());
+                
             })).build());
 }

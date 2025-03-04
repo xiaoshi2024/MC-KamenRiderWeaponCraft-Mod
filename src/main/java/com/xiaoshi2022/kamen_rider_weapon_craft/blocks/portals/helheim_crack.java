@@ -2,19 +2,17 @@ package com.xiaoshi2022.kamen_rider_weapon_craft.blocks.portals;
 
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModBlockEntities;
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModSounds;
-import net.minecraft.Util;
+import com.xiaoshi2022.kamen_rider_weapon_craft.worldgen.dimension.ModDimensions;
+import com.xiaoshi2022.kamen_rider_weapon_craft.worldgen.portal.ModTeleporter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
@@ -24,10 +22,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.*;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.common.util.ITeleporter;
 
 import javax.annotation.Nullable;
-import java.util.function.Function;
 
 public class helheim_crack extends HorizontalDirectionalBlock implements EntityBlock {
     public static final IntegerProperty ANIMATION = IntegerProperty.create("animation", 0, 1);
@@ -78,44 +74,27 @@ public class helheim_crack extends HorizontalDirectionalBlock implements EntityB
 
             // 如果玩家是服务器玩家，执行传送逻辑
             if (entity instanceof ServerPlayer serverPlayer) {
-                // 判断玩家当前所在的维度
-                if (world.dimension() == Level.OVERWORLD) {
-                    // 玩家在主世界，传送至自定义维度
-                    ResourceKey<Level> customDimension = ResourceKey.create(Registries.DIMENSION, new ResourceLocation("kamen_rider_weapon_craft", "helheim"));
-                    Level targetLevel = world.getServer().getLevel(customDimension);
-                    if (targetLevel != null) {
-                        serverPlayer.changeDimension((ServerLevel) targetLevel, new ITeleporter() {
-                            @Override
-                            public Entity placeEntity(Entity entity, ServerLevel currentWorld, ServerLevel destWorld, float yaw, Function<Boolean, Entity> repositionEntity) {
-                                // 可以在这里设置玩家在自定义维度的传送位置
-                                BlockPos targetPos = new BlockPos(0, 64, 0); // 示例位置
-                                return repositionEntity.apply(true);
-                            }
-                        });
-                    } else {
-                        entity.sendSystemMessage(Component.literal("自定义维度加载失败！"));
-                        return InteractionResult.FAIL;
-                    }
-                } else {
-                    // 玩家在自定义维度，传送回主世界
-                    Level overworld = world.getServer().getLevel(Level.OVERWORLD);
-                    if (overworld != null) {
-                        serverPlayer.changeDimension((ServerLevel) overworld, new ITeleporter() {
-                            @Override
-                            public Entity placeEntity(Entity entity, ServerLevel currentWorld, ServerLevel destWorld, float yaw, Function<Boolean, Entity> repositionEntity) {
-                                // 可以在这里设置玩家在主世界的传送位置
-                                BlockPos targetPos = new BlockPos(0, 64, 0); // 示例位置
-                                return repositionEntity.apply(true);
-                            }
-                        });
-                    } else {
-                        entity.sendSystemMessage(Component.literal("主世界加载失败！"));
-                        return InteractionResult.FAIL;
-                    }
-                }
+                handleHelheimPortal(serverPlayer, pos);
             }
         }
         return InteractionResult.SUCCESS;
+    }
+
+    private void handleHelheimPortal(ServerPlayer player, BlockPos pPos) {
+        if (player.level() instanceof ServerLevel serverlevel) {
+            MinecraftServer minecraftserver = serverlevel.getServer();
+            ResourceKey<Level> resourcekey = player.level().dimension() == ModDimensions.HELHEIM_LEVEL_KEY ?
+                    Level.OVERWORLD : ModDimensions.HELHEIM_LEVEL_KEY;
+
+            ServerLevel portalDimension = minecraftserver.getLevel(resourcekey);
+            if (portalDimension != null && !player.isPassenger()) {
+                if(resourcekey == ModDimensions.HELHEIM_LEVEL_KEY) {
+                    player.changeDimension(portalDimension, new ModTeleporter(pPos, true));
+                } else {
+                    player.changeDimension(portalDimension, new ModTeleporter(pPos, false));
+                }
+            }
+        }
     }
 
     private void playSound(Level world, BlockPos pos) {
