@@ -1,19 +1,38 @@
 {
-  "type": "minecraft:simple_block",
+  "type": "minecraft:random_patch",
   "config": {
-    "to_place": {
-      "type": "minecraft:simple_state_provider",
-      "state": {
-        "Name": "kamen_rider_weapon_craft:helheimvine",
-        "Properties": {
-          "east": "true",
-          "facing": "north",
-          "north": "true",
-          "south": "true",
-          "up": "true",
-          "west": "true"
+    "feature": {
+      "feature": {
+        "type": "minecraft:simple_block",
+        "config": {
+          "to_place": {
+            "type": "minecraft:simple_state_provider",
+            "state": {
+              "Name": "kamen_rider_weapon_craft:helheimvine",
+              "Properties": {
+                "east": "true",
+                "facing": "north",
+                "north": "true",
+                "south": "true",
+                "up": "true",
+                "west": "true"
+              }
+            }
+          }
         }
-      }
-    }
+      },
+      "placement": [
+        {
+          "type": "minecraft:block_predicate_filter",
+          "predicate": {
+            "type": "minecraft:matching_blocks",
+            "blocks": "minecraft:air"
+          }
+        }
+      ]
+    },
+    "tries": 64,
+    "xz_spread": 2,
+    "y_spread": 5
   }
 }

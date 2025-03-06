@@ -1,5 +1,6 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.blocks.portals;
 
+import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.client.helheim_crackBlockEntity;
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModBlockEntities;
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModSounds;
 import com.xiaoshi2022.kamen_rider_weapon_craft.worldgen.dimension.ModDimensions;
@@ -15,40 +16,56 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.*;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
 
-public class helheim_crack extends HorizontalDirectionalBlock implements EntityBlock {
+public class helheim_crack extends Block implements EntityBlock {
     public static final IntegerProperty ANIMATION = IntegerProperty.create("animation", 0, 1);
-    public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
-    public static final EnumProperty<AttachFace> FACE = FaceAttachedHorizontalDirectionalBlock.FACE;
-    public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
+
+    public static final DirectionProperty FACING = DirectionalBlock.FACING;
+
 
     public helheim_crack(Properties properties) {
         super(properties);
         this.registerDefaultState(this.stateDefinition.any()
                 .setValue(FACING, Direction.NORTH)
-                .setValue(FACE, AttachFace.WALL)
-                .setValue(WATERLOGGED, false)
                 .setValue(ANIMATION, 0));
     }
 
-
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
-        return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
+        return this.defaultBlockState()
+                .setValue(FACING, context.getHorizontalDirection().getOpposite());
+    }
+
+    @Override
+    public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
+
+        return switch (state.getValue(FACING)) {
+            default -> box(0, 0, 0, 16, 48, 16);
+            case NORTH -> box(0, 0, 0, 16, 48, 16);
+            case EAST -> box(0, 0, 0, 16, 48, 16);
+            case WEST -> box(0, 0, 0, 16, 48, 16);
+            case UP -> box(0, 0, 0, 16, 16, 48);
+            case DOWN -> box(0, 0, -32, 16, 16, 16);
+        };
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(ANIMATION, FACING, WATERLOGGED, FACE);
+        builder.add(ANIMATION, FACING);
     }
 
 
@@ -57,6 +74,7 @@ public class helheim_crack extends HorizontalDirectionalBlock implements EntityB
     public BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
         return ModBlockEntities.HELHEIM_CRACK_BLOCK_ENTITY.get().create(blockPos, blockState);
     }
+
 
     @Override
     public InteractionResult use(BlockState blockstate, Level world, BlockPos pos, Player entity, InteractionHand hand, BlockHitResult hit) {
@@ -105,5 +123,17 @@ public class helheim_crack extends HorizontalDirectionalBlock implements EntityB
     @Override
     public RenderShape getRenderShape(BlockState state) {
         return RenderShape.ENTITYBLOCK_ANIMATED;
+    }
+
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
+        if (level.isClientSide) {
+            return null;
+        }
+        if (type == ModBlockEntities.HELHEIM_CRACK_BLOCK_ENTITY.get()) {
+            return (lvl, pos, stt, be) -> helheim_crackBlockEntity.tick(lvl, pos, stt, (helheim_crackBlockEntity) be);
+        }
+        return null;
     }
 }

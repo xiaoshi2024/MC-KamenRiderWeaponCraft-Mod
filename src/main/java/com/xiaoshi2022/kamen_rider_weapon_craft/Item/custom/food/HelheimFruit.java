@@ -1,8 +1,11 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.food;
 
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.food.HelheimFruit.HelheimFruitRenderer;
+import com.xiaoshi2022.kamen_rider_weapon_craft.registry.EffectInit;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -76,6 +79,18 @@ public class HelheimFruit extends Item implements GeoItem {
         return super.use(level, player, hand);
     }
 
+    @Override
+    public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
+        // 确保只在服务器端执行逻辑
+        if (!level.isClientSide && entity instanceof Player player) {
+            // 30% 概率获得赫尔海姆之力（HELMHEIM_POWER）buff
+            if (player.getRandom().nextInt(100) < 60) { // 60% 概率
+                player.addEffect(new MobEffectInstance(EffectInit.HELMHEIM_POWER.get(), 30 * 20, 0, false, false));
+            }
+        }
+        // 调用父类方法以确保物品的默认行为（例如消耗物品）
+        return super.finishUsingItem(stack, level, entity);
+    }
 
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {

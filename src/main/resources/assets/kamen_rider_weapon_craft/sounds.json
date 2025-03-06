@@ -26,6 +26,15 @@
       }
     ]
   },
+  "cheryyenergy": {
+    "subtitle": "subtitles.cheryyenergy",
+    "sounds": [
+      {
+        "name": "kamen_rider_weapon_craft:cheryyenergy",
+        "stream": false
+      }
+    ]
+  },
   "opendlock": {
     "subtitle": "subtitles.opendlock",
     "sounds": [

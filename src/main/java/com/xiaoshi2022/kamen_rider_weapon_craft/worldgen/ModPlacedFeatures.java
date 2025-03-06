@@ -69,19 +69,15 @@ public class ModPlacedFeatures {
         // 注册 Helheim Vine 的放置逻辑
         register(context, HELHEIM_VINE_PLACED_KEY, configuredFeatures.getOrThrow(ModConfiguredFeatures.HELHEIM_VINE_KEY),
                 List.of(
-                        PlacementUtils.countExtra(25, 1.0F, 5), // 每棵树基础生成15个藤蔓，额外生成5个（总共15到20个）
+                        PlacementUtils.countExtra(25, 1.0F, 5), // 每棵树基础生成25个藤蔓，额外生成最多5个（总共25到30个）
                         InSquarePlacement.spread(), // 在水平范围内均匀分布
                         HeightRangePlacement.uniform(VerticalAnchor.aboveBottom(0), VerticalAnchor.aboveBottom(256)), // 使用高度范围确保生成在地形范围内
-                        PlacementUtils.filteredByBlockSurvival(Blocks.BIRCH_WOOD),
-                        PlacementUtils.filteredByBlockSurvival(Blocks.OAK_WOOD),
-                        PlacementUtils.filteredByBlockSurvival(Blocks.SPRUCE_WOOD),
-                        // 修改过滤条件，确保生成在树叶上
-                        PlacementUtils.filteredByBlockSurvival(Blocks.OAK_LEAVES), // 示例：橡树树叶
-                        PlacementUtils.filteredByBlockSurvival(Blocks.SPRUCE_LEAVES), // 示例：云杉树叶
-                        PlacementUtils.filteredByBlockSurvival(Blocks.BIRCH_LEAVES), // 示例：桦树树叶
-                        PlacementUtils.filteredByBlockSurvival(Blocks.JUNGLE_LEAVES), // 示例：丛林树叶
-                        PlacementUtils.filteredByBlockSurvival(Blocks.DARK_OAK_LEAVES), // 示例：深色橡树树叶
-                        PlacementUtils.filteredByBlockSurvival(Blocks.ACACIA_LEAVES) // 示例：金合欢树叶
+                        PlacementUtils.filteredByBlockSurvival(Blocks.BIRCH_LOG),
+                        PlacementUtils.filteredByBlockSurvival(Blocks.OAK_LOG),
+                        PlacementUtils.filteredByBlockSurvival(Blocks.SPRUCE_LOG),
+                        PlacementUtils.filteredByBlockSurvival(Blocks.JUNGLE_LOG),
+                        PlacementUtils.filteredByBlockSurvival(Blocks.DARK_OAK_LOG),
+                        PlacementUtils.filteredByBlockSurvival(Blocks.ACACIA_LOG)
                 ));
     }
 

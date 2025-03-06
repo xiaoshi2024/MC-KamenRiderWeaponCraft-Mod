@@ -90,6 +90,8 @@ public class kamen_rider_weapon_craft {
 
         // 注册 NetworkHandler
         NetworkHandler.register();
+
+        EffectInit.EFFECTS.register(modEventBus);
     }
 
 //    private void commonSetup(final FMLCommonSetupEvent event) {

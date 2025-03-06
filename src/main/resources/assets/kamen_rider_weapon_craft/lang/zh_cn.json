@@ -54,9 +54,12 @@
   "item.kamen_rider_weapon_craft.progrise_hopper_blade": "升程蝗虫砍击者",
 
 
+  "effect.kamen_rider_weapon_craft.helmheim_power": "赫尔海姆之力",
+
 
   "item.kamen_rider_weapon_craft.sonicx_arrow": "能量音速箭矢",
   "item.kamen_rider_weapon_craft.melon": "蜜瓜能量锁种",
+  "item.kamen_rider_weapon_craft.cheryy": "樱桃能量锁种",
   "item.kamen_rider_weapon_craft.rider_forging_alloy_ore": "骑士合金材料",
   "item.kamen_rider_weapon_craft.rider_circuit_board": "骑士电路板",
   "item.kamen_rider_weapon_craft.rider_basic_weapon": "骑士基础武器材料",
@@ -71,6 +74,7 @@
   "subtitles.riderbookersword": "咔修!",
   "subtitles.opendlock": "滋 ~滋~（拉链拉动）",
   "subtitles.melonenergy": "蜜瓜-能量!",
+  "subtitles.cheryyenergy": "樱桃-能量！",
   "subtitles.lock_on": "锁种 ~ 锁上~！",
   "subtitles.lock_seed_put_in": "锁种放入~",
   "subtitles.pull_standby": "拉动~",

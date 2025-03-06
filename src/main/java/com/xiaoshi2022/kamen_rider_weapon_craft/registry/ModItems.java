@@ -4,6 +4,7 @@ import com.xiaoshi2022.kamen_rider_weapon_craft.Item.ModTires;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.*;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.food.HelheimFruit;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.prop.custom.Melon;
+import com.xiaoshi2022.kamen_rider_weapon_craft.Item.prop.custom.cheryy;
 import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.display.rider_fusion_machine_item;
 import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.display.time_traveler_studio_item;
 import com.xiaoshi2022.kamen_rider_weapon_craft.kamen_rider_weapon_craft;
@@ -93,6 +94,9 @@ public class ModItems {
     // 武器联动道具
     public static final RegistryObject<Melon> MELON = ITEMS.register("melon",
             () -> new Melon(new Item.Properties()));
+    public static final RegistryObject<cheryy> CHERYY = ITEMS.register("cheryy",
+            () -> new cheryy(new Item.Properties()));
+
     public static final RegistryObject<Item> RIDER_BASIC_WEAPON = ITEMS.register("rider_basic_weapon",
             () -> new Item(new Item.Properties()));
 

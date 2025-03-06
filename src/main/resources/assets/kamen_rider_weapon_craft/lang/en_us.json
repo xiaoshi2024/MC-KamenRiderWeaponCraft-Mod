@@ -52,10 +52,12 @@
 
   "item.kamen_rider_weapon_craft.sonicx_arrow": "sonicx arrow",
   "item.kamen_rider_weapon_craft.melon": "Melon energy-seed",
+  "item.kamen_rider_weapon_craft.cheryy": "Cherry energy-seed",
   "item.kamen_rider_weapon_craft.rider_forging_alloy_ore": "Rider Forging alloy",
   "item.kamen_rider_weapon_craft.rider_circuit_board": "Rider Board",
   "item.kamen_rider_weapon_craft.rider_basic_weapon": "rider base weapon material",
 
+  "effect.kamen_rider_weapon_craft.helmheim_power": "Helheim The power of Buff",
 
   "item.sonic_bow.desc": "desc",
   "item.sonic_bow.strength": "strength",
@@ -67,6 +69,7 @@
   "subtitles.riderbookersword": "Casheu!",
   "subtitles.opendlock": "crunch ~",
   "subtitles.melonenergy": "Melon-Energy!",
+  "subtitles.cheryyenergy": "Cherry-energy!",
   "subtitles.lock_on": "lock ~ on~!",
   "subtitles.lock_seed_put_in": "lock_seed_put_in",
   "subtitles.pull_standby": "pull_standby",

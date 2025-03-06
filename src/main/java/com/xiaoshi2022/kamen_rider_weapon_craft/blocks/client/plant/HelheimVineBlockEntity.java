@@ -18,14 +18,14 @@ public class HelheimVineBlockEntity extends BlockEntity implements GeoBlockEntit
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, "controller", 0, this::predicate));
+//        controllers.add(new AnimationController<>(this, "controller", 0, this::predicate));
     }
 
-    private PlayState predicate(AnimationState<HelheimVineBlockEntity> event) {
-        // 设置动画逻辑
-        event.getController().setAnimation(RawAnimation.begin().thenLoop("idle"));
-        return PlayState.CONTINUE;
-    }
+//    private PlayState predicate(AnimationState<HelheimVineBlockEntity> event) {
+//        // 设置动画逻辑
+//        event.getController().setAnimation(RawAnimation.begin().thenLoop("idle"));
+//        return PlayState.CONTINUE;
+//    }
 
     @Override
     public InstancedAnimatableInstanceCache getAnimatableInstanceCache() {

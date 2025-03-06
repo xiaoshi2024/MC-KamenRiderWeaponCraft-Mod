@@ -37,7 +37,7 @@
       "predicate": {
         "type": "minecraft:would_survive",
         "state": {
-          "Name": "minecraft:birch_wood",
+          "Name": "minecraft:birch_log",
           "Properties": {
             "axis": "y"
           }
@@ -49,7 +49,7 @@
       "predicate": {
         "type": "minecraft:would_survive",
         "state": {
-          "Name": "minecraft:oak_wood",
+          "Name": "minecraft:oak_log",
           "Properties": {
             "axis": "y"
           }
@@ -61,7 +61,7 @@
       "predicate": {
         "type": "minecraft:would_survive",
         "state": {
-          "Name": "minecraft:spruce_wood",
+          "Name": "minecraft:spruce_log",
           "Properties": {
             "axis": "y"
           }
@@ -73,11 +73,9 @@
       "predicate": {
         "type": "minecraft:would_survive",
         "state": {
-          "Name": "minecraft:oak_leaves",
+          "Name": "minecraft:jungle_log",
           "Properties": {
-            "distance": "7",
-            "persistent": "false",
-            "waterlogged": "false"
+            "axis": "y"
           }
         }
       }
@@ -87,11 +85,9 @@
       "predicate": {
         "type": "minecraft:would_survive",
         "state": {
-          "Name": "minecraft:spruce_leaves",
+          "Name": "minecraft:dark_oak_log",
           "Properties": {
-            "distance": "7",
-            "persistent": "false",
-            "waterlogged": "false"
+            "axis": "y"
           }
         }
       }
@@ -101,53 +97,9 @@
       "predicate": {
         "type": "minecraft:would_survive",
         "state": {
-          "Name": "minecraft:birch_leaves",
+          "Name": "minecraft:acacia_log",
           "Properties": {
-            "distance": "7",
-            "persistent": "false",
-            "waterlogged": "false"
-          }
-        }
-      }
-    },
-    {
-      "type": "minecraft:block_predicate_filter",
-      "predicate": {
-        "type": "minecraft:would_survive",
-        "state": {
-          "Name": "minecraft:jungle_leaves",
-          "Properties": {
-            "distance": "7",
-            "persistent": "false",
-            "waterlogged": "false"
-          }
-        }
-      }
-    },
-    {
-      "type": "minecraft:block_predicate_filter",
-      "predicate": {
-        "type": "minecraft:would_survive",
-        "state": {
-          "Name": "minecraft:dark_oak_leaves",
-          "Properties": {
-            "distance": "7",
-            "persistent": "false",
-            "waterlogged": "false"
-          }
-        }
-      }
-    },
-    {
-      "type": "minecraft:block_predicate_filter",
-      "predicate": {
-        "type": "minecraft:would_survive",
-        "state": {
-          "Name": "minecraft:acacia_leaves",
-          "Properties": {
-            "distance": "7",
-            "persistent": "false",
-            "waterlogged": "false"
+            "axis": "y"
           }
         }
       }
