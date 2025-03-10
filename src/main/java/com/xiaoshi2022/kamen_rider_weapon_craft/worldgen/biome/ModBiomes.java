@@ -1,5 +1,6 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.worldgen.biome;
 
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ModEntityTypes;
 import com.xiaoshi2022.kamen_rider_weapon_craft.kamen_rider_weapon_craft;
 import com.xiaoshi2022.kamen_rider_weapon_craft.worldgen.ModPlacedFeatures;
 import net.minecraft.core.registries.Registries;
@@ -37,6 +38,9 @@ public class ModBiomes {
 
         BiomeDefaultFeatures.farmAnimals(spawnBuilder);
         BiomeDefaultFeatures.commonSpawns(spawnBuilder);
+
+        // 添加自定义实体生成规则
+        spawnBuilder.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(ModEntityTypes.INVES_HEILEHIM.get(), 20, 1, 2));
 
         BiomeGenerationSettings.Builder biomeBuilder =
                 new BiomeGenerationSettings.Builder(context.lookup(Registries.PLACED_FEATURE), context.lookup(Registries.CONFIGURED_CARVER));

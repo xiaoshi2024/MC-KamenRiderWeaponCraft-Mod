@@ -184,6 +184,12 @@
         "maxCount": 1,
         "minCount": 1,
         "weight": 5
+      },
+      {
+        "type": "kamen_rider_boss_you_and_me:inves_heilehim",
+        "maxCount": 2,
+        "minCount": 1,
+        "weight": 20
       }
     ],
     "underground_water_creature": [

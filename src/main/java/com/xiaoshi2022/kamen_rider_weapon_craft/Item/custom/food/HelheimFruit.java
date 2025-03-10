@@ -1,10 +1,13 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.food;
 
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ModEntityTypes;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.food.HelheimFruit.HelheimFruitRenderer;
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.EffectInit;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
@@ -23,6 +26,7 @@ import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
+import tocraft.walkers.api.PlayerShape;
 
 import java.util.function.Consumer;
 
@@ -83,6 +87,30 @@ public class HelheimFruit extends Item implements GeoItem {
     public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
         // 确保只在服务器端执行逻辑
         if (!level.isClientSide && entity instanceof Player player) {
+            // 40% 概率变形为异域者（INVES_HEILEHIM）
+            if (player.getRandom().nextInt(100) < 40) { // 40% 概率
+                player.stopRiding();
+                ServerPlayer serverPlayer = (ServerPlayer) player;
+                EntityType<?> invesHeilehimType = ModEntityTypes.INVES_HEILEHIM.get();
+                if (invesHeilehimType != null) {
+                    LivingEntity invesHeilehimEntity = (LivingEntity) invesHeilehimType.create(level);
+                    if (invesHeilehimEntity != null) {
+                        // 初始化实体并设置位置
+                        invesHeilehimEntity.moveTo(player.getX(), player.getY(), player.getZ());
+                        if (!invesHeilehimEntity.isAlive()) {
+                            System.err.println("INVES_HEILEHIM initialization failed");
+                            return stack;
+                        }
+                        // 调用 PlayerShape.updateShapes 方法进行变形
+                        if (PlayerShape.updateShapes(serverPlayer, invesHeilehimEntity)) {
+                            System.out.println("Player transformed to INVES_HEILEHIM successfully");
+                        } else {
+                            System.err.println("Player transformation failed");
+                        }
+                    }
+                }
+            }
+
             // 30% 概率获得赫尔海姆之力（HELMHEIM_POWER）buff
             if (player.getRandom().nextInt(100) < 60) { // 60% 概率
                 player.addEffect(new MobEffectInstance(EffectInit.HELMHEIM_POWER.get(), 30 * 20, 0, false, false));

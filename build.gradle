@@ -156,6 +156,10 @@ repositories {
         url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
     }
     maven {
+        name "KosmX's maven"
+        url 'https://maven.kosmx.dev/'
+    }
+    maven {
         url "https://cursemaven.com"
     }
     maven { url 'https://maven.blamejared.com' }
@@ -171,6 +175,13 @@ repositories {
 }
 
 dependencies {
+
+    implementation fg.deobf("curse.maven:remorphed-950721:5755676")
+    implementation fg.deobf("curse.maven:crafted-core-923377:6187026")
+    implementation fg.deobf("curse.maven:woodwalkers-868922:6278864")
+
+    implementation fg.deobf("curse.maven:kamenriderbossyouandme-1214394:6270437")
+    implementation fg.deobf("dev.kosmx.player-anim:player-animation-lib-forge:1.0.2-rc1+1.20")
 
     compileOnly "mekanism:Mekanism:${mekanism_version}:api"
 
