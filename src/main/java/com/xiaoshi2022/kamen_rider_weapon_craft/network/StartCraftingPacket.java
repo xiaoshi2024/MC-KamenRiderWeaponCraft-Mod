@@ -8,6 +8,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkEvent;
+
 import java.util.function.Supplier;
 
 public class StartCraftingPacket {
@@ -21,24 +22,37 @@ public class StartCraftingPacket {
         this.pos = buffer.readBlockPos();
     }
 
-    public void toBytes(FriendlyByteBuf buffer) {
+    public void encode(FriendlyByteBuf buffer) {
         buffer.writeBlockPos(pos);
     }
 
-    public void handle(Supplier<NetworkEvent.Context> context) {
-        context.get().enqueueWork(() -> {
-            // 在服务端启动合成
-            if (context.get().getDirection() == NetworkDirection.PLAY_TO_SERVER) {
-                ServerPlayer player = context.get().getSender();
+    public static StartCraftingPacket decode(FriendlyByteBuf buffer) {
+        return new StartCraftingPacket(buffer);
+    }
+
+    public static void handle(StartCraftingPacket packet, Supplier<NetworkEvent.Context> ctx) {
+        ctx.get().enqueueWork(() -> {
+            if (ctx.get().getDirection() == NetworkDirection.PLAY_TO_SERVER) {
+                ServerPlayer player = ctx.get().getSender();
                 if (player != null) {
                     Level level = player.level();
-                    BlockEntity blockEntity = level.getBlockEntity(pos);
+                    if (level == null) {
+                        return;
+                    }
+
+                    BlockEntity blockEntity = level.getBlockEntity(packet.pos);
                     if (blockEntity instanceof RiderFusionMachineBlockEntity fusionMachine) {
                         fusionMachine.startCrafting();
+                    } else {
+                        System.err.println("Block entity at position " + packet.pos + " is not a RiderFusionMachineBlockEntity");
                     }
+                } else {
+                    System.err.println("Player is null in StartCraftingPacket.handle");
                 }
+            } else {
+                System.err.println("Packet direction is not PLAY_TO_SERVER");
             }
         });
-        context.get().setPacketHandled(true);
+        ctx.get().setPacketHandled(true);
     }
 }

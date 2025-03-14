@@ -20,6 +20,8 @@ public class ModTab {
             .displayItems(((parameters, output) -> {
                 output.accept(SONICARROW.get());
                 output.accept(DAIDAIMARU.get());
+                output.accept(HINAWA_DAIDAI_DJ_JU.get());
+                output.accept(MUSOUHINAWADJ.get());
                 output.accept(MUSOUSABERD.get());
                 output.accept(GANGUNSABER.get());
                 output.accept(RIDEBOOKER.get());
@@ -65,6 +67,7 @@ public class ModTab {
                 output.accept(HELHEIM_PLANT_2_ITEMS.get());
                 output.accept(HELHEIM_PLANT_ITEMS.get());
                 output.accept(HELHEIMVINE_ITEM.get());
+                output.accept(LOCKSEEDIRONBARS_ITEM.get());
                 
             })).build());
 }

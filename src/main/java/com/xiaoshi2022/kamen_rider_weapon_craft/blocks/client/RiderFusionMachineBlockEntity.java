@@ -1,11 +1,12 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.blocks.client;
 
+import com.xiaoshi2022.kamen_rider_weapon_craft.network.NetworkHandler;
 import com.xiaoshi2022.kamen_rider_weapon_craft.network.SyncAnimationStatePacket;
 import com.xiaoshi2022.kamen_rider_weapon_craft.network.SyncGuiOpenStatePacket;
-import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModBlockEntities;
-import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModRecipes;
-import com.xiaoshi2022.kamen_rider_weapon_craft.network.NetworkHandler;
 import com.xiaoshi2022.kamen_rider_weapon_craft.network.SyncRecipeDataPacket;
+import com.xiaoshi2022.kamen_rider_weapon_craft.recipe.ModRecipes;
+import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModBlockEntities;
+import com.xiaoshi2022.kamen_rider_weapon_craft.recipe.RiderFusionRecipe;
 import com.xiaoshi2022.kamen_rider_weapon_craft.world.inventory.RiderFusionMachineContainer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -19,14 +20,14 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.network.PacketDistributor;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.*;
-import software.bernie.geckolib.util.GeckoLibUtil;
 import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.util.GeckoLibUtil;
 import software.bernie.geckolib.animatable.GeoBlockEntity;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.network.PacketDistributor;
 
 import java.util.Optional;
 
@@ -37,15 +38,12 @@ public class RiderFusionMachineBlockEntity extends BlockEntity implements GeoBlo
         protected void onContentsChanged(int slot) {
             setChanged();
             if (slot < 4 && isCrafting) {
-
                 checkRecipeMatch();
             }
-            // 检查输出槽位（槽位4）是否被取出
             if (slot == 4 && isCraftingComplete && getStackInSlot(4).isEmpty()) {
-
                 isCraftingComplete = false;
                 shouldPlayEndAnimation = true;
-                syncAnimationStateToClient(); // 同步动画状态到客户端
+                syncAnimationStateToClient();
             }
         }
     };
@@ -63,20 +61,17 @@ public class RiderFusionMachineBlockEntity extends BlockEntity implements GeoBlo
     public int maxCraftingProgress = 0;
 
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
-    public boolean isGuiOpen = false;          // GUI打开时触发
-    private boolean isCraftingComplete = false; // 合成完成后保持rotate动画
-    public boolean shouldPlayEndAnimation = false; // 输出槽清空时触发
+    public boolean isGuiOpen = false;
+    private boolean isCraftingComplete = false;
+    public boolean shouldPlayEndAnimation = false;
 
     public RiderFusionMachineBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.RIDER_FUSION_MACHINE_BLOCK_ENTITY.get(), pos, state);
-
     }
 
-    // ---------------------- GUI交互 ----------------------
     public void onGuiOpened() {
-
-        isGuiOpen = true; // 标记需要播放GUI打开动画
-        syncGuiOpenStateToClient(); // 同步GUI状态到客户端
+        isGuiOpen = true;
+        syncGuiOpenStateToClient();
     }
 
     private void syncGuiOpenStateToClient() {
@@ -86,14 +81,12 @@ public class RiderFusionMachineBlockEntity extends BlockEntity implements GeoBlo
         }
     }
 
-    // ---------------------- 合成逻辑 ----------------------
     public void startCrafting() {
-
         if (!isCrafting && canCraft()) {
             Optional<? extends Recipe<Container>> recipe = level.getRecipeManager()
-                .getRecipeFor(ModRecipes.RIDER_FUSION_RECIPE.get(), getContainer(), level);
+                    .getRecipeFor(ModRecipes.RIDER_FUSION_RECIPE.get(), getContainer(), level);
 
-            if (recipe.isPresent() && recipe.get() instanceof com.xiaoshi2022.kamen_rider_weapon_craft.recipe.RiderFusionRecipe fusionRecipe) {
+            if (recipe.isPresent() && recipe.get() instanceof RiderFusionRecipe fusionRecipe) {
                 fusionTime = fusionRecipe.getFusionTime();
                 maxCraftingProgress = fusionTime;
                 isCrafting = true;
@@ -106,12 +99,9 @@ public class RiderFusionMachineBlockEntity extends BlockEntity implements GeoBlo
 
     public boolean canCraft() {
         if (level == null) {
-
             return false;
         }
-        boolean canCraft = level.getRecipeManager().getRecipeFor(ModRecipes.RIDER_FUSION_RECIPE.get(), getContainer(), level).isPresent();
-
-        return canCraft;
+        return level.getRecipeManager().getRecipeFor(ModRecipes.RIDER_FUSION_RECIPE.get(), getContainer(), level).isPresent();
     }
 
     public Container getContainer() {
@@ -122,18 +112,14 @@ public class RiderFusionMachineBlockEntity extends BlockEntity implements GeoBlo
         return container;
     }
 
-    // ---------------------- 物品槽获取 ----------------------
     public IItemHandler getItemHandler() {
         return itemHandler;
     }
 
-    // ---------------------- 合成过程 ----------------------
     public void serverTick(Level level, BlockPos pos, BlockState state) {
         if (isCrafting) {
-
             craftingProgress++;
             if (craftingProgress >= fusionTime) {
-
                 completeCrafting();
                 isCrafting = false;
                 craftingProgress = 0;
@@ -144,7 +130,6 @@ public class RiderFusionMachineBlockEntity extends BlockEntity implements GeoBlo
             if (level instanceof ServerLevel serverLevel) {
                 serverLevel.players().forEach(player -> {
                     if (player.containerMenu instanceof RiderFusionMachineContainer container) {
-
                         container.setCraftingProgress(craftingProgress, maxCraftingProgress, isCrafting);
                     }
                 });
@@ -153,46 +138,30 @@ public class RiderFusionMachineBlockEntity extends BlockEntity implements GeoBlo
     }
 
     public void completeCrafting() {
-
         if (level == null) {
-
             return;
         }
 
         Optional<? extends Recipe<Container>> recipe = level.getRecipeManager()
-            .getRecipeFor(ModRecipes.RIDER_FUSION_RECIPE.get(), getContainer(), level);
+                .getRecipeFor(ModRecipes.RIDER_FUSION_RECIPE.get(), getContainer(), level);
 
-        if (recipe.isPresent() && recipe.get() instanceof com.xiaoshi2022.kamen_rider_weapon_craft.recipe.RiderFusionRecipe fusionRecipe) {
+        if (recipe.isPresent() && recipe.get() instanceof RiderFusionRecipe fusionRecipe) {
             ItemStack result = recipe.get().assemble(getContainer(), level.registryAccess());
             ItemStack currentOutput = itemHandler.getStackInSlot(4);
 
-
-            if (currentOutput.isEmpty() ||
-               (currentOutput.is(result.getItem()) &&
-                currentOutput.getCount() + result.getCount() <= currentOutput.getMaxStackSize())) {
-
-                // Deduct materials
+            if (currentOutput.isEmpty() || (currentOutput.is(result.getItem()) && currentOutput.getCount() + result.getCount() <= currentOutput.getMaxStackSize())) {
                 for (int i = 0; i < 4; i++) {
-                    int extracted = itemHandler.extractItem(i, fusionRecipe.getRequiredCount(i), false).getCount();
-
+                    itemHandler.extractItem(i, fusionRecipe.getRequiredCount(i), false);
                 }
-
-                // Attempt to insert
-                ItemStack remaining = itemHandler.insertItem(4, result.copy(), false);
-                if (!remaining.isEmpty()) {
-
-                    isCrafting = false;
-                    craftingProgress = 0;
-                } else {
-                    isCraftingComplete = true; // 标记合成完成，保持rotate动画
-                }
+                itemHandler.insertItem(4, result, false);
+                isCraftingComplete = true;
             } else {
-
                 isCrafting = false;
                 craftingProgress = 0;
             }
         } else {
-
+            isCrafting = false;
+            craftingProgress = 0;
         }
 
         setChanged();
@@ -200,9 +169,7 @@ public class RiderFusionMachineBlockEntity extends BlockEntity implements GeoBlo
     }
 
     private void checkRecipeMatch() {
-
         if (!canCraft()) {
-
             isCrafting = false;
             craftingProgress = 0;
             setChanged();
@@ -210,12 +177,10 @@ public class RiderFusionMachineBlockEntity extends BlockEntity implements GeoBlo
         }
     }
 
-    // ---------------------- 同步到客户端 ----------------------
     private void syncToClient() {
         if (level != null && !level.isClientSide) {
-
             NetworkHandler.INSTANCE.send(PacketDistributor.TRACKING_CHUNK.with(() -> level.getChunkAt(worldPosition)),
-                new SyncRecipeDataPacket(craftingProgress, maxCraftingProgress, isCrafting, worldPosition));
+                    new SyncRecipeDataPacket(craftingProgress, maxCraftingProgress, isCrafting, worldPosition));
         }
     }
 
@@ -223,32 +188,26 @@ public class RiderFusionMachineBlockEntity extends BlockEntity implements GeoBlo
         return isCrafting ? 3 : 0;
     }
 
-    // ---------------------- 动画控制 ----------------------
     private PlayState predicate(AnimationState event) {
-        // 优先级1: GUI打开动画
         if (isGuiOpen) {
-            isGuiOpen = false; // 立即重置状态
+            isGuiOpen = false;
             return event.setAndContinue(RawAnimation.begin().thenPlay("1").thenPlay("0"));
         }
 
-        // 优先级2: 输出槽清空时的结束动画
         if (shouldPlayEndAnimation) {
-            isCraftingComplete = false; // 立即重置状态
-            shouldPlayEndAnimation = false; // 立即重置状态
+            isCraftingComplete = false;
+            shouldPlayEndAnimation = false;
             return event.setAndContinue(RawAnimation.begin().thenPlayAndHold("end").thenPlay("0"));
         }
 
-        // 优先级3: 合成完成后的持续旋转
         if (isCraftingComplete) {
             return event.setAndContinue(RawAnimation.begin().thenPlay("rotate").thenPlayAndHold("end"));
         }
 
-        // 优先级4: 合成中的旋转动画
         if (isCrafting) {
             return event.setAndContinue(RawAnimation.begin().thenLoop("rotate"));
         }
 
-        // 默认状态：空闲动画（由GeckoLib自动处理）
         return PlayState.CONTINUE;
     }
 
@@ -272,7 +231,6 @@ public class RiderFusionMachineBlockEntity extends BlockEntity implements GeoBlo
         compound.putInt("maxCraftingProgress", maxCraftingProgress);
         compound.putBoolean("isCraftingComplete", isCraftingComplete);
         compound.putBoolean("shouldPlayEndAnimation", shouldPlayEndAnimation);
-
     }
 
     @Override
@@ -285,7 +243,6 @@ public class RiderFusionMachineBlockEntity extends BlockEntity implements GeoBlo
         maxCraftingProgress = compound.getInt("maxCraftingProgress");
         isCraftingComplete = compound.getBoolean("isCraftingComplete");
         shouldPlayEndAnimation = compound.getBoolean("shouldPlayEndAnimation");
-
     }
 
     @Override
@@ -301,12 +258,10 @@ public class RiderFusionMachineBlockEntity extends BlockEntity implements GeoBlo
         tag.putInt("maxCraftingProgress", maxCraftingProgress);
         tag.putBoolean("isCraftingComplete", isCraftingComplete);
         tag.putBoolean("shouldPlayEndAnimation", shouldPlayEndAnimation);
-
         return tag;
     }
 
     public void setCraftingProgress(int craftingProgress, int maxCraftingProgress, boolean isCrafting) {
-
         this.craftingProgress = craftingProgress;
         this.maxCraftingProgress = maxCraftingProgress;
         this.isCrafting = isCrafting;
@@ -322,7 +277,6 @@ public class RiderFusionMachineBlockEntity extends BlockEntity implements GeoBlo
             maxCraftingProgress = tag.getInt("maxCraftingProgress");
             isCraftingComplete = tag.getBoolean("isCraftingComplete");
             shouldPlayEndAnimation = tag.getBoolean("shouldPlayEndAnimation");
-
         }
     }
 

@@ -1,6 +1,7 @@
 buildscript {
     repositories {
         maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
+        maven { url = 'https://maven.minecraftforge.net/' }
     }
 }
 
@@ -95,7 +96,7 @@ minecraft {
             property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
 
             //客户端中指定你资源包中的mixin文件
-            arg '-mixin.config=xiaoshi2022.mixins.json'
+            arg '-mixin.config=kamen_rider_weapon_craft.mixins.json'
 
             mods {
                 kamen_rider_weapon_craft {
@@ -110,7 +111,7 @@ minecraft {
             args '--nogui'
 
             //服务端中指定你资源包中的mixin文件
-            arg '-mixin.config=xiaoshi2022.mixins.json'
+            arg '-mixin.config=kamen_rider_weapon_craft.mixins.json'
             mods {
                 kamen_rider_weapon_craft {
                     source sourceSets.main
@@ -133,7 +134,7 @@ minecraft {
             args '--mod', mod_id, '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
 
             //数据包中指定你资源包中的mixin文件
-            arg '-mixin.config=xiaoshi2022.mixins.json'
+            arg '-mixin.config=kamen_rider_weapon_craft.mixins.json'
             mods {
                 kamen_rider_weapon_craft {
                     source sourceSets.main
@@ -147,17 +148,25 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 //设置你的mixin源文件名称
 mixin {
-    add sourceSets.main, "xiaoshi2022.refmap.json"
+    add sourceSets.main, "kamen_rider_weapon_craft.refmap.json"
 }
 
+
 repositories {
+
     maven {
-        name = 'GeckoLib'
-        url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
+        name "zigythebirdMods"
+        url "https://maven.zigythebird.com/mods"
     }
+
     maven {
         name "KosmX's maven"
         url 'https://maven.kosmx.dev/'
+    }
+
+    maven {
+        name = 'GeckoLib'
+        url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
     }
     maven {
         url "https://cursemaven.com"
@@ -175,7 +184,6 @@ repositories {
 }
 
 dependencies {
-
     implementation fg.deobf("curse.maven:remorphed-950721:5755676")
     implementation fg.deobf("curse.maven:crafted-core-923377:6187026")
     implementation fg.deobf("curse.maven:woodwalkers-868922:6278864")
@@ -230,7 +238,6 @@ dependencies {
     compileOnly(fg.deobf("mezz.jei:jei-1.20.1-common-api:15.3.0.8"))
     compileOnly(fg.deobf("mezz.jei:jei-1.20.1-forge-api:15.3.0.8"))
     runtimeOnly(fg.deobf("mezz.jei:jei-1.20.1-forge:15.3.0.8"))
-
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.
@@ -244,7 +251,6 @@ tasks.named('processResources', ProcessResources).configure {
             loader_version_range: loader_version_range,
             mod_id              : mod_id, mod_name: mod_name, mod_license: mod_license, mod_version: mod_version,
             mod_authors         : mod_authors, mod_description: mod_description,
-            terrablender_version_range: terrablender_version_range
     ]
     inputs.properties replaceProperties
 
@@ -265,7 +271,7 @@ tasks.named('jar', Jar).configure {
                 'Implementation-Vendor'   : mod_authors,
                 'Implementation-Timestamp': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
                 //你资源包中的mixin配置文件
-                "MixinConfigs": "xiaoshi2022.mixins.json"
+                "MixinConfigs": "kamen_rider_weapon_craft.mixins.json"
         ])
     }
 
@@ -274,8 +280,8 @@ tasks.named('jar', Jar).configure {
 }
 
 mixin {
-    add sourceSets.main, "xiaoshi2022.refmap.json"
-    config "xiaoshi2022.mixins.json"
+    add sourceSets.main, "kamen_rider_weapon_craft.refmap.json"
+    config "kamen_rider_weapon_craft.mixins.json"
     debug.export = true
 }
 

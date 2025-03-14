@@ -2,10 +2,11 @@ package com.xiaoshi2022.kamen_rider_weapon_craft;
 
 import com.xiaoshi2022.kamen_rider_weapon_craft.event.LivingHurtHandler;
 import com.xiaoshi2022.kamen_rider_weapon_craft.procedures.KRWBoot;
-import com.xiaoshi2022.kamen_rider_weapon_craft.recipe.ModRecipeSerializers;
 import com.xiaoshi2022.kamen_rider_weapon_craft.network.*;
 import com.xiaoshi2022.kamen_rider_weapon_craft.particle.ModParticles;
 import com.xiaoshi2022.kamen_rider_weapon_craft.procedures.PullSounds;
+import com.xiaoshi2022.kamen_rider_weapon_craft.recipe.ModRecipeSerializers;
+import com.xiaoshi2022.kamen_rider_weapon_craft.recipe.ModRecipes;
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.*;
 import com.xiaoshi2022.kamen_rider_weapon_craft.tab.ModTab;
 import com.xiaoshi2022.kamen_rider_weapon_craft.villagers.TimeTravelerProfession;
@@ -113,13 +114,13 @@ public class kamen_rider_weapon_craft {
                 CloseMapPacket::handle
         );
         // 注册 SeverSound 数据包
-        PACKET_HANDLER.registerMessage(
-                id++,
-                ServerSound.class,
-                ServerSound::encode,
-                ServerSound::decode,
-                ServerSound::handle
-        );
+//        PACKET_HANDLER.registerMessage(
+//                id++,
+//                ServerSound.class,
+//                ServerSound::encode,
+//                ServerSound::decode,
+//                ServerSound::handle
+//        );
     }
 
     // 任务队列

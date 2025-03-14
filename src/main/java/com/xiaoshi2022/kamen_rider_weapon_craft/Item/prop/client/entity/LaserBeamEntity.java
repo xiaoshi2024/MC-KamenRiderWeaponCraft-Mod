@@ -80,6 +80,10 @@ public class LaserBeamEntity extends Projectile {
         this.weaponStack = ItemStack.EMPTY; // 默认值，确保不会为 null
     }
 
+    public LaserBeamEntity(Level level, Player player) {
+        this(ModEntityTypes.LASER_BEAM.get(), level, player.getMainHandItem()); // 使用主手物品作为武器堆栈
+    }
+
     private void adjustDamageBasedOnCharge() {
         // 根据蓄力时间调整伤害
         this.damage += this.chargeTime * 0.6D; // 每蓄力1秒，伤害增加0.6

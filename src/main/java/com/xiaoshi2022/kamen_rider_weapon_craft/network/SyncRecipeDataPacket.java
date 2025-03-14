@@ -1,13 +1,9 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.network;
 
-import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.client.RiderFusionMachineBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraftforge.network.NetworkDirection;
+import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.network.NetworkEvent;
-import net.minecraft.client.Minecraft;
 
 import java.util.function.Supplier;
 
@@ -22,62 +18,35 @@ public class SyncRecipeDataPacket {
         this.maxCraftingProgress = maxCraftingProgress;
         this.isCrafting = isCrafting;
         this.pos = pos;
-
     }
 
-    public SyncRecipeDataPacket(FriendlyByteBuf buffer) {
-        this.craftingProgress = buffer.readInt();
-        this.maxCraftingProgress = buffer.readInt();
-        this.isCrafting = buffer.readBoolean();
-        this.pos = buffer.readBlockPos();
-
+    public void encode(FriendlyByteBuf buf) {
+        buf.writeInt(craftingProgress);
+        buf.writeInt(maxCraftingProgress);
+        buf.writeBoolean(isCrafting);
+        buf.writeBlockPos(pos);
     }
 
-    public void toBytes(FriendlyByteBuf buffer) {
-        buffer.writeInt(craftingProgress);
-        buffer.writeInt(maxCraftingProgress);
-        buffer.writeBoolean(isCrafting);
-        buffer.writeBlockPos(pos);
-
+    public static SyncRecipeDataPacket decode(FriendlyByteBuf buf) {
+        int craftingProgress = buf.readInt();
+        int maxCraftingProgress = buf.readInt();
+        boolean isCrafting = buf.readBoolean();
+        BlockPos pos = buf.readBlockPos();
+        return new SyncRecipeDataPacket(craftingProgress, maxCraftingProgress, isCrafting, pos);
     }
 
-    public void handle(Supplier<NetworkEvent.Context> context) {
-        context.get().enqueueWork(() -> {
-
-
-            // Ensure it is handled on the client
-            if (context.get().getDirection() == NetworkDirection.PLAY_TO_CLIENT) {
-                Level level = Minecraft.getInstance().level;
-                if (level == null) {
-
-                    return;
-                }
-
-                // Get the block entity
-                BlockEntity blockEntity = level.getBlockEntity(pos);
-                if (blockEntity == null) {
-
-                    return;
-                }
-
-                if (blockEntity instanceof RiderFusionMachineBlockEntity fusionMachine) {
-
-                    // Safely update the data
-                    fusionMachine.setCraftingProgress(craftingProgress, maxCraftingProgress, isCrafting);
-                } else {
-                }
-            } else {
+    public static void handle(SyncRecipeDataPacket packet, Supplier<NetworkEvent.Context> ctx) {
+        ctx.get().enqueueWork(() -> {
+            NetworkEvent.Context context = ctx.get();
+            if (context.getDirection().getReceptionSide() == LogicalSide.CLIENT) {
+                // 客户端处理逻辑
+                BlockPos pos = packet.pos;
+                int craftingProgress = packet.craftingProgress;
+                int maxCraftingProgress = packet.maxCraftingProgress;
+                boolean isCrafting = packet.isCrafting;
+                // 更新客户端的合成进度
             }
         });
-
-        context.get().setPacketHandled(true);
-    }
-
-    @Override
-    public String toString() {
-        return String.format(
-            "SyncRecipeDataPacket{Progress=%d/%d, Status=%b, Position=%s}",
-            craftingProgress, maxCraftingProgress, isCrafting, pos
-        );
+        ctx.get().setPacketHandled(true);
     }
 }

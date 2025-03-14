@@ -21,7 +21,7 @@ public class NetworkHandler {
     public static void register() {
         int packetId = 0;
 
-        //注册ServerSound
+        // 注册 ServerSound
         INSTANCE.registerMessage(
                 packetId++,
                 ServerSound.class,
@@ -32,20 +32,20 @@ public class NetworkHandler {
 
         // 注册 SyncRecipeDataPacket
         INSTANCE.registerMessage(
-            packetId++,
-            SyncRecipeDataPacket.class,
-            SyncRecipeDataPacket::toBytes,
-            SyncRecipeDataPacket::new,
-            NetworkHandler::handleSyncRecipeData
+                packetId++,
+                SyncRecipeDataPacket.class,
+                SyncRecipeDataPacket::encode,
+                SyncRecipeDataPacket::decode,
+                SyncRecipeDataPacket::handle
         );
 
         // 注册 StartCraftingPacket
         INSTANCE.registerMessage(
-            packetId++,
-            StartCraftingPacket.class,
-            StartCraftingPacket::toBytes,
-            StartCraftingPacket::new,
-            NetworkHandler::handleStartCrafting
+                packetId++,
+                StartCraftingPacket.class,
+                StartCraftingPacket::encode,
+                StartCraftingPacket::decode,
+                StartCraftingPacket::handle
         );
 
         // 注册 SyncAnimationStatePacket
@@ -65,21 +65,5 @@ public class NetworkHandler {
                 SyncGuiOpenStatePacket::decode,
                 SyncGuiOpenStatePacket::handle
         );
-    }
-
-    /**
-     * 处理 SyncRecipeDataPacket 消息
-     */
-    private static void handleSyncRecipeData(SyncRecipeDataPacket packet, Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> packet.handle(ctx)); // 确保在主线程处理
-        ctx.get().setPacketHandled(true);
-    }
-
-    /**
-     * 处理 StartCraftingPacket 消息
-     */
-    private static void handleStartCrafting(StartCraftingPacket packet, Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> packet.handle(ctx)); // 确保在主线程处理
-        ctx.get().setPacketHandled(true);
     }
 }

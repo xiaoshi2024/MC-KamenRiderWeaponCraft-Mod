@@ -45,8 +45,15 @@ public class ModItems {
             () -> new gavvwhipir());
     public static final RegistryObject<destroy_fifty_swords> DESTROY_FIFTY_SWORDS = ITEMS.register("destroy_fifty_swords",
             () -> new destroy_fifty_swords());
+    public static final RegistryObject<HinawaDaidai_DJ_Ju> HINAWA_DAIDAI_DJ_JU = ITEMS.register("hinawadai_dai_dj_ju",
+            () -> new HinawaDaidai_DJ_Ju());
+    public static final RegistryObject<musouhinawadj> MUSOUHINAWADJ = ITEMS.register("musouhinawadj",
+            () -> new musouhinawadj(ModTires.DAIMARU, 15, 2.7F, new Item.Properties()));
 
     //方块物品
+    public static final RegistryObject<Item> LOCKSEEDIRONBARS_ITEM = ITEMS.register("lockseed_iron_bars_item",
+            () -> new BlockItem(ModBlocks.LOCKSEEDIRONBARS.get(), new Item.Properties()));
+
     // 存储注册的物品的 RegistryObject 列表
 
     //食物

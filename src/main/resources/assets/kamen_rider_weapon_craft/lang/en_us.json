@@ -23,6 +23,7 @@
   "block.kamen_rider_weapon_craft.pine_sapling": "helheim Sapling",
   "block.kamen_rider_weapon_craft.pine_log": "helheim Log",
   "block.kamen_rider_weapon_craft.pine_planks": "helheim Planks",
+  "block.kamen_rider_weapon_craft.lockseed_iron_bars": "Lock seed IronBars",
 
   "entity.minecraft.villager.kamen_rider_weapon_craft.time_traveler_profession": "theWillOfTimeTravel",
 
@@ -38,6 +39,8 @@
   "gui.destiny.hikari_studio": "Hikari Studio",
   "gui.kamen_rider_weapon_craft.rider_fusion_machines.button_controls": "stir",
 
+  "item.kamen_rider_weapon_craft.hinawadai_dai_dj_ju": "HinawaDaidai-DJ-Ju",
+  "item.kamen_rider_weapon_craft.musouhinawadj": "HinawaDaidai-DJ-Ju-Sword",
   "item.kamen_rider_weapon_craft.daidaimaru": "daidaimaru",
   "item.kamen_rider_weapon_craft.gangunsaber": "Gan Gun Saber",
   "item.kamen_rider_weapon_craft.musousaberd": "musousaber-daidaimaru",
@@ -81,6 +84,8 @@
   "subtitles.finish_rise": "Finish Rise!",
   "subtitles.pro_standby_tone": "Pro Standbys~",
   "subtitles.progrising_strash": "Progrising Strash！",
+  "subtitles.dj_boot_tone": "HinawaDaidai-DJ-Ju~！",
+  "subtitles.dj_disc": "dj-disc",
 
   "advancement.kamen_rider_weapon_craft.ridebooker.title": "Too many cards",
   "advancement.kamen_rider_weapon_craft.ridebooker.desc": "Abominable Decade",

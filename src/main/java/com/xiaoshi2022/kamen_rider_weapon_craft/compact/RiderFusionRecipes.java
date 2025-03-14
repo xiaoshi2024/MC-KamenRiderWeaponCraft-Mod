@@ -13,6 +13,9 @@ import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+
+import java.util.List;
 
 public class RiderFusionRecipes implements IRecipeCategory<RiderFusionRecipe> {
     public static final ResourceLocation UID = new ResourceLocation("kamen_rider_weapon_craft", "rider_fusion");
@@ -26,7 +29,9 @@ public class RiderFusionRecipes implements IRecipeCategory<RiderFusionRecipe> {
 
     public RiderFusionRecipes(IGuiHelper helper) {
         this.background = helper.createDrawable(TEXTURE, 0, 0, 254, 103);
-        this.icon = helper.createDrawableIngredient(VanillaTypes.ITEM_STACK,new  ItemStack(ModBlocks.RIDER_FUSION_MACHINE_BLOCK.get()));
+        this.icon = ModBlocks.RIDER_FUSION_MACHINE_BLOCK.get() != null ?
+                helper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(ModBlocks.RIDER_FUSION_MACHINE_BLOCK.get())) :
+                helper.createDrawableIngredient(VanillaTypes.ITEM_STACK, ItemStack.EMPTY);
     }
 
     @Override
@@ -51,11 +56,23 @@ public class RiderFusionRecipes implements IRecipeCategory<RiderFusionRecipe> {
 
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, RiderFusionRecipe recipe, IFocusGroup focusGroup) {
-        builder.addSlot(RecipeIngredientRole.INPUT, 35, 23).addIngredients(recipe.getIngredients().get(0));
-        builder.addSlot(RecipeIngredientRole.INPUT, 54, 43).addIngredients(recipe.getIngredients().get(1));
-        builder.addSlot(RecipeIngredientRole.INPUT, 73, 23).addIngredients(recipe.getIngredients().get(2));
-        builder.addSlot(RecipeIngredientRole.INPUT, 153, 43).addIngredients(recipe.getIngredients().get(3));
+        List<Ingredient> ingredients = recipe.getIngredients();
+        if (ingredients == null || ingredients.size() < 4) {
+            System.err.println("Invalid recipe ingredients for RiderFusionRecipe: " + recipe);
+            return;
+        }
 
-        builder.addSlot(RecipeIngredientRole.OUTPUT, 153, 23).addItemStack(recipe.getResultItem(null));
+        builder.addSlot(RecipeIngredientRole.INPUT, 35, 23).addIngredients(ingredients.get(0));
+        builder.addSlot(RecipeIngredientRole.INPUT, 54, 43).addIngredients(ingredients.get(1));
+        builder.addSlot(RecipeIngredientRole.INPUT, 73, 23).addIngredients(ingredients.get(2));
+        builder.addSlot(RecipeIngredientRole.INPUT, 153, 43).addIngredients(ingredients.get(3));
+
+        ItemStack resultItem = recipe.getResultItem(null);
+        if (resultItem != null) {
+            builder.addSlot(RecipeIngredientRole.OUTPUT, 153, 23).addItemStack(resultItem.copy());
+        } else {
+            System.err.println("Result item is null for RiderFusionRecipe: " + recipe);
+            builder.addSlot(RecipeIngredientRole.OUTPUT, 153, 23).addItemStack(ItemStack.EMPTY); // 添加空物品槽位
+        }
     }
 }

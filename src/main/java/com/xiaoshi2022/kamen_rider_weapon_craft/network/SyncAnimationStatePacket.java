@@ -1,4 +1,5 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.network;
+
 import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.client.RiderFusionMachineBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;

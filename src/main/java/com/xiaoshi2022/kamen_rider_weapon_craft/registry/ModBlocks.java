@@ -3,10 +3,7 @@ package com.xiaoshi2022.kamen_rider_weapon_craft.registry;
 import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.custom.ModFlammableRotatedPillarBlock;
 //import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.custom.ModHangingSignBlock;
 //import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.custom.ModWallHangingSignBlock;
-import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.portals.RiderFusionMachineBlock;
-import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.portals.RiderforgingalloymineralBlock;
-import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.portals.Time_traveler_studio_block;
-import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.portals.helheim_crack;
+import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.portals.*;
 import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.portals.plant.helheim_plant;
 import com.xiaoshi2022.kamen_rider_weapon_craft.worldgen.tree.PineTreeGrower;
 import net.minecraft.core.BlockPos;
@@ -30,6 +27,10 @@ import java.util.List;
 public class ModBlocks {
     // 创建一个 DeferredRegister 实例用于注册方块
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, "kamen_rider_weapon_craft");
+
+    //功能方块
+    public static final RegistryObject<lockseedIronBars> LOCKSEEDIRONBARS = BLOCKS.register(
+            "lockseed_iron_bars", () -> new lockseedIronBars(BlockBehaviour.Properties.of().strength(1.5f, 6.0f).noOcclusion()));
 
     // 注册一个方块
     public static final RegistryObject<helheim_crack> HELHEIM_CRACK_BLOCK = BLOCKS.register("helheim_crack_block",

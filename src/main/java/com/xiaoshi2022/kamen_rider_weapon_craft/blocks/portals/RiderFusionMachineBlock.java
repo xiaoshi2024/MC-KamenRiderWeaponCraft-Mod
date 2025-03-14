@@ -10,13 +10,13 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
-import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
@@ -26,7 +26,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.Containers;
-import net.minecraft.world.Container;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.core.Direction;
@@ -49,27 +48,24 @@ public class RiderFusionMachineBlock extends BaseEntityBlock implements EntityBl
 
     public RiderFusionMachineBlock() {
         super(BlockBehaviour.Properties.of()
-            .instrument(NoteBlockInstrument.BASEDRUM)
-            .sound(SoundType.METAL)
-            .strength(5.3f, 10f)
-            .lightLevel(s -> 2)
-            .requiresCorrectToolForDrops()
-            .noOcclusion()
-            .pushReaction(PushReaction.PUSH_ONLY)
-            .isRedstoneConductor((bs, br, bp) -> false));
+                .instrument(NoteBlockInstrument.BASEDRUM)
+                .sound(SoundType.METAL)
+                .strength(5.3f, 10f)
+                .lightLevel(s -> 2)
+                .requiresCorrectToolForDrops()
+                .noOcclusion()
+                .pushReaction(PushReaction.PUSH_ONLY)
+                .isRedstoneConductor((bs, br, bp) -> false));
 
         this.registerDefaultState(this.stateDefinition.any()
-            .setValue(FACING, Direction.NORTH)
-            .setValue(ANIMATION, 0));
-
-
+                .setValue(FACING, Direction.NORTH)
+                .setValue(ANIMATION, 0));
     }
 
     @Override
     public void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving) {
         super.onPlace(state, level, pos, oldState, isMoving);
         if (!level.isClientSide) {
-
             level.scheduleTick(pos, this, 1); // Start tick
         }
     }
@@ -78,12 +74,12 @@ public class RiderFusionMachineBlock extends BaseEntityBlock implements EntityBl
     public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
         super.tick(state, level, pos, random);
         if (level.getBlockEntity(pos) instanceof RiderFusionMachineBlockEntity be) {
-
             be.serverTick(level, pos, state);
             // 重新调度下一次tick
             level.scheduleTick(pos, this, 1);
         } else {
-
+            // 处理方块实体为空的情况
+            System.err.println("Block entity at position " + pos + " is not a RiderFusionMachineBlockEntity");
         }
     }
 
@@ -100,7 +96,6 @@ public class RiderFusionMachineBlock extends BaseEntityBlock implements EntityBl
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
-
         return ModBlockEntities.RIDER_FUSION_MACHINE_BLOCK_ENTITY.get().create(blockPos, blockState);
     }
 
@@ -144,7 +139,6 @@ public class RiderFusionMachineBlock extends BaseEntityBlock implements EntityBl
         BlockEntity tileEntity = world.getBlockEntity(pos);
         if (tileEntity instanceof RiderFusionMachineBlockEntity be) {
             int signal = be.getRedstoneSignal();
-
             return signal;
         }
         return 0;
@@ -192,22 +186,22 @@ public class RiderFusionMachineBlock extends BaseEntityBlock implements EntityBl
         return blockEntity != null && blockEntity.triggerEvent(eventID, eventParam);
     }
 
-@Override
-public void onRemove(BlockState state, Level world, BlockPos pos, BlockState newState, boolean isMoving) {
-    if (state.getBlock() != newState.getBlock()) {
-        BlockEntity blockEntity = world.getBlockEntity(pos);
-        if (blockEntity instanceof RiderFusionMachineBlockEntity be) {
-            // 直接访问 ItemStackHandler
-            ItemStackHandler handler = (ItemStackHandler) be.getItemHandler();
-            for (int i = 0; i < handler.getSlots(); i++) {
-                ItemStack stack = handler.getStackInSlot(i);
-                if (!stack.isEmpty()) {
-                    Containers.dropItemStack(world, pos.getX(), pos.getY(), pos.getZ(), stack);
+    @Override
+    public void onRemove(BlockState state, Level world, BlockPos pos, BlockState newState, boolean isMoving) {
+        if (state.getBlock() != newState.getBlock()) {
+            BlockEntity blockEntity = world.getBlockEntity(pos);
+            if (blockEntity instanceof RiderFusionMachineBlockEntity be) {
+                // 直接访问 ItemStackHandler
+                ItemStackHandler handler = (ItemStackHandler) be.getItemHandler();
+                for (int i = 0; i < handler.getSlots(); i++) {
+                    ItemStack stack = handler.getStackInSlot(i);
+                    if (!stack.isEmpty()) {
+                        Containers.dropItemStack(world, pos.getX(), pos.getY(), pos.getZ(), stack);
+                    }
                 }
+                world.updateNeighbourForOutputSignal(pos, this);
             }
-            world.updateNeighbourForOutputSignal(pos, this);
+            super.onRemove(state, world, pos, newState, isMoving);
         }
-        super.onRemove(state, world, pos, newState, isMoving);
     }
-}
 }

@@ -142,5 +142,23 @@
         "stream": false
       }
     ]
+  },
+  "dj_disc": {
+    "subtitle": "subtitles.dj_disc",
+    "sounds": [
+      {
+        "name": "kamen_rider_weapon_craft:dj_disc",
+        "stream": false
+      }
+    ]
+  },
+  "dj_boot_tone": {
+    "subtitle": "subtitles.dj_boot_tone",
+    "sounds": [
+      {
+        "name": "kamen_rider_weapon_craft:dj_boot_tone",
+        "stream": false
+      }
+    ]
   }
 }

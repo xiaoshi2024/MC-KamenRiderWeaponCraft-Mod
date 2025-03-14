@@ -3,7 +3,7 @@
   "package": "com.xiaoshi2022.kamen_rider_weapon_craft.mixin",
   "compatibilityLevel": "JAVA_17",
   "minVersion": "0.8",
-  "refmap": "xiaoshi2022.refmap.json",
+  "refmap": "kamen_rider_weapon_craft.refmap.json",
   "plugin": "com.xiaoshi2022.kamen_rider_weapon_craft.mixin.MixinPlugin",
   "mixins": [
 

@@ -45,4 +45,9 @@ public class ModSounds {
                 () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_weapon_craft", "pro_standby_tone")));
         public static final RegistryObject<SoundEvent> PROGRISING_STRASH = REGISTRY.register("progrising_strash",
                 () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_weapon_craft", "progrising_strash")));
+
+        public static final RegistryObject<SoundEvent> DJ_DISC = REGISTRY.register("dj_disc",
+                () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_weapon_craft", "dj_disc")));
+        public static final RegistryObject<SoundEvent> DJ_BOOT_TONE = REGISTRY.register("dj_boot_tone",
+                () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_weapon_craft", "dj_boot_tone")));
 }

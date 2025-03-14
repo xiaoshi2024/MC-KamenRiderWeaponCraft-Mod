@@ -15,7 +15,6 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 public class ModRecipeSerializers {
-
     public static final DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZERS =
             DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, "kamen_rider_weapon_craft");
 
@@ -23,42 +22,62 @@ public class ModRecipeSerializers {
             RECIPE_SERIALIZERS.register("rider_fusion_recipe", RiderFusionRecipe.Serializer::new);
 
     public static class Serializer implements RecipeSerializer<RiderFusionRecipe> {
-
         @Override
         public RiderFusionRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
-            // 解析输出物品
-            ItemStack output = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(json, "output"));
-
-            // 解析输入槽位 (0-3)
-            JsonObject ingredientsObj = GsonHelper.getAsJsonObject(json, "ingredients");
-            NonNullList<Ingredient> ingredients = NonNullList.withSize(4, Ingredient.EMPTY);
-            int[] requiredCounts = new int[4];
-
-            for (int slot = 0; slot < 4; slot++) {
-                String slotKey = String.valueOf(slot);
-                if (!ingredientsObj.has(slotKey)) {
-                    throw new JsonParseException("Missing ingredient definition for slot " + slot);
+            if (recipeId == null) {
+                throw new IllegalArgumentException("Recipe ID cannot be null");
+            }
+            System.out.println("[Recipe] Loading recipe from JSON: " + recipeId);
+            try {
+                // Parse output item
+                ItemStack output;
+                if (json.has("output") && !json.get("output").isJsonNull()) {
+                    output = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(json, "output"));
+                } else {
+                    output = ItemStack.EMPTY;
                 }
-                JsonObject slotObj = ingredientsObj.getAsJsonObject(slotKey);
-                ingredients.set(slot, Ingredient.fromJson(slotObj));
-                requiredCounts[slot] = GsonHelper.getAsInt(slotObj, "count", 1);
-            }
 
-            // 解析融合时间（必须提供）
-            if (!json.has("fusion_time")) {
-                throw new JsonParseException("Missing required field 'fusion_time'");
-            }
-            int fusionTime = GsonHelper.getAsInt(json, "fusion_time");
+                // Parse input slots (0-3)
+                JsonObject ingredientsObj = GsonHelper.getAsJsonObject(json, "ingredients");
+                NonNullList<Ingredient> ingredients = NonNullList.withSize(4, Ingredient.EMPTY);
+                int[] requiredCounts = new int[4];
 
-            return new RiderFusionRecipe(recipeId, output, ingredients, fusionTime, requiredCounts);
+                for (int slot = 0; slot < 4; slot++) {
+                    String slotKey = String.valueOf(slot);
+                    if (!ingredientsObj.has(slotKey)) {
+                        System.out.println("[Recipe] Missing slot definition: " + slot);
+                        throw new JsonParseException("Missing ingredient definition for slot " + slot);
+                    }
+                    JsonObject slotObj = ingredientsObj.getAsJsonObject(slotKey);
+                    ingredients.set(slot, Ingredient.fromJson(slotObj));
+                    requiredCounts[slot] = GsonHelper.getAsInt(slotObj, "count", 1);
+                }
+
+                // Parse fusion time
+                if (!json.has("fusion_time")) {
+                    System.out.println("[Recipe] Missing fusion time field");
+                    throw new JsonParseException("Missing required field 'fusion_time'");
+                }
+                int fusionTime = GsonHelper.getAsInt(json, "fusion_time");
+
+                return new RiderFusionRecipe(recipeId, output, ingredients, fusionTime, requiredCounts);
+            } catch (Exception e) {
+                System.out.println("[Recipe] JSON parsing failed: " + e.getMessage());
+                throw e;
+            }
         }
 
         @Override
         public RiderFusionRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
-            // 读取输出物品
+            if (recipeId == null) {
+                throw new IllegalArgumentException("Recipe ID cannot be null");
+            }
+            System.out.println("[Recipe] Loading recipe from network: " + recipeId);
             ItemStack output = buffer.readItem();
+            if (output.isEmpty()) {
+                output = ItemStack.EMPTY;
+            }
 
-            // 读取输入槽位
             NonNullList<Ingredient> ingredients = NonNullList.withSize(4, Ingredient.EMPTY);
             int[] requiredCounts = new int[4];
             for (int slot = 0; slot < 4; slot++) {
@@ -66,24 +85,20 @@ public class ModRecipeSerializers {
                 requiredCounts[slot] = buffer.readInt();
             }
 
-            // 读取融合时间
             int fusionTime = buffer.readInt();
-
             return new RiderFusionRecipe(recipeId, output, ingredients, fusionTime, requiredCounts);
         }
 
         @Override
         public void toNetwork(FriendlyByteBuf buffer, RiderFusionRecipe recipe) {
-            // 写入输出物品
+            System.out.println("[Recipe] Writing recipe to network: " + recipe.getRecipeId());
             buffer.writeItemStack(recipe.output, false);
 
-            // 写入输入槽位
             for (int slot = 0; slot < 4; slot++) {
                 recipe.getIngredients().get(slot).toNetwork(buffer);
                 buffer.writeInt(recipe.requiredCounts[slot]);
             }
 
-            // 写入融合时间
             buffer.writeInt(recipe.getFusionTime());
         }
     }

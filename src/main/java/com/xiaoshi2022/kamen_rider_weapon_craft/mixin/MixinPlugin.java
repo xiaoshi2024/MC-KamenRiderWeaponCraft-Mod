@@ -4,6 +4,7 @@ import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -13,7 +14,7 @@ public class MixinPlugin implements IMixinConfigPlugin{
     public void onLoad(String mixinPackage) {
         try {
             //这个字符串对应你的项目主类
-            Class.forName("com.xiaoshi2022.kamen_rider_weapon_craft.Main", false, this.getClass().getClassLoader());
+            Class.forName("com.xiaoshi2022.kamen_rider_weapon_craft.kamen_rider_weapon_craft", false, this.getClass().getClassLoader());
             isFrameworkInstalled = true;
         } catch (Exception e) {
             isFrameworkInstalled = false;
@@ -22,7 +23,7 @@ public class MixinPlugin implements IMixinConfigPlugin{
 
     @Override
     public String getRefMapperConfig() {
-        return null;
+        return "kamen_rider_weapon_craft.refmap.json";
     }
 
     @Override
@@ -37,7 +38,7 @@ public class MixinPlugin implements IMixinConfigPlugin{
 
     @Override
     public List<String> getMixins() {
-        return null;
+        return Collections.emptyList();
     }
 
     @Override

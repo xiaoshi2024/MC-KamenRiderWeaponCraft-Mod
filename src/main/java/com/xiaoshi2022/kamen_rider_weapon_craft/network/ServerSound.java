@@ -1,5 +1,6 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.network;
 
+import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.HinawaDaidai_DJ_Ju;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.progrise_hopper_blade;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.sonicarrow;
 import com.xiaoshi2022.kamen_rider_weapon_craft.procedures.KRWBoot;
@@ -51,6 +52,9 @@ public class ServerSound {
                         }
                         if (isHoldingItem(player, progrise_hopper_blade.class)) {
                             KRWBoot.playProgriseHopperBladeBoot(player);
+                        }
+                        if (isHoldingItem(player, HinawaDaidai_DJ_Ju.class)) {
+                            KRWBoot.playHinawaDaidaiDJJuBoot(player);
                         }
                         break;
                 }

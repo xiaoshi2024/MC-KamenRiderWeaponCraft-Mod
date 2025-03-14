@@ -3,6 +3,7 @@ package com.xiaoshi2022.kamen_rider_weapon_craft.network;
 import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.client.RiderFusionMachineBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
@@ -30,7 +31,7 @@ public class SyncGuiOpenStatePacket {
     public static void handle(SyncGuiOpenStatePacket packet, Supplier<NetworkEvent.Context> contextSupplier) {
         NetworkEvent.Context context = contextSupplier.get();
         context.enqueueWork(() -> {
-            if (context.getSender() == null) { // 客户端处理
+            if (context.getDirection() == NetworkDirection.PLAY_TO_CLIENT) {
                 net.minecraft.world.level.Level level = net.minecraft.client.Minecraft.getInstance().level;
                 if (level != null) {
                     net.minecraft.world.level.block.entity.BlockEntity blockEntity = level.getBlockEntity(packet.pos);

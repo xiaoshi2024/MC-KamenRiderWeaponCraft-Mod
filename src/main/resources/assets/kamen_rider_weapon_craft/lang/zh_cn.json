@@ -23,6 +23,8 @@
   "block.kamen_rider_weapon_craft.pine_sapling": "赫尔海姆树苗",
   "block.kamen_rider_weapon_craft.pine_log": "赫尔海姆原木",
   "block.kamen_rider_weapon_craft.pine_planks": "赫尔海姆木板",
+  "block.kamen_rider_weapon_craft.lockseed_iron_bars": "锁种放置钢架",
+
 
 
   "entity.minecraft.villager.kamen_rider_weapon_craft.time_traveler_profession": "时空旅行意志者",
@@ -40,7 +42,8 @@
   "gui.kamen_rider_weapon_craft.rider_fusion_machines.button_controls": "交融",
 
 
-
+  "item.kamen_rider_weapon_craft.hinawadai_dai_dj_ju": "火绳大橙DJ枪",
+  "item.kamen_rider_weapon_craft.musouhinawadj": "火绳大橙DJ-大剑模式",
   "item.kamen_rider_weapon_craft.daidaimaru": "大橙丸",
   "item.kamen_rider_weapon_craft.gangunsaber": "幽灵眼剑枪",
   "item.kamen_rider_weapon_craft.musousaberd": "无双军刀镰大橙丸",
@@ -86,6 +89,8 @@
   "subtitles.finish_rise": "蝗虫跃升!",
   "subtitles.pro_standby_tone": "蝗虫待机中~",
   "subtitles.progrising_strash": "蝗虫悦升击~！",
+  "subtitles.dj_boot_tone": "火绳大~大橙DJ枪~！",
+  "subtitles.dj_disc": "dj-动次",
 
 
 

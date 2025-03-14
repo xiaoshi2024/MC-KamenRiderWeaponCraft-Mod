@@ -24,6 +24,9 @@ public class RiderFusionRecipe implements Recipe<Container> {
     final int[] requiredCounts;
 
     public RiderFusionRecipe(ResourceLocation id, ItemStack output, NonNullList<Ingredient> ingredients, int fusionTime, int[] requiredCounts) {
+        if (id == null) {
+            throw new IllegalArgumentException("Recipe ID cannot be null");
+        }
         this.id = id;
         this.output = output;
         this.ingredients = ingredients;
@@ -49,14 +52,13 @@ public class RiderFusionRecipe implements Recipe<Container> {
             ItemStack slotStack = inv.getItem(slot);
             Ingredient ingredient = ingredients.get(slot);
             System.out.printf(" - Slot %d: Actual=%s x%d, Required=%s x%d%n",
-                slot,
-                slotStack.getItem().getDescriptionId(),  // Replaced getRegistryName with getDescriptionId
-                slotStack.getCount(),
-                ingredient.getItems()[0].getItem().getDescriptionId(),  // Replaced getRegistryName with getDescriptionId
-                requiredCounts[slot]
-            );
+                    slot,
+                    slotStack.getItem().getDescriptionId(),
+                    slotStack.getCount(),
+                    ingredient.getItems()[0].getItem().getDescriptionId(),
+                    requiredCounts[slot]);
 
-            if (!ingredient.test(slotStack)) {  // Closing parentheses
+            if (!ingredient.test(slotStack)) {
                 System.out.println("[Recipe] Item does not match: " + slotStack);
                 return false;
             }
@@ -108,16 +110,29 @@ public class RiderFusionRecipe implements Recipe<Container> {
         return requiredCounts[slot];
     }
 
+    // 添加一个公共的 getter 方法来访问 id 字段
+    public ResourceLocation getRecipeId() {
+        return id;
+    }
+
     // ---------------------- Serializer Inner Class ----------------------
     public static class Serializer implements RecipeSerializer<RiderFusionRecipe> {
         public static final Serializer INSTANCE = new Serializer();
 
         @Override
         public RiderFusionRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
+            if (recipeId == null) {
+                throw new IllegalArgumentException("Recipe ID cannot be null");
+            }
             System.out.println("[Recipe] Loading recipe from JSON: " + recipeId);
             try {
                 // Parse output item
-                ItemStack output = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(json, "output"));
+                ItemStack output;
+                if (json.has("output") && !json.get("output").isJsonNull()) {
+                    output = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(json, "output"));
+                } else {
+                    output = ItemStack.EMPTY;
+                }
 
                 // Parse input slots (0-3)
                 JsonObject ingredientsObj = GsonHelper.getAsJsonObject(json, "ingredients");
@@ -149,10 +164,17 @@ public class RiderFusionRecipe implements Recipe<Container> {
             }
         }
 
+        /// 修复了网络数据包读取时可能出现的空指针异常
         @Override
         public RiderFusionRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
+            if (recipeId == null) {
+                throw new IllegalArgumentException("Recipe ID cannot be null");
+            }
             System.out.println("[Recipe] Loading recipe from network: " + recipeId);
             ItemStack output = buffer.readItem();
+            if (output.isEmpty()) {
+                output = ItemStack.EMPTY;
+            }
 
             NonNullList<Ingredient> ingredients = NonNullList.withSize(4, Ingredient.EMPTY);
             int[] requiredCounts = new int[4];
@@ -165,9 +187,10 @@ public class RiderFusionRecipe implements Recipe<Container> {
             return new RiderFusionRecipe(recipeId, output, ingredients, fusionTime, requiredCounts);
         }
 
+        /// 修复了网络数据包写入时可能出现的空指针异常
         @Override
         public void toNetwork(FriendlyByteBuf buffer, RiderFusionRecipe recipe) {
-            System.out.println("[Recipe] Writing recipe to network: " + recipe.id);
+            System.out.println("[Recipe] Writing recipe to network: " + recipe.getRecipeId());
             buffer.writeItemStack(recipe.output, false);
 
             for (int slot = 0; slot < 4; slot++) {

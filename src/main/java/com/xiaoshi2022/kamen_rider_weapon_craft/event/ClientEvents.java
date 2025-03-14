@@ -1,5 +1,6 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.event;
 
+import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.client.RiderFusionMachine.RiderFusionMachineBlockRenderer;
 import com.xiaoshi2022.kamen_rider_weapon_craft.kamen_rider_weapon_craft;
 import com.xiaoshi2022.kamen_rider_weapon_craft.network.CloseMapPacket;
 import com.xiaoshi2022.kamen_rider_weapon_craft.particle.ModParticles;
@@ -36,8 +37,8 @@ import static com.xiaoshi2022.kamen_rider_weapon_craft.util.KeyBinding.CHANGE_KE
 import static com.xiaoshi2022.kamen_rider_weapon_craft.util.KeyBinding.OPEN_LOCKSEED;
 
 import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.client.helheim_crack.helheim_crackBlockRenderer;
-import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.client.RiderFusionMachine.RiderFusionMachineBlockRenderer;
 import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.client.plant.HelheimVine.HelheimVineBlockRenderer;
+import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.renderer.lockseedIronBarsEntityRenderer;
 
 
 public class ClientEvents {
@@ -134,6 +135,7 @@ public class ClientEvents {
         public static void onEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
             EntityRenderers.register(ModEntityTypes.THROWN_DAIDAIMARU.get(), ThrownDaidaimaruRenderer::new);
             EntityRenderers.register(ModEntityTypes.LASER_BEAM.get(), LaserBeamEntityRenderer::new);
+            event.registerBlockEntityRenderer(ModBlockEntities.LOCKSEEDIRONBARS_ENTITY.get(), lockseedIronBarsEntityRenderer::new);
         }
     }
 }
