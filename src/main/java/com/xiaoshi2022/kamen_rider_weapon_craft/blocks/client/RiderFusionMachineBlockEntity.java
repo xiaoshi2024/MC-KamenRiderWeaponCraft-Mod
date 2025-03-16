@@ -287,4 +287,11 @@ public class RiderFusionMachineBlockEntity extends BlockEntity implements GeoBlo
     public int getMaxCraftingProgress() {
         return maxCraftingProgress;
     }
+
+    public void handleRecipeSync(int craftingProgress, int maxCraftingProgress, boolean isCrafting) {
+        this.craftingProgress = craftingProgress;
+        this.maxCraftingProgress = maxCraftingProgress;
+        this.isCrafting = isCrafting;
+        setChanged();
+    }
 }

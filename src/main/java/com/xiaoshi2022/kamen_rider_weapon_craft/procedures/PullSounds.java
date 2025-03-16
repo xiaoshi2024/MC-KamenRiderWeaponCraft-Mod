@@ -24,6 +24,14 @@ public class PullSounds {
                 // 在服务器端播放音效
                 player.playSound(ModSounds.PULL_STANDBY.get(),  1.0F, 1.0F);
             }
+        }
+    }
+    public static void playPullStandbyDJSound(ServerPlayer player) {
+        Level level = player.level();
+        long currentTime = level.getGameTime();
+        if (currentTime - lastPlayedTime >= SOUND_INTERVAL) {
+            lastPlayedTime = currentTime;
+
             if (player.isUsingItem() && player.getUseItem().getItem() instanceof HinawaDaidai_DJ_Ju) {
                 // 在服务器端播放音效
                 player.playSound(ModSounds.DJ_DISC.get(),  1.0F, 1.0F);

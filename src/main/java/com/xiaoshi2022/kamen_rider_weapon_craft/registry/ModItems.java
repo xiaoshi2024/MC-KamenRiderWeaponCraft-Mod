@@ -46,7 +46,7 @@ public class ModItems {
     public static final RegistryObject<destroy_fifty_swords> DESTROY_FIFTY_SWORDS = ITEMS.register("destroy_fifty_swords",
             () -> new destroy_fifty_swords());
     public static final RegistryObject<HinawaDaidai_DJ_Ju> HINAWA_DAIDAI_DJ_JU = ITEMS.register("hinawadai_dai_dj_ju",
-            () -> new HinawaDaidai_DJ_Ju());
+            () -> new HinawaDaidai_DJ_Ju(new Item.Properties().stacksTo(1)));
     public static final RegistryObject<musouhinawadj> MUSOUHINAWADJ = ITEMS.register("musouhinawadj",
             () -> new musouhinawadj(ModTires.DAIMARU, 15, 2.7F, new Item.Properties()));
 

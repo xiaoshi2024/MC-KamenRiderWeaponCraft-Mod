@@ -164,7 +164,6 @@ public class RiderFusionRecipe implements Recipe<Container> {
             }
         }
 
-        /// 修复了网络数据包读取时可能出现的空指针异常
         @Override
         public RiderFusionRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
             if (recipeId == null) {
@@ -187,7 +186,6 @@ public class RiderFusionRecipe implements Recipe<Container> {
             return new RiderFusionRecipe(recipeId, output, ingredients, fusionTime, requiredCounts);
         }
 
-        /// 修复了网络数据包写入时可能出现的空指针异常
         @Override
         public void toNetwork(FriendlyByteBuf buffer, RiderFusionRecipe recipe) {
             System.out.println("[Recipe] Writing recipe to network: " + recipe.getRecipeId());

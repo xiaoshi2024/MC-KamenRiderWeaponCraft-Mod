@@ -59,8 +59,9 @@ public class kamen_rider_weapon_craft {
 
         MinecraftForge.EVENT_BUS.register(LivingHurtHandler.class);
 
+        /// 注册配方
         ModRecipes.RECIPE_TYPES.register(modEventBus);
-        ModRecipeSerializers.RECIPE_SERIALIZERS.register(modEventBus);
+        ModRecipes.RECIPE_SERIALIZERS.register(modEventBus);
 
         MinecraftForge.EVENT_BUS.register(PullSounds.class);
         MinecraftForge.EVENT_BUS.register(KRWBoot.class);

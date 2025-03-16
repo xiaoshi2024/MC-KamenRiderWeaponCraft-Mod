@@ -33,10 +33,15 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 import java.util.UUID;
 import java.util.function.Consumer;
 
-public class HinawaDaidai_DJ_Ju extends SwordItem implements GeoItem {
+public class HinawaDaidai_DJ_Ju extends Item implements GeoItem {
     private static final float SHOOT_POWER = 1.5f;
     private static final float INACCURACY = 1.0f;
     private static final int SHOOT_COOLDOWN = 20;
+
+    public HinawaDaidai_DJ_Ju(Properties p_41383_) {
+        super(p_41383_);
+        SingletonGeoAnimatable.registerSyncedAnimatable(this);
+    }
 
     private void shoot(Level level, Player player) {
         if (!level.isClientSide) {
@@ -45,22 +50,11 @@ public class HinawaDaidai_DJ_Ju extends SwordItem implements GeoItem {
             level.addFreshEntity(laser);
         }
     }
-    private final float meleeDamage;
-    private final float attackSpeed;
-    private static final UUID ATTACK_DAMAGE_MODIFIER = UUID.randomUUID();
-    private static final UUID ATTACK_SPEED_MODIFIER = UUID.randomUUID();
+
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
-    public HinawaDaidai_DJ_Ju(float meleeDamage, float attackSpeed, Properties properties) {
-        super(Tiers.NETHERITE, (int) meleeDamage, attackSpeed, properties);
-        this.meleeDamage = meleeDamage;
-        this.attackSpeed = attackSpeed;
-        SingletonGeoAnimatable.registerSyncedAnimatable(this);
-    }
 
-    public HinawaDaidai_DJ_Ju() {
-        this(8.0F, 3.0F, new Properties().stacksTo(1).durability(1561));
-    }
+
 
     @Override
     public void initializeClient(Consumer<IClientItemExtensions> consumer) {
@@ -148,7 +142,7 @@ public class HinawaDaidai_DJ_Ju extends SwordItem implements GeoItem {
             for (ServerPlayer player : event.getServer().getPlayerList().getPlayers()) {
                 if (isHoldingDJ(player) && isUsing) {
                     triggerAnim(player, GeoItem.getOrAssignId(player.getMainHandItem(), (ServerLevel) player.level()), "disc", "disc");
-                    PullSounds.playPullStandbySound(player);
+                    PullSounds.playPullStandbyDJSound(player);
                 }
             }
         }

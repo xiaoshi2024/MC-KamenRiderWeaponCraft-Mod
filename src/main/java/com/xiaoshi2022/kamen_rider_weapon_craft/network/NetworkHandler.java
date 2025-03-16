@@ -3,8 +3,6 @@ package com.xiaoshi2022.kamen_rider_weapon_craft.network;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
-import net.minecraftforge.network.NetworkEvent;
-import java.util.function.Supplier;
 
 /**
  * NetworkHandler 负责处理所有的网络消息，包括配方数据的同步。
@@ -21,7 +19,6 @@ public class NetworkHandler {
     public static void register() {
         int packetId = 0;
 
-        // 注册 ServerSound
         INSTANCE.registerMessage(
                 packetId++,
                 ServerSound.class,
@@ -30,7 +27,6 @@ public class NetworkHandler {
                 ServerSound::handle
         );
 
-        // 注册 SyncRecipeDataPacket
         INSTANCE.registerMessage(
                 packetId++,
                 SyncRecipeDataPacket.class,
@@ -39,7 +35,6 @@ public class NetworkHandler {
                 SyncRecipeDataPacket::handle
         );
 
-        // 注册 StartCraftingPacket
         INSTANCE.registerMessage(
                 packetId++,
                 StartCraftingPacket.class,
@@ -48,7 +43,7 @@ public class NetworkHandler {
                 StartCraftingPacket::handle
         );
 
-        // 注册 SyncAnimationStatePacket
+
         INSTANCE.registerMessage(
                 packetId++,
                 SyncAnimationStatePacket.class,
@@ -57,7 +52,6 @@ public class NetworkHandler {
                 SyncAnimationStatePacket::handle
         );
 
-        // 注册 SyncGuiOpenStatePacket
         INSTANCE.registerMessage(
                 packetId++,
                 SyncGuiOpenStatePacket.class,
