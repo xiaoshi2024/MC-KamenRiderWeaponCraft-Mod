@@ -18,6 +18,8 @@ import net.minecraft.world.level.levelgen.placement.*;
 import java.util.List;
 
 public class ModPlacedFeatures {
+    public static final ResourceKey<PlacedFeature> RIDER_FORGE_ALLOY_MINERAL_PLACED_KEY = registerKey("rider_forge_alloy_mineral_placed");
+
     public static final ResourceKey<PlacedFeature> PINE_PLACED_KEY = registerKey("pine_placed");
     public static final ResourceKey<PlacedFeature> HELHEIM_PLANT_PLACED_KEY = registerKey("helheim_plant_placed");
     public static final ResourceKey<PlacedFeature> HELHEIM_PLANT_2_PLACED_KEY = registerKey("helheim_plant_2_placed");
@@ -27,6 +29,11 @@ public class ModPlacedFeatures {
 
     public static void bootstrap(BootstapContext<PlacedFeature> context) {
         HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
+
+        register(context, RIDER_FORGE_ALLOY_MINERAL_PLACED_KEY, configuredFeatures.getOrThrow(ModConfiguredFeatures.RIDER_FORGE_ALLOY_MINERAL_KEY),
+                 ModOrePlacement.commonOrePlacement(16,HeightRangePlacement.uniform(
+                         VerticalAnchor.absolute(-64), VerticalAnchor.absolute(80))
+                 ));
 
         // 注册松树的放置逻辑
         register(context, PINE_PLACED_KEY, configuredFeatures.getOrThrow(ModConfiguredFeatures.PINE_KEY),
@@ -88,5 +95,18 @@ public class ModPlacedFeatures {
     private static void register(BootstapContext<PlacedFeature> context, ResourceKey<PlacedFeature> key, Holder<ConfiguredFeature<?, ?>> configuration,
                                  List<PlacementModifier> modifiers) {
         context.register(key, new PlacedFeature(configuration, List.copyOf(modifiers)));
+    }
+
+    static class ModOrePlacement {
+
+        public static List<PlacementModifier> orePlacement(PlacementModifier modifier, PlacementModifier modifier1) {
+            return List.of(modifier,InSquarePlacement.spread(),modifier1,BiomeFilter.biome());
+        }
+        public static List<PlacementModifier> commonOrePlacement(int i, PlacementModifier modifier) {
+            return orePlacement(CountPlacement.of(i),modifier);
+        }
+        public static List<PlacementModifier> rareOrePlacement(int i, PlacementModifier modifier) {
+            return orePlacement(RarityFilter.onAverageOnceEvery(i),modifier);
+        }
     }
 }

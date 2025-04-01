@@ -1,5 +1,7 @@
 {
   "gui.cs.ssonic.button_increase_juice": "榨汁",
+  "key.cs.y": "音速弓按键Y",
+  "key.cs.x": "音速弓按键X",
 
   "item group.kamen_rider_weapon_craft_prop_tab": "假面骑士里武器的联动道具",
   "item group.kamen_rider_weapon_craft_tab": "假面骑士武器集合模组",

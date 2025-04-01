@@ -5,12 +5,9 @@ import com.xiaoshi2022.kamen_rider_weapon_craft.Item.prop.client.entity.LaserBea
 import com.xiaoshi2022.kamen_rider_weapon_craft.network.ServerSound;
 import com.xiaoshi2022.kamen_rider_weapon_craft.particle.ModParticles;
 import com.xiaoshi2022.kamen_rider_weapon_craft.procedures.PullSounds;
-import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModSounds;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -21,6 +18,7 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 import software.bernie.geckolib.animatable.GeoItem;
 import software.bernie.geckolib.animatable.SingletonGeoAnimatable;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -30,9 +28,9 @@ import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
-import java.util.UUID;
 import java.util.function.Consumer;
 
+@Mod.EventBusSubscriber(modid = "kamen_rider_weapon_craft")
 public class HinawaDaidai_DJ_Ju extends Item implements GeoItem {
     private static final float SHOOT_POWER = 1.5f;
     private static final float INACCURACY = 1.0f;

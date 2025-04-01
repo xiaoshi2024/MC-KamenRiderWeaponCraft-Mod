@@ -9,17 +9,21 @@ import net.minecraft.data.worldgen.BootstapContext;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
-import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConfiguration;
-import net.minecraft.world.level.levelgen.feature.configurations.SimpleBlockConfiguration;
-import net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.*;
 import net.minecraft.world.level.levelgen.feature.featuresize.TwoLayersFeatureSize;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
+import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
+import net.minecraft.world.level.levelgen.structure.templatesystem.TagMatchTest;
+
+import java.util.List;
 
 public class ModConfiguredFeatures {
+    public static final ResourceKey<ConfiguredFeature<?, ?>> RIDER_FORGE_ALLOY_MINERAL_KEY = registerKey("rider_forge_alloy_mineral");
+
     public static final ResourceKey<ConfiguredFeature<?, ?>> PINE_KEY = registerKey("pine");
     public static final ResourceKey<ConfiguredFeature<?, ?>> HELHEIM_PLANT_KEY = registerKey("helheim_plant");
     public static final ResourceKey<ConfiguredFeature<?, ?>> HELHEIM_PLANT_2_KEY = registerKey("helheim_plant_2");
@@ -28,6 +32,14 @@ public class ModConfiguredFeatures {
     public static final ResourceKey<ConfiguredFeature<?, ?>> HELHEIM_VINE_KEY = registerKey("helheimvine");
 
     public static void bootstrap(BootstapContext<ConfiguredFeature<?, ?>> context) {
+        //配置骑士合金矿石
+        RuleTest stoneReplace = new TagMatchTest(BlockTags.STONE_ORE_REPLACEABLES);
+
+        List<OreConfiguration.TargetBlockState> overworldBlockSilverOres = List
+                .of(OreConfiguration.target(stoneReplace, ModBlocks.RIDERFORGINGALLOYMINERAL.get().defaultBlockState()));
+        register(context, RIDER_FORGE_ALLOY_MINERAL_KEY, Feature.ORE, new OreConfiguration(overworldBlockSilverOres, 10));
+
+
         // 注册松树配置特征
         register(context, PINE_KEY, Feature.TREE, new TreeConfiguration.TreeConfigurationBuilder(
                 BlockStateProvider.simple(ModBlocks.PINE_LOG.get()), // 树干

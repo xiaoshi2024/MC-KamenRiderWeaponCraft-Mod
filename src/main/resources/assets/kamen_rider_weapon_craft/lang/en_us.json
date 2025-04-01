@@ -1,5 +1,7 @@
 {
   "gui.cs.ssonic.button_increase_juice": "Juicing",
+  "key.cs.y": "sonicBowButtonY",
+  "key.cs.x": "sonicBowButtonX",
 
   "item group.kamen_rider_weapon_craft_prop_tab": "KamenRiderWeaponCraft Prop Tab",
   "item group.kamen_rider_weapon_craft_tab": "KamenRiderWeaponCraft Tab",

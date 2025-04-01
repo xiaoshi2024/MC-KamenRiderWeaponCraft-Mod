@@ -5,12 +5,11 @@ import com.xiaoshi2022.kamen_rider_weapon_craft.procedures.KRWBoot;
 import com.xiaoshi2022.kamen_rider_weapon_craft.network.*;
 import com.xiaoshi2022.kamen_rider_weapon_craft.particle.ModParticles;
 import com.xiaoshi2022.kamen_rider_weapon_craft.procedures.PullSounds;
-import com.xiaoshi2022.kamen_rider_weapon_craft.recipe.ModRecipeSerializers;
+import com.xiaoshi2022.kamen_rider_weapon_craft.procedures.PullSoundsClient;
 import com.xiaoshi2022.kamen_rider_weapon_craft.recipe.ModRecipes;
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.*;
 import com.xiaoshi2022.kamen_rider_weapon_craft.tab.ModTab;
 import com.xiaoshi2022.kamen_rider_weapon_craft.villagers.TimeTravelerProfession;
-import com.xiaoshi2022.kamen_rider_weapon_craft.worldgen.biome.ModTerrablender;
 import com.xiaoshi2022.kamen_rider_weapon_craft.worldgen.tree.ModFoliagePlacers;
 import com.xiaoshi2022.kamen_rider_weapon_craft.worldgen.tree.ModTrunkPlacerTypes;
 import net.minecraft.resources.ResourceLocation;
@@ -65,6 +64,7 @@ public class kamen_rider_weapon_craft {
 
         MinecraftForge.EVENT_BUS.register(PullSounds.class);
         MinecraftForge.EVENT_BUS.register(KRWBoot.class);
+        MinecraftForge.EVENT_BUS.register(PullSoundsClient.class);
 
         //树苗的注册
         ModFoliagePlacers.register(modEventBus);
@@ -85,7 +85,7 @@ public class kamen_rider_weapon_craft {
         MixinEnvironment.getDefaultEnvironment().setSide(MixinEnvironment.Side.CLIENT);
         MixinEnvironment.getEnvironment(MixinEnvironment.Phase.DEFAULT);
 
-        ModTerrablender.registerBiomes();
+
 
         // 注册网络包
         registerNetworkMessages();

@@ -1,0 +1,6 @@
+{
+  "type": "forge:add_features",
+  "biomes": "#forge:is_plains",
+  "features": "kamen_rider_weapon_craft:pine_placed",
+  "step": "vegetal_decoration"
+}
