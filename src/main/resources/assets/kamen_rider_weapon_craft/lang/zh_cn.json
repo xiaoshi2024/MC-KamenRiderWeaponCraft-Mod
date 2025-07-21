@@ -2,16 +2,13 @@
   "gui.cs.ssonic.button_increase_juice": "榨汁",
   "key.cs.y": "音速弓按键Y",
   "key.cs.x": "音速弓按键X",
-
   "item group.kamen_rider_weapon_craft_prop_tab": "假面骑士里武器的联动道具",
   "item group.kamen_rider_weapon_craft_tab": "假面骑士武器集合模组",
   "item group.kamen_rider_weapon_craft_misc_tab": "假面骑士武器集的杂物",
-
   "block.kamen_rider_weapon_craft.helheim_crack_block": "赫尔海姆裂缝",
   "block.kamen_rider_weapon_craft.time_traveler_studio_block": "时空旅行照相馆",
   "block.kamen_rider_weapon_craft.rider_fusion_machine_block": "骑士交融器",
   "block.kamen_rider_weapon_craft.riderforgingalloymineral": "骑士合金矿",
-
   "block.kamen_rider_weapon_craft.helheimvine": "赫尔海姆藤曼",
   "item.kamen_rider_weapon_craft.helheimfruit": "赫尔海姆果实",
   "block.kamen_rider_weapon_craft.helheim_plant": "赫尔海姆植物（粉）",
@@ -26,11 +23,9 @@
   "block.kamen_rider_weapon_craft.pine_log": "赫尔海姆原木",
   "block.kamen_rider_weapon_craft.pine_planks": "赫尔海姆木板",
   "block.kamen_rider_weapon_craft.lockseed_iron_bars": "锁种放置钢架",
-
-
+  "block.kamen_rider_weapon_craft.timesand": "时间沙子",
 
   "entity.minecraft.villager.kamen_rider_weapon_craft.time_traveler_profession": "时空旅行意志者",
-
   "dialogue.just_passing_by/1": "我要成为世界的破坏者(DCD)",
   "dialogue.just_passing_by/2": "旅途仍在继续",
   "dialogue.main.just_passing_by/1": "你是谁?",
@@ -42,8 +37,7 @@
   "dialogue.location.hikari_studio/1": "噢~没记错的话，我在 %2$s 找到了这个个房屋.",
   "gui.destiny.hikari_studio": "光照相馆",
   "gui.kamen_rider_weapon_craft.rider_fusion_machines.button_controls": "交融",
-
-
+  "item.kamen_rider_weapon_craft.denkamen_sword": "电假面剑",
   "item.kamen_rider_weapon_craft.hinawadai_dai_dj_ju": "火绳大橙DJ枪",
   "item.kamen_rider_weapon_craft.musouhinawadj": "火绳大橙DJ-大剑模式",
   "item.kamen_rider_weapon_craft.daidaimaru": "大橙丸",
@@ -57,24 +51,18 @@
   "item.kamen_rider_weapon_craft.destroy_fifty_swords": "五十破坏割裂者",
   "item.kamen_rider_weapon_craft.authorize_buster": "授权-破坏者",
   "item.kamen_rider_weapon_craft.progrise_hopper_blade": "升程蝗虫砍击者",
-
-
-  "effect.kamen_rider_weapon_craft.helmheim_power": "赫尔海姆之力",
-
-
   "item.kamen_rider_weapon_craft.sonicx_arrow": "能量音速箭矢",
   "item.kamen_rider_weapon_craft.melon": "蜜瓜能量锁种",
   "item.kamen_rider_weapon_craft.cheryy": "樱桃能量锁种",
   "item.kamen_rider_weapon_craft.rider_forging_alloy_ore": "骑士合金材料",
   "item.kamen_rider_weapon_craft.rider_circuit_board": "骑士电路板",
   "item.kamen_rider_weapon_craft.rider_basic_weapon": "骑士基础武器材料",
-
+  "effect.kamen_rider_weapon_craft.helmheim_power": "赫尔海姆之力",
   "item.sonic_bow.desc": "描述",
   "item.sonic_bow.strength": "强度",
   "item.sonicarrow.ammo": "水果能量",
   "kamen_rider_weapon_craft.landing": "欢迎安装假面骑士武器集合并加载",
   "weapon_map": "骑士武器大全图鉴",
-
   "subtitles.gavvwhipir_start_tone": "加布掼奶油枪~!",
   "subtitles.riderbookersword": "咔修!",
   "subtitles.opendlock": "滋 ~滋~（拉链拉动）",
@@ -93,17 +81,12 @@
   "subtitles.progrising_strash": "蝗虫悦升击~！",
   "subtitles.dj_boot_tone": "火绳大~大橙DJ枪~！",
   "subtitles.dj_disc": "dj-动次",
-
-
-
-
   "advancement.kamen_rider_weapon_craft.ridebooker.title": "卡牌已经数不清了是吧",
   "advancement.kamen_rider_weapon_craft.ridebooker.desc": "可恶的帝骑哥！",
   "advancement.kamen_rider_weapon_craft.daidaimaru.title": "又扔大橙丸?",
   "advancement.kamen_rider_weapon_craft.daidaimaru.desc": "一次性物品是吧？（剧中操作！）",
   "advancement.kamen_rider_weapon_craft.kamen_rider_weapon_craft.title": "欢迎 游玩 假面骑士武器大全",
   "advancement.kamen_rider_weapon_craft.kamen_rider_weapon_craft.desc": "现在 ！启动你的玩法！",
-
   "KEY.kamen_rider_weapon_craft.change_over": "切换物品形态",
   "KEY.kamen_rider_weapon_craft.kamen_rider_weapon_craft": "假面骑士切换",
   "KEY.kamen_rider_weapon_craft.open_lockseed_gui": "开打锁种装载"

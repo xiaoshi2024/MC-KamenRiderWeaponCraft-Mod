@@ -26,6 +26,7 @@
   "block.kamen_rider_weapon_craft.pine_log": "helheim Log",
   "block.kamen_rider_weapon_craft.pine_planks": "helheim Planks",
   "block.kamen_rider_weapon_craft.lockseed_iron_bars": "Lock seed IronBars",
+  "block.kamen_rider_weapon_craft.timesand": "Time Sand",
 
   "entity.minecraft.villager.kamen_rider_weapon_craft.time_traveler_profession": "theWillOfTimeTravel",
 
@@ -41,6 +42,7 @@
   "gui.destiny.hikari_studio": "Hikari Studio",
   "gui.kamen_rider_weapon_craft.rider_fusion_machines.button_controls": "stir",
 
+  "item.kamen_rider_weapon_craft.denkamen_sword": "DenKamen Sword",
   "item.kamen_rider_weapon_craft.hinawadai_dai_dj_ju": "HinawaDaidai-DJ-Ju",
   "item.kamen_rider_weapon_craft.musouhinawadj": "HinawaDaidai-DJ-Ju-Sword",
   "item.kamen_rider_weapon_craft.daidaimaru": "daidaimaru",

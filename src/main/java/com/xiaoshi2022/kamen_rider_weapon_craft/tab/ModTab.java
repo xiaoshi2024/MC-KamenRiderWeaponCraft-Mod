@@ -26,6 +26,7 @@ public class ModTab {
                 output.accept(GANGUNSABER.get());
                 output.accept(RIDEBOOKER.get());
                 output.accept(SATAN_SABRE.get());
+                output.accept(DENKAMEN_SWORD.get());
                 output.accept(GAVVWHIPIR.get());
                 output.accept(DESTROY_FIFTY_SWORDS.get());
                 output.accept(AUTHORIZE_BUSTER.get());
@@ -68,6 +69,7 @@ public class ModTab {
                 output.accept(HELHEIM_PLANT_ITEMS.get());
                 output.accept(HELHEIMVINE_ITEM.get());
                 output.accept(LOCKSEEDIRONBARS_ITEM.get());
+                output.accept(TIMESAND_ITEM.get());
                 
             })).build());
 }

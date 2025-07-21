@@ -5,15 +5,13 @@ import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.custom.ModFlammableRotate
 //import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.custom.ModWallHangingSignBlock;
 import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.portals.*;
 import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.portals.plant.helheim_plant;
+import com.xiaoshi2022.kamen_rider_weapon_craft.world.inventory.SonicBowContainer;
 import com.xiaoshi2022.kamen_rider_weapon_craft.worldgen.tree.PineTreeGrower;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.LeavesBlock;
-import net.minecraft.world.level.block.SaplingBlock;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.registries.DeferredRegister;
@@ -31,6 +29,9 @@ public class ModBlocks {
     //功能方块
     public static final RegistryObject<lockseedIronBars> LOCKSEEDIRONBARS = BLOCKS.register(
             "lockseed_iron_bars", () -> new lockseedIronBars(BlockBehaviour.Properties.of().strength(1.5f, 6.0f).noOcclusion()));
+
+    public static final RegistryObject<Block> TIMESAND = BLOCKS.register("timesand",
+            () -> new FallingBlock(BlockBehaviour.Properties.copy(Blocks.SAND)));
 
     // 注册一个方块
     public static final RegistryObject<helheim_crack> HELHEIM_CRACK_BLOCK = BLOCKS.register("helheim_crack_block",
@@ -103,7 +104,7 @@ public class ModBlocks {
     public static final RegistryObject<Block> PINE_SAPLING = BLOCKS.register("pine_sapling",
             () -> new SaplingBlock(new PineTreeGrower(), BlockBehaviour.Properties.copy(Blocks.OAK_SAPLING)));
 
-//    // 存储注册的方块的 RegistryObject 列表
+    //    // 存储注册的方块的 RegistryObject 列表
 //    public static final List<RegistryObject<Block>> HELHEIM_PLANTS = new ArrayList<>();
 //
 //    static {

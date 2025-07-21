@@ -27,6 +27,8 @@ public class ModItems {
 
     public static final RegistryObject<satan_sabre> SATAN_SABRE = ITEMS.register("satan_sabre",
             () -> new satan_sabre());
+    public static final RegistryObject<denkamen_sword> DENKAMEN_SWORD = ITEMS.register("denkamen_sword",
+            () -> new denkamen_sword());
     public static final RegistryObject<authorize_buster> AUTHORIZE_BUSTER = ITEMS.register("authorize_buster",
             () -> new authorize_buster());
     public static final RegistryObject<sonicarrow> SONICARROW = ITEMS.register("sonicarrow",
@@ -51,6 +53,9 @@ public class ModItems {
             () -> new musouhinawadj(ModTires.DAIMARU, 15, 2.7F, new Item.Properties()));
 
     //方块物品
+    public static final RegistryObject<Item> TIMESAND_ITEM = ITEMS.register("timesand_item",
+            () -> new BlockItem((Block) ModBlocks.TIMESAND.get(), new Item.Properties()));
+
     public static final RegistryObject<Item> LOCKSEEDIRONBARS_ITEM = ITEMS.register("lockseed_iron_bars_item",
             () -> new BlockItem(ModBlocks.LOCKSEEDIRONBARS.get(), new Item.Properties()));
 
