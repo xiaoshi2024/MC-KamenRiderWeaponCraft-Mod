@@ -31,7 +31,7 @@ public class ModBlocks {
             "lockseed_iron_bars", () -> new lockseedIronBars(BlockBehaviour.Properties.of().strength(1.5f, 6.0f).noOcclusion()));
 
     public static final RegistryObject<Block> TIMESAND = BLOCKS.register("timesand",
-            () -> new FallingBlock(BlockBehaviour.Properties.copy(Blocks.SAND)));
+            () -> new TimeSandBlock(BlockBehaviour.Properties.copy(Blocks.SAND)));
 
     // 注册一个方块
     public static final RegistryObject<helheim_crack> HELHEIM_CRACK_BLOCK = BLOCKS.register("helheim_crack_block",

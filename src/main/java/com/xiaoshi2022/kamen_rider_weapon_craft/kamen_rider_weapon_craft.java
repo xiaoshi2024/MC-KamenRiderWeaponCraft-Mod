@@ -1,6 +1,7 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft;
 
 import com.xiaoshi2022.kamen_rider_weapon_craft.event.LivingHurtHandler;
+import com.xiaoshi2022.kamen_rider_weapon_craft.event.WitherSpawnHandler;
 import com.xiaoshi2022.kamen_rider_weapon_craft.procedures.KRWBoot;
 import com.xiaoshi2022.kamen_rider_weapon_craft.network.*;
 import com.xiaoshi2022.kamen_rider_weapon_craft.particle.ModParticles;
@@ -57,6 +58,8 @@ public class kamen_rider_weapon_craft {
         GeckoLib.initialize();
 
         MinecraftForge.EVENT_BUS.register(LivingHurtHandler.class);
+
+        MinecraftForge.EVENT_BUS.register(WitherSpawnHandler.class);
 
         /// 注册配方
         ModRecipes.RECIPE_TYPES.register(modEventBus);
