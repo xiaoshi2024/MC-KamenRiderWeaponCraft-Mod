@@ -24,7 +24,6 @@
   "block.kamen_rider_weapon_craft.pine_planks": "赫尔海姆木板",
   "block.kamen_rider_weapon_craft.lockseed_iron_bars": "锁种放置钢架",
   "block.kamen_rider_weapon_craft.timesand": "时间沙子",
-
   "entity.minecraft.villager.kamen_rider_weapon_craft.time_traveler_profession": "时空旅行意志者",
   "dialogue.just_passing_by/1": "我要成为世界的破坏者(DCD)",
   "dialogue.just_passing_by/2": "旅途仍在继续",
@@ -57,6 +56,8 @@
   "item.kamen_rider_weapon_craft.rider_forging_alloy_ore": "骑士合金材料",
   "item.kamen_rider_weapon_craft.rider_circuit_board": "骑士电路板",
   "item.kamen_rider_weapon_craft.rider_basic_weapon": "骑士基础武器材料",
+  "item.kamen_rider_weapon_craft.rider_pass": "骑士通票",
+
   "effect.kamen_rider_weapon_craft.helmheim_power": "赫尔海姆之力",
   "item.sonic_bow.desc": "描述",
   "item.sonic_bow.strength": "强度",

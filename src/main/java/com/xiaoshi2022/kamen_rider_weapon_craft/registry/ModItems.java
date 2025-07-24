@@ -3,6 +3,7 @@ package com.xiaoshi2022.kamen_rider_weapon_craft.registry;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.ModTires;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.*;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.food.HelheimFruit;
+import com.xiaoshi2022.kamen_rider_weapon_craft.Item.prop.RiderPass;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.prop.custom.Melon;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.prop.custom.cheryy;
 import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.display.rider_fusion_machine_item;
@@ -120,6 +121,10 @@ public class ModItems {
             () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> RIDER_CIRCUIT_BOARD = ITEMS.register("rider_circuit_board",
             () -> new Item(new Item.Properties()));
+
+    //工具
+    public static final RegistryObject<Item> RIDER_PASS = ITEMS.register("rider_pass",
+            () -> new RiderPass(new Item.Properties()));
 
     //植物的杂七杂八
     public static final RegistryObject<BlockItem> PINE_PLANKS_ITEM = ITEMS.register(

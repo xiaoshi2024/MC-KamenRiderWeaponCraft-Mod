@@ -1,0 +1,11 @@
+{
+  "name": "电假面剑",
+  "icon": "kamen_rider_weapon_craft:denkamen_sword",
+  "category": "kamen_rider_weapon_craft:den-o",
+  "pages": [
+    {
+      "type": "text",
+      "text": "假面骑士电王中主角的力量以及魔神加上电车的力量"
+    }
+  ]
+}

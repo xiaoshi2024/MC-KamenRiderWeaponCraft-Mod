@@ -42,6 +42,7 @@ public class ModTab {
                 output.accept(TIME_TRAVELER_STUDIO_BLOCK_ITEM.get());
                 output.accept(RIDERFUSIONMACHINE_ITEM.get());
                 output.accept(RIDER_CIRCUIT_BOARD.get());
+                output.accept(RIDER_PASS.get());
                 output.accept(RIDER_FORGING_ALLOY_ORE.get());
                 output.accept(RIDER_BASIC_WEAPON.get());
                 output.accept(RIDERFORGINGALLOYMINERAL.get());
