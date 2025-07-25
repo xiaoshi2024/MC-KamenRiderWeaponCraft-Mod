@@ -46,5 +46,15 @@
       <option name="name" value="maven5" />
       <option name="url" value="https://libraries.minecraft.net/" />
     </remote-repository>
+    <remote-repository>
+      <option name="id" value="zigythebirdMods" />
+      <option name="name" value="zigythebirdMods" />
+      <option name="url" value="https://maven.zigythebird.com/mods" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="KosmX's maven" />
+      <option name="name" value="KosmX's maven" />
+      <option name="url" value="https://maven.kosmx.dev/" />
+    </remote-repository>
   </component>
 </project>

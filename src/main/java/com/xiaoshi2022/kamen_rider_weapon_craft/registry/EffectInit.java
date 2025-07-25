@@ -13,6 +13,6 @@ public class EffectInit {
 
     // 注册赫尔海姆之力效果
     public static final RegistryObject<MobEffect> HELMHEIM_POWER = EFFECTS.register("helmheim_power", () -> {
-        return new HelmheimPowerEffect(MobEffectCategory.BENEFICIAL, 0x00FF00); // 绿色效果
+        return new HelmheimPowerEffect(MobEffectCategory.BENEFICIAL, 0xFFA500); // 橙色效果
     });
 }

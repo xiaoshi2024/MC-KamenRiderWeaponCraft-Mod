@@ -102,5 +102,7 @@
 
   "KEY.kamen_rider_weapon_craft.change_over": "Switch the item of goods",
   "KEY.kamen_rider_weapon_craft.kamen_rider_weapon_craft": "KamenRiderWeaponCraft Change Over",
-  "KEY.kamen_rider_weapon_craft.open_lockseed_gui": "Open lockSeed box"
+  "KEY.kamen_rider_weapon_craft.open_lockseed_gui": "Open lockSeed box",
+  "message.kamen_rider_weapon_craft.helmheim_power.revert": "Restore human form",
+  "message.kamen_rider_weapon_craft.helmheim_power.level_up": "Obtained the Helheim power at level %d!"
 }

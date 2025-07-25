@@ -4,6 +4,7 @@ import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ModEntityTypes;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.food.HelheimFruit.HelheimFruitRenderer;
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.EffectInit;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -110,10 +111,25 @@ public class HelheimFruit extends Item implements GeoItem {
                     }
                 }
             }
+            // 在finishUsingItem方法中修改赫尔海姆之力的赋予逻辑
+            if (player.getRandom().nextInt(100) < 60) {
+                // 随机给予1-3级效果
+                int powerLevel = player.getRandom().nextInt(3); // 0=1级, 1=2级, 2=3级
+                player.addEffect(new MobEffectInstance(
+                        EffectInit.HELMHEIM_POWER.get(),
+                        30 * 20, // 30秒
+                        powerLevel, // 效果等级
+                        false,
+                        false
+                ));
 
-            // 30% 概率获得赫尔海姆之力（HELMHEIM_POWER）buff
-            if (player.getRandom().nextInt(100) < 60) { // 60% 概率
-                player.addEffect(new MobEffectInstance(EffectInit.HELMHEIM_POWER.get(), 30 * 20, 0, false, false));
+                // 如果给予的是2级或以上，发送消息
+                if (powerLevel >= 1) {
+                    player.sendSystemMessage(Component.translatable(
+                            "message.kamen_rider_weapon_craft.helmheim_power.level_up",
+                            powerLevel + 1 // 显示为2级/3级
+                    ));
+                }
             }
         }
         // 调用父类方法以确保物品的默认行为（例如消耗物品）
