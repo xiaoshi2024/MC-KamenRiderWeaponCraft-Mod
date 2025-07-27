@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "aXX",
+    "XXX",
+    "XXX"
+  ],
+  "key": {
+    "X": {
+      "item": "minecraft:bowl"
+    },
+    "a": {
+      "item": "kamen_rider_weapon_craft:helheim_jelly_block"
+    }
+  },
+  "result": {
+    "item": "kamen_rider_weapon_craft:helheim_jelly",
+    "count": 8
+  }
+}

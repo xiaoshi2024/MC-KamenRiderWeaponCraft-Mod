@@ -10,7 +10,6 @@
   "block.kamen_rider_weapon_craft.rider_fusion_machine_block": "骑士交融器",
   "block.kamen_rider_weapon_craft.riderforgingalloymineral": "骑士合金矿",
   "block.kamen_rider_weapon_craft.helheimvine": "赫尔海姆藤曼",
-  "item.kamen_rider_weapon_craft.helheimfruit": "赫尔海姆果实",
   "block.kamen_rider_weapon_craft.helheim_plant": "赫尔海姆植物（粉）",
   "block.kamen_rider_weapon_craft.helheim_plant_4": "赫尔海姆植物（绿）",
   "block.kamen_rider_weapon_craft.helheim_plant_2": "赫尔海姆植物（花）",
@@ -91,5 +90,29 @@
   "KEY.kamen_rider_weapon_craft.kamen_rider_weapon_craft": "假面骑士切换",
   "KEY.kamen_rider_weapon_craft.open_lockseed_gui": "开打锁种装载",
   "message.kamen_rider_weapon_craft.helmheim_power.revert": "赫尔海姆之力净化了异域者的力量!",
-  "message.kamen_rider_weapon_craft.helmheim_power.level_up": "获得赫尔海姆之力 %d 级！"
+  "message.kamen_rider_weapon_craft.helmheim_power.level_up": "获得赫尔海姆之力 %d 级！",
+
+  "travelerstitles.kamen_rider_weapon_craft.helheim": "赫尔海姆界",
+  "biome.kamen_rider_weapon_craft.helheim_biome": "赫尔海姆生物群系",
+
+  "travelerstitles.kamen_rider_weapon_craft.the_desertof_time": "时之沙漠",
+
+  "solar_system.kamen_rider_weapon_craft.helheim_system": "赫尔海姆 系",
+  "planet.kamen_rider_weapon_craft.helheim": "赫尔海姆星球",
+  "planet.kamen_rider_weapon_craft.helheim_orbit": "轨道 赫尔海姆",
+
+  "item.kamen_rider_weapon_craft.helheimfruit": "赫尔海姆果实",
+  "item.kamen_rider_weapon_craft.helheim_juice_bottle": "赫尔海姆果汁",
+  "item.kamen_rider_weapon_craft.helheim_ice_cream": "赫尔海姆冰淇淋",
+  "item.kamen_rider_weapon_craft.helheim_jelly": "赫尔海姆果冻",
+  "item.kamen_rider_weapon_craft.helheim_cake_slice": "赫尔海姆蛋糕片",
+  "item.kamen_rider_weapon_craft.helheim_pulp": "赫尔海姆果肉",
+
+  "block.kamen_rider_weapon_craft.helheim_juice_block": "赫尔海姆果汁流体",
+
+
+  "fluid.kamen_rider_weapon_craft.helheim_juice": "赫尔海姆美~汁-汁",
+  "item.kamen_rider_weapon_craft.helheim_juice_bucket": "赫尔海姆果汁桶",
+  "block.kamen_rider_weapon_craft.helheim_jelly_block": "赫尔海姆果块"
+
 }

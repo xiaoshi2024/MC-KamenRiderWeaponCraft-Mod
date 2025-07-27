@@ -51,6 +51,8 @@ public class kamen_rider_weapon_craft {
         ModSounds.REGISTRY.register(modEventBus);
         ModItems.ITEMS.register(modEventBus);
         ModBlocks.BLOCKS.register(modEventBus);
+        ModFluids.FLUIDS.register(modEventBus);
+        ModFluids.FLUID_TYPES.register(modEventBus);
         ModTab.TABS.register(modEventBus);
         ModBlockEntities.BLOCK_ENTITIES.register(modEventBus);
         ModParticles.REGISTRY.register(modEventBus);

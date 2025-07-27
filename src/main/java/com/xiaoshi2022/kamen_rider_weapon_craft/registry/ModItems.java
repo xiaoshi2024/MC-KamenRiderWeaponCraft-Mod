@@ -3,6 +3,9 @@ package com.xiaoshi2022.kamen_rider_weapon_craft.registry;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.ModTires;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.*;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.food.HelheimFruit;
+import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.food.helheimfoods.HelheimBowlFood;
+import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.food.helheimfoods.HelheimJuiceBottle;
+import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.food.helheimfoods.HelheimSpecialFood;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.prop.RiderPass;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.prop.custom.Melon;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.prop.custom.cheryy;
@@ -12,6 +15,7 @@ import com.xiaoshi2022.kamen_rider_weapon_craft.kamen_rider_weapon_craft;
 import com.xiaoshi2022.kamen_rider_weapon_craft.weapon_mapBOOK.weapon_map;
 import com.xiaoshi2022.kamen_rider_weapon_craft.world.inventory.SonicBowContainer;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.registries.DeferredRegister;
@@ -21,6 +25,7 @@ import net.minecraftforge.registries.RegistryObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModBlocks.HELHEIM_JELLY_BLOCK;
 import static net.minecraft.world.phys.shapes.Shapes.block;
 
 public class ModItems {
@@ -65,6 +70,16 @@ public class ModItems {
     //食物
     public static final RegistryObject<HelheimFruit> HELHEIMFRUIT = ITEMS.register("helheimfruit",
             ()-> new HelheimFruit(new Item.Properties()));
+    public static final RegistryObject<HelheimJuiceBottle> HELHEIM_JUICE_BOTTLE = ITEMS.register("helheim_juice_bottle",
+            HelheimJuiceBottle::new);
+    public static final RegistryObject<HelheimBowlFood> HELHEIM_ICE_CREAM = ITEMS.register("helheim_ice_cream",
+            ()-> new HelheimBowlFood(0, false));
+    public static final RegistryObject<HelheimBowlFood> HELHEIM_JELLY= ITEMS.register("helheim_jelly",
+            ()-> new HelheimBowlFood(0, false));
+    public static final RegistryObject<HelheimSpecialFood> HELHEIM_CAKE_SLICE = ITEMS.register("helheim_cake_slice",
+            ()-> new HelheimSpecialFood(2, false));
+//    public static final RegistryObject<Item> HELHEIM_PULP= ITEMS.register("helheim_pulp",
+//            ()-> new Item(new Item.Properties()));
 
     public static final RegistryObject<BlockItem> HELHEIM_PLANT_ITEMS = ITEMS.register("helheim_plant",
             () -> new BlockItem(ModBlocks.HELHEIM_PLANT.get(), new Item.Properties()));
@@ -97,6 +112,12 @@ public class ModItems {
             () -> new rider_fusion_machine_item(ModBlocks.RIDER_FUSION_MACHINE_BLOCK.get(), new Item.Properties()));
 
     public static final RegistryObject<Item> RIDERFORGINGALLOYMINERAL = block(ModBlocks.RIDERFORGINGALLOYMINERAL);
+
+    //果汁液体桶【赫尔果实】
+    public static final RegistryObject<Item> HELHEIM_JUICE_BUCKET =
+            ITEMS.register("helheim_juice_bucket",
+                    () -> new BucketItem(ModFluids.HELHEIM_JUICE_STILL_FLUID.get(),
+                            new Item.Properties().stacksTo(1)));
 
     private static RegistryObject<Item> block(RegistryObject<Block> block) {
         return ITEMS.register(block.getId().getPath(), () -> new BlockItem(block.get(), new Item.Properties()));
@@ -147,4 +168,9 @@ public class ModItems {
     //树苗
     public static final RegistryObject<BlockItem> PINE_SAPLING_ITEM = ITEMS.register(
 "pine_sapling", () -> new BlockItem(ModBlocks.PINE_SAPLING.get(), new Item.Properties()));
+
+    public static final RegistryObject<Item> HELHEIM_JELLY_BLOCK_ITEM =
+            ITEMS.register("helheim_jelly_block",
+                    () -> new BlockItem(HELHEIM_JELLY_BLOCK.get(),
+                            new Item.Properties()));
 }

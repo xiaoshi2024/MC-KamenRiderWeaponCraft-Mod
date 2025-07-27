@@ -4,43 +4,72 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.util.ITeleporter;
 
 import java.util.function.Function;
 
 public class ModTeleporter implements ITeleporter {
-    public static BlockPos thisPos = BlockPos.ZERO;
-    public static boolean insideDimension = true;
+    private final BlockPos targetPos;
+    private final boolean toHelheim;
 
-    public ModTeleporter(BlockPos pos, boolean insideDim) {
-        thisPos = pos;
-        insideDimension = insideDim;
+    public ModTeleporter(BlockPos pos, boolean toHelheim) {
+        this.targetPos = pos;
+        this.toHelheim = toHelheim;
     }
 
     @Override
     public Entity placeEntity(Entity entity, ServerLevel currentWorld, ServerLevel destinationWorld,
                               float yaw, Function<Boolean, Entity> repositionEntity) {
         entity = repositionEntity.apply(false);
-        int y = 61;
 
-        if (!insideDimension) {
-            y = thisPos.getY();
-        }
+        BlockPos destinationPos = findSafePosition(destinationWorld, targetPos);
 
-        BlockPos destinationPos = new BlockPos(thisPos.getX(), y, thisPos.getZ());
-
-        int tries = 0;
-        while ((destinationWorld.getBlockState(destinationPos).getBlock() != Blocks.AIR) &&
-                !destinationWorld.getBlockState(destinationPos).canBeReplaced(Fluids.WATER) &&
-                (destinationWorld.getBlockState(destinationPos.above()).getBlock()  != Blocks.AIR) &&
-                !destinationWorld.getBlockState(destinationPos.above()).canBeReplaced(Fluids.WATER) && (tries < 25)) {
-            destinationPos = destinationPos.above(2);
-            tries++;
-        }
-
-        entity.setPos(destinationPos.getX(), destinationPos.getY(), destinationPos.getZ());
+        entity.teleportTo(
+                destinationPos.getX() + 0.5,
+                destinationPos.getY(),
+                destinationPos.getZ() + 0.5
+        );
 
         return entity;
+    }
+
+    private BlockPos findSafePosition(ServerLevel world, BlockPos startPos) {
+        if (toHelheim) {
+            return findSafePositionFromY(world, startPos, 60);
+        }
+        return findSafePositionFromY(world, startPos, startPos.getY());
+    }
+
+    private BlockPos findSafePositionFromY(ServerLevel world, BlockPos pos, int startY) {
+        startY = Math.min(Math.max(startY, world.getMinBuildHeight() + 1), world.getMaxBuildHeight() - 2);
+
+        // 向上搜索
+        for (int y = startY; y < world.getMaxBuildHeight() - 2; y++) {
+            BlockPos checkPos = new BlockPos(pos.getX(), y, pos.getZ());
+            if (isSafePosition(world, checkPos)) {
+                return checkPos;
+            }
+        }
+
+        // 向下搜索
+        for (int y = startY; y > world.getMinBuildHeight() + 1; y--) {
+            BlockPos checkPos = new BlockPos(pos.getX(), y, pos.getZ());
+            if (isSafePosition(world, checkPos)) {
+                return checkPos;
+            }
+        }
+
+        return new BlockPos(pos.getX(), startY, pos.getZ());
+    }
+
+    private boolean isSafePosition(ServerLevel world, BlockPos pos) {
+        BlockState floor = world.getBlockState(pos.below());
+        BlockState feet = world.getBlockState(pos);
+        BlockState head = world.getBlockState(pos.above());
+
+        return !floor.isAir() &&
+                (feet.isAir() || feet.canBeReplaced()) &&
+                (head.isAir() || head.canBeReplaced());
     }
 }

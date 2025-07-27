@@ -3,10 +3,12 @@ package com.xiaoshi2022.kamen_rider_weapon_craft.registry;
 import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.custom.ModFlammableRotatedPillarBlock;
 //import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.custom.ModHangingSignBlock;
 //import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.custom.ModWallHangingSignBlock;
+import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.food.HelheimJellyBlock;
 import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.portals.*;
 import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.portals.plant.helheim_plant;
 import com.xiaoshi2022.kamen_rider_weapon_craft.world.inventory.SonicBowContainer;
 import com.xiaoshi2022.kamen_rider_weapon_craft.worldgen.tree.PineTreeGrower;
+import net.minecraft.client.resources.model.Material;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
@@ -14,6 +16,7 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -35,7 +38,7 @@ public class ModBlocks {
 
     // 注册一个方块
     public static final RegistryObject<helheim_crack> HELHEIM_CRACK_BLOCK = BLOCKS.register("helheim_crack_block",
-            () -> new helheim_crack(Block.Properties.of().strength(1.5f, 6.0f).noCollission()));
+            () -> new helheim_crack(Block.Properties.of().strength(1.5f, 6.0f).noCollission().randomTicks()));
 
     public static final RegistryObject<Time_traveler_studio_block> TIME_TRAVELER_STUDIO_BLOCK = BLOCKS.register("time_traveler_studio_block",
             () -> new Time_traveler_studio_block(Block.Properties.of().strength(1.5f, 6.0f).noCollission()));
@@ -124,4 +127,25 @@ public class ModBlocks {
             () -> new helheim_plant(BlockBehaviour.Properties.copy(Blocks.WHEAT)));
     public static final RegistryObject<Block> HELHEIM_PLANT_4 = BLOCKS.register("helheim_plant_4",
             () -> new helheim_plant(BlockBehaviour.Properties.copy(Blocks.WHEAT)));
+    //果汁液体方块
+    public static final RegistryObject<LiquidBlock> HELHEIM_JUICE_BLOCK =
+            BLOCKS.register("helheim_juice_block",
+                    () -> new LiquidBlock(
+                            ModFluids.HELHEIM_JUICE_STILL_FLUID,
+                            BlockBehaviour.Properties.of()
+                                    .noCollission()
+                                    .strength(100.0F)
+                                    .noLootTable()
+                                    .replaceable()        // ← 关键：允许被替换
+                                    .liquid())            // ← 标记为液体
+            );
+    public static final RegistryObject<Block> HELHEIM_JELLY_BLOCK =
+            BLOCKS.register("helheim_jelly_block",
+                    () -> new HelheimJellyBlock(BlockBehaviour.Properties.of()
+                            .sound(SoundType.HONEY_BLOCK)   // 蜂蜜音效
+                            .speedFactor(0.4f)              // 移动减速
+                            .jumpFactor(0.5f)               // 弹跳减弱
+                            .friction(0.8f)                 // 摩擦系数
+                            .noOcclusion()                  // 不遮挡视线
+                            .instabreak()));                // 瞬间破坏
 }

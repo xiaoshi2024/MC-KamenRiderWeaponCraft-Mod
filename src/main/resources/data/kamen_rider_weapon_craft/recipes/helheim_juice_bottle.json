@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "aX ",
+    "X  ",
+    "   "
+  ],
+  "key": {
+    "X": {
+      "item": "kamen_rider_weapon_craft:helheimfruit"
+    },
+    "a": {
+      "item": "pamhc2foodcore:juiceritem"
+    }
+  },
+  "result": {
+    "item": "kamen_rider_weapon_craft:helheim_juice_bottle",
+    "count": 1
+  }
+}

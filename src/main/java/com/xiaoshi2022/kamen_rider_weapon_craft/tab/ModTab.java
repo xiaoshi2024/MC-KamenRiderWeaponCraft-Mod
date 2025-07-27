@@ -60,7 +60,14 @@ public class ModTab {
 //                output.accept(PINE_HANGING_SIGN_ITEM.get());
 //                output.accept(PINE_WALL_HANGING_SIGN_ITEM.get());
                 output.accept(PINE_SAPLING_ITEM.get());
+                output.accept(HELHEIM_JELLY_BLOCK_ITEM.get());
                 output.accept(HELHEIMFRUIT.get());
+                output.accept(HELHEIM_JUICE_BOTTLE.get());
+                output.accept(HELHEIM_ICE_CREAM.get());
+                output.accept(HELHEIM_JELLY.get());
+                output.accept(HELHEIM_CAKE_SLICE.get());
+//                output.accept(HELHEIM_PULP.get());
+                output.accept(HELHEIM_JUICE_BUCKET.get());
 //                for (RegistryObject<Item> plantItem : HELHEIM_PLANT_ITEMS) {
 //                    output.accept(new ItemStack(plantItem.get()));
 //                }

@@ -13,7 +13,6 @@
   "block.kamen_rider_weapon_craft.rider_fusion_machine_block": "Rider Fusion Machine",
   "block.kamen_rider_weapon_craft.riderforgingalloymineral": "Rider Forging Alloy mineral",
   "block.kamen_rider_weapon_craft.helheimvine": "Helheim Vine",
-  "item.kamen_rider_weapon_craft.helheimfruit": "helheimFruit",
   "block.kamen_rider_weapon_craft.helheim_plant": "helheimPlantPink",
   "block.kamen_rider_weapon_craft.helheim_plant_4": "helheimPlantsGreen",
   "block.kamen_rider_weapon_craft.helheim_plant_2": "helheimPlantsFlowers",
@@ -104,5 +103,27 @@
   "KEY.kamen_rider_weapon_craft.kamen_rider_weapon_craft": "KamenRiderWeaponCraft Change Over",
   "KEY.kamen_rider_weapon_craft.open_lockseed_gui": "Open lockSeed box",
   "message.kamen_rider_weapon_craft.helmheim_power.revert": "Restore human form",
-  "message.kamen_rider_weapon_craft.helmheim_power.level_up": "Obtained the Helheim power at level %d!"
+  "message.kamen_rider_weapon_craft.helmheim_power.level_up": "Obtained the Helheim power at level %d!",
+
+  "travelerstitles.kamen_rider_weapon_craft.helheim": "Helheim",
+  "biome.kamen_rider_weapon_craft.helheim_biome": "Helheim Biome",
+
+  "travelerstitles.kamen_rider_weapon_craft.the_desertof_time": "The Desert of Time",
+
+  "solar_system.kamen_rider_weapon_craft.helheim_system": "helheim System",
+  "planet.kamen_rider_weapon_craft.helheim": "Planet helheim",
+  "planet.kamen_rider_weapon_craft.helheim_orbit": "Orbit helheim",
+
+  "item.kamen_rider_weapon_craft.helheimfruit": "Helheim Fruit",
+  "item.kamen_rider_weapon_craft.helheim_juice_bottle": "Helheim Juice Bottle",
+  "item.kamen_rider_weapon_craft.helheim_ice_cream": "Helheim Ice Cream",
+  "item.kamen_rider_weapon_craft.helheim_jelly": "Helheim Jelly",
+  "item.kamen_rider_weapon_craft.helheim_cake_slice": "Helheim Cake Slice",
+  "item.kamen_rider_weapon_craft.helheim_pulp": "Helheim Pulp",
+
+  "fluid.kamen_rider_weapon_craft.helheim_juice": "Helheim Juice",
+  "item.kamen_rider_weapon_craft.helheim_juice_bucket": "Helheim Juice bucket",
+
+  "block.kamen_rider_weapon_craft.helheim_juice_block": "Helheim Juices",
+  "block.kamen_rider_weapon_craft.helheim_jelly_block": "Helheim Jelly Block"
 }

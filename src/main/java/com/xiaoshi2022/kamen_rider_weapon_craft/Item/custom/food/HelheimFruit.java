@@ -38,7 +38,7 @@ public class HelheimFruit extends Item implements GeoItem {
 
     public HelheimFruit(Properties properties) {
         super(properties.food(new FoodProperties.Builder()
-                .nutrition(4) // 饱腹值
+                .nutrition(3) // 饱腹值
                 .saturationMod(0.3f) // 饱和度
                 .build()));
         SingletonGeoAnimatable.registerSyncedAnimatable(this);
