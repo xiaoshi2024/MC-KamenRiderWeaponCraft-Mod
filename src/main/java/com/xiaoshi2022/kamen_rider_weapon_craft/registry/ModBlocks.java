@@ -49,7 +49,7 @@ public class ModBlocks {
     public static final RegistryObject<Block> RIDERFORGINGALLOYMINERAL = BLOCKS.register("riderforgingalloymineral", RiderforgingalloymineralBlock::new);
 
     public static final RegistryObject<HelheimVine> HELHEIMVINE = BLOCKS.register("helheimvine",
-            () -> new HelheimVine(Block.Properties.of().noCollission().randomTicks().instabreak()));
+            () -> new HelheimVine(BlockBehaviour.Properties.copy(Blocks.VINE).noCollission().randomTicks().instabreak()));
 
     // 注册植物
     public static final RegistryObject<Block> PINE_LOG = BLOCKS.register("pine_log",

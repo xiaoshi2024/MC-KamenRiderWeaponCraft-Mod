@@ -73,11 +73,11 @@ public class ModItems {
     public static final RegistryObject<HelheimJuiceBottle> HELHEIM_JUICE_BOTTLE = ITEMS.register("helheim_juice_bottle",
             HelheimJuiceBottle::new);
     public static final RegistryObject<HelheimBowlFood> HELHEIM_ICE_CREAM = ITEMS.register("helheim_ice_cream",
-            ()-> new HelheimBowlFood(0, false));
+            ()-> new HelheimBowlFood(2, false));
     public static final RegistryObject<HelheimBowlFood> HELHEIM_JELLY= ITEMS.register("helheim_jelly",
-            ()-> new HelheimBowlFood(0, false));
+            ()-> new HelheimBowlFood(2, false));
     public static final RegistryObject<HelheimSpecialFood> HELHEIM_CAKE_SLICE = ITEMS.register("helheim_cake_slice",
-            ()-> new HelheimSpecialFood(2, false));
+            ()-> new HelheimSpecialFood(4, false));
 //    public static final RegistryObject<Item> HELHEIM_PULP= ITEMS.register("helheim_pulp",
 //            ()-> new Item(new Item.Properties()));
 

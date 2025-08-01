@@ -23,13 +23,13 @@ public class time_traveler_professionTradesEvent { // ${mod_class} 占位符：�
                     10, // 经验值
                     0.05f // 价格乘数
             ));
+            // 第 2 级交易
             event.getTrades().get(2).add(new BasicItemListing(
-                    new ItemStack(Items.DIAMOND,6), //6颗钻石换
-                    new ItemStack(ModItems.WEAPON_MAP.get(),1), //加上1本说明图鉴
-                    new ItemStack(ModItems.RIDEBOOKER.get(),1), // 出骑士卡盒剑
-            1, // 交易次数
-                    4, // 经验值
-                    0.05f // 价格乘数
+                    new ItemStack(ModItems.RIDER_FORGING_ALLOY_ORE.get(), 6), // 6 个 rider_forging_alloy_ore
+                    new ItemStack(Items.DIAMOND, 3), // 3 颗钻石
+                    9, // 交易次数
+                    14, // 经验值
+                    0.1f // 价格乘数
             ));
         }
     }

@@ -56,5 +56,10 @@
       <option name="name" value="KosmX's maven" />
       <option name="url" value="https://maven.kosmx.dev/" />
     </remote-repository>
+    <remote-repository>
+      <option name="id" value="Illusive Soulworks maven" />
+      <option name="name" value="Illusive Soulworks maven" />
+      <option name="url" value="https://maven.theillusivec4.top/" />
+    </remote-repository>
   </component>
 </project>

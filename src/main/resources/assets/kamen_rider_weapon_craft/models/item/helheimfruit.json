@@ -6,97 +6,95 @@
     64
   ],
   "display": {
-    "thirdperson_righthand": {
-      "rotation": [
-        69.71,
-        8.5,
-        -152.68
-      ],
-      "translation": [
-        0.5,
-        -0.75,
-        0
-      ],
-      "scale": [
-        0.822265625,
-        1,
-        0.7265625
-      ]
-    },
-    "thirdperson_lefthand": {
-      "rotation": [
-        83.2,
-        5.34,
-        179.9
-      ],
-      "translation": [
-        -0.75,
-        -1.5,
-        0
-      ],
-      "scale": [
-        0.8671875,
-        1,
-        0.82421875
-      ]
-    },
     "firstperson_righthand": {
-      "rotation": [
-        121.5,
-        0,
-        0
-      ],
       "translation": [
         0,
-        3,
-        1.25
+        5.25,
+        0
+      ],
+      "scale": [
+        1.3984375,
+        1.3984375,
+        1.3984375
       ]
     },
     "firstperson_lefthand": {
+      "translation": [
+        0,
+        4.75,
+        0
+      ],
+      "scale": [
+        1.4140625,
+        1.4140625,
+        1.4140625
+      ]
+    },
+    "ground": {
+      "translation": [
+        0,
+        1.5,
+        0
+      ],
+      "scale": [
+        1.123046875,
+        1.123046875,
+        1.123046875
+      ]
+    },
+    "gui": {
       "rotation": [
-        83.25,
-        -0.56,
-        -175.31
+        -3.22,
+        46.92,
+        4.39
+      ],
+      "translation": [
+        0,
+        0.75,
+        0
+      ],
+      "scale": [
+        1.974609375,
+        1.974609375,
+        1.974609375
+      ]
+    },
+    "head": {
+      "rotation": [
+        0,
+        0,
+        -44
+      ],
+      "translation": [
+        5.5,
+        5.75,
+        -7.25
+      ],
+      "scale": [
+        1.267578125,
+        1.267578125,
+        1.267578125
+      ]
+    },
+    "fixed": {
+      "rotation": [
+        0,
+        -81.5,
+        0
       ],
       "translation": [
         0,
         1.5,
         0
-      ]
-    },
-    "gui": {
-      "rotation": [
-        -180,
-        74.5,
-        -145
       ],
       "scale": [
-        1.119140625,
-        1.138671875,
-        1
-      ]
-    },
-    "head": {
-      "rotation": [
-        76.25,
-        0,
-        0
-      ],
-      "translation": [
-        0,
-        8.75,
-        -5.25
-      ]
-    },
-    "fixed": {
-      "translation": [
-        0,
-        0,
-        -1.75
+        1.947265625,
+        1.947265625,
+        1.947265625
       ]
     }
   },
   "textures": {
-    "particle": "kamen_rider_weapon_craft:item/helheimfruit"
+    "particle": "kamen_rider_weapon_craft:item/helheimvine"
   }
 }
