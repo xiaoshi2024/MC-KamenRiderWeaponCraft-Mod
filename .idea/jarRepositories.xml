@@ -61,5 +61,10 @@
       <option name="name" value="Illusive Soulworks maven" />
       <option name="url" value="https://maven.theillusivec4.top/" />
     </remote-repository>
+    <remote-repository>
+      <option name="id" value="RedlanceMinecraft" />
+      <option name="name" value="RedlanceMinecraft" />
+      <option name="url" value="https://repo.redlance.org/public" />
+    </remote-repository>
   </component>
 </project>

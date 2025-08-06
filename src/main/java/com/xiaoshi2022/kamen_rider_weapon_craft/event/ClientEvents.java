@@ -3,12 +3,14 @@ package com.xiaoshi2022.kamen_rider_weapon_craft.event;
 import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.client.RiderFusionMachine.RiderFusionMachineBlockRenderer;
 import com.xiaoshi2022.kamen_rider_weapon_craft.kamen_rider_weapon_craft;
 import com.xiaoshi2022.kamen_rider_weapon_craft.network.CloseMapPacket;
+import com.xiaoshi2022.kamen_rider_weapon_craft.network.FruitConversionPacket;
 import com.xiaoshi2022.kamen_rider_weapon_craft.particle.ModParticles;
 import com.xiaoshi2022.kamen_rider_weapon_craft.particle.custom.AonicxParticles;
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModBlockEntities;
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModBlocks;
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModEntityTypes;
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModItems;
+import com.xiaoshi2022.kamen_rider_weapon_craft.util.FruitConversionRegistry;
 import com.xiaoshi2022.kamen_rider_weapon_craft.util.KeyBinding;
 import com.xiaoshi2022.kamen_rider_weapon_craft.weapon_mapBOOK.weapon_map;
 import com.xiaoshi2022.kamen_rider_weapon_craft.util.PlayerUtils;
@@ -19,6 +21,7 @@ import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.InteractionHand;
@@ -71,57 +74,34 @@ public class ClientEvents {
 
         @SubscribeEvent
         public static void onPlayerInteract(PlayerInteractEvent.RightClickItem event) {
-            if (!(event.getEntity() instanceof Player)) return;
+            Player player = event.getEntity();
 
-            Player player = (Player) event.getEntity();
+            // 1. 检查按键状态
+            if (!KeyBinding.CHANGE_KEY.isDown()) {
+                return;
+            }
+
+            // 2. 检查Helheim能量状态
+            if (!PlayerUtils.hasCustomBuff(player, "helmheim_power")) {
+                return;
+            }
+
+            // 3. 获取并验证物品
             ItemStack heldItem = event.getItemStack();
-            InteractionHand hand = event.getHand();
-
-            // 检查玩家是否按下特定键（例如 X 键）
-            if (!KeyBinding.CHANGE_KEY.isDown()) return;
-
-            // 检查玩家是否拥有自定义buff
-            if (!PlayerUtils.hasCustomBuff(player, "helmheim_power")) return;
-
-            // 检查玩家是否持有哈密瓜
-            if (heldItem.is(ItemTags.create(new ResourceLocation("forge", "fruits/cantaloupe")))) {
-                replaceItem(player, hand, heldItem, ModItems.MELON.get());
-                event.setCancellationResult(InteractionResult.SUCCESS);
-                event.setCanceled(true);
+            if (heldItem.isEmpty() || !FruitConversionRegistry.isConvertibleFruit(heldItem)) {
+                return;
             }
 
-            // 检查玩家是否持有樱桃
-            else if (heldItem.is(ItemTags.create(new ResourceLocation("forge", "fruits/cherry")))) {
-                replaceItem(player, hand, heldItem, ModItems.CHERYY.get());
-                event.setCancellationResult(InteractionResult.SUCCESS);
-                event.setCanceled(true);
-            }
+            // 4. 发送转换请求
+            kamen_rider_weapon_craft.PACKET_HANDLER.sendToServer(
+                    new FruitConversionPacket(event.getHand())
+            );
 
-            // 继续添加更多水果的逻辑
-        }
-
-        private static void replaceItem(Player player, InteractionHand hand, ItemStack heldItem, Item newItem) {
-            // 检查玩家是否持有物品
-            if (!heldItem.isEmpty()) {
-                // 消耗手中的一个物品
-                heldItem.shrink(1);
-
-                // 如果消耗后物品数量为0，则清空手中的物品
-                if (heldItem.getCount() <= 0) {
-                    player.setItemInHand(hand, ItemStack.EMPTY);
-                }
-            }
-
-            // 创建新物品的ItemStack
-            ItemStack newItemStack = new ItemStack(newItem);
-
-            // 将新物品添加到玩家的背包中
-            if (!player.getInventory().add(newItemStack)) {
-                // 如果背包已满，将新物品丢弃到玩家周围
-                player.drop(newItemStack, false);
-            }
+            // 5. 取消事件防止其他操作
+            event.setCanceled(true);
         }
     }
+
     @Mod.EventBusSubscriber(modid = kamen_rider_weapon_craft.MOD_ID, value = Dist.CLIENT,bus = Mod.EventBusSubscriber.Bus.MOD)
     public static class ClientModBusEvents{
         @SubscribeEvent

@@ -10,6 +10,7 @@ import com.xiaoshi2022.kamen_rider_weapon_craft.procedures.PullSoundsClient;
 import com.xiaoshi2022.kamen_rider_weapon_craft.recipe.ModRecipes;
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.*;
 import com.xiaoshi2022.kamen_rider_weapon_craft.tab.ModTab;
+import com.xiaoshi2022.kamen_rider_weapon_craft.util.FruitConversionRegistry;
 import com.xiaoshi2022.kamen_rider_weapon_craft.villagers.TimeTravelerProfession;
 import com.xiaoshi2022.kamen_rider_weapon_craft.worldgen.tree.ModFoliagePlacers;
 import com.xiaoshi2022.kamen_rider_weapon_craft.worldgen.tree.ModTrunkPlacerTypes;
@@ -62,6 +63,8 @@ public class kamen_rider_weapon_craft {
         MinecraftForge.EVENT_BUS.register(LivingHurtHandler.class);
 
         MinecraftForge.EVENT_BUS.register(WitherSpawnHandler.class);
+
+        FruitConversionRegistry.init();
 
         /// 注册配方
         ModRecipes.RECIPE_TYPES.register(modEventBus);
@@ -118,6 +121,14 @@ public class kamen_rider_weapon_craft {
                 CloseMapPacket::encode,
                 CloseMapPacket::decode,
                 CloseMapPacket::handle
+        );
+        // 新增水果转换包注册
+        PACKET_HANDLER.registerMessage(
+                id++,
+                FruitConversionPacket.class,
+                FruitConversionPacket::encode,
+                FruitConversionPacket::decode,
+                FruitConversionPacket::handle
         );
         // 注册 SeverSound 数据包
 //        PACKET_HANDLER.registerMessage(

@@ -154,9 +154,14 @@ mixin {
 
 repositories {
 
+//    maven {
+//        name "zigythebirdMods"
+//        url "https://maven.zigythebird.com/mods"
+//    }
+
     maven {
-        name "zigythebirdMods"
-        url "https://maven.zigythebird.com/mods"
+        name = "RedlanceMinecraft"
+        url = "https://repo.redlance.org/public"
     }
 
     maven {

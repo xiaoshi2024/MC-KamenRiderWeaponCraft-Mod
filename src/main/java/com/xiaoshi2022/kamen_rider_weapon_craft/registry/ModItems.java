@@ -14,9 +14,12 @@ import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.display.time_traveler_stu
 import com.xiaoshi2022.kamen_rider_weapon_craft.kamen_rider_weapon_craft;
 import com.xiaoshi2022.kamen_rider_weapon_craft.weapon_mapBOOK.weapon_map;
 import com.xiaoshi2022.kamen_rider_weapon_craft.world.inventory.SonicBowContainer;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -127,9 +130,21 @@ public class ModItems {
 
     // 武器联动道具
     public static final RegistryObject<Melon> MELON = ITEMS.register("melon",
-            () -> new Melon(new Item.Properties()));
+            () -> new Melon(new Item.Properties()) {
+                @Override
+                public void onCraftedBy(ItemStack stack, Level world, Player player) {
+                    stack.getOrCreateTag().putInt("is_lockseed", 1);
+                }
+            }
+    );
     public static final RegistryObject<cheryy> CHERYY = ITEMS.register("cheryy",
-            () -> new cheryy(new Item.Properties()));
+            () -> new cheryy(new Item.Properties()) {
+                @Override
+                public void onCraftedBy(ItemStack stack, Level world, Player player) {
+                    stack.getOrCreateTag().putInt("is_lockseed", 1);
+                }
+            }
+    );
 
     public static final RegistryObject<Item> RIDER_BASIC_WEAPON = ITEMS.register("rider_basic_weapon",
             () -> new Item(new Item.Properties()));

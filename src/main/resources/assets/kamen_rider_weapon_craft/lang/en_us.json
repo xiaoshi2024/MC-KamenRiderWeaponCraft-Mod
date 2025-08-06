@@ -125,5 +125,6 @@
   "item.kamen_rider_weapon_craft.helheim_juice_bucket": "Helheim Juice bucket",
 
   "block.kamen_rider_weapon_craft.helheim_juice_block": "Helheim Juices",
-  "block.kamen_rider_weapon_craft.helheim_jelly_block": "Helheim Jelly Block"
+  "block.kamen_rider_weapon_craft.helheim_jelly_block": "Helheim Jelly Block",
+  "message.kamen_rider.need_helheim_power": "You need the power of Helheim to transform fruits!"
 }

@@ -113,6 +113,8 @@
 
   "fluid.kamen_rider_weapon_craft.helheim_juice": "赫尔海姆美~汁-汁",
   "item.kamen_rider_weapon_craft.helheim_juice_bucket": "赫尔海姆果汁桶",
-  "block.kamen_rider_weapon_craft.helheim_jelly_block": "赫尔海姆果块"
+  "block.kamen_rider_weapon_craft.helheim_jelly_block": "赫尔海姆果块",
+
+  "message.kamen_rider.need_helheim_power": "你需要赫尔海姆的力量才能转化果实！"
 
 }
