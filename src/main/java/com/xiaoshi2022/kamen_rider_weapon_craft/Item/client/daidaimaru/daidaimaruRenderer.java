@@ -9,6 +9,5 @@ import software.bernie.geckolib.renderer.layer.AutoGlowingGeoLayer;
 public class daidaimaruRenderer extends GeoItemRenderer<daidaimaru> {
     public daidaimaruRenderer() {
         super(new daidaimaruModel<>(new ResourceLocation(kamen_rider_weapon_craft.MOD_ID,"daidaimaru")));
-        addRenderLayer(new AutoGlowingGeoLayer<>(this));
     }
 }

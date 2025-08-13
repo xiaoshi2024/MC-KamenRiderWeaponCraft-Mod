@@ -11,6 +11,5 @@ import software.bernie.geckolib.renderer.layer.AutoGlowingGeoLayer;
 public class gavvwhipirRenderer  extends GeoItemRenderer<gavvwhipir> {
     public gavvwhipirRenderer() {
         super(new gavvwhipirModel<>(new ResourceLocation(kamen_rider_weapon_craft.MOD_ID,"gavvwhipir")));
-        addRenderLayer(new AutoGlowingGeoLayer<>(this));
     }
 }

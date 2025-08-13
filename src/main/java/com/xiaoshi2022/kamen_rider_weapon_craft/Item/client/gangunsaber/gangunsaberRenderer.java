@@ -9,6 +9,5 @@ import software.bernie.geckolib.renderer.layer.AutoGlowingGeoLayer;
 public class gangunsaberRenderer  extends GeoItemRenderer<gangunsaber> {
     public gangunsaberRenderer() {
         super(new gangunsaberModel<>(new ResourceLocation(kamen_rider_weapon_craft.MOD_ID,"gangunsaber")));
-        addRenderLayer(new AutoGlowingGeoLayer<>(this));
     }
 }

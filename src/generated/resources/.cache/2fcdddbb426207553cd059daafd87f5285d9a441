@@ -1,6 +1,7 @@
-// 1.20.1	2025-03-04T14:55:06.7543971	Tags for minecraft:block mod id kamen_rider_weapon_craft
+// 1.20.1	2025-08-10T13:49:47.6293393	Tags for minecraft:block mod id kamen_rider_weapon_craft
 3391b655b0a5cf1202d0f8941300183fdcfb6cf5 data/minecraft/tags/blocks/leaves.json
 2af6b9405450c5b67156abc23f597c6d7535c120 data/minecraft/tags/blocks/logs.json
 e023a66768d44b5a462e8daa083ebb9e197ebf80 data/minecraft/tags/blocks/logs_that_burn.json
 6f899b8ad8caea95006455967a77b1ff77bb83f1 data/minecraft/tags/blocks/logs_that_sustain_leaves.json
+d8bfca0cef508914aab3e67072880ecfe917386d data/minecraft/tags/blocks/mineable/axe.json
 d8bfca0cef508914aab3e67072880ecfe917386d data/minecraft/tags/blocks/planks.json

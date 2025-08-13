@@ -9,7 +9,7 @@ import software.bernie.geckolib.renderer.layer.AutoGlowingGeoLayer;
 public class musousaberdRenderer extends GeoItemRenderer<musousaberd> {
     public musousaberdRenderer() {
         super(new musousaberdModel<>(new ResourceLocation(kamen_rider_weapon_craft.MOD_ID,"musousaberd")));
-        addRenderLayer(new AutoGlowingGeoLayer<>(this));
+//        addRenderLayer(new AutoGlowingGeoLayer<>(this));
     }
 }
 

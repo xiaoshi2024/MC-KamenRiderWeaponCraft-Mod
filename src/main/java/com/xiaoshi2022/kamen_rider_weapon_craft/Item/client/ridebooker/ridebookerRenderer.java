@@ -9,7 +9,6 @@ import software.bernie.geckolib.renderer.layer.AutoGlowingGeoLayer;
 public class ridebookerRenderer extends GeoItemRenderer<ridebooker> {
     public ridebookerRenderer() {
         super(new ridebookerModel<>(new ResourceLocation(kamen_rider_weapon_craft.MOD_ID,"ridebooker")));
-        addRenderLayer(new AutoGlowingGeoLayer<>(this));
     }
 }
 

@@ -32,6 +32,7 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
         // 添加到 planks 标签
         this.tag(BlockTags.PLANKS)
                 .add(ModBlocks.PINE_PLANKS.get());
+        this.tag(BlockTags.MINEABLE_WITH_AXE).add(ModBlocks.PINE_PLANKS.get());
         // 添加自定义树干方块到 minecraft:logs 标签
         this.tag(ModTags.Blocks.LOGS)
                 .add(ModBlocks.PINE_LOG.get());

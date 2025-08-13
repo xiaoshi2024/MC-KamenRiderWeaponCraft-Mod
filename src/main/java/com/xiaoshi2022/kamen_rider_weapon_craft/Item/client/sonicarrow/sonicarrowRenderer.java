@@ -18,7 +18,6 @@ public class sonicarrowRenderer extends GeoItemRenderer<sonicarrow> {
         super(new sonicarrowModel()); // 默认模型
         this.defaultModel = new sonicarrowModel();
         this.melonModel = new sonicarrowMelonModel();
-        addRenderLayer(new AutoGlowingGeoLayer<>(this));
     }
 
     @Override

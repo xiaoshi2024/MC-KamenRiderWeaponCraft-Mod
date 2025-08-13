@@ -3,7 +3,7 @@
   "fusion_time": 400,
   "ingredients": {
     "0": {
-      "item": "mekanism:basic_control_circuit",
+      "item": "minecraft:gold_ingot",
       "count": 1
     },
     "1": {

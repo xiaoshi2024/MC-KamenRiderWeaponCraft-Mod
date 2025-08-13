@@ -46,6 +46,8 @@
   "item.kamen_rider_weapon_craft.satan_sabre": "撒旦军刀",
   "item.kamen_rider_weapon_craft.sonicarrow": "音速弓~",
   "item.kamen_rider_weapon_craft.gavvwhipir": "加布掼奶油枪",
+  "item.kamen_rider_weapon_craft.zanvat_sword": "魔皇剑",
+
   "item.kamen_rider_weapon_craft.destroy_fifty_swords": "五十破坏割裂者",
   "item.kamen_rider_weapon_craft.authorize_buster": "授权-破坏者",
   "item.kamen_rider_weapon_craft.progrise_hopper_blade": "升程蝗虫砍击者",
@@ -109,6 +111,7 @@
   "item.kamen_rider_weapon_craft.helheim_pulp": "赫尔海姆果肉",
 
   "block.kamen_rider_weapon_craft.helheim_juice_block": "赫尔海姆果汁流体",
+  "item.kamen_rider_weapon_craft.heiseisword": "平成驾驭剑",
 
 
   "fluid.kamen_rider_weapon_craft.helheim_juice": "赫尔海姆美~汁-汁",

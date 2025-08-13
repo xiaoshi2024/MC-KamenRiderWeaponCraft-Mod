@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "rider_smelt",
+  "category": "equipment",
+  "pattern": [
+    "aaa",
+    "aba",
+    "aaa"
+  ],
+  "key": {
+    "a": {
+      "item": "minecraft:iron_bars"
+    },
+    "b": {
+      "item": "kamen_rider_weapon_craft:helheimfruit"
+    }
+  },
+  "result": {
+    "item": "kamen_rider_weapon_craft:lockseed_iron_bars_item",
+    "count": 2
+  }
+}

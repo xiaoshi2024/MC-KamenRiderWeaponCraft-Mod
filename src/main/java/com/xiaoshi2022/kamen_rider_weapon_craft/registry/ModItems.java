@@ -34,6 +34,10 @@ import static net.minecraft.world.phys.shapes.Shapes.block;
 public class ModItems {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, kamen_rider_weapon_craft.MOD_ID);
 
+    public static final RegistryObject<Heiseisword> HEISEISWORD = ITEMS.register("heiseisword",
+            () -> new Heiseisword());
+    public static final RegistryObject<ZanvatSword> ZANVAT_SWORD = ITEMS.register("zanvat_sword",
+            () -> new ZanvatSword());
     public static final RegistryObject<satan_sabre> SATAN_SABRE = ITEMS.register("satan_sabre",
             () -> new satan_sabre());
     public static final RegistryObject<denkamen_sword> DENKAMEN_SWORD = ITEMS.register("denkamen_sword",

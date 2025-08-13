@@ -24,6 +24,8 @@ public class ModTab {
                 output.accept(GANGUNSABER.get());
                 output.accept(RIDEBOOKER.get());
                 output.accept(SATAN_SABRE.get());
+                output.accept(ZANVAT_SWORD.get());
+                output.accept(HEISEISWORD.get());
                 output.accept(DENKAMEN_SWORD.get());
                 output.accept(GAVVWHIPIR.get());
                 output.accept(DESTROY_FIFTY_SWORDS.get());
