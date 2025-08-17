@@ -11,10 +11,14 @@ import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModSounds;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
+import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
@@ -29,6 +33,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.*;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -58,12 +63,13 @@ public class sonicarrow extends SwordItem implements GeoItem {
     private static final RawAnimation DRAW = RawAnimation.begin().thenPlay("draw");
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
+    public static final String MODE_KEY = "Mode";
+
     public enum Mode {
         DEFAULT,
-        MELON
+        MELON,
+        LEMON
     }
-
-    private Mode currentMode = Mode.DEFAULT;
 
     public sonicarrow(float meleeDamage, float attackSpeed, Properties properties) {
         super((Tier) Tiers.GOLD, (int) meleeDamage, attackSpeed, properties);
@@ -77,18 +83,28 @@ public class sonicarrow extends SwordItem implements GeoItem {
     }
 
     public void switchMode(ItemStack stack, Mode mode) {
-        CompoundTag tag = stack.getOrCreateTag();
-        currentMode = mode;
-        tag.putString("Mode", currentMode.name());
-        stack.setTag(tag);
+        stack.getOrCreateTag().putString("Mode", mode.name());
+
+        Player player = (Player) stack.getEntityRepresentation();
+        if (player != null) player.containerMenu.broadcastChanges();
     }
 
     public Mode getCurrentMode(ItemStack stack) {
-        CompoundTag tag = stack.getOrCreateTag();
-        if (tag.contains("Mode")) {
-            return Mode.valueOf(tag.getString("Mode"));
+        String name = stack.getOrCreateTag().getString(MODE_KEY);
+        try {
+            return Mode.valueOf(name);
+        } catch (IllegalArgumentException e) {
+            return Mode.DEFAULT;
         }
-        return Mode.DEFAULT;
+    }
+
+    @Override
+    public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
+        super.inventoryTick(stack, level, entity, slotId, isSelected);
+        CompoundTag tag = stack.getOrCreateTag();
+        if (!tag.contains(MODE_KEY, Tag.TAG_STRING)) {
+            tag.putString(MODE_KEY, Mode.DEFAULT.name());
+        }
     }
 
     @Override
@@ -126,10 +142,10 @@ public class sonicarrow extends SwordItem implements GeoItem {
 
     @Override
     public boolean onLeftClickEntity(ItemStack stack, Player player, Entity entity) {
-        if (!player.level().isClientSide) {
+        if (!player.level().isClientSide && player.level() instanceof ServerLevel serverLevel) {
             if (player.getRandom().nextInt(10) == 0) {
-                triggerAnim(player, GeoItem.getOrAssignId(stack, (ServerLevel) player.level()), "bowblade", "bowblade");
-                ((ServerLevel) player.level()).playSound(null, player.blockPosition(), ModSounds.SLASH.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
+                triggerAnim(player, GeoItem.getOrAssignId(stack, serverLevel), "bowblade", "bowblade");
+                serverLevel.playSound(null, player.blockPosition(), ModSounds.SLASH.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
             }
         }
         return super.onLeftClickEntity(stack, player, entity);
@@ -170,46 +186,97 @@ public class sonicarrow extends SwordItem implements GeoItem {
         return InteractionResultHolder.consume(stack);
     }
 
+    record ModeConfig(
+            double damage,        // 单发伤害
+            float  shootSpeed,    // 激光飞行速度
+            int    burstCount,    // 连发数量
+            int    coolDown,      // 射击冷却 tick
+            ParticleOptions particle,
+            SoundEvent shootSound
+    ) {}
+
+    ModeConfig getConfig(Mode mode){
+        return switch(mode){
+            case MELON -> new ModeConfig(
+                    12.0, 1.6f, 1, 30,
+                    ModParticles.MELON_PARTICLE.get(),
+                    ModSounds.SONICARROW_SHOOT.get()
+            );
+            case LEMON -> new ModeConfig(
+                    10.0, 2.4f, 3, 10,
+                    ModParticles.LEMON_PARTICLE.get(),
+                    ModSounds.SONICARROW_SHOOT.get()
+            );
+            default -> new ModeConfig(
+                    9.0, 2.0f, 1, 20,
+                    ModParticles.AONICX_PARTICLE.get(),
+                    ModSounds.SONICARROW_SHOOT.get()
+            );
+        };
+    }
+
     @Override
     public void releaseUsing(ItemStack stack, Level level, LivingEntity shooter, int ticksRemaining) {
-        if (shooter instanceof Player player) {
-            // 发送网络包，停止播放 pull_standby 音效
-            ServerSound.sendToServer(new ServerSound(ServerSound.SoundType.STOP_STANDBY));
-            if (stack.getDamageValue() >= stack.getMaxDamage() - 1)
-                return;
+        if (!(shooter instanceof Player player) || level.isClientSide) return;
 
-            player.getCooldowns().addCooldown(this, 30);
-            if (!level.isClientSide) {
-                float yaw = player.getYRot();
-                float pitch = player.getXRot();
-                float laserVelocity = 2f;
+        ServerLevel serverLevel = (ServerLevel) level;
+        Mode mode = getCurrentMode(stack);
+        ModeConfig cfg = getConfig(mode);
 
-                double xSpeed = -Mth.sin(yaw * (float) Math.PI / 180.0F) * Mth.cos(pitch * (float) Math.PI / 180.0F) * laserVelocity;
-                double ySpeed = -Mth.sin(pitch * (float) Math.PI / 180.0F) * laserVelocity;
-                double zSpeed = Mth.cos(yaw * (float) Math.PI / 180.0F) * Mth.cos(pitch * (float) Math.PI / 180.0F) * laserVelocity;
+        // 冷却
+        player.getCooldowns().addCooldown(this, cfg.coolDown());
 
-                float chargeTime = (float) (this.getUseDuration(stack) - ticksRemaining) / 20.0F;
+        // 计算充能时间（秒）
+        float chargeTime = (getUseDuration(stack) - ticksRemaining) / 20F;
 
-                LaserBeamEntity laserBeam = new LaserBeamEntity(level, player, ModParticles.AONICX_PARTICLE.get(), chargeTime, stack);
-                laserBeam.setPos(player.getX(), player.getY() + player.getEyeHeight(), player.getZ());
-                laserBeam.setDeltaMovement(xSpeed, ySpeed, zSpeed);
-                laserBeam.damage = 9.0D;
+        // 连发
+        for (int i = 0; i < cfg.burstCount(); i++) {
+            // 微小散布
+            float yaw   = player.getYRot() + (i - cfg.burstCount() / 2F) * 2.5F;
+            float pitch = player.getXRot();
 
-                level.addFreshEntity(laserBeam);
-                ((ServerLevel) player.level()).playSound(null, player.blockPosition(), ModSounds.SONICARROW_SHOOT.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
+            // 方向向量
+            Vec3 look = Vec3.directionFromRotation(pitch, yaw).scale(cfg.shootSpeed());
 
-                stack.hurtAndBreak(1, player, e -> e.broadcastBreakEvent(player.getUsedItemHand()));
+            LaserBeamEntity laser = new LaserBeamEntity(
+                    level, player,
+                    cfg.particle(),
+                    cfg.damage(),
+                    cfg.shootSound(),
+                    chargeTime,
+                    stack
+            );
+            laser.setPos(
+                    player.getX(),
+                    player.getEyeY(),
+                    player.getZ()
+            );
+            laser.shoot(look.x, look.y, look.z);
+            level.addFreshEntity(laser);
 
-                if (stack.isEnchanted() && stack.getEnchantmentLevel(Enchantments.FLAMING_ARROWS) > 0) {
-                    laserBeam.setSecondsOnFire(5);
-                }
-                if (stack.isEnchanted() && stack.getEnchantmentLevel(Enchantments.POWER_ARROWS) > 0) {
-                    laserBeam.damage += stack.getEnchantmentLevel(Enchantments.POWER_ARROWS);
-                }
-
-                triggerAnim(shooter, GeoItem.getOrAssignId(stack, (ServerLevel) shooter.level()), "pullback", "pullback");
-            }
+            // 附魔
+            if (stack.getEnchantmentLevel(Enchantments.FLAMING_ARROWS) > 0)
+                laser.setSecondsOnFire(5);
+            if (stack.getEnchantmentLevel(Enchantments.POWER_ARROWS) > 0)
+                laser.damage += stack.getEnchantmentLevel(Enchantments.POWER_ARROWS);
         }
+
+        // 音效（只播一次）
+        serverLevel.playSound(
+                null,
+                player.blockPosition(),
+                cfg.shootSound(),
+                SoundSource.PLAYERS,
+                1F,
+                1F
+        );
+
+        // 耐久
+        stack.hurtAndBreak(cfg.burstCount(), player,
+                e -> e.broadcastBreakEvent(player.getUsedItemHand()));
+
+        // 动画
+        triggerAnim(player, GeoItem.getOrAssignId(stack, serverLevel), "pullback", "pullback");
     }
 
     @Override

@@ -11,4 +11,6 @@ public class ModParticles {
     public static final DeferredRegister<ParticleType<?>> REGISTRY = DeferredRegister.create(ForgeRegistries.PARTICLE_TYPES, kamen_rider_weapon_craft.MOD_ID);
 
     public static final RegistryObject<SimpleParticleType> AONICX_PARTICLE = REGISTRY.register("aonicx_particle", () -> new SimpleParticleType(true));
+    public static final RegistryObject<SimpleParticleType> LEMON_PARTICLE = REGISTRY.register("lemon_particle", () -> new SimpleParticleType(true));
+    public static final RegistryObject<SimpleParticleType> MELON_PARTICLE = REGISTRY.register("melon_particle", () -> new SimpleParticleType(true));
 }

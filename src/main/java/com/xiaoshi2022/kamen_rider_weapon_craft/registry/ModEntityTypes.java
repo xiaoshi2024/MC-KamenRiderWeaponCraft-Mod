@@ -23,8 +23,8 @@ public class ModEntityTypes {
                     .build("thrown_daidaimaru"));
 
     public static final RegistryObject<EntityType<LaserBeamEntity>> LASER_BEAM =
-            ENTITIES.register("laser_beam", () ->
-                    EntityType.Builder.<LaserBeamEntity>of(LaserBeamEntity::new, MobCategory.MISC)
+            ENTITIES.register("laser_beam",
+                    () -> EntityType.Builder.<LaserBeamEntity>of(LaserBeamEntity::new, MobCategory.MISC)
                             .sized(0.2F, 0.2F)
                             .clientTrackingRange(64)
                             .updateInterval(1)

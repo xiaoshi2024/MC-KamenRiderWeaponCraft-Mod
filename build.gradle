@@ -193,7 +193,8 @@ dependencies {
     implementation fg.deobf("curse.maven:crafted-core-923377:6187026")
     implementation fg.deobf("curse.maven:woodwalkers-868922:6278864")
 
-    implementation fg.deobf("curse.maven:kamenriderbossyouandme-1214394:6270437")
+    implementation fg.deobf("curse.maven:curios-309927:6418456")
+    implementation fg.deobf("curse.maven:kamenriderbossyouandme-1214394:6874277")
     implementation fg.deobf("dev.kosmx.player-anim:player-animation-lib-forge:1.0.2-rc1+1.20")
 
     compileOnly "mekanism:Mekanism:${mekanism_version}:api"

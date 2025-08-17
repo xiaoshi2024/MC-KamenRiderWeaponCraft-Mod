@@ -61,11 +61,19 @@ public class SonicBowGuiScreen extends AbstractContainerScreen<SonicBowContainer
                     offhandStack.setTag(tag);
 
                     // 检查左手武器的存储槽位数据是否为空
+                    // 进度条完成后
                     if (this.menu.internal.getStackInSlot(0).isEmpty()) {
-                        // 切换武器模式
                         sonicarrow weapon = (sonicarrow) offhandStack.getItem();
-                        weapon.switchMode(offhandStack, sonicarrow.Mode.MELON);
-                        entity.displayClientMessage(Component.literal("Switched to Melon Mode"), true);
+
+                        // 根据 lastInput 决定切换哪个模式
+                        ItemStack input = this.menu.lastInput;
+                        if (input.getItem() == com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems.LEMON_ENERGY.get()) {
+                            weapon.switchMode(offhandStack, sonicarrow.Mode.LEMON);
+                            entity.displayClientMessage(Component.literal("Switched to Lemon Mode"), true);
+                        } else {
+                            weapon.switchMode(offhandStack, sonicarrow.Mode.MELON);
+                            entity.displayClientMessage(Component.literal("Switched to Melon Mode"), true);
+                        }
                     }
                 }
             }
@@ -135,31 +143,34 @@ public class SonicBowGuiScreen extends AbstractContainerScreen<SonicBowContainer
     @Override
     public void init() {
         super.init();
-        buttonIncreaseEnergy = Button.builder(Component.translatable("gui.cs.ssonic.button_increase_juice"), e -> {
-            // 清除输入槽位的物品
-            ItemStack inputStack = this.menu.internal.getStackInSlot(0);
-            if (!inputStack.isEmpty()) {
-                this.menu.internal.setStackInSlot(0, ItemStack.EMPTY);
+        buttonIncreaseEnergy = Button.builder(
+                Component.translatable("gui.cs.ssonic.button_increase_juice"),
+                e -> {
+                    ItemStack input = menu.internal.getStackInSlot(0);
+                    if (!input.isEmpty()) {
+                        // 1. 真正消耗锁种
+                        menu.internal.setStackInSlot(0, ItemStack.EMPTY);
 
-                // 清除左手武器的存储槽位数据
-                ItemStack offhandStack = entity.getOffhandItem();
-                if (offhandStack.getItem() == ModItems.SONICARROW.get()) {
-                    CompoundTag tag = offhandStack.getOrCreateTag();
-                    tag.put("Inventory", new CompoundTag()); // 清除存储槽位数据
-                    offhandStack.setTag(tag);
+                        // 2. 立即决定模式
+                        sonicarrow.Mode newMode = input.getItem() == com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems.LEMON_ENERGY.get()
+                                ? sonicarrow.Mode.LEMON
+                                : sonicarrow.Mode.MELON;
 
-                    // 更新左手物品的存储槽位数据为清空
-                    this.menu.internal.deserializeNBT(new CompoundTag());
+                        // 3. 立即把模式写进左手弓并同步
+                        ItemStack bow = minecraft.player.getOffhandItem();
+                        ((sonicarrow) bow.getItem()).switchMode(bow, newMode);
 
-                    // 开始进度条动画
-                    isProgressing = true;
-                    progressTicks = 0;
+                        // 4. 把空槽位同步到 NBT，防止无限刷
+                        CompoundTag tag = bow.getOrCreateTag();
+                        tag.put("Inventory", menu.internal.serializeNBT());
+                        bow.setTag(tag);
 
-                    // 播放音效
-                    entity.playSound(ModSounds.LOCK_ON.get(), 1.0F, 1.0F);
+                        // 5. 音效 + 关闭
+                        minecraft.player.playSound(ModSounds.LOCK_ON.get(), 1.0F, 1.0F);
+                        minecraft.player.closeContainer();
+                    }
                 }
-            }
-        }).bounds(this.leftPos + 79, this.topPos + 55, 72, 20).build();
+        ).bounds(leftPos + 79, topPos + 55, 72, 20).build();
         guistate.put("button:button_increase_juice", buttonIncreaseEnergy);
         this.addRenderableWidget(buttonIncreaseEnergy);
     }

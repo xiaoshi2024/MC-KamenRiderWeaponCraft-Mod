@@ -42,11 +42,26 @@ public class HinawaDaidai_DJ_Ju extends Item implements GeoItem {
     }
 
     private void shoot(Level level, Player player) {
-        if (!level.isClientSide) {
-            LaserBeamEntity laser = new LaserBeamEntity(level, player);
-            laser.shoot(player.getXRot(), player.getYRot(), 0.0F, SHOOT_POWER, INACCURACY);
-            level.addFreshEntity(laser);
-        }
+        if (level.isClientSide) return;
+
+        ItemStack bow = player.getMainHandItem();
+        if (!(bow.getItem() instanceof sonicarrow sa)) return;
+
+        sonicarrow.Mode mode = sa.getCurrentMode(bow);
+        sonicarrow.ModeConfig cfg = sa.getConfig(mode);
+
+        float charge = 0.0F;               // 如果需要蓄力可改为实际值
+        LaserBeamEntity laser = new LaserBeamEntity(
+                level,
+                player,
+                cfg.particle(),            // 对应形态粒子
+                cfg.damage(),              // 对应形态伤害
+                cfg.shootSound(),          // 对应形态音效
+                charge,
+                bow
+        );
+        laser.shoot(player.getXRot(), player.getYRot(), 0.0F, 1.5F, 0.0F);
+        level.addFreshEntity(laser);
     }
 
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);

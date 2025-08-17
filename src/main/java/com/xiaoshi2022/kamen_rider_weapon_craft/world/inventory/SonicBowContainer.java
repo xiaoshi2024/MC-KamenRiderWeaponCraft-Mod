@@ -1,5 +1,6 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.world.inventory;
 
+import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.sonicarrow;
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModContainers;
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModItems;
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModSounds;
@@ -26,6 +27,10 @@ public class SonicBowContainer extends AbstractContainerMenu implements Supplier
     public ItemStackHandler internal;
     private final Map<Integer, Slot> customSlots = new HashMap<>();
 
+    // 1) 新增：记录最后一次成功放入的物品
+    public ItemStack lastInput = ItemStack.EMPTY;
+
+
     public SonicBowContainer(int id, Inventory inv, FriendlyByteBuf extraData) {
         super(ModContainers.SSONIC.get(), id);
         this.entity = inv.player;
@@ -44,15 +49,17 @@ public class SonicBowContainer extends AbstractContainerMenu implements Supplier
 
         // 添加输入槽位
         this.customSlots.put(0, this.addSlot(new SlotItemHandler(internal, 0, 30, 28) {
-            @Override
-            public int getMaxStackSize() {
-                return 1; // 设置为64使其兼容堆叠物品
+            @Override public int getMaxStackSize() { return 1; }
+
+            @Override public boolean mayPlace(ItemStack stack) {
+                return stack.getItem() == ModItems.MELON.get()
+                        || stack.getItem() == com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems.LEMON_ENERGY.get();
             }
 
-            @Override
-            public boolean mayPlace(ItemStack stack) {
-                //只能放入melon
-                return stack.getItem() == ModItems.MELON.get();
+            @Override public void set(ItemStack stack) {
+                super.set(stack);
+                // 真正放进槽位时记录
+                if (!stack.isEmpty()) lastInput = stack.copy();
             }
 
             @Override
@@ -108,7 +115,29 @@ public class SonicBowContainer extends AbstractContainerMenu implements Supplier
     @Override
     public void removed(Player player) {
         super.removed(player);
-        syncInventoryToNBT();
+        ItemStack bow = player.getOffhandItem();
+        if (bow.getItem() != ModItems.SONICARROW.get()) return;
+
+        // 同步槽位数据（无论有没有物品）
+        bow.getOrCreateTag().put("Inventory", internal.serializeNBT());
+
+        // 槽位空 → 回到默认
+        if (internal.getStackInSlot(0).isEmpty()) {
+            ((sonicarrow) bow.getItem()).switchMode(bow, sonicarrow.Mode.DEFAULT);
+        } else {
+            // 槽位里还有锁种 → 根据锁种类型切形态
+            sonicarrow.Mode newMode =
+                    lastInput.getItem() == com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems.LEMON_ENERGY.get()
+                            ? sonicarrow.Mode.LEMON
+                            : sonicarrow.Mode.MELON;
+            ((sonicarrow) bow.getItem()).switchMode(bow, newMode);
+        }
+    }
+
+    private sonicarrow.Mode decideMode() {
+        if (lastInput.getItem() == com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems.LEMON_ENERGY.get()) return sonicarrow.Mode.LEMON;
+        if (lastInput.getItem() == ModItems.MELON.get()) return sonicarrow.Mode.MELON;
+        return sonicarrow.Mode.DEFAULT;
     }
 
     // 同步槽位物品到 NBT 数据

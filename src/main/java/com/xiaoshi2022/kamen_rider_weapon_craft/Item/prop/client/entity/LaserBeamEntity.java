@@ -2,6 +2,7 @@ package com.xiaoshi2022.kamen_rider_weapon_craft.Item.prop.client.entity;
 
 import com.xiaoshi2022.kamen_rider_weapon_craft.particle.ModParticles;
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModEntityTypes;
+import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
@@ -12,6 +13,7 @@ import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -47,41 +49,59 @@ public class LaserBeamEntity extends Projectile {
     private float chargeTime; // 蓄力时间
     private final ItemStack weaponStack;
 
-    public LaserBeamEntity(EntityType<? extends LaserBeamEntity> entityType, Level level, ItemStack weaponStack) {
-        super(entityType, level);
-        if (weaponStack == null) {
-            throw new IllegalArgumentException("Weapon stack cannot be null");
-        }
-        this.weaponStack = weaponStack;
-        this.damage = 9.0D;
-        this.chargeTime = 0.0F;
-        // 调整碰撞箱大小
-        this.setBoundingBox(new AABB(-1.0, -1.0, -1.0, 1.5, 1.5, 1.5)); // 增大碰撞箱
+    private final SoundEvent shootSound;
+
+    ParticleOptions particleType = this.entityData.get(DATA_PARTICLE_TYPE);
+
+    /* 1. Forge 反射专用（必须 public + 无额外参数） */
+    public LaserBeamEntity(EntityType<? extends LaserBeamEntity> type, Level level) {
+        super(type, level);
+        this.entityData.set(DATA_PARTICLE_TYPE, ParticleTypes.FLAME);
+        this.weaponStack = ItemStack.EMPTY;
+        this.damage      = 9.0D;
+        this.shootSound  = ModSounds.SONICARROW_SHOOT.get();
     }
 
-    public LaserBeamEntity(Level level, LivingEntity shooter, ParticleOptions particleType, float chargeTime, ItemStack weaponStack) {
+    /* 2. 旧代码兼容（4 参数） */
+    public LaserBeamEntity(Level level,
+                           LivingEntity shooter,
+                           SimpleParticleType particleType,
+                           float chargeTime,
+                           ItemStack weaponStack) {
+        this(level, shooter,
+                particleType,
+                9.0D,
+                ModSounds.SONICARROW_SHOOT.get(),
+                chargeTime,
+                weaponStack);
+    }
+
+    /* 3. 新模式专用（7 参数） */
+    public LaserBeamEntity(Level level,
+                           LivingEntity shooter,
+                           ParticleOptions particleType,
+                           double damage,
+                           SoundEvent shootSound,
+                           float chargeTime,
+                           ItemStack weaponStack) {
         super(ModEntityTypes.LASER_BEAM.get(), level);
-        if (weaponStack == null) {
-            throw new IllegalArgumentException("Weapon stack cannot be null");
-        }
-        this.weaponStack = weaponStack;
-        this.damage = 9.0D;
-        this.chargeTime = chargeTime;
-        this.entityData.set(DATA_PARTICLE_TYPE, particleType);
-        this.setPos(shooter.getX(), shooter.getY() + shooter.getEyeHeight(), shooter.getZ());
-        this.setOwner(shooter); // 确保设置 owner 属性
-        // 调整碰撞箱大小
-        this.setBoundingBox(new AABB(-1.0, -1.0, -1.0, 1.5, 1.5, 1.5)); // 增大碰撞箱
-        this.adjustDamageBasedOnCharge();
-        this.setCriticalChance(chargeTime);
-    }
-    public LaserBeamEntity(EntityType<? extends LaserBeamEntity> entityType, Level level) {
-        super(entityType, level);
-        this.weaponStack = ItemStack.EMPTY; // 默认值，确保不会为 null
-    }
 
-    public LaserBeamEntity(Level level, Player player) {
-        this(ModEntityTypes.LASER_BEAM.get(), level, player.getMainHandItem()); // 使用主手物品作为武器堆栈
+        this.entityData.set(DATA_PARTICLE_TYPE, particleType);
+
+        this.weaponStack = weaponStack;
+        this.damage      = damage;
+        this.shootSound  = shootSound;
+        this.chargeTime  = chargeTime;
+
+
+        setPos(shooter.getX(), shooter.getY() + shooter.getEyeHeight(), shooter.getZ());
+        setOwner(shooter);
+
+        adjustDamageBasedOnCharge();
+        setCriticalChance(chargeTime);
+        this.setBoundingBox(new AABB(
+                this.getX() - 1.0, this.getY() - 1.0, this.getZ() - 1.0,
+                this.getX() + 1.0, this.getY() + 1.0, this.getZ() + 1.0));
     }
 
     private void adjustDamageBasedOnCharge() {
@@ -260,8 +280,13 @@ public class LaserBeamEntity extends Projectile {
         return super.canHitEntity(entity) && entity != this.getOwner();
     }
 
-    @Override
-    protected void onHit(HitResult result) {
-        super.onHit(result); // 确保调用父类方法
+    public void shoot(double xSpeed, double ySpeed, double zSpeed) {
+        this.setDeltaMovement(xSpeed, ySpeed, zSpeed);
+
+        double xz = Math.sqrt(xSpeed * xSpeed + zSpeed * zSpeed);
+        this.setYRot((float) (Mth.atan2(xSpeed, zSpeed) * 180.0F / Math.PI));
+        this.setXRot((float) (Mth.atan2(ySpeed, xz) * 180.0F / Math.PI));
+        this.yRotO = this.getYRot();
+        this.xRotO = this.getXRot();
     }
 }
