@@ -26,6 +26,7 @@ public class ModTab {
                 output.accept(SATAN_SABRE.get());
                 output.accept(ZANVAT_SWORD.get());
                 output.accept(HEISEISWORD.get());
+                output.accept(BANA_SPEAR.get());
                 output.accept(DENKAMEN_SWORD.get());
                 output.accept(GAVVWHIPIR.get());
                 output.accept(DESTROY_FIFTY_SWORDS.get());

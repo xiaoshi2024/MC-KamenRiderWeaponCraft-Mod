@@ -126,6 +126,12 @@
 
   "item.sonicarrow.mode.lemon": "柠檬模式",
 
+  "item.kamen_rider_weapon_craft.bana_spear": "Bana Spear",
+
+  "item.kamen_rider_weapon_craft.sonicarrow.mode.default": "lockMode：null",
+  "item.kamen_rider_weapon_craft.sonicarrow.mode.melon":   "lockMode：melon",
+  "item.kamen_rider_weapon_craft.sonicarrow.mode.lemon":   "lockMode：lemon",
+
 
   "fluid.kamen_rider_weapon_craft.helheim_juice": "Helheim Juice",
   "item.kamen_rider_weapon_craft.helheim_juice_bucket": "Helheim Juice bucket",

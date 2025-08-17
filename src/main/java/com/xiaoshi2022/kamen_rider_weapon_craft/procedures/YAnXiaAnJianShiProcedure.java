@@ -2,6 +2,7 @@ package com.xiaoshi2022.kamen_rider_weapon_craft.procedures;
 
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModItems;
 import com.xiaoshi2022.kamen_rider_weapon_craft.world.inventory.SonicBowContainer;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.network.NetworkHooks;
 
 import net.minecraft.world.level.LevelAccessor;
@@ -20,44 +21,34 @@ import net.minecraft.core.BlockPos;
 import io.netty.buffer.Unpooled;
 
 public class YAnXiaAnJianShiProcedure {
-    private static final int COOLDOWN_INTERVAL = 12 * 20; // 设置冷却时间为12秒
+    private static final int COOLDOWN_TICKS = 2 * 20; // 2 秒
 
     public static void execute(LevelAccessor world, double x, double y, double z, Entity entity) {
-        if (entity == null)
+        if (!(entity instanceof ServerPlayer player)) return;
+
+        long last = player.getPersistentData().getLong("sonicGuiCooldown");
+        long now = world instanceof ServerLevel sl ? sl.getGameTime()
+                : world.dayTime();
+
+        if (now - last < COOLDOWN_TICKS) {
+            int remain = (int) Math.ceil((COOLDOWN_TICKS - (now - last)) / 20.0);
+            player.displayClientMessage(Component.literal("冷却中，还需 " + remain + " 秒"), true);
             return;
+        }
 
-        // 获取玩家最后一次打开 GUI 的时间
-        long lastOpened = entity.getPersistentData().getLong("lastOpenedGui");
-
-        // 获取当前时间
-        long currentTime = world.dayTime();
-
-        // 检查是否已经过了冷却时间
-        if (currentTime - lastOpened >= COOLDOWN_INTERVAL) {
-            if ((entity instanceof LivingEntity _livEnt ? _livEnt.getOffhandItem() : ItemStack.EMPTY).getItem() == ModItems.SONICARROW.get()) {
-                if (entity instanceof ServerPlayer _ent) {
-                    BlockPos _bpos = BlockPos.containing(x, y, z);
-                    NetworkHooks.openScreen((ServerPlayer) _ent, new MenuProvider() {
-                        @Override
-                        public Component getDisplayName() {
+        if (player.getOffhandItem().is(ModItems.SONICARROW.get())) {
+            BlockPos pos = BlockPos.containing(x, y, z);
+            NetworkHooks.openScreen(player,
+                    new MenuProvider() {
+                        @Override public Component getDisplayName() {
                             return Component.literal("ssonic");
                         }
-
-                        @Override
-                        public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
-                            return new SonicBowContainer(id, inventory, new FriendlyByteBuf(Unpooled.buffer()).writeBlockPos(_bpos));
+                        @Override public AbstractContainerMenu createMenu(int id, Inventory inv, Player p) {
+                            return new SonicBowContainer(id, inv,
+                                    new FriendlyByteBuf(Unpooled.buffer()).writeBlockPos(pos));
                         }
-                    }, _bpos);
-
-                    // 更新玩家最后一次打开 GUI 的时间
-                    entity.getPersistentData().putLong("lastOpenedGui", currentTime);
-                }
-            }
-        } else {
-            // 如果未达到冷却时间，可以在这里添加一些提示信息
-            if (entity instanceof Player player) {
-                player.displayClientMessage(Component.literal("冷却时间未结束，还需等待 " + (COOLDOWN_INTERVAL - (currentTime - lastOpened)) / 20 + " 秒"), true);
-            }
+                    }, pos);
+            player.getPersistentData().putLong("sonicGuiCooldown", now);
         }
     }
 }

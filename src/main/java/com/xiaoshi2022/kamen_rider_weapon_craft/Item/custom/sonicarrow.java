@@ -2,6 +2,7 @@ package com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.client.sonicarrow.sonicarrowRenderer;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.prop.client.entity.LaserBeamEntity;
 import com.xiaoshi2022.kamen_rider_weapon_craft.network.ServerSound;
@@ -125,18 +126,29 @@ public class sonicarrow extends SwordItem implements GeoItem {
     @Override
     public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack) {
         Multimap<Attribute, AttributeModifier> multimap = HashMultimap.create();
-
         if (slot == EquipmentSlot.MAINHAND) {
-            multimap.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", this.meleeDamage, AttributeModifier.Operation.ADDITION));
-            multimap.put(Attributes.ATTACK_SPEED, new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", this.attackSpeed, AttributeModifier.Operation.ADDITION));
-        }
+            Mode mode = getCurrentMode(stack);
+            ModeConfigMelee cfg = getMeleeConfig(mode);
 
+            // 基础值 + 锁种修正
+            multimap.put(Attributes.ATTACK_DAMAGE,
+                    new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier",
+                            this.meleeDamage + cfg.damageBonus(), AttributeModifier.Operation.ADDITION));
+            multimap.put(Attributes.ATTACK_SPEED,
+                    new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier",
+                            this.attackSpeed + cfg.attackSpeedBonus(), AttributeModifier.Operation.ADDITION));
+        }
         return multimap;
     }
 
     @Override
     public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
         stack.hurtAndBreak(1, attacker, e -> e.broadcastBreakEvent(attacker.getUsedItemHand()));
+
+        if (!target.level().isClientSide && attacker instanceof Player) {
+            ModeConfigMelee cfg = getMeleeConfig(getCurrentMode(stack));
+            cfg.onHitEffect().accept(target);
+        }
         return true;
     }
 
@@ -212,6 +224,30 @@ public class sonicarrow extends SwordItem implements GeoItem {
                     ModParticles.AONICX_PARTICLE.get(),
                     ModSounds.SONICARROW_SHOOT.get()
             );
+        };
+    }
+
+    record ModeConfigMelee(
+            double damageBonus,         // 额外攻击伤害
+            float  attackSpeedBonus,    // 额外攻速
+            Consumer<LivingEntity> onHitEffect // 命中特效
+    ) {}
+
+    private ModeConfigMelee getMeleeConfig(Mode mode){
+        return switch(mode){
+            case MELON  -> new ModeConfigMelee(
+                    8.0, 0.0F,        // +2❤️
+                    target -> {       // 小范围击飞
+                        target.knockback(1.2F,
+                                target.getX() - target.level().getRandom().nextDouble(),
+                                target.getZ() - target.level().getRandom().nextDouble());
+                    });
+            case LEMON  -> new ModeConfigMelee(
+                    6.0, 1.0f,       // +1❤️ +1攻速
+                    target -> {       // 连斩：额外一次1点真实伤害
+                        target.hurt(target.level().damageSources().playerAttack((Player)target), 1.0F);
+                    });
+            default     -> new ModeConfigMelee(0, 0, t -> {});
         };
     }
 
@@ -295,11 +331,12 @@ public class sonicarrow extends SwordItem implements GeoItem {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
-        tooltip.add(Component.translatable("item.sonicarrow.ammo",
-                        stack.getMaxDamage() - stack.getDamageValue() - 1,
-                        stack.getMaxDamage() - 1)
-                .withStyle(ChatFormatting.ITALIC));
+    public void appendHoverText(ItemStack stack, Level worldIn,
+                                List<Component> tooltip, TooltipFlag flagIn) {
+        Mode mode = getCurrentMode(stack);
+        // 使用语言键，客户端会自动去 lang 文件找
+        tooltip.add(Component.translatable("item.kamen_rider_weapon_craft.sonicarrow.mode." + mode.name().toLowerCase())
+                .withStyle(ChatFormatting.YELLOW));
     }
 
     @Override

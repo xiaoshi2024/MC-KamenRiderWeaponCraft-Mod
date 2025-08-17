@@ -112,7 +112,12 @@
 
   "block.kamen_rider_weapon_craft.helheim_juice_block": "赫尔海姆果汁流体",
   "item.kamen_rider_weapon_craft.heiseisword": "平成驾驭剑",
+  "item.kamen_rider_weapon_craft.bana_spear": "香蕉矛枪",
   "item.sonicarrow.mode.lemon": "柠檬模式",
+
+  "item.kamen_rider_weapon_craft.sonicarrow.mode.default": "锁种模式：无",
+  "item.kamen_rider_weapon_craft.sonicarrow.mode.melon":   "锁种模式：蜜瓜",
+  "item.kamen_rider_weapon_craft.sonicarrow.mode.lemon":   "锁种模式：柠檬",
 
 
   "fluid.kamen_rider_weapon_craft.helheim_juice": "赫尔海姆美~汁-汁",

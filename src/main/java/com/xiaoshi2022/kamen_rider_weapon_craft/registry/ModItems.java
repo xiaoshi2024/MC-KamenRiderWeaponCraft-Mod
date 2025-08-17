@@ -36,6 +36,8 @@ public class ModItems {
 
     public static final RegistryObject<Heiseisword> HEISEISWORD = ITEMS.register("heiseisword",
             () -> new Heiseisword());
+    public static final RegistryObject<BanaSpear> BANA_SPEAR = ITEMS.register("bana_spear",
+            () -> new BanaSpear());
     public static final RegistryObject<ZanvatSword> ZANVAT_SWORD = ITEMS.register("zanvat_sword",
             () -> new ZanvatSword());
     public static final RegistryObject<satan_sabre> SATAN_SABRE = ITEMS.register("satan_sabre",
