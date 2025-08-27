@@ -24,11 +24,8 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
-import java.util.ArrayList;
-import java.util.List;
 
 import static com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModBlocks.HELHEIM_JELLY_BLOCK;
-import static net.minecraft.world.phys.shapes.Shapes.block;
 
 public class ModItems {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, kamen_rider_weapon_craft.MOD_ID);

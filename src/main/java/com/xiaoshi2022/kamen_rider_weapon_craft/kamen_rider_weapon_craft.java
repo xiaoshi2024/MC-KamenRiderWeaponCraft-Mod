@@ -1,6 +1,7 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft;
 
 import com.xiaoshi2022.kamen_rider_weapon_craft.event.LivingHurtHandler;
+import com.xiaoshi2022.kamen_rider_weapon_craft.event.LockSeedMerchantTradesEvent;
 import com.xiaoshi2022.kamen_rider_weapon_craft.event.WitherSpawnHandler;
 import com.xiaoshi2022.kamen_rider_weapon_craft.procedures.KRWBoot;
 import com.xiaoshi2022.kamen_rider_weapon_craft.network.*;
@@ -100,8 +101,8 @@ public class kamen_rider_weapon_craft {
         MixinEnvironment.getDefaultEnvironment().setSide(MixinEnvironment.Side.CLIENT);
         MixinEnvironment.getEnvironment(MixinEnvironment.Phase.DEFAULT);
 
-
-
+// 在FMLCommonSetupEvent中扫描锁种物品
+        modEventBus.addListener(this::commonSetup);
         // 注册网络包
         registerNetworkMessages();
 
