@@ -113,7 +113,7 @@ public class HinawaDaidai_DJ_Ju extends Item implements GeoItem {
                 ServerSound.sendToServer(new ServerSound(ServerSound.SoundType.START_STANDBY));
             }
         }
-        return InteractionResultHolder.consume(stack);
+        return InteractionResultHolder.success(stack);
     }
 
     @Override

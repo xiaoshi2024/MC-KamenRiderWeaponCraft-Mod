@@ -19,11 +19,13 @@ import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
+import top.theillusivec4.curios.api.SlotContext;
+import top.theillusivec4.curios.api.type.capability.ICurioItem;
 
 import java.util.function.Consumer;
 
-public class musousaberd extends SwordItem implements GeoItem {
-    private static final RawAnimation SWEEP = RawAnimation.begin().thenPlay("sweep");
+public class musousaberd extends SwordItem implements GeoItem, ICurioItem {
+    private static final RawAnimation  CHARGE = RawAnimation.begin().thenPlay(" charge");
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
     public musousaberd(Tier p_43269_, int p_43270_, float p_43271_, Properties p_43272_) {
@@ -50,11 +52,16 @@ public class musousaberd extends SwordItem implements GeoItem {
         });
     }
 
+    @Override
+    public boolean canEquip(SlotContext slotContext, ItemStack stack) {
+        return true;
+    }
+
     // Let's add our animation controller
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, "sweep", 20, state -> PlayState.STOP)
-                .triggerableAnim("sweep", SWEEP)
+        controllers.add(new AnimationController<>(this, " charge", 20, state -> PlayState.STOP)
+                .triggerableAnim(" charge",  CHARGE)
                 // We've marked the "box_open" animation as being triggerable from the server
                 .setSoundKeyframeHandler(state -> {
                 }));
@@ -64,7 +71,7 @@ public class musousaberd extends SwordItem implements GeoItem {
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         if (level instanceof ServerLevel serverLevel)
-            triggerAnim(player, GeoItem.getOrAssignId(player.getItemInHand(hand), serverLevel), "sweep", "sweep");
+            triggerAnim(player, GeoItem.getOrAssignId(player.getItemInHand(hand), serverLevel), " charge", " charge");
 
         return super.use(level, player, hand);
     }

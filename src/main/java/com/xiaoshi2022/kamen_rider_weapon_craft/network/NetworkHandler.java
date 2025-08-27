@@ -59,5 +59,12 @@ public class NetworkHandler {
                 SyncGuiOpenStatePacket::decode,
                 SyncGuiOpenStatePacket::handle
         );
+        INSTANCE.registerMessage(
+                packetId++,
+                DrawMusouSaberPacket.class,
+                DrawMusouSaberPacket::encode,
+                DrawMusouSaberPacket::decode,
+                DrawMusouSaberPacket::handle
+        );
     }
 }

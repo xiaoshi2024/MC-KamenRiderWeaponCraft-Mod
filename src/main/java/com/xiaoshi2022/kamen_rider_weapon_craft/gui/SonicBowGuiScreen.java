@@ -70,6 +70,12 @@ public class SonicBowGuiScreen extends AbstractContainerScreen<SonicBowContainer
                         if (input.getItem() == com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems.LEMON_ENERGY.get()) {
                             weapon.switchMode(offhandStack, sonicarrow.Mode.LEMON);
                             entity.displayClientMessage(Component.literal("Switched to Lemon Mode"), true);
+                        } else if (input.getItem() == ModItems.CHERYY.get()) {
+                            weapon.switchMode(offhandStack, sonicarrow.Mode.CHERRY);
+                            entity.displayClientMessage(Component.literal("Switched to Cherry Mode"), true);
+                        } else if (input.getItem() == com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems.PEACH_ENERGY.get()) {
+                            weapon.switchMode(offhandStack, sonicarrow.Mode.PEACH);
+                            entity.displayClientMessage(Component.literal("Switched to Peach Mode"), true);
                         } else {
                             weapon.switchMode(offhandStack, sonicarrow.Mode.MELON);
                             entity.displayClientMessage(Component.literal("Switched to Melon Mode"), true);
@@ -152,9 +158,16 @@ public class SonicBowGuiScreen extends AbstractContainerScreen<SonicBowContainer
                         menu.internal.setStackInSlot(0, ItemStack.EMPTY);
 
                         // 2. 立即决定模式
-                        sonicarrow.Mode newMode = input.getItem() == com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems.LEMON_ENERGY.get()
-                                ? sonicarrow.Mode.LEMON
-                                : sonicarrow.Mode.MELON;
+                        sonicarrow.Mode newMode;
+                        if (input.getItem() == com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems.LEMON_ENERGY.get()) {
+                            newMode = sonicarrow.Mode.LEMON;
+                        } else if (input.getItem() == ModItems.CHERYY.get()) {
+                            newMode = sonicarrow.Mode.CHERRY;
+                        } else if (input.getItem() == com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems.PEACH_ENERGY.get()) {
+                            newMode = sonicarrow.Mode.PEACH;
+                        } else {
+                            newMode = sonicarrow.Mode.MELON;
+                        }
 
                         // 3. 立即把模式写进左手弓并同步
                         ItemStack bow = minecraft.player.getOffhandItem();

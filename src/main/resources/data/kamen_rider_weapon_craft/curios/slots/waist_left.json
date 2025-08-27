@@ -1,0 +1,6 @@
+{
+  "identifier": "waist_left",
+  "size": 1,
+  "validators": ["curios:tag"],
+  "add_cosmetic": false
+}

@@ -13,7 +13,6 @@ import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.display.rider_fusion_mach
 import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.display.time_traveler_studio_item;
 import com.xiaoshi2022.kamen_rider_weapon_craft.kamen_rider_weapon_craft;
 import com.xiaoshi2022.kamen_rider_weapon_craft.weapon_mapBOOK.weapon_map;
-import com.xiaoshi2022.kamen_rider_weapon_craft.world.inventory.SonicBowContainer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.BucketItem;
@@ -52,7 +51,7 @@ public class ModItems {
             () -> new progrise_hopper_blade());
     public static final RegistryObject<daidaimaru> DAIDAIMARU = ITEMS.register("daidaimaru",
             () -> new daidaimaru(ModTires.DAIMARU, 3, 2.5F, new Item.Properties()));
-    public static final RegistryObject<musousaberd> MUSOUSABERD = ITEMS.register("musousaberd",
+    public static final RegistryObject<musousaberd> MUSOUSABERD = ITEMS.register("musou_saber",
             () -> new musousaberd(ModTires.DAIMARU, 3, 2.5F, new Item.Properties()));
     public static final RegistryObject<gangunsaber> GANGUNSABER = ITEMS.register("gangunsaber",
             () -> new gangunsaber(ModTires.DAIMARU, 3, 1.9F, new Item.Properties()));

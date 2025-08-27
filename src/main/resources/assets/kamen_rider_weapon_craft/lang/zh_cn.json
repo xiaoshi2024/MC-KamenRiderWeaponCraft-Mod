@@ -24,6 +24,7 @@
   "block.kamen_rider_weapon_craft.lockseed_iron_bars": "锁种放置钢架",
   "block.kamen_rider_weapon_craft.timesand": "时间沙子",
   "entity.minecraft.villager.kamen_rider_weapon_craft.time_traveler_profession": "时空旅行意志者",
+  "entity.minecraft.villager.kamen_rider_weapon_craft.lockseed_merchant": "定锁种子商人",
   "dialogue.just_passing_by/1": "我要成为世界的破坏者(DCD)",
   "dialogue.just_passing_by/2": "旅途仍在继续",
   "dialogue.main.just_passing_by/1": "你是谁?",
@@ -41,12 +42,15 @@
   "item.kamen_rider_weapon_craft.daidaimaru": "大橙丸",
   "item.kamen_rider_weapon_craft.gangunsaber": "幽灵眼剑枪",
   "item.kamen_rider_weapon_craft.musousaberd": "无双军刀镰大橙丸",
+  "item.kamen_rider_weapon_craft.musou_saber": "无双军刀",
   "item.kamen_rider_weapon_craft.weapon_map": "骑士武器图鉴",
   "item.kamen_rider_weapon_craft.ridebooker": "骑士卡盒枪剑",
   "item.kamen_rider_weapon_craft.satan_sabre": "撒旦军刀",
   "item.kamen_rider_weapon_craft.sonicarrow": "音速弓~",
   "item.kamen_rider_weapon_craft.gavvwhipir": "加布掼奶油枪",
   "item.kamen_rider_weapon_craft.zanvat_sword": "魔皇剑",
+
+  "curios.identifier.waist_left": "武器腰带槽",
 
   "item.kamen_rider_weapon_craft.destroy_fifty_swords": "五十破坏割裂者",
   "item.kamen_rider_weapon_craft.authorize_buster": "授权-破坏者",
@@ -118,6 +122,8 @@
   "item.kamen_rider_weapon_craft.sonicarrow.mode.default": "锁种模式：无",
   "item.kamen_rider_weapon_craft.sonicarrow.mode.melon":   "锁种模式：蜜瓜",
   "item.kamen_rider_weapon_craft.sonicarrow.mode.lemon":   "锁种模式：柠檬",
+  "item.kamen_rider_weapon_craft.sonicarrow.mode.peach":   "锁种模式：蜜桃",
+  "item.kamen_rider_weapon_craft.sonicarrow.mode.cherry":  "锁种模式：樱桃",
 
 
   "fluid.kamen_rider_weapon_craft.helheim_juice": "赫尔海姆美~汁-汁",

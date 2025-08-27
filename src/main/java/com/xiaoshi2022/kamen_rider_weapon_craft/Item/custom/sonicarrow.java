@@ -69,7 +69,9 @@ public class sonicarrow extends SwordItem implements GeoItem {
     public enum Mode {
         DEFAULT,
         MELON,
-        LEMON
+        LEMON,
+        CHERRY,
+        PEACH
     }
 
     public sonicarrow(float meleeDamage, float attackSpeed, Properties properties) {
@@ -195,7 +197,7 @@ public class sonicarrow extends SwordItem implements GeoItem {
                 ServerSound.sendToServer(new ServerSound(ServerSound.SoundType.START_STANDBY));
             }
         }
-        return InteractionResultHolder.consume(stack);
+        return InteractionResultHolder.success(stack);
     }
 
     record ModeConfig(
@@ -217,6 +219,16 @@ public class sonicarrow extends SwordItem implements GeoItem {
             case LEMON -> new ModeConfig(
                     10.0, 2.4f, 3, 10,
                     ModParticles.LEMON_PARTICLE.get(),
+                    ModSounds.SONICARROW_SHOOT.get()
+            );
+            case CHERRY -> new ModeConfig(
+                    11.0, 2.0f, 2, 20,
+                    ModParticles.CHERRY_PARTICLE.get(),
+                    ModSounds.SONICARROW_SHOOT.get()
+            );
+            case PEACH -> new ModeConfig(
+                    13.0, 1.8f, 1, 25,
+                    ModParticles.PEACH_PARTICLE.get(),
                     ModSounds.SONICARROW_SHOOT.get()
             );
             default -> new ModeConfig(
@@ -246,6 +258,49 @@ public class sonicarrow extends SwordItem implements GeoItem {
                     6.0, 1.0f,       // +1❤️ +1攻速
                     target -> {       // 连斩：额外一次1点真实伤害
                         target.hurt(target.level().damageSources().playerAttack((Player)target), 1.0F);
+                    });
+            case CHERRY -> new ModeConfigMelee(
+                    7.0, 0.5f,
+                    target -> {
+                        if (target.level() instanceof ServerLevel serverLevel) {
+                            CompoundTag tag = target.getPersistentData();
+                            if (!tag.contains("BleedingTimer")) {
+                                tag.putInt("BleedingTimer", 60); // 3 秒
+                            }
+                            // 如果还没注册过，就注册一次
+                            if (!tag.getBoolean("BleedingRegistered")) {
+                                tag.putBoolean("BleedingRegistered", true);
+                                net.minecraftforge.common.MinecraftForge.EVENT_BUS.register(new Object() {
+                                    @SubscribeEvent
+                                    public void onServerTick(TickEvent.ServerTickEvent event) {
+                                        if (event.phase != TickEvent.Phase.END) return;
+
+                                        if (target.isAlive() && target.getPersistentData().contains("BleedingTimer")) {
+                                            int timer = target.getPersistentData().getInt("BleedingTimer");
+                                            if (timer % 10 == 0) {
+                                                target.hurt(target.level().damageSources().generic(), 0.5F);
+                                            }
+                                            target.getPersistentData().putInt("BleedingTimer", timer - 1);
+                                            if (timer <= 1) {
+                                                target.getPersistentData().remove("BleedingTimer");
+                                                target.getPersistentData().remove("BleedingRegistered");
+                                                net.minecraftforge.common.MinecraftForge.EVENT_BUS.unregister(this);
+                                            }
+                                        } else {
+                                            net.minecraftforge.common.MinecraftForge.EVENT_BUS.unregister(this);
+                                        }
+                                    }
+                                });
+                            }
+                        }
+                    });
+            case PEACH -> new ModeConfigMelee(
+                    9.0, 0.2f,       // +4.5❤️ +0.2攻速
+                    target -> {       // 治疗效果：攻击时恢复生命值
+                        LivingEntity attacker = target.getLastHurtByMob();
+                        if (attacker != null && attacker.isAlive()) {
+                            attacker.heal(2.0F);
+                        }
                     });
             default     -> new ModeConfigMelee(0, 0, t -> {});
         };

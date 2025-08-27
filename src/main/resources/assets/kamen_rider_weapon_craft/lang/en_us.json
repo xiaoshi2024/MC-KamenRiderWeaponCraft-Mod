@@ -28,6 +28,8 @@
   "block.kamen_rider_weapon_craft.timesand": "Time Sand",
 
   "entity.minecraft.villager.kamen_rider_weapon_craft.time_traveler_profession": "theWillOfTimeTravel",
+  "entity.minecraft.villager.kamen_rider_weapon_craft.lockseed_merchant": "LockSeed Merchant",
+
 
   "dialogue.just_passing_by/1": "I'm going to be the destroyer of the world（DCD）",
   "dialogue.just_passing_by/2": "The journey continues",
@@ -47,12 +49,16 @@
   "item.kamen_rider_weapon_craft.daidaimaru": "daidaimaru",
   "item.kamen_rider_weapon_craft.gangunsaber": "Gan Gun Saber",
   "item.kamen_rider_weapon_craft.musousaberd": "musousaber-daidaimaru",
+  "item.kamen_rider_weapon_craft.musou_saber": "MusouSaber",
   "item.kamen_rider_weapon_craft.weapon_map": "Ride Weapon map",
   "item.kamen_rider_weapon_craft.ridebooker": "Ride Booker",
   "item.kamen_rider_weapon_craft.satan_sabre": "Satan Saber",
   "item.kamen_rider_weapon_craft.sonicarrow": "Sonic Arrow",
   "item.kamen_rider_weapon_craft.gavvwhipir": "Gavv Whipir",
   "item.kamen_rider_weapon_craft.zanvat_sword": "Zanvat Sword",
+
+  "curios.identifier.waist_left": "weaponBeltSlot",
+
 
   "item.kamen_rider_weapon_craft.destroy_fifty_swords": "Destroy 50 Swords",
   "item.kamen_rider_weapon_craft.authorize_buster": "Authorize Buster",
@@ -131,6 +137,10 @@
   "item.kamen_rider_weapon_craft.sonicarrow.mode.default": "lockMode：null",
   "item.kamen_rider_weapon_craft.sonicarrow.mode.melon":   "lockMode：melon",
   "item.kamen_rider_weapon_craft.sonicarrow.mode.lemon":   "lockMode：lemon",
+  "item.kamen_rider_weapon_craft.sonicarrow.mode.peach":   "lockMode：peach",
+  "item.kamen_rider_weapon_craft.sonicarrow.mode.cherry":  "lockMode：cherry",
+
+
 
 
   "fluid.kamen_rider_weapon_craft.helheim_juice": "Helheim Juice",

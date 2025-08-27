@@ -53,7 +53,9 @@ public class SonicBowContainer extends AbstractContainerMenu implements Supplier
 
             @Override public boolean mayPlace(ItemStack stack) {
                 return stack.getItem() == ModItems.MELON.get()
-                        || stack.getItem() == com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems.LEMON_ENERGY.get();
+                        || stack.getItem() == com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems.LEMON_ENERGY.get()
+                        || stack.getItem() == ModItems.CHERYY.get()
+                        || stack.getItem() == com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems.PEACH_ENERGY.get();
             }
 
             @Override public void set(ItemStack stack) {
@@ -126,17 +128,25 @@ public class SonicBowContainer extends AbstractContainerMenu implements Supplier
             ((sonicarrow) bow.getItem()).switchMode(bow, sonicarrow.Mode.DEFAULT);
         } else {
             // 槽位里还有锁种 → 根据锁种类型切形态
-            sonicarrow.Mode newMode =
-                    lastInput.getItem() == com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems.LEMON_ENERGY.get()
-                            ? sonicarrow.Mode.LEMON
-                            : sonicarrow.Mode.MELON;
+            sonicarrow.Mode newMode;
+            if (lastInput.getItem() == com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems.LEMON_ENERGY.get()) {
+                newMode = sonicarrow.Mode.LEMON;
+            } else if (lastInput.getItem() == ModItems.CHERYY.get()) {
+                newMode = sonicarrow.Mode.CHERRY;
+            } else if (lastInput.getItem() == com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems.PEACH_ENERGY.get()) {
+                newMode = sonicarrow.Mode.PEACH;
+            } else {
+                newMode = sonicarrow.Mode.MELON;
+            }
             ((sonicarrow) bow.getItem()).switchMode(bow, newMode);
         }
     }
 
     private sonicarrow.Mode decideMode() {
         if (lastInput.getItem() == com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems.LEMON_ENERGY.get()) return sonicarrow.Mode.LEMON;
+        if (lastInput.getItem() == ModItems.CHERYY.get()) return sonicarrow.Mode.CHERRY;
         if (lastInput.getItem() == ModItems.MELON.get()) return sonicarrow.Mode.MELON;
+        if (lastInput.getItem() == com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems.PEACH_ENERGY.get()) return sonicarrow.Mode.PEACH;
         return sonicarrow.Mode.DEFAULT;
     }
 

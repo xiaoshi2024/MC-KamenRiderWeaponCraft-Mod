@@ -1,7 +1,9 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.Item.client.sonicarrow;
 
+import com.xiaoshi2022.kamen_rider_weapon_craft.Item.combineds.client.combineds.sonicarrow_melon.sonicarrowCherryModel;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.combineds.client.combineds.sonicarrow_melon.sonicarrowLemonModel;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.combineds.client.combineds.sonicarrow_melon.sonicarrowMelonModel;
+import com.xiaoshi2022.kamen_rider_weapon_craft.Item.combineds.client.combineds.sonicarrow_melon.sonicarrowPeachModel;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.sonicarrow;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.world.item.ItemDisplayContext;
@@ -14,12 +16,16 @@ public class sonicarrowRenderer extends GeoItemRenderer<sonicarrow> {
     private final GeoModel<sonicarrow> defaultModel;
     private final GeoModel<sonicarrow> melonModel;
     private final GeoModel<sonicarrow> lemonModel;
+    private final GeoModel<sonicarrow> cherryModel;
+    private final GeoModel<sonicarrow> peachModel;
 
     public sonicarrowRenderer() {
         super(new sonicarrowModel());
         this.defaultModel = new sonicarrowModel();
         this.melonModel = new sonicarrowMelonModel();
         this.lemonModel = new sonicarrowLemonModel();
+        this.cherryModel = new sonicarrowCherryModel();
+        this.peachModel = new sonicarrowPeachModel();
     }
 
     @Override
@@ -37,6 +43,8 @@ public class sonicarrowRenderer extends GeoItemRenderer<sonicarrow> {
         GeoModel<sonicarrow> currentModel = switch(mode) {
             case MELON -> melonModel;
             case LEMON -> lemonModel;
+            case CHERRY -> cherryModel;
+            case PEACH -> peachModel;
             default -> defaultModel;
         };
 

@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/com.xiaoshi2022.kamen_rider_weapon_craft.forge-1.20.1KamenRiderWeaponCraft.main.iml" filepath="$PROJECT_DIR$/.idea/modules/com.xiaoshi2022.kamen_rider_weapon_craft.forge-1.20.1KamenRiderWeaponCraft.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/com.xiaoshi2022.kamen_rider_weapon_craft.forge-1.20.1KamenRiderWeaponCraft.test.iml" filepath="$PROJECT_DIR$/.idea/modules/com.xiaoshi2022.kamen_rider_weapon_craft.forge-1.20.1KamenRiderWeaponCraft.test.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/forge-1.20.1KamenRiderWeaponCraft-main.test.iml" filepath="$PROJECT_DIR$/.idea/modules/forge-1.20.1KamenRiderWeaponCraft-main.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/forge-1.20.1KamenRiderWeaponCraft.main.iml" filepath="$PROJECT_DIR$/.idea/modules/forge-1.20.1KamenRiderWeaponCraft.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/forge-1.20.1KamenRiderWeaponCraft.test.iml" filepath="$PROJECT_DIR$/.idea/modules/forge-1.20.1KamenRiderWeaponCraft.test.iml" />
     </modules>
   </component>

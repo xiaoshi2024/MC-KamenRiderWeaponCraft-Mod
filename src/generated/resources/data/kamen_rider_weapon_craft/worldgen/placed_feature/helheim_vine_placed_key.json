@@ -7,11 +7,11 @@
         "type": "minecraft:weighted_list",
         "distribution": [
           {
-            "data": 25,
-            "weight": 0
+            "data": 6,
+            "weight": 4
           },
           {
-            "data": 30,
+            "data": 9,
             "weight": 1
           }
         ]
@@ -37,72 +37,12 @@
       "predicate": {
         "type": "minecraft:would_survive",
         "state": {
-          "Name": "minecraft:birch_log",
-          "Properties": {
-            "axis": "y"
-          }
+          "Name": "minecraft:grass"
         }
       }
     },
     {
-      "type": "minecraft:block_predicate_filter",
-      "predicate": {
-        "type": "minecraft:would_survive",
-        "state": {
-          "Name": "minecraft:oak_log",
-          "Properties": {
-            "axis": "y"
-          }
-        }
-      }
-    },
-    {
-      "type": "minecraft:block_predicate_filter",
-      "predicate": {
-        "type": "minecraft:would_survive",
-        "state": {
-          "Name": "minecraft:spruce_log",
-          "Properties": {
-            "axis": "y"
-          }
-        }
-      }
-    },
-    {
-      "type": "minecraft:block_predicate_filter",
-      "predicate": {
-        "type": "minecraft:would_survive",
-        "state": {
-          "Name": "minecraft:jungle_log",
-          "Properties": {
-            "axis": "y"
-          }
-        }
-      }
-    },
-    {
-      "type": "minecraft:block_predicate_filter",
-      "predicate": {
-        "type": "minecraft:would_survive",
-        "state": {
-          "Name": "minecraft:dark_oak_log",
-          "Properties": {
-            "axis": "y"
-          }
-        }
-      }
-    },
-    {
-      "type": "minecraft:block_predicate_filter",
-      "predicate": {
-        "type": "minecraft:would_survive",
-        "state": {
-          "Name": "minecraft:acacia_log",
-          "Properties": {
-            "axis": "y"
-          }
-        }
-      }
+      "type": "minecraft:biome"
     }
   ]
 }

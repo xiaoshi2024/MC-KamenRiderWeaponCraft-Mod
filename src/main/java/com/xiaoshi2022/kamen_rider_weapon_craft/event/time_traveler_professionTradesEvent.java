@@ -31,6 +31,14 @@ public class time_traveler_professionTradesEvent { // ${mod_class} 占位符：�
                     14, // 经验值
                     0.1f // 价格乘数
             ));
+            // 第 3 级交易
+            event.getTrades().get(3).add(new BasicItemListing(
+                    new ItemStack(ModItems.RIDERFORGINGALLOYMINERAL.get(), 12), // 12 个 骑士矿
+                    new ItemStack(Items.DIAMOND, 2), // 2 颗钻石
+                    12, // 交易次数
+                    18, // 经验值
+                    0.15f // 价格乘数
+            ));
         }
     }
 }

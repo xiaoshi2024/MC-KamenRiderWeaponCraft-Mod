@@ -2,10 +2,10 @@ package com.xiaoshi2022.kamen_rider_weapon_craft.registry;
 
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.HinawaDaidai_DJ_Ju;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.progrise_hopper_blade;
+import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.sonicarrow;
 import com.xiaoshi2022.kamen_rider_weapon_craft.kamen_rider_weapon_craft;
 import com.xiaoshi2022.kamen_rider_weapon_craft.network.LockseedManager;
 import com.xiaoshi2022.kamen_rider_weapon_craft.network.ServerSound;
-import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.sonicarrow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.world.entity.player.Player;
@@ -77,10 +77,16 @@ public class KeyMappings {
     public static class KeyEventListener {
         @SubscribeEvent
         public static void onClientTick(TickEvent.ClientTickEvent event) {
-            if (Minecraft.getInstance().screen == null) {
-                Y.consumeClick();
-                X.consumeClick();
-            }
+            // 只在 END 阶段处理
+            if (event.phase != TickEvent.Phase.END) return;
+
+            // 不在 GUI 内才处理
+            Minecraft mc = Minecraft.getInstance();
+            if (mc.screen != null) return;
+
+            // 仅处理 X/Y 键，不碰鼠标右键
+            while (Y.consumeClick()) { /* 已用 setDown 触发逻辑，这里留空 */ }
+            while (X.consumeClick()) { /* 同上 */ }
         }
     }
 }

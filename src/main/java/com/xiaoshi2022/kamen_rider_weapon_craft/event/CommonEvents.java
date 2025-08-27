@@ -45,10 +45,10 @@ public class CommonEvents {
                     new ResourceLocation("kamen_rider_boss_you_and_me", "lemon_energy"));
         }
         //可继续添加如下例子
-//        else if (stack.is(ItemTags.create(new ResourceLocation("forge", "fruits/peach")))) {
-//            return ForgeRegistries.ITEMS.getValue(
-//                    new ResourceLocation("other_mod", "peach_lockseed"));
-//        }
+        else if (stack.is(ItemTags.create(new ResourceLocation("forge", "fruits/peach")))) {
+            return ForgeRegistries.ITEMS.getValue(
+                    new ResourceLocation("kamen_rider_boss_you_and_me", "peach_energy"));
+        }
         return null;
     }
 

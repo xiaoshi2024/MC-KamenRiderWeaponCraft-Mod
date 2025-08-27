@@ -11,7 +11,9 @@ import com.xiaoshi2022.kamen_rider_weapon_craft.recipe.ModRecipes;
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.*;
 import com.xiaoshi2022.kamen_rider_weapon_craft.tab.ModTab;
 import com.xiaoshi2022.kamen_rider_weapon_craft.util.FruitConversionRegistry;
+import com.xiaoshi2022.kamen_rider_weapon_craft.villagers.LockSeedMerchantProfession;
 import com.xiaoshi2022.kamen_rider_weapon_craft.villagers.TimeTravelerProfession;
+import com.xiaoshi2022.kamen_rider_weapon_craft.worldgen.biome.surface.ModSurfaceRules;
 import com.xiaoshi2022.kamen_rider_weapon_craft.worldgen.tree.ModFoliagePlacers;
 import com.xiaoshi2022.kamen_rider_weapon_craft.worldgen.tree.ModTrunkPlacerTypes;
 import net.minecraft.resources.ResourceLocation;
@@ -20,6 +22,7 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.util.thread.SidedThreadGroups;
 import net.minecraftforge.network.NetworkRegistry;
@@ -27,6 +30,7 @@ import net.minecraftforge.network.simple.SimpleChannel;
 import org.spongepowered.asm.launch.MixinBootstrap;
 import org.spongepowered.asm.mixin.MixinEnvironment;
 import software.bernie.geckolib.GeckoLib;
+import terrablender.api.SurfaceRuleManager;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
@@ -57,7 +61,7 @@ public class kamen_rider_weapon_craft {
         ModTab.TABS.register(modEventBus);
         ModBlockEntities.BLOCK_ENTITIES.register(modEventBus);
         ModParticles.REGISTRY.register(modEventBus);
-        MinecraftForge.EVENT_BUS.register(this);
+        MinecraftForge.EVENT_BUS.register(kamen_rider_weapon_craft.class);
         GeckoLib.initialize();
 
         MinecraftForge.EVENT_BUS.register(LivingHurtHandler.class);
@@ -66,7 +70,7 @@ public class kamen_rider_weapon_craft {
 
         FruitConversionRegistry.init();
 
-        /// 注册配方
+   /// 注册配方
         ModRecipes.RECIPE_TYPES.register(modEventBus);
         ModRecipes.RECIPE_SERIALIZERS.register(modEventBus);
 
@@ -81,6 +85,9 @@ public class kamen_rider_weapon_craft {
         // 自定义村民职业
         TimeTravelerProfession.POI_TYPE.register(modEventBus);
         TimeTravelerProfession.PROFESSION.register(modEventBus);
+
+        LockSeedMerchantProfession.POI_TYPE.register(modEventBus);
+        LockSeedMerchantProfession.PROFESSION.register(modEventBus);
 
         // 初始化容器
         ModContainers.REGISTRY.register(modEventBus);
@@ -104,12 +111,12 @@ public class kamen_rider_weapon_craft {
         EffectInit.EFFECTS.register(modEventBus);
     }
 
-//    private void commonSetup(final FMLCommonSetupEvent event) {
-//        event.enqueueWork(() -> {
-//            // 注册地表规则
-//            SurfaceRuleManager.addSurfaceRules(SurfaceRuleManager.RuleCategory.OVERWORLD, MOD_ID, ModSurfaceRules.makeRules());
-//        });
-//    }
+    private void commonSetup(final FMLCommonSetupEvent event) {
+        event.enqueueWork(() -> {
+            // 注册地表规则
+            SurfaceRuleManager.addSurfaceRules(SurfaceRuleManager.RuleCategory.OVERWORLD, MOD_ID, ModSurfaceRules.makeRules());
+        });
+    }
 
 
     private void registerNetworkMessages() {
@@ -131,13 +138,13 @@ public class kamen_rider_weapon_craft {
                 FruitConversionPacket::handle
         );
         // 注册 SeverSound 数据包
-//        PACKET_HANDLER.registerMessage(
-//                id++,
-//                ServerSound.class,
-//                ServerSound::encode,
-//                ServerSound::decode,
-//                ServerSound::handle
-//        );
+        PACKET_HANDLER.registerMessage(
+                id++,
+                ServerSound.class,
+                ServerSound::encode,
+                ServerSound::decode,
+                ServerSound::handle
+        );
     }
 
     // 任务队列
@@ -150,7 +157,7 @@ public class kamen_rider_weapon_craft {
     }
 
     @SubscribeEvent
-    public void tick(TickEvent.ServerTickEvent event) {
+    public static void tick(TickEvent.ServerTickEvent event) {
         if (event.phase == TickEvent.Phase.END) {
             // 处理任务队列
             List<AbstractMap.SimpleEntry<Runnable, Integer>> actions = new ArrayList<>();

@@ -13,7 +13,7 @@ public class ModTab {
     public static final DeferredRegister<CreativeModeTab> TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, kamen_rider_weapon_craft.MOD_ID);
 
     public static final RegistryObject<CreativeModeTab> TEST_TAB = TABS.register("kamen_rider_weapon_craft_tab", () -> CreativeModeTab.builder()
-            .icon(() -> SONICARROW.get().getDefaultInstance())
+            .icon(() -> PROGRISE_HOPPER_BLADE.get().getDefaultInstance())
             .title(Component.translatable("item group.kamen_rider_weapon_craft_tab"))
             .displayItems(((parameters, output) -> {
                 output.accept(SONICARROW.get());

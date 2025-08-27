@@ -13,4 +13,6 @@ public class ModParticles {
     public static final RegistryObject<SimpleParticleType> AONICX_PARTICLE = REGISTRY.register("aonicx_particle", () -> new SimpleParticleType(true));
     public static final RegistryObject<SimpleParticleType> LEMON_PARTICLE = REGISTRY.register("lemon_particle", () -> new SimpleParticleType(true));
     public static final RegistryObject<SimpleParticleType> MELON_PARTICLE = REGISTRY.register("melon_particle", () -> new SimpleParticleType(true));
+    public static final RegistryObject<SimpleParticleType> CHERRY_PARTICLE = REGISTRY.register("cherry_particle", () -> new SimpleParticleType(true));
+    public static final RegistryObject<SimpleParticleType> PEACH_PARTICLE = REGISTRY.register("peach_particle", () -> new SimpleParticleType(true));
 }

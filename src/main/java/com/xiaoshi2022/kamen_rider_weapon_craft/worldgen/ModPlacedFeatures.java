@@ -31,9 +31,9 @@ public class ModPlacedFeatures {
         HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
 
         register(context, RIDER_FORGE_ALLOY_MINERAL_PLACED_KEY, configuredFeatures.getOrThrow(ModConfiguredFeatures.RIDER_FORGE_ALLOY_MINERAL_KEY),
-                 ModOrePlacement.commonOrePlacement(16,HeightRangePlacement.uniform(
-                         VerticalAnchor.absolute(-64), VerticalAnchor.absolute(80))
-                 ));
+                ModOrePlacement.commonOrePlacement(16,HeightRangePlacement.uniform(
+                        VerticalAnchor.absolute(-64), VerticalAnchor.absolute(80))
+                ));
 
         // 注册松树的放置逻辑
         register(context, PINE_PLACED_KEY, configuredFeatures.getOrThrow(ModConfiguredFeatures.PINE_KEY),
@@ -76,16 +76,14 @@ public class ModPlacedFeatures {
         // 注册 Helheim Vine 的放置逻辑
         register(context, HELHEIM_VINE_PLACED_KEY, configuredFeatures.getOrThrow(ModConfiguredFeatures.HELHEIM_VINE_KEY),
                 List.of(
-                        PlacementUtils.countExtra(25, 1.0F, 5), // 每棵树基础生成25个藤蔓，额外生成最多5个（总共25到30个）
+                        PlacementUtils.countExtra(6, 0.2F, 3), // 增加生成密度，使荆棘效果更明显
                         InSquarePlacement.spread(), // 在水平范围内均匀分布
-                        HeightRangePlacement.uniform(VerticalAnchor.aboveBottom(0), VerticalAnchor.aboveBottom(256)), // 使用高度范围确保生成在地形范围内
-                        PlacementUtils.filteredByBlockSurvival(Blocks.BIRCH_LOG),
-                        PlacementUtils.filteredByBlockSurvival(Blocks.OAK_LOG),
-                        PlacementUtils.filteredByBlockSurvival(Blocks.SPRUCE_LOG),
-                        PlacementUtils.filteredByBlockSurvival(Blocks.JUNGLE_LOG),
-                        PlacementUtils.filteredByBlockSurvival(Blocks.DARK_OAK_LOG),
-                        PlacementUtils.filteredByBlockSurvival(Blocks.ACACIA_LOG)
+                        HeightRangePlacement.uniform(VerticalAnchor.aboveBottom(0), VerticalAnchor.aboveBottom(256)), // 在整个高度范围内生成
+                        PlacementUtils.filteredByBlockSurvival(Blocks.GRASS), // 确保生成在草地上
+                        BiomeFilter.biome() // 只在特定生物群系中生成
                 ));
+
+
     }
 
     private static ResourceKey<PlacedFeature> registerKey(String name) {

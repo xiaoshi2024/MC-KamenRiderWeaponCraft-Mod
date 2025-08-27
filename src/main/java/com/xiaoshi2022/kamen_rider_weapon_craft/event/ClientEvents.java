@@ -1,6 +1,7 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.event;
 
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.client.daidaimaru.ThrownDaidaimaruRenderer;
+import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.musousaberd;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.prop.client.arrowx.LaserBeamEntityRenderer;
 import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.client.RiderFusionMachine.RiderFusionMachineBlockRenderer;
 import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.client.Time_traveler_studio_block.Time_traveler_studio_blockRenderer;
@@ -8,20 +9,28 @@ import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.client.helheim_crack.helh
 import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.renderer.lockseedIronBarsEntityRenderer;
 import com.xiaoshi2022.kamen_rider_weapon_craft.kamen_rider_weapon_craft;
 import com.xiaoshi2022.kamen_rider_weapon_craft.network.CloseMapPacket;
+import com.xiaoshi2022.kamen_rider_weapon_craft.network.DrawMusouSaberPacket;
 import com.xiaoshi2022.kamen_rider_weapon_craft.network.FruitConversionPacket;
 import com.xiaoshi2022.kamen_rider_weapon_craft.particle.ModParticles;
 import com.xiaoshi2022.kamen_rider_weapon_craft.particle.custom.LaserParticles;
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModBlockEntities;
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModEntityTypes;
+import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModItems;
 import com.xiaoshi2022.kamen_rider_weapon_craft.util.FruitConversionRegistry;
 import com.xiaoshi2022.kamen_rider_weapon_craft.util.KeyBinding;
 import com.xiaoshi2022.kamen_rider_weapon_craft.util.PlayerUtils;
 import com.xiaoshi2022.kamen_rider_weapon_craft.weapon_mapBOOK.weapon_map;
 import net.minecraft.client.Minecraft;
+import com.xiaoshi2022.kamen_rider_weapon_craft.Item.client.musousaberd.musousaberdRenderer;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderers;
+import net.minecraft.network.protocol.game.ClientboundAnimatePacket;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
@@ -33,6 +42,12 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.items.ItemStackHandler;
+import top.theillusivec4.curios.api.CuriosApi;
+import top.theillusivec4.curios.api.client.CuriosRendererRegistry;
+import top.theillusivec4.curios.api.type.inventory.ICurioStacksHandler;
+
+import java.util.Optional;
 
 import static com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModBlocks.HELHEIMVINE;
 import static com.xiaoshi2022.kamen_rider_weapon_craft.util.KeyBinding.CHANGE_KEY;
@@ -83,7 +98,9 @@ public class ClientEvents {
             );
 
             // 5. 取消事件防止其他操作
-            event.setCanceled(true);
+            if (FruitConversionRegistry.isConvertibleFruit(heldItem)) {
+                event.setCanceled(true);
+            }
         }
     }
 
@@ -94,6 +111,8 @@ public class ClientEvents {
             event.registerSpriteSet(ModParticles.AONICX_PARTICLE.get(), LaserParticles.Provider::new);
             event.registerSpriteSet(ModParticles.LEMON_PARTICLE.get(),  LaserParticles.Provider::new);
             event.registerSpriteSet(ModParticles.MELON_PARTICLE.get(),   LaserParticles.Provider::new);
+            event.registerSpriteSet(ModParticles.CHERRY_PARTICLE.get(),  LaserParticles.Provider::new);
+            event.registerSpriteSet(ModParticles.PEACH_PARTICLE.get(),  LaserParticles.Provider::new);
         }
 
        @SubscribeEvent
@@ -116,6 +135,8 @@ public class ClientEvents {
         }
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
+            CuriosRendererRegistry.register(ModItems.MUSOUSABERD.get(), musousaberdRenderer::new);
+
             event.enqueueWork(() -> {
                 ItemBlockRenderTypes.setRenderLayer(HELHEIMVINE.get(), RenderType.cutout());
             });

@@ -22,6 +22,7 @@ public class FruitConversionRegistry {
         register(FruitTags.CHERRY, () -> ModItems.CHERYY.get());
         register(FruitTags.BANANA, () -> crossModItem("kamen_rider_boss_you_and_me", "bananafruit"));
         register(FruitTags.LEMON, () -> crossModItem("kamen_rider_boss_you_and_me", "lemon_energy"));
+        register(FruitTags.PEACH, () -> crossModItem("kamen_rider_boss_you_and_me", "peach_energy"));
 
         // 预留的未来水果注册位置
         // register(FruitTags.PEACH, () -> crossModItem(...));
