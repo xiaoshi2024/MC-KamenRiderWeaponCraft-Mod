@@ -82,7 +82,7 @@ public class sonicarrow extends SwordItem implements GeoItem {
     }
 
     public sonicarrow() {
-        this(9.0F, 4.4F, new Properties().stacksTo(1).durability(980));
+    this(28.0F, 8.0F, new Properties().stacksTo(1).durability(1500));
     }
 
     public void switchMode(ItemStack stack, Mode mode) {

@@ -35,7 +35,7 @@ public class BanaSpear extends SwordItem implements GeoItem {
         super(new Tier() {
             @Override public int getUses()               { return 400; }          // 耐久
             @Override public float getSpeed()            { return 3.0f; }         // 攻速
-            @Override public float getAttackDamageBonus(){ return 10.0f; }        // 额外伤害
+            @Override public float getAttackDamageBonus(){ return 20.0f; }        // 额外伤害
             @Override public int getLevel()              { return 3; }            // 等级
             @Override public int getEnchantmentValue()   { return 15; }           // 附魔值
             @Override public Ingredient getRepairIngredient() { return Ingredient.of(ModItems.RIDER_FORGING_ALLOY_ORE.get()); } // 举例：用竹子修

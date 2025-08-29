@@ -37,7 +37,7 @@ public class gavvwhipir extends SwordItem implements GeoItem {
         super(new Tier() {
             @Override
             public int getUses() {
-                return 350; // 武器的耐久度
+                return 2000; // 武器的耐久度
             }
 
             @Override
@@ -47,7 +47,7 @@ public class gavvwhipir extends SwordItem implements GeoItem {
 
             @Override
             public float getAttackDamageBonus() {
-                return 12.4f; // 武器的额外攻击伤害
+                return 20.0f; // 武器的额外攻击伤害
             }
 
             @Override
@@ -57,7 +57,7 @@ public class gavvwhipir extends SwordItem implements GeoItem {
 
             @Override
             public int getEnchantmentValue() {
-                return 1; // 武器的附魔价值
+                return 10; // 武器的附魔价值
             }
 
             @Override

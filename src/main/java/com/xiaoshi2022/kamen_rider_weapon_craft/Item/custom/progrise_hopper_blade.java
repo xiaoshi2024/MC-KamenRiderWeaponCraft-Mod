@@ -34,17 +34,17 @@ public class progrise_hopper_blade extends SwordItem implements GeoItem {
         super(new Tier() {
             @Override
             public int getUses() {
-                return 680; // 武器的耐久度
+                return 1200; // 武器的耐久度
             }
 
             @Override
             public float getSpeed() {
-                return 3.8f; // 武器的攻击速度
+                return 4.5f; // 武器的攻击速度
             }
 
             @Override
             public float getAttackDamageBonus() {
-                return 8.4f; // 武器的额外攻击伤害
+                return 20.0f; // 武器的额外攻击伤害
             }
 
             @Override
@@ -54,7 +54,7 @@ public class progrise_hopper_blade extends SwordItem implements GeoItem {
 
             @Override
             public int getEnchantmentValue() {
-                return 1; // 武器的附魔价值
+                return 5; // 武器的附魔价值
             }
 
             @Override

@@ -31,15 +31,15 @@ public class destroy_fifty_swords extends SwordItem implements GeoItem {
     public destroy_fifty_swords() {
         super(new Tier() {
             public int getUses() {
-                return 500; // 武器的耐久度
+                return 1000; // 武器的耐久度
             }
 
             public float getSpeed() {
-                return 1f; // 武器的攻击速度
+                return 1.5f; // 武器的攻击速度
             }
 
             public float getAttackDamageBonus() {
-                return 6f; // 武器的额外攻击伤害
+                return 20f; // 武器的额外攻击伤害
             }
 
             public int getLevel() {
@@ -47,7 +47,7 @@ public class destroy_fifty_swords extends SwordItem implements GeoItem {
             }
 
             public int getEnchantmentValue() {
-                return 3;
+                return 6;
             }
 
             public Ingredient getRepairIngredient() {

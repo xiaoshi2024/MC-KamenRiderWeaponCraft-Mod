@@ -33,15 +33,15 @@ public class satan_sabre extends SwordItem implements GeoItem {
 	public satan_sabre() {
 		super(new Tier() {
 			public int getUses() {
-				return 699;
+				return 1500;
 			}
 
 			public float getSpeed() {
-				return 12f;
+				return 15f;
 			}
 
 			public float getAttackDamageBonus() {
-				return 10f;
+				return 35f;
 			}
 
 			public int getLevel() {
@@ -49,7 +49,7 @@ public class satan_sabre extends SwordItem implements GeoItem {
 			}
 
 			public int getEnchantmentValue() {
-				return 2;
+				return 8;
 			}
 
 			public Ingredient getRepairIngredient() {

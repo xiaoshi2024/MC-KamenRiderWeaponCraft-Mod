@@ -39,7 +39,7 @@ public class ZanvatSword extends SwordItem implements GeoItem {
             }
 
             public float getAttackDamageBonus() {
-                return 8f; // 武器的额外攻击伤害
+                return 38f; // 武器的额外攻击伤害
             }
 
             public int getLevel() {

@@ -139,7 +139,7 @@ public class HinawaDaidai_DJ_Ju extends Item implements GeoItem {
                 LaserBeamEntity laserBeam = new LaserBeamEntity(level, player, ModParticles.AONICX_PARTICLE.get(), chargeTime, stack);
                 laserBeam.setPos(player.getX(), player.getY() + player.getEyeHeight(), player.getZ());
                 laserBeam.setDeltaMovement(xSpeed, ySpeed, zSpeed);
-                laserBeam.damage = 9.0D;
+                laserBeam.damage = 14.0D;
 
                 level.addFreshEntity(laserBeam);
 

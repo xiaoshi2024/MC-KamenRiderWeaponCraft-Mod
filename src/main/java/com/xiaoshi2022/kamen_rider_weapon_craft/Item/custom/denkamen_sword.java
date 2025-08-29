@@ -31,15 +31,15 @@ public class denkamen_sword extends SwordItem implements GeoItem {
     public denkamen_sword() {
         super(new Tier() {
             public int getUses() {
-                return 1000; // 武器的耐久度
+                return 1500; // 武器的耐久度
             }
 
             public float getSpeed() {
-                return -1.4f; // 武器的攻击速度
+                return -1.0f; // 武器的攻击速度
             }
 
             public float getAttackDamageBonus() {
-                return 6f; // 武器的额外攻击伤害
+                return 30f; // 武器的额外攻击伤害
             }
 
             public int getLevel() {
@@ -47,7 +47,7 @@ public class denkamen_sword extends SwordItem implements GeoItem {
             }
 
             public int getEnchantmentValue() {
-                return 3;
+                return 8;
             }
 
             public Ingredient getRepairIngredient() {

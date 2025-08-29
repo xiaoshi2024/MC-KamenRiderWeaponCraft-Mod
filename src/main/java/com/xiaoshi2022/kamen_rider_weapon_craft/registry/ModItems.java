@@ -47,13 +47,13 @@ public class ModItems {
     public static final RegistryObject<progrise_hopper_blade> PROGRISE_HOPPER_BLADE = ITEMS.register("progrise_hopper_blade",
             () -> new progrise_hopper_blade());
     public static final RegistryObject<daidaimaru> DAIDAIMARU = ITEMS.register("daidaimaru",
-            () -> new daidaimaru(ModTires.DAIMARU, 3, 2.5F, new Item.Properties()));
+            () -> new daidaimaru(ModTires.DAIMARU, 12, 2.5F, new Item.Properties()));
     public static final RegistryObject<musousaberd> MUSOUSABERD = ITEMS.register("musou_saber",
-            () -> new musousaberd(ModTires.DAIMARU, 3, 2.5F, new Item.Properties()));
+            () -> new musousaberd(ModTires.DAIMARU, 20, 2.5F, new Item.Properties()));
     public static final RegistryObject<gangunsaber> GANGUNSABER = ITEMS.register("gangunsaber",
-            () -> new gangunsaber(ModTires.DAIMARU, 3, 1.9F, new Item.Properties()));
+            () -> new gangunsaber(ModTires.DAIMARU, 21, 1.9F, new Item.Properties()));
     public static final RegistryObject<ridebooker> RIDEBOOKER = ITEMS.register("ridebooker",
-            () -> new ridebooker(ModTires.DAIMARU, 4, 1.9F, new Item.Properties()));
+            () -> new ridebooker(ModTires.DAIMARU, 24, 1.9F, new Item.Properties()));
     public static final RegistryObject<gavvwhipir> GAVVWHIPIR = ITEMS.register("gavvwhipir",
             () -> new gavvwhipir());
     public static final RegistryObject<destroy_fifty_swords> DESTROY_FIFTY_SWORDS = ITEMS.register("destroy_fifty_swords",
@@ -61,7 +61,7 @@ public class ModItems {
     public static final RegistryObject<HinawaDaidai_DJ_Ju> HINAWA_DAIDAI_DJ_JU = ITEMS.register("hinawadai_dai_dj_ju",
             () -> new HinawaDaidai_DJ_Ju(new Item.Properties().stacksTo(1)));
     public static final RegistryObject<musouhinawadj> MUSOUHINAWADJ = ITEMS.register("musouhinawadj",
-            () -> new musouhinawadj(ModTires.DAIMARU, 15, 2.7F, new Item.Properties()));
+            () -> new musouhinawadj(ModTires.DAIMARU, 23, 2.7F, new Item.Properties()));
 
     //方块物品
     public static final RegistryObject<Item> TIMESAND_ITEM = ITEMS.register("timesand_item",

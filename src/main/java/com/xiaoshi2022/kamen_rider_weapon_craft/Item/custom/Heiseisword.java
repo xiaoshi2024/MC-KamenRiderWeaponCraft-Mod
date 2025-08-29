@@ -39,7 +39,7 @@ public class Heiseisword extends SwordItem implements GeoItem {
             }
 
             public float getAttackDamageBonus() {
-                return 15f; // 武器的额外攻击伤害
+                return 29f; // 武器的额外攻击伤害
             }
 
             public int getLevel() {

@@ -31,17 +31,17 @@ public class authorize_buster extends AxeItem implements GeoItem {
         super(new Tier() {
             @Override
             public int getUses() {
-                return 620; // 武器的耐久度
+                return 1000; // 武器的耐久度
             }
 
             @Override
             public float getSpeed() {
-                return 1.3f; // 武器的攻击速度
+                return 1.8f; // 武器的攻击速度
             }
 
             @Override
             public float getAttackDamageBonus() {
-                return 7.4f; // 武器的额外攻击伤害
+                return 11.0f; // 武器的额外攻击伤害
             }
 
             @Override
@@ -51,7 +51,7 @@ public class authorize_buster extends AxeItem implements GeoItem {
 
             @Override
             public int getEnchantmentValue() {
-                return 1; // 武器的附魔价值
+                return 5; // 武器的附魔价值
             }
 
             @Override
