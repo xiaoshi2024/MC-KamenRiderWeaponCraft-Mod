@@ -12,6 +12,7 @@ import net.minecraft.client.renderer.DimensionSpecialEffects;
 
 @Mod.EventBusSubscriber
 public class TheDesertofTimeDimension {
+
 	@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 	public static class DimensionSpecialEffectsHandler {
 		@SubscribeEvent
@@ -20,7 +21,7 @@ public class TheDesertofTimeDimension {
 			DimensionSpecialEffects customEffect = new DimensionSpecialEffects(Float.NaN, true, DimensionSpecialEffects.SkyType.NONE, false, false) {
 				@Override
 				public Vec3 getBrightnessDependentFogColor(Vec3 color, float sunHeight) {
-					return new Vec3(0.4, 0.4, 0.4);
+					return new Vec3(0.8, 0.7, 0.5); // 沙漠色调的雾颜色
 				}
 
 				@Override

@@ -16,15 +16,20 @@ import com.xiaoshi2022.kamen_rider_weapon_craft.villagers.TimeTravelerProfession
 import com.xiaoshi2022.kamen_rider_weapon_craft.worldgen.tree.ModFoliagePlacers;
 import com.xiaoshi2022.kamen_rider_weapon_craft.worldgen.tree.ModTrunkPlacerTypes;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.ComposterBlock;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.util.thread.SidedThreadGroups;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.spongepowered.asm.launch.MixinBootstrap;
 import org.spongepowered.asm.mixin.MixinEnvironment;
 import software.bernie.geckolib.GeckoLib;
@@ -34,6 +39,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
+
+import static com.mojang.text2speech.Narrator.LOGGER;
 
 @Mod("kamen_rider_weapon_craft")
 @Mod.EventBusSubscriber(modid = "kamen_rider_weapon_craft")
@@ -100,18 +107,29 @@ public class kamen_rider_weapon_craft {
         // 注册网络包
         registerNetworkMessages();
 
+        // 确保这行存在！这是关键！
+        modEventBus.addListener(this::commonSetup);
+
         // 注册 NetworkHandler
         NetworkHandler.register();
 
         EffectInit.EFFECTS.register(modEventBus);
     }
 
-//    private void commonSetup(final FMLCommonSetupEvent event) {
-//        event.enqueueWork(() -> {
-//            // 注册地表规则
-//            SurfaceRuleManager.addSurfaceRules(SurfaceRuleManager.RuleCategory.OVERWORLD, MOD_ID, ModSurfaceRules.makeRules());
-//        });
-//    }
+    @SubscribeEvent
+    public void commonSetup(final FMLCommonSetupEvent event) {
+        event.enqueueWork(() -> {
+            // 确保在主线程中操作
+            Item leavesItem = ModItems.PINE_LEAVES_ITEM.get();
+
+            // 直接操作 public 的 COMPOSTABLES map
+            ComposterBlock.COMPOSTABLES.put(leavesItem, 0.3f);
+
+            ComposterBlock.COMPOSTABLES.put(ModItems.PINE_SAPLING_ITEM.get(), 0.3f);
+
+        });
+    }
+
 
 
     private void registerNetworkMessages() {

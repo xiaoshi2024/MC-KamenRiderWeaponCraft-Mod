@@ -19,31 +19,24 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
 
     @Override
     protected void addTags(HolderLookup.Provider provider) {
-        // 添加到 logs_that_burn 标签
-        this.tag(BlockTags.LOGS_THAT_BURN)
-                .add(ModBlocks.PINE_LOG.get(), ModBlocks.PINE_WOOD.get(),
-                        ModBlocks.STRIPPED_PINE_LOG.get(), ModBlocks.STRIPPED_PINE_WOOD.get());
+        // 明确设置 replace: false 对于所有标签
+        this.tag(BlockTags.LEAVES).add(ModBlocks.PINE_LEAVES.get());
+        this.tag(BlockTags.LOGS).add(ModBlocks.PINE_LOG.get());
+        this.tag(BlockTags.PLANKS).add(ModBlocks.PINE_PLANKS.get());
+        this.tag(BlockTags.LOGS_THAT_BURN).add(ModBlocks.PINE_LOG.get());
 
-        // 添加到 stripped_logs 和 stripped_wood 标签
-        this.tag(BlockTags.LOGS)
-                .add(ModBlocks.STRIPPED_PINE_LOG.get());
-        this.tag(BlockTags.LOGS)
-                .add(ModBlocks.STRIPPED_PINE_WOOD.get());
-        // 添加到 planks 标签
-        this.tag(BlockTags.PLANKS)
-                .add(ModBlocks.PINE_PLANKS.get());
+
         this.tag(BlockTags.MINEABLE_WITH_AXE).add(ModBlocks.PINE_PLANKS.get());
-        // 添加自定义树干方块到 minecraft:logs 标签
-        this.tag(ModTags.Blocks.LOGS)
-                .add(ModBlocks.PINE_LOG.get());
-        // 添加自定义树干方块到 minecraft:logs_that_sustain_leaves 标签
-        this.tag(ModTags.Blocks.LOGS_THAT_CAN_SUSTAIN_LEAVES)
-                .add(ModBlocks.PINE_LOG.get());
-        // 添加自定义树叶到自定义标签
-        this.tag(ModTags.Blocks.LEAVES)
-                .add(ModBlocks.PINE_LEAVES.get());
-        // 添加自定义树叶到 minecraft:leaves 标签
-        this.tag(BlockTags.LEAVES)
-                .add(ModBlocks.PINE_LEAVES.get());
+        this.tag(BlockTags.MINEABLE_WITH_HOE).add(ModBlocks.PINE_LEAVES.get());
+
+        // ✅ 添加到自定义标签（可选）
+        this.tag(ModTags.Blocks.PINE_LOGS)
+                .add(ModBlocks.PINE_LOG.get())
+                .add(ModBlocks.PINE_WOOD.get())
+                .add(ModBlocks.STRIPPED_PINE_LOG.get())
+                .add(ModBlocks.STRIPPED_PINE_WOOD.get());
+
+        this.tag(ModTags.Blocks.PINE_LEAVES).add(ModBlocks.PINE_LEAVES.get());
+        this.tag(ModTags.Blocks.LOGS_THAT_CAN_SUSTAIN_PINE_LEAVES).add(ModBlocks.PINE_LOG.get());
     }
 }

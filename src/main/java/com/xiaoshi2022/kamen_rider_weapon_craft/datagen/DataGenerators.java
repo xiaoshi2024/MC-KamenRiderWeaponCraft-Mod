@@ -25,8 +25,14 @@ public class DataGenerators {
 
         generator.addProvider(event.includeServer(), new ModWorldGenProvider(packOutput, lookupProvider));
 
+        // 先创建 BlockTagsProvider 并保存为变量
         ModBlockTagGenerator blockTagGenerator = generator.addProvider(event.includeServer(),
                 new ModBlockTagGenerator(packOutput, lookupProvider, existingFileHelper));
+
+        // ✅ 添加这行：注册 ItemTagsProvider，并传入 blockTagGenerator
+        generator.addProvider(event.includeServer(),
+                new ModItemTagGenerator(packOutput, lookupProvider, blockTagGenerator, existingFileHelper));
+
         generator.addProvider(event.includeServer(), new ModRecipeProvider(packOutput));
     }
 }

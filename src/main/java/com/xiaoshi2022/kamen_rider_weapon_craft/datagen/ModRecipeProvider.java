@@ -50,6 +50,5 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .requires(ModBlocks.PINE_LOG.get(), 4) // 需要一个原木
                 .unlockedBy("has_log", has(ModBlocks.PINE_LOG.get()))
                 .save(consumer, new ResourceLocation("kamen_rider_weapon_craft", "pine_wood_from_log"));
-        ComposterBlock.COMPOSTABLES.put(ModBlocks.PINE_LEAVES.get(), 0.3F); // 堆肥概率为 30%
     }
 }

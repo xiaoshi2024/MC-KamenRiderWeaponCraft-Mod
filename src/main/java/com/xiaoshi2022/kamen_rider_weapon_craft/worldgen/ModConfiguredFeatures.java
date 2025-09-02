@@ -37,8 +37,9 @@ public class ModConfiguredFeatures {
 
         List<OreConfiguration.TargetBlockState> overworldBlockSilverOres = List
                 .of(OreConfiguration.target(stoneReplace, ModBlocks.RIDERFORGINGALLOYMINERAL.get().defaultBlockState()));
-        register(context, RIDER_FORGE_ALLOY_MINERAL_KEY, Feature.ORE, new OreConfiguration(overworldBlockSilverOres, 10));
 
+        // 调整矿石生成参数：减少矿脉大小和生成频率
+        register(context, RIDER_FORGE_ALLOY_MINERAL_KEY, Feature.ORE, new OreConfiguration(overworldBlockSilverOres, 7)); // 从10减少到6
 
         // 注册松树配置特征
         register(context, PINE_KEY, Feature.TREE, new TreeConfiguration.TreeConfigurationBuilder(
@@ -57,11 +58,13 @@ public class ModConfiguredFeatures {
 //        register(context, HELHEIM_VINE_KEY, Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(ModBlocks.HELHEIMVINE.get())));
 
         // 使用 RandomPatchConfiguration 增加藤蔓生成率
+        // 减少藤蔓的生成尝试次数
         register(context, HELHEIM_VINE_KEY, Feature.RANDOM_PATCH, new RandomPatchConfiguration(
-                64, // 尝试次数
-                2, // 最小间距
-                5, // 最大间距
-                PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(ModBlocks.HELHEIMVINE.get())))
+                32, // 从64减少到32（尝试次数减半）
+                3,  // 增加最小间距
+                7,  // 增加最大间距
+                PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK,
+                        new SimpleBlockConfiguration(BlockStateProvider.simple(ModBlocks.HELHEIMVINE.get())))
         ));
 
     }

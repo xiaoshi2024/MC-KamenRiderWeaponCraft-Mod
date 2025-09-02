@@ -31,6 +31,20 @@
               }
             }
           ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "kamen_rider_boss_you_and_me:bloodline_fang",
+          "weight": 6,
+          "functions": [
+            {
+              "function": "set_count",
+              "count": {
+                "min": 1,
+                "max": 1
+              }
+            }
+          ]
         }
       ]
     }

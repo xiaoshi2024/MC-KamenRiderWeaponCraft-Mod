@@ -197,18 +197,11 @@ dependencies {
     implementation fg.deobf("curse.maven:kamenriderbossyouandme-1214394:6918264")
     implementation fg.deobf("dev.kosmx.player-anim:player-animation-lib-forge:1.0.2-rc1+1.20")
 
-    compileOnly "mekanism:Mekanism:${mekanism_version}:api"
-
     implementation fg.deobf("com.github.glitchfiend:TerraBlender-forge:${minecraft_version}-${terrablender_version}")
 
     implementation fg.deobf("curse.maven:pams-harvestcraft-2-trees-365460:4625518")
     implementation fg.deobf("curse.maven:pams-harvestcraft-2-crops-361385:4687624")
 
-    // If you want to test/use Mekanism & its modules during `runClient` invocation, use the following
-    runtimeOnly fg.deobf("mekanism:Mekanism:${mekanism_version}")// core
-    runtimeOnly fg.deobf("mekanism:Mekanism:${mekanism_version}:additions")// Mekanism: Additions
-    runtimeOnly fg.deobf("mekanism:Mekanism:${mekanism_version}:generators")// Mekanism: Generators
-    runtimeOnly fg.deobf("mekanism:Mekanism:${mekanism_version}:tools")// Mekanism: Tools
 
     implementation fg.deobf("curse.maven:minecraft-comes-alive-reborn-535291:6127389")
     implementation fg.deobf("curse.maven:architectury-api-419699:5137938")
