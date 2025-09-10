@@ -2,6 +2,7 @@ package com.xiaoshi2022.kamen_rider_weapon_craft;
 
 import com.xiaoshi2022.kamen_rider_weapon_craft.event.LivingHurtHandler;
 import com.xiaoshi2022.kamen_rider_weapon_craft.event.WitherSpawnHandler;
+import com.xiaoshi2022.kamen_rider_weapon_craft.event.ItemTooltipHandler;
 import com.xiaoshi2022.kamen_rider_weapon_craft.procedures.KRWBoot;
 import com.xiaoshi2022.kamen_rider_weapon_craft.network.*;
 import com.xiaoshi2022.kamen_rider_weapon_craft.particle.ModParticles;
@@ -17,7 +18,6 @@ import com.xiaoshi2022.kamen_rider_weapon_craft.worldgen.tree.ModFoliagePlacers;
 import com.xiaoshi2022.kamen_rider_weapon_craft.worldgen.tree.ModTrunkPlacerTypes;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.ComposterBlock;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
@@ -29,7 +29,6 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.util.thread.SidedThreadGroups;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.spongepowered.asm.launch.MixinBootstrap;
 import org.spongepowered.asm.mixin.MixinEnvironment;
 import software.bernie.geckolib.GeckoLib;
@@ -40,7 +39,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import static com.mojang.text2speech.Narrator.LOGGER;
 
 @Mod("kamen_rider_weapon_craft")
 @Mod.EventBusSubscriber(modid = "kamen_rider_weapon_craft")
@@ -71,6 +69,12 @@ public class kamen_rider_weapon_craft {
         MinecraftForge.EVENT_BUS.register(LivingHurtHandler.class);
 
         MinecraftForge.EVENT_BUS.register(WitherSpawnHandler.class);
+        
+        // 注册物品提示处理器
+        MinecraftForge.EVENT_BUS.register(ItemTooltipHandler.class);
+        
+        // 注册武器提示处理器 - 为所有ModItems中注册的武器添加统一提示
+//        MinecraftForge.EVENT_BUS.register(WeaponTooltipHandler.class);
 
         FruitConversionRegistry.init();
 

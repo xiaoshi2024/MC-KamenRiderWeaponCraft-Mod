@@ -130,6 +130,25 @@
   "item.kamen_rider_weapon_craft.helheim_juice_bucket": "赫尔海姆果汁桶",
   "block.kamen_rider_weapon_craft.helheim_jelly_block": "赫尔海姆果块",
 
-  "message.kamen_rider.need_helheim_power": "你需要赫尔海姆的力量才能转化果实！"
+  "message.kamen_rider.need_helheim_power": "你需要赫尔海姆的力量才能转化果实！",
 
+  "tooltip.kamen_rider_weapon_craft.heiseisword.usage": "嘿！假面骑士们！ 平成骑士剑",
+  "tooltip.kamen_rider_weapon_craft.denkamen_sword.usage": "4位异魔神驱动的高能剑，拥有强大的攻击力",
+  "tooltip.kamen_rider_weapon_craft.sonicarrow.usage": "发射能量箭的弓，可以切换不同的模式：副手拿着此武器按下Y",
+  "tooltip.kamen_rider_weapon_craft.daidaimaru.usage": "可以投掷攻击敌人？",
+  "tooltip.kamen_rider_weapon_craft.helheimfruit.usage": "来自赫尔海姆的神秘果实",
+
+  "tooltip.kamen_rider_weapon_craft.hinawadai_dai_dj_ju.usage": "可以在枪和剑模式之间转换的DJ枪，战斗时播放音乐",
+  "tooltip.kamen_rider_weapon_craft.musouhinawadj.usage": "火绳大橙DJ枪的大剑模式，拥有增强的切割力",
+  "tooltip.kamen_rider_weapon_craft.gangunsaber.usage": "幽灵的主要武器，结合了枪和剑的功能",
+  "tooltip.kamen_rider_weapon_craft.musousaberd.usage": "结合的",
+  "tooltip.kamen_rider_weapon_craft.musou_saber.usage": "可以放入饰品槽位",
+  "tooltip.kamen_rider_weapon_craft.ridebooker.usage": "帝骑的多功能武器，可以在卡盒枪和剑模式之间转换",
+  "tooltip.kamen_rider_weapon_craft.satan_sabre.usage": "永恒的强大军刀，具有黑暗能量属性",
+  "tooltip.kamen_rider_weapon_craft.gavvwhipir.usage": "加布的鞭枪，可以发射奶油基攻击",
+  "tooltip.kamen_rider_weapon_craft.zanvat_sword.usage": "魔皇Kiva的终极武器，具有吸血能力",
+  "tooltip.kamen_rider_weapon_craft.destroy_fifty_swords.usage": "利维斯的剑刃",
+  "tooltip.kamen_rider_weapon_craft.authorize_buster.usage": "具有高科技能力",
+  "tooltip.kamen_rider_weapon_craft.progrise_hopper_blade.usage": "零一的蝗虫砍击者，增强跳跃和切割能力",
+  "tooltip.kamen_rider_weapon_craft.bana_spear.usage": "巴隆的香蕉矛枪，伸缩动画"
 }
