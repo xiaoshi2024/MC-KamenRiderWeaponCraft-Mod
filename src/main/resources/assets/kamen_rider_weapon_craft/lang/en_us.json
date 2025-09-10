@@ -150,6 +150,8 @@
   "block.kamen_rider_weapon_craft.helheim_jelly_block": "Helheim Jelly Block",
   "message.kamen_rider.need_helheim_power": "You need the power of Helheim to transform fruits!",
 
+
+  "tooltip.kamen_rider_weapon_craft.timesand_item.usage": "Mysterious sand that manipulates the flow of time, used to reach the end of the world's collapse",
   "tooltip.kamen_rider_weapon_craft.heiseisword.usage": "Hey! Kamen Riders! Heisei Sword",
   "tooltip.kamen_rider_weapon_craft.denkamen_sword.usage": "A high-energy sword powered by four Youma, with strong offensive power",
   "tooltip.kamen_rider_weapon_craft.sonicarrow.usage": "A bow that fires energy arrows, which can switch between different modes: Press Y while holding this weapon in the off-hand",
