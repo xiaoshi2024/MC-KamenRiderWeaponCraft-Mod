@@ -476,10 +476,20 @@ public class Heiseisword extends SwordItem implements GeoItem {
                     // 检查实体是否被击败
                     if (entity instanceof net.minecraft.world.entity.LivingEntity livingEntity && !livingEntity.isAlive()) {
                         // 实体被击败，先播放骑士名称音效，然后播放Dual Time Break音效
-                        // 使用直接方式播放，避免可能的延迟问题
-                        HeiseiRiderEffectManager.playSelectionSound(player.level(), player, rider);
-                        // 确保Dual Time Break音效正确播放
-                        RiderSounds.playDelayedSound(player.level(), player, RiderSounds.DUAL_TIME_BREAK, 40);
+                        if ("Drive".equals(rider)) {
+                            // 对Drive骑士进行特殊处理
+                            RiderSounds.playSound(player.level(), player, RiderSounds.NAME_DRIVE);
+                            // 确保Dual Time Break音效正确播放
+                            RiderSounds.playDelayedSound(player.level(), player, RiderSounds.DUAL_TIME_BREAK, 40);
+                        } else {
+                            // 其他骑士使用常规处理
+                            SoundEvent nameSound = HeiseiRiderEffectManager.getRiderNameSound(rider);
+                            if (nameSound != null) {
+                                RiderSounds.playSound(player.level(), player, nameSound);
+                                // 确保Dual Time Break音效正确播放
+                                RiderSounds.playDelayedSound(player.level(), player, RiderSounds.DUAL_TIME_BREAK, 40);
+                            }
+                        }
                     }
                     return result;
                 }

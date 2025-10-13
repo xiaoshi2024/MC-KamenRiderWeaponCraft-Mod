@@ -2,6 +2,7 @@ package com.xiaoshi2022.kamen_rider_weapon_craft.rider;
 
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModEntityTypes;
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.build.BuildRiderEntityRenderer;
+import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.drive.DriveRiderEntityRenderer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -32,20 +33,31 @@ public class RiderEffectEntityRegistry {
      * @param event 实体渲染器注册事件
      */
     @SubscribeEvent
-        public static void registerRiderEffectEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
-            // 注册Build骑士特效实体渲染器
-            registerBuildRiderRenderers(event);
-            
-            // 这里可以添加更多骑士特效实体的注册方法
-        }
+    public static void registerRiderEffectEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
+        // 注册Build骑士特效实体渲染器
+        registerBuildRiderRenderers(event);
+        
+        // 注册Drive骑士特效实体渲染器
+        registerDriveRiderRenderers(event);
+        
+        // 这里可以添加更多骑士特效实体的注册方法
+    }
 
-        /**
-         * 注册Build骑士相关的特效实体渲染器
-         * @param event 实体渲染器注册事件
-         */
-        private static void registerBuildRiderRenderers(EntityRenderersEvent.RegisterRenderers event) {
-            // 使用与项目中其他实体一致的注册方式，保持代码风格统一
-            event.registerEntityRenderer(ModEntityTypes.BUILD_RIDER_EFFECT.get(), BuildRiderEntityRenderer::new);
-        }
-
+    /**
+     * 注册Build骑士相关的特效实体渲染器
+     * @param event 实体渲染器注册事件
+     */
+    private static void registerBuildRiderRenderers(EntityRenderersEvent.RegisterRenderers event) {
+        // 使用与项目中其他实体一致的注册方式，保持代码风格统一
+        event.registerEntityRenderer(ModEntityTypes.BUILD_RIDER_EFFECT.get(), BuildRiderEntityRenderer::new);
+    }
+    
+    /**
+     * 注册Drive骑士相关的特效实体渲染器
+     * @param event 实体渲染器注册事件
+     */
+    private static void registerDriveRiderRenderers(EntityRenderersEvent.RegisterRenderers event) {
+        // 使用与项目中其他实体一致的注册方式，保持代码风格统一
+        event.registerEntityRenderer(ModEntityTypes.DRIVE_RIDER_EFFECT.get(), DriveRiderEntityRenderer::new);
+    }
 }

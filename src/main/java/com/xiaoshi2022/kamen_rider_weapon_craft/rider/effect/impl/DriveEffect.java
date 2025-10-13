@@ -1,6 +1,7 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.rider.effect.impl;
 
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.effect.HeiseiRiderEffect;
+import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.drive.DriveRiderEffect;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
@@ -34,6 +35,9 @@ public class DriveEffect implements HeiseiRiderEffect {
                     Thread.currentThread().interrupt();
                 }
             });
+            
+            // 4. 生成车轮特效
+            DriveRiderEffect.spawnWheelEffectByOwnerDirection(level, player, getAttackDamage());
         } else {
             // 客户端：粒子效果已移除，后续将使用geo动画还原
         }
