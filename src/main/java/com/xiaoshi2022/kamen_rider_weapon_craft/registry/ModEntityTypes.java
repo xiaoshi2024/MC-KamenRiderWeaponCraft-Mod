@@ -2,6 +2,7 @@ package com.xiaoshi2022.kamen_rider_weapon_craft.registry;
 
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.client.daidaimaru.entity.ThrownDaidaimaru;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.prop.client.entity.LaserBeamEntity;
+import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.build.BuildRiderEntity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.projectile.ThrownTrident;
@@ -30,6 +31,16 @@ public class ModEntityTypes {
                             .updateInterval(1)
                             .build("laser_beam"));
 
+    // Kamen Rider Build 特效实体
+    public static final RegistryObject<EntityType<BuildRiderEntity>> BUILD_RIDER_EFFECT = 
+            ENTITIES.register("build_rider_effect", 
+                    () -> EntityType.Builder.<BuildRiderEntity>of(BuildRiderEntity::new, MobCategory.MISC)
+                            .setTrackingRange(64)
+                            .setUpdateInterval(1)
+                            .setShouldReceiveVelocityUpdates(false)
+                            .build("build_rider_effect"));
+
     public static void register(IEventBus modEventBus) {
+        ENTITIES.register(modEventBus);
     }
 }

@@ -160,5 +160,239 @@
         "stream": false
       }
     ]
+  },
+  "hey": {
+    "subtitle": "subtitles.hey",
+    "sounds": [
+      {
+        "name": "kamen_rider_weapon_craft:hey",
+        "stream": false
+      }
+    ]
+  },
+  "hey_say_rapid": {
+    "subtitle": "subtitles.hey_say_rapid",
+    "sounds": [
+      {
+        "name": "kamen_rider_weapon_craft:hey_say_rapid",
+        "stream": false
+      }
+    ]
+  },
+  "name_agito": {
+    "subtitle": "subtitles.name_agito",
+    "sounds": [
+      {
+        "name": "kamen_rider_weapon_craft:name_agito",
+        "stream": false
+      }
+    ]
+  },
+  "name_blade": {
+    "subtitle": "subtitles.name_blade",
+    "sounds": [
+      {
+        "name": "kamen_rider_weapon_craft:name_blade",
+        "stream": false
+      }
+    ]
+  },
+  "name_build": {
+    "subtitle": "subtitles.name_build",
+    "sounds": [
+      {
+        "name": "kamen_rider_weapon_craft:name_build",
+        "stream": false
+      }
+    ]
+  },
+  "name_decade": {
+    "subtitle": "subtitles.name_decade",
+    "sounds": [
+      {
+        "name": "kamen_rider_weapon_craft:name_decade",
+        "stream": false
+      }
+    ]
+  },
+  "name_den_o": {
+    "subtitle": "subtitles.name_den_o",
+    "sounds": [
+      {
+        "name": "kamen_rider_weapon_craft:name_den_o",
+        "stream": false
+      }
+    ]
+  },
+  "name_drive": {
+    "subtitle": "subtitles.name_drive",
+    "sounds": [
+      {
+        "name": "kamen_rider_weapon_craft:name_drive",
+        "stream": false
+      }
+    ]
+  },
+  "name_exaid": {
+    "subtitle": "subtitles.name_exaid",
+    "sounds": [
+      {
+        "name": "kamen_rider_weapon_craft:name_exaid",
+        "stream": false
+      }
+    ]
+  },
+  "name_faiz": {
+    "subtitle": "subtitles.name_faiz",
+    "sounds": [
+      {
+        "name": "kamen_rider_weapon_craft:name_faiz",
+        "stream": false
+      }
+    ]
+  },
+  "name_fourze": {
+    "subtitle": "subtitles.name_fourze",
+    "sounds": [
+      {
+        "name": "kamen_rider_weapon_craft:name_fourze",
+        "stream": false
+      }
+    ]
+  },
+  "name_gaim": {
+    "subtitle": "subtitles.name_gaim",
+    "sounds": [
+      {
+        "name": "kamen_rider_weapon_craft:name_gaim",
+        "stream": false
+      }
+    ]
+  },
+  "name_ghost": {
+    "subtitle": "subtitles.name_ghost",
+    "sounds": [
+      {
+        "name": "kamen_rider_weapon_craft:name_ghost",
+        "stream": false
+      }
+    ]
+  },
+  "name_hibiki": {
+    "subtitle": "subtitles.name_hibiki",
+    "sounds": [
+      {
+        "name": "kamen_rider_weapon_craft:name_hibiki",
+        "stream": false
+      }
+    ]
+  },
+  "name_kabuto": {
+    "subtitle": "subtitles.name_kabuto",
+    "sounds": [
+      {
+        "name": "kamen_rider_weapon_craft:name_kabuto",
+        "stream": false
+      }
+    ]
+  },
+  "name_kiva": {
+    "subtitle": "subtitles.name_kiva",
+    "sounds": [
+      {
+        "name": "kamen_rider_weapon_craft:name_kiva",
+        "stream": false
+      }
+    ]
+  },
+  "name_kuuga": {
+    "subtitle": "subtitles.name_kuuga",
+    "sounds": [
+      {
+        "name": "kamen_rider_weapon_craft:name_kuuga",
+        "stream": false
+      }
+    ]
+  },
+  "name_ooo": {
+    "subtitle": "subtitles.name_ooo",
+    "sounds": [
+      {
+        "name": "kamen_rider_weapon_craft:name_ooo",
+        "stream": false
+      }
+    ]
+  },
+  "name_ryuki": {
+    "subtitle": "subtitles.name_ryuki",
+    "sounds": [
+      {
+        "name": "kamen_rider_weapon_craft:name_ryuki",
+        "stream": false
+      }
+    ]
+  },
+  "name_w": {
+    "subtitle": "subtitles.name_w",
+    "sounds": [
+      {
+        "name": "kamen_rider_weapon_craft:name_w",
+        "stream": false
+      }
+    ]
+  },
+  "name_wizard": {
+    "subtitle": "subtitles.name_wizard",
+    "sounds": [
+      {
+        "name": "kamen_rider_weapon_craft:name_wizard",
+        "stream": false
+      }
+    ]
+  },
+  "ride_hei_saber": {
+    "subtitle": "subtitles.ride_hei_saber",
+    "sounds": [
+      {
+        "name": "kamen_rider_weapon_craft:ride_hei_saber",
+        "stream": false
+      }
+    ]
+  },
+  "dual_time_break": {
+    "subtitle": "subtitles.dual_time_break",
+    "sounds": [
+      {
+        "name": "kamen_rider_weapon_craft:dual_time_break",
+        "stream": false
+      }
+    ]
+  },
+  "finish_time": {
+    "subtitle": "subtitles.finish_time",
+    "sounds": [
+      {
+        "name": "kamen_rider_weapon_craft:finish_time",
+        "stream": false
+      }
+    ]
+  },
+  "scramble_time_break": {
+    "subtitle": "subtitles.scramble_time_break",
+    "sounds": [
+      {
+        "name": "kamen_rider_weapon_craft:scramble_time_break",
+        "stream": false
+      }
+    ]
+  },
+  "ultimate_time_break": {
+    "subtitle": "subtitles.ultimate_time_break",
+    "sounds": [
+      {
+        "name": "kamen_rider_weapon_craft:ultimate_time_break",
+        "stream": false
+      }
+    ]
   }
 }

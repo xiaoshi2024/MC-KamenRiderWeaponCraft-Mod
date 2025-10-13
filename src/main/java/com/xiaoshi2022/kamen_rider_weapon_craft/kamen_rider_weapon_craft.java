@@ -16,6 +16,7 @@ import com.xiaoshi2022.kamen_rider_weapon_craft.villagers.LockSeedMerchantProfes
 import com.xiaoshi2022.kamen_rider_weapon_craft.villagers.TimeTravelerProfession;
 import com.xiaoshi2022.kamen_rider_weapon_craft.worldgen.tree.ModFoliagePlacers;
 import com.xiaoshi2022.kamen_rider_weapon_craft.worldgen.tree.ModTrunkPlacerTypes;
+import com.xiaoshi2022.kamen_rider_weapon_craft.rider.RiderEffectEntityRegistry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.ComposterBlock;
@@ -102,6 +103,9 @@ public class kamen_rider_weapon_craft {
 
         // 初始化 MODEntity
         ModEntityTypes.ENTITIES.register(modEventBus);
+        
+        // 注册骑士效果实体
+        RiderEffectEntityRegistry.register(modEventBus);
 
         // 初始化 Mixin 系统
         MixinBootstrap.init();

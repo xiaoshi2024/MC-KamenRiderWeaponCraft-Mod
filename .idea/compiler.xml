@@ -7,7 +7,7 @@
         <processorPath useClasspath="false">
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.spongepowered/mixin/0.8.5/6d1c8bf4c28e697f472a83bd6add76ec4951734/mixin-0.8.5-processor.jar" />
         </processorPath>
-        <module name="forge-1.20.1KamenRiderWeaponCraft.main" />
+        <module name="com.xiaoshi2022.kamen_rider_weapon_craft.forge-1.20.1KamenRiderWeaponCraft.main" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="17" />
