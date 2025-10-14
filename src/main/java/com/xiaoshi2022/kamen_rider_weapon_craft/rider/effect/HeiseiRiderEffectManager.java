@@ -98,8 +98,8 @@ public class HeiseiRiderEffectManager {
         // 实际的Scramble Time Break音效会在实体被击败时通过新的方法触发
     }
 
-    // 简化Ultimate Time Break音效 - 使用优化的批量播放方法
-    public static void playUltimateTimeBreakSound(Level level, Player player, List<String> selectedRiders) {
+    // 播放超必杀的骑士名称部分音效
+    public static void playUltimateTimeBreakNameSounds(Level level, Player player, List<String> selectedRiders) {
         // 不需要再播放Hey Say音效，因为已经在playUltimateActivationSound中播放过了
 
         // 使用优化的批量播放方法，减少线程创建
@@ -118,9 +118,35 @@ public class HeiseiRiderEffectManager {
         
         // 批量播放所有音效，显著减少资源消耗
         RiderSounds.playDelayedSoundSequence(level, player, sounds);
+    }
+    
+    // 简化Ultimate Time Break音效 - 使用优化的批量播放方法
+    public static void playUltimateTimeBreakSound(Level level, Player player, List<String> selectedRiders) {
+        // 现在这个方法只播放超必杀的骑士名称部分，最后报名音效会在击败实体后触发
+        playUltimateTimeBreakNameSounds(level, player, selectedRiders);
+    }
+    
+    // 播放完整的超必杀音效序列（在击败实体后触发）
+    public static void playUltimateFinishSoundSequence(Level level, Player player, List<String> selectedRiders) {
+        // 使用优化的批量播放方法，减少线程创建
+        List<RiderSounds.DelayedSound> sounds = new ArrayList<>();
         
-        // Ultimate Time Break音效现在只在击败实体后才会触发
-        // 实际的Ultimate Time Break音效会在实体被击败时通过新的方法触发
+        int delay = 0;
+
+        // 播放所有选中骑士的名称音效
+        for (String rider : selectedRiders) {
+            SoundEvent nameSound = getRiderNameSound(rider);
+            if (nameSound != null) {
+                sounds.add(new RiderSounds.DelayedSound(nameSound, delay));
+                delay += 8;
+            }
+        }
+        
+        // 添加Ultimate Time Break最后报名音效
+        sounds.add(new RiderSounds.DelayedSound(RiderSounds.ULTIMATE_TIME_BREAK, delay + 20));
+        
+        // 批量播放所有音效，显著减少资源消耗
+        RiderSounds.playDelayedSoundSequence(level, player, sounds);
     }
     
     // 新方法：在击败实体后播放特殊音效

@@ -15,6 +15,9 @@ import net.minecraft.world.phys.Vec3;
 /**
  * Kamen Rider Build 特效实现类
  * 单一气泡兔坦形态实现，包含招牌技能公式踢
+ * 
+ * 注意：目前系统实际使用的是 com.xiaoshi2022.kamen_rider_weapon_craft.rider.effect.impl.BuildEffect 类
+ * 如需使用此类，请在 HeiseiRiderEffectManager.java 中修改注册信息
  */
 public class BuildRiderEffect implements HeiseiRiderEffect {
 

@@ -6,6 +6,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -294,40 +295,80 @@ public class BuildRiderEntity extends Projectile implements GeoEntity {
     // 吸引半径5格内的生物到特效中心
     private void attractEntities() {
         if (this.level().isClientSide()) return;
-        
+
         Vec3 center = this.position();
         AABB searchArea = this.getBoundingBox().inflate(5.0D); // 半径5格
-        
-        // 获取范围内的所有可移动实体 - 包括其他玩家，只排除主人
-        List<Entity> entities = this.level().getEntities(this, searchArea, entity -> 
-                entity instanceof LivingEntity && 
-                entity != this.getOwner() && 
-                entity.isAlive() && 
-                !(entity instanceof Projectile)
-                // 包含所有非主人的生物，包括其他玩家
+
+        // 获取范围内的所有可移动实体
+        List<Entity> entities = this.level().getEntities(this, searchArea, entity ->
+                entity instanceof LivingEntity &&
+                        entity != this.getOwner() &&
+                        entity.isAlive() &&
+                        !(entity instanceof Projectile) &&
+                        !entity.isSpectator() // 排除旁观者模式玩家
         );
-        
+
         for (Entity entity : entities) {
             // 计算实体到特效中心的向量
             Vec3 entityPos = entity.position();
-            Vec3 direction = center.subtract(entityPos).normalize();
-            
-            // 计算距离，距离越近，吸引力越大
-            double distance = entityPos.distanceTo(center);
-            if (distance > 0.3) { // 调整最小距离，让实体可以更靠近
-                // 增加吸引力，从0.1增加到0.3，使效果更明显
-                double force = 0.3 * (1.0 - distance / 5.0); // 吸引力随距离增加而减小
-                Vec3 pushVector = direction.scale(force);
-                
-                // 应用推力
-                entity.push(pushVector.x, pushVector.y, pushVector.z);
-                
-                // 增加粒子效果生成几率，从20%增加到40%
-                if (this.level().random.nextFloat() < 0.4) {
-                    this.level().addParticle(ParticleTypes.WITCH, 
-                            entityPos.x, entityPos.y + 0.5, entityPos.z, 
-                            direction.x * 0.5, direction.y * 0.5, direction.z * 0.5);
+            Vec3 toCenter = center.subtract(entityPos);
+            double distance = toCenter.length();
+
+            // 如果距离很近，跳过避免过度拉扯
+            if (distance < 0.5) continue;
+
+            // 标准化方向向量
+            Vec3 direction = toCenter.normalize();
+
+            // 计算引力强度 - 使用平方反比定律，距离越近引力越强
+            double maxDistance = 5.0;
+            double minForce = 0.1;  // 最小引力
+            double maxForce = 0.8;  // 最大引力
+
+            // 引力随距离增加而减小，使用平滑的曲线
+            double normalizedDistance = distance / maxDistance;
+            double force = maxForce * (1.0 - normalizedDistance * normalizedDistance);
+
+            // 确保引力不小于最小值
+            force = Math.max(force, minForce);
+
+            // 应用引力 - 使用更平滑的移动
+            Vec3 attraction = direction.scale(force * 0.3); // 乘以系数控制总体强度
+
+            // 对实体应用移动
+            if (entity instanceof LivingEntity livingEntity) {
+                // 对于生物实体，使用更自然的移动方式
+                Vec3 currentMotion = entity.getDeltaMovement();
+                Vec3 newMotion = currentMotion.add(attraction);
+
+                // 限制最大速度避免过度加速
+                double maxSpeed = 1.5;
+                if (newMotion.length() > maxSpeed) {
+                    newMotion = newMotion.normalize().scale(maxSpeed);
                 }
+
+                entity.setDeltaMovement(newMotion);
+
+                // 设置实体已经移动，避免服务器重置位置
+                livingEntity.hurtMarked = true;
+            } else {
+                // 对于其他实体直接应用推力
+                entity.push(attraction.x, attraction.y, attraction.z);
+            }
+
+            // 增加粒子效果 - 只在有实际移动时生成
+            if (force > minForce * 1.5 && this.level().random.nextFloat() < 0.3) {
+                // 使用更合适的粒子类型
+                this.level().addParticle(ParticleTypes.ENCHANT,
+                        entityPos.x, entityPos.y + entity.getBbHeight() * 0.5, entityPos.z,
+                        direction.x * 0.2, direction.y * 0.2, direction.z * 0.2);
+            }
+
+            // 偶尔播放吸引音效
+            if (this.level().random.nextFloat() < 0.02) {
+                this.level().playSound(null, center.x, center.y, center.z,
+                        net.minecraft.sounds.SoundEvents.ENDERMAN_TELEPORT,
+                        SoundSource.NEUTRAL, 0.3F, 1.5F);
             }
         }
     }

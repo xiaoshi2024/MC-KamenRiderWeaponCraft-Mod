@@ -13,6 +13,18 @@ public class BuildEffect implements HeiseiRiderEffect {
         if (!level.isClientSide) {
             // 服务器端：使用BuildRiderEntity生成特效实体，有几率触发
             BuildRiderEntity.trySpawnEffect(level, player, direction, getAttackDamage());
+            
+            // 为玩家添加气泡兔坦形态的增益效果
+            player.addEffect(new net.minecraft.world.effect.MobEffectInstance(
+                net.minecraft.world.effect.MobEffects.MOVEMENT_SPEED, 200, 1));
+            
+            // 增加伤害抵抗（坦克防御特性）
+            player.addEffect(new net.minecraft.world.effect.MobEffectInstance(
+                net.minecraft.world.effect.MobEffects.DAMAGE_RESISTANCE, 200, 1));
+            
+            // 增加攻击力（气泡兔坦爆发力量）
+            player.addEffect(new net.minecraft.world.effect.MobEffectInstance(
+                net.minecraft.world.effect.MobEffects.DAMAGE_BOOST, 100, 0));
         } else {
             // 客户端：粒子效果已移除，后续将使用geo动画还原
         }

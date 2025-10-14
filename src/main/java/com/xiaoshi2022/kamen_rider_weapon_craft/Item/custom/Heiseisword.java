@@ -355,6 +355,9 @@ public class Heiseisword extends SwordItem implements GeoItem {
 
             // 自动选择所有骑士用于超必杀
             setScrambleRiders(stack, new ArrayList<>(riderOrder));
+            
+            // 设置超必杀准备就绪标志，实际技能将在玩家发动攻击时执行
+            stack.getOrCreateTag().putBoolean("isXKeyUltimateReady", true);
             return;
         }
 
@@ -441,6 +444,8 @@ public class Heiseisword extends SwordItem implements GeoItem {
             setCurrentRotationPosition(stack, 0);
             setUltimateMode(stack, false);
             setRotationCount(stack, 0);
+            // 清除超必杀准备就绪标志
+            stack.getOrCreateTag().remove("isXKeyUltimateReady");
         }
         return InteractionResultHolder.success(stack);
     }
@@ -573,6 +578,26 @@ public class Heiseisword extends SwordItem implements GeoItem {
     @Override
     public boolean onLeftClickEntity(ItemStack stack, Player player, net.minecraft.world.entity.Entity entity) {
         if (!player.level().isClientSide) {
+            // 检查是否处于超必杀准备就绪状态（由X键触发）
+            boolean isXKeyUltimateReady = stack.getOrCreateTag().getBoolean("isXKeyUltimateReady");
+            
+            if (isXKeyUltimateReady) {
+                // 如果是X键超必杀准备就绪状态，执行X键超必杀攻击
+                executeXKeyUltimateAttack(player.level(), player, stack);
+                
+                // 清除超必杀准备就绪标志
+                stack.getOrCreateTag().remove("isXKeyUltimateReady");
+                
+                // 检查实体是否被击败
+                if (entity instanceof net.minecraft.world.entity.LivingEntity livingEntity && !livingEntity.isAlive()) {
+                    // 实体被击败，播放完整的超必杀音效序列
+                    List<String> riders = getScrambleRiders(stack);
+                    HeiseiRiderEffectManager.playUltimateFinishSoundSequence(player.level(), player, riders);
+                }
+                
+                return true;
+            }
+            
             if (isFinishTimeMode(stack)) {
                 // Finish Time模式下的攻击
                 boolean result = handleFinishTimeAttack(player, stack);
@@ -580,37 +605,18 @@ public class Heiseisword extends SwordItem implements GeoItem {
                 if (entity instanceof net.minecraft.world.entity.LivingEntity livingEntity && !livingEntity.isAlive()) {
                     // 实体被击败，根据当前模式播放相应的音效
                     if (isUltimateMode(stack)) {
-                        // 超必杀模式，播放Ultimate Time Break音效
+                        // 超必杀模式，播放完整的超必杀音效序列（在击败实体后触发）
                         List<String> riders = getScrambleRiders(stack);
-                        // 使用优化的批量播放方法，减少线程创建
-                        List<RiderSounds.DelayedSound> sounds = new ArrayList<>();
-                        
-                        // 添加Hey音效（无延迟）
-                        sounds.add(new RiderSounds.DelayedSound(RiderSounds.HEY, 0));
-                        
-                        // 然后按顺序添加所有选中骑士的名称音效
-                        int delay = 20;
-                        for (String riderName : riders) {
-                            SoundEvent nameSound = HeiseiRiderEffectManager.getRiderNameSound(riderName);
-                            if (nameSound != null) {
-                                sounds.add(new RiderSounds.DelayedSound(nameSound, delay));
-                                delay += 10;
-                            }
-                        }
-                        // 添加Ultimate Time Break音效
-                        sounds.add(new RiderSounds.DelayedSound(RiderSounds.ULTIMATE_TIME_BREAK, delay + 20));
-                        
-                        // 批量播放所有音效，显著减少资源消耗
-                        RiderSounds.playDelayedSoundSequence(player.level(), player, sounds);
+                        HeiseiRiderEffectManager.playUltimateFinishSoundSequence(player.level(), player, riders);
                     } else {
                         // 普通Scramble模式，播放Scramble Time Break音效
                         List<String> riders = getScrambleRiders(stack);
                         // 使用优化的批量播放方法，减少线程创建
                         List<RiderSounds.DelayedSound> sounds = new ArrayList<>();
-                        
+                         
                         // 添加Hey音效（无延迟）
                         sounds.add(new RiderSounds.DelayedSound(RiderSounds.HEY, 0));
-                        
+                         
                         // 然后按顺序添加所有选中骑士的名称音效
                         int delay = 20;
                         for (String riderName : riders) {
@@ -622,7 +628,7 @@ public class Heiseisword extends SwordItem implements GeoItem {
                         }
                         // 添加Scramble Time Break音效
                         sounds.add(new RiderSounds.DelayedSound(RiderSounds.SCRAMBLE_TIME_BREAK, delay + 20));
-                        
+                         
                         // 批量播放所有音效，显著减少资源消耗
                         RiderSounds.playDelayedSoundSequence(player.level(), player, sounds);
                     }
@@ -719,7 +725,9 @@ public class Heiseisword extends SwordItem implements GeoItem {
         List<String> riders = getScrambleRiders(stack);
         int riderCount = riders.size();
         
-        // 不再直接播放Scramble Time Break音效，音效将在击败实体后通过onLeftClickEntity方法触发
+        // 移除攻击时播放的音效，改为在击败实体后播放
+        // 音效将在onLeftClickEntity方法中，当实体被击败时触发
+        
 
         // 移除特效数量限制，确保所有粒子效果都能显示
         for (int i = 0; i < riderCount; i++) {
@@ -731,18 +739,34 @@ public class Heiseisword extends SwordItem implements GeoItem {
         }
     }
 
-    // 执行Ultimate Time Break
-    private void executeUltimateTimeBreak(Level level, Player player, ItemStack stack) {
+    // 执行X键触发的超必杀攻击（独立于叠加必杀的功能）
+    private void executeXKeyUltimateAttack(Level level, Player player, ItemStack stack) {
         List<String> riders = getScrambleRiders(stack);
         
-        // 不再直接播放Ultimate Time Break音效，音效将在击败实体后通过onLeftClickEntity方法触发
-
         // 移除特效数量限制，确保所有粒子效果都能显示
         for (int i = 0; i < riders.size(); i++) {
             String rider = riders.get(i);
             HeiseiRiderEffect effect = HeiseiRiderEffectManager.getRiderEffect(rider);
             if (effect != null) {
-                // 超必杀模式下特效增强
+                // X键超必杀模式下特效增强
+                effect.executeSpecialAttack(level, player, player.getLookAngle());
+            }
+        }
+
+        // 添加额外的全屏特效或范围伤害
+        executeUltimateSpecialEffects(level, player);
+    }
+    
+    // 执行Ultimate Time Break（叠加必杀）
+    private void executeUltimateTimeBreak(Level level, Player player, ItemStack stack) {
+        List<String> riders = getScrambleRiders(stack);
+        
+        // 移除特效数量限制，确保所有粒子效果都能显示
+        for (int i = 0; i < riders.size(); i++) {
+            String rider = riders.get(i);
+            HeiseiRiderEffect effect = HeiseiRiderEffectManager.getRiderEffect(rider);
+            if (effect != null) {
+                // 叠加超必杀模式下特效增强
                 effect.executeSpecialAttack(level, player, player.getLookAngle());
             }
         }
