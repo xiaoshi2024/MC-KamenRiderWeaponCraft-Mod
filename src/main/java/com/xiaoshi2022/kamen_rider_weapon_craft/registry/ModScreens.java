@@ -1,13 +1,12 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.registry;
 
-import com.xiaoshi2022.kamen_rider_weapon_craft.gui.SonicBowGuiScreen;
 import com.xiaoshi2022.kamen_rider_weapon_craft.gui.RiderFusionMachinesScreen;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.api.distmarker.Dist;
-
+import com.xiaoshi2022.kamen_rider_weapon_craft.gui.SonicBowGuiScreen;
 import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)

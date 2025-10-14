@@ -1,6 +1,5 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.Item.prop.client.entity;
 
-import com.xiaoshi2022.kamen_rider_weapon_craft.particle.ModParticles;
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModEntityTypes;
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModSounds;
 import net.minecraft.core.BlockPos;
@@ -29,13 +28,8 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.EntityHitResult;
-import net.minecraft.world.phys.HitResult;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.*;
 import net.minecraftforge.network.NetworkHooks;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 import java.util.Random;

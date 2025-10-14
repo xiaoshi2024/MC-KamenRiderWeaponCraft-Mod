@@ -1,7 +1,6 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.worldgen;
 
 import com.xiaoshi2022.kamen_rider_weapon_craft.kamen_rider_weapon_craft;
-import com.xiaoshi2022.kamen_rider_weapon_craft.worldgen.ModConfiguredFeatures;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
@@ -9,7 +8,6 @@ import net.minecraft.data.worldgen.BootstapContext;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;

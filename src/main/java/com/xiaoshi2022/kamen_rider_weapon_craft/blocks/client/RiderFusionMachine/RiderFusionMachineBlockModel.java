@@ -1,9 +1,8 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.blocks.client.RiderFusionMachine;
 
 import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.client.RiderFusionMachineBlockEntity;
-import software.bernie.geckolib.model.GeoModel;
-
 import net.minecraft.resources.ResourceLocation;
+import software.bernie.geckolib.model.GeoModel;
 
 
 public class RiderFusionMachineBlockModel extends GeoModel<RiderFusionMachineBlockEntity> {

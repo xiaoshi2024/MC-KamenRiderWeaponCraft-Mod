@@ -24,7 +24,6 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
-
 import static com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModBlocks.HELHEIM_JELLY_BLOCK;
 
 public class ModItems {

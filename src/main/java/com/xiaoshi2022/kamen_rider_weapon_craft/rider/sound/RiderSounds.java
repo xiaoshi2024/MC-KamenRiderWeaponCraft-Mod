@@ -2,7 +2,6 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.rider.sound;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;

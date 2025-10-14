@@ -4,6 +4,8 @@ import com.xiaoshi2022.kamen_rider_weapon_craft.Item.client.Heiseisword.Heiseisw
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.effect.HeiseiRiderEffect;
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.effect.HeiseiRiderEffectManager;
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.sound.RiderSounds;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -13,10 +15,9 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import com.xiaoshi2022.kamen_rider_weapon_craft.util.KeyBinding;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import software.bernie.geckolib.animatable.GeoItem;
@@ -32,6 +33,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.SwordItem;
@@ -60,8 +63,10 @@ public class Heiseisword extends SwordItem implements GeoItem {
     private static final String TAG_CURRENT_ROTATION_POSITION = "currentRotationPosition";
     // 添加冷却时间相关常量和NBT键
     private static final String TAG_LAST_ATTACK_TIME = "lastAttackTime";
+    private static final String TAG_LAST_RIDER_SELECTION_TIME = "lastRiderSelectionTime"; // 上次选择骑士的时间
     private static final int ATTACK_COOLDOWN_TICKS = 10; // 攻击冷却时间（约0.5秒）
     private static final int ULTIMATE_ATTACK_COOLDOWN_TICKS = 40; // 超必杀冷却时间（约2秒）
+    private static final int RIDER_SELECTION_COOLDOWN_TICKS = 15; // 骑士选择冷却时间（约0.75秒）
 
     // 添加获取上次攻击时间的方法
     private long getLastAttackTime(ItemStack stack) {
@@ -253,13 +258,159 @@ public class Heiseisword extends SwordItem implements GeoItem {
             return toggleFinishTimeMode(level, player, stack);
         }
 
-        if (isFinishTimeMode(stack)) {
-            // 必杀时刻模式：处理Finish Time模式
-            return handleFinishTimeMode(level, player, hand, stack);
-        } else {
-            // 普通模式：处理普通模式
-            return handleNormalMode(level, player, hand, stack);
+        // 右键仅用于远程攻击，不执行其他功能
+        player.startUsingItem(hand);
+        return InteractionResultHolder.consume(stack);
+    }
+
+    // 获取上次选择骑士的时间
+    private long getLastRiderSelectionTime(ItemStack stack) {
+        if (!stack.hasTag()) return 0;
+        return stack.getTag().getLong(TAG_LAST_RIDER_SELECTION_TIME);
+    }
+
+    // 设置上次选择骑士的时间
+    private void setLastRiderSelectionTime(ItemStack stack, long time) {
+        stack.getOrCreateTag().putLong(TAG_LAST_RIDER_SELECTION_TIME, time);
+    }
+
+    // 检查骑士选择是否冷却完毕
+    private boolean isRiderSelectionOnCooldown(ItemStack stack, Level level) {
+        long lastSelectionTime = getLastRiderSelectionTime(stack);
+        long currentTime = level.getGameTime();
+        return (currentTime - lastSelectionTime) < RIDER_SELECTION_COOLDOWN_TICKS;
+    }
+
+    // 处理Y键选择骑士的逻辑 - 从武器类内部调用
+    @Override
+    public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
+        // 只有当物品在主手且实体是玩家时才处理
+        if (isSelected && entity instanceof Player player) {
+            // 检测Y键按下且不在冷却期
+            if (KeyBinding.OPEN_LOCKSEED.isDown() && !isRiderSelectionOnCooldown(stack, level)) {
+                // 在客户端直接处理选择逻辑
+                // NBT数据会自动同步到服务端
+                handleRiderSelectionInternal(player, stack);
+                // 更新上次选择时间，设置冷却
+                setLastRiderSelectionTime(stack, level.getGameTime());
+            }
         }
+        super.inventoryTick(stack, level, entity, slotId, isSelected);
+    }
+    
+    @Override
+    public boolean canContinueUsing(ItemStack oldStack, ItemStack newStack) {
+        return super.canContinueUsing(oldStack, newStack);
+    }
+
+    // 内部处理骑士选择逻辑
+    private void handleRiderSelectionInternal(Player player, ItemStack stack) {
+        if (isFinishTimeMode(stack)) {
+            // 必杀时刻模式：处理Finish Time模式下的选择
+            handleFinishTimeModeSelection(player, stack);
+        } else {
+            // 普通模式：处理普通模式下的选择
+            handleNormalModeSelection(player, stack);
+        }
+    }
+
+    // 处理普通模式下的Y键选择
+    private void handleNormalModeSelection(Player player, ItemStack stack) {
+        List<String> riderOrder = HeiseiRiderEffectManager.getRiderOrder();
+
+        String currentSelectedRider = getSelectedRider(stack);
+        if (currentSelectedRider == null || currentSelectedRider.isEmpty()) {
+            // 第一次使用，播放启动音效并选择Build
+            HeiseiRiderEffectManager.playRiderTimeSound(player.level(), player);
+            setSelectedRider(stack, riderOrder.get(0)); // Build
+            setCurrentRotationPosition(stack, 0);
+        } else {
+            // 逆时针选择下一个骑士
+            int currentIndex = riderOrder.indexOf(currentSelectedRider);
+            int nextIndex = (currentIndex + 1) % riderOrder.size();
+            setSelectedRider(stack, riderOrder.get(nextIndex));
+
+            // 更新旋转位置（4个方位）
+            int currentPosition = getCurrentRotationPosition(stack);
+            setCurrentRotationPosition(stack, (currentPosition + 1) % 4);
+        }
+
+        // 播放选择音效："Hey! △△!"
+        HeiseiRiderEffectManager.playSelectionSound(player.level(), player, getSelectedRider(stack));
+
+        // 触发分段旋转动画（客户端和服务端都触发）
+        triggerRotationAnimation(player.level(), player, stack);
+    }
+
+    // 处理Finish Time模式下的Y键选择
+    private void handleFinishTimeModeSelection(Player player, ItemStack stack) {
+        List<String> riderOrder = HeiseiRiderEffectManager.getRiderOrder();
+
+        // 检测X键按下（用于触发超必杀）
+        if (KeyBinding.CHANGE_KEY.isDown() && !isUltimateMode(stack)) {
+            setUltimateMode(stack, true);
+            // 播放超必杀启动音效（嘿嘿待机音）和动画
+            HeiseiRiderEffectManager.playUltimateActivationSound(player.level(), player);
+            triggerUltimateAnimation(player.level(), player, stack);
+
+            // 自动选择所有骑士用于超必杀
+            setScrambleRiders(stack, new ArrayList<>(riderOrder));
+            return;
+        }
+
+        // 顺时针选择骑士并添加到列表
+        List<String> currentScrambleRiders = getScrambleRiders(stack);
+        
+        if (currentScrambleRiders.isEmpty()) {
+            // 从Build开始顺时针选择
+            String newRider = riderOrder.get(0); // Build
+            List<String> updatedRiders = new ArrayList<>();
+            updatedRiders.add(newRider);
+            setScrambleRiders(stack, updatedRiders);
+            HeiseiRiderEffectManager.playSelectionSound(player.level(), player, newRider);
+            setCurrentRotationPosition(stack, 0);
+            // 从ActionBar显示选择信息
+            if (!player.level().isClientSide && player instanceof ServerPlayer serverPlayer) {
+                serverPlayer.displayClientMessage(Component.literal("选择了第一个骑士: " + newRider), true);
+            }
+        } else {
+            // 顺时针选择下一个未被选择的骑士
+            String lastRider = currentScrambleRiders.get(currentScrambleRiders.size() - 1);
+            int currentIndex = riderOrder.indexOf(lastRider);
+            
+            // 防御性编程：如果lastRider不在riderOrder列表中，从0开始
+            if (currentIndex == -1) {
+                currentIndex = 0;
+            }
+
+            // 查找下一个未被选择的骑士
+            int nextIndex = (currentIndex + 1) % riderOrder.size();
+            while (nextIndex != currentIndex) {
+                String candidate = riderOrder.get(nextIndex);
+                if (!currentScrambleRiders.contains(candidate)) {
+                    // 找到了未被选择的骑士
+                    List<String> updatedRiders = new ArrayList<>(currentScrambleRiders);
+                    updatedRiders.add(candidate);
+                    setScrambleRiders(stack, updatedRiders);
+                    HeiseiRiderEffectManager.playSelectionSound(player.level(), player, candidate);
+                    setCurrentRotationPosition(stack, (getCurrentRotationPosition(stack) + 1) % 4);
+                    // 从ActionBar显示选择信息
+                    if (!player.level().isClientSide && player instanceof ServerPlayer serverPlayer) {
+                        serverPlayer.displayClientMessage(Component.literal("选择了骑士: " + candidate), true);
+                    }
+                    break;
+                }
+                nextIndex = (nextIndex + 1) % riderOrder.size();
+            }
+        }
+
+        // 从ActionBar显示当前已选骑士信息
+        if (!player.level().isClientSide && player instanceof ServerPlayer serverPlayer) {
+            serverPlayer.displayClientMessage(Component.literal("当前已选骑士: " + getScrambleRiders(stack)), true);
+        }
+        
+        // 在Finish Time模式下选择骑士时也触发旋转动画
+        triggerRotationAnimation(player.level(), player, stack);
     }
 
     // 切换到必杀时刻（模拟放入表盘）
@@ -276,13 +427,17 @@ public class Heiseisword extends SwordItem implements GeoItem {
             HeiseiRiderEffectManager.playFinishTimeSound(level, player);
             setScrambleRiders(stack, new ArrayList<>());
             setRotationCount(stack, 0);
+            // 保存当前选择的骑士到临时变量
+            String savedRider = getSelectedRider(stack);
             setSelectedRider(stack, null);
             setUltimateMode(stack, false);
             setCurrentRotationPosition(stack, 0);
+            // 恢复之前选择的骑士
+            setSelectedRider(stack, savedRider);
         } else {
-            // 退出Finish Time模式
-            setSelectedRider(stack, null);
+            // 退出Finish Time模式，清空选中的骑士，符合用户需求
             setScrambleRiders(stack, new ArrayList<>());
+            setSelectedRider(stack, null); // 清空骑士选择
             setCurrentRotationPosition(stack, 0);
             setUltimateMode(stack, false);
             setRotationCount(stack, 0);
@@ -395,18 +550,23 @@ public class Heiseisword extends SwordItem implements GeoItem {
 
     // 触发分段旋转动画
     private void triggerRotationAnimation(Level level, Player player, ItemStack stack) {
+        int position = getCurrentRotationPosition(stack);
+        String animationName = "pos" + (position + 1);
+        
+        // 确保在服务端触发动画并同步到所有客户端
         if (level instanceof ServerLevel serverLevel) {
-            int position = getCurrentRotationPosition(stack);
-            String animationName = "pos" + (position + 1);
             triggerAnim(player, GeoItem.getOrAssignId(stack, serverLevel), "rotation", animationName);
         }
+        // 客户端不需要额外处理，因为GeckoLib会自动处理客户端动画
     }
 
     // 触发超必杀动画
     private void triggerUltimateAnimation(Level level, Player player, ItemStack stack) {
+        // 确保在服务端触发动画并同步到所有客户端
         if (level instanceof ServerLevel serverLevel) {
             triggerAnim(player, GeoItem.getOrAssignId(stack, serverLevel), "ultimate", "ultimate_time_break");
         }
+        // 客户端不需要额外处理，因为GeckoLib会自动处理客户端动画
     }
 
     // 执行普通攻击
@@ -619,6 +779,122 @@ public class Heiseisword extends SwordItem implements GeoItem {
                             )
                     );
                 });
+        }
+    }
+
+    // 远程攻击相关方法
+    @Override
+    public UseAnim getUseAnimation(ItemStack stack) {
+        // 设置使用动画为弓的动画
+        return UseAnim.BOW;
+    }
+
+    @Override
+    public int getUseDuration(ItemStack stack) {
+        // 设置最大使用时间
+        return 72000;
+    }
+
+    @Override
+    public void releaseUsing(ItemStack stack, Level level, LivingEntity shooter, int ticksRemaining) {
+        if (!(shooter instanceof Player player) || level.isClientSide) return;
+
+        ServerLevel serverLevel = (ServerLevel) level;
+        float chargeTime = (getUseDuration(stack) - ticksRemaining) / 20F;
+        chargeTime = (chargeTime * chargeTime + chargeTime * 2.0F) / 3.0F;
+        if (chargeTime > 1.0F) {
+            chargeTime = 1.0F;
+        }
+
+        // 根据不同模式执行不同的远程攻击
+        if (isFinishTimeMode(stack)) {
+            if (isUltimateMode(stack)) {
+                executeUltimateRangedAttack(player, stack, chargeTime);
+            } else {
+                executeScrambleRangedAttack(player, stack, chargeTime);
+            }
+        } else {
+            executeNormalRangedAttack(player, stack, chargeTime);
+        }
+
+        // 触发远程攻击动画
+        triggerRangedAttackAnimation(level, player, stack);
+
+        // 消耗耐久
+        stack.hurtAndBreak(1, player, e -> e.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+    }
+
+    // 触发远程攻击动画
+    private void triggerRangedAttackAnimation(Level level, Player player, ItemStack stack) {
+        if (level instanceof ServerLevel serverLevel) {
+            triggerAnim(player, GeoItem.getOrAssignId(stack, serverLevel), "rotation", "pos1");
+        }
+    }
+
+    // 执行普通模式远程攻击
+    private void executeNormalRangedAttack(Player player, ItemStack stack, float chargeTime) {
+        String rider = getSelectedRider(stack);
+        if (rider != null && !rider.isEmpty()) {
+            HeiseiRiderEffect effect = HeiseiRiderEffectManager.getRiderEffect(rider);
+            if (effect != null) {
+                // 播放远程攻击音效
+                SoundEvent nameSound = HeiseiRiderEffectManager.getRiderNameSound(rider);
+                if (nameSound != null) {
+                    RiderSounds.playAttackSound(player.level(), player, nameSound);
+                }
+                
+                // 执行远程特殊攻击效果
+                Vec3 lookAngle = player.getLookAngle().scale(chargeTime * 2.0);
+                effect.executeSpecialAttack(player.level(), player, lookAngle);
+                
+                // 更新上次攻击时间
+                setLastAttackTime(stack, player.level().getGameTime());
+            }
+        }
+    }
+
+    // 执行Scramble模式远程攻击
+    private void executeScrambleRangedAttack(Player player, ItemStack stack, float chargeTime) {
+        List<String> riders = getScrambleRiders(stack);
+        if (!riders.isEmpty()) {
+            // 播放远程攻击音效
+            RiderSounds.playSound(player.level(), player, RiderSounds.SCRAMBLE_TIME_BREAK);
+            
+            // 对每个选中的骑士执行远程特殊攻击
+            Vec3 lookAngle = player.getLookAngle().scale(chargeTime * 1.5);
+            for (String rider : riders) {
+                HeiseiRiderEffect effect = HeiseiRiderEffectManager.getRiderEffect(rider);
+                if (effect != null) {
+                    effect.executeSpecialAttack(player.level(), player, lookAngle);
+                }
+            }
+            
+            // 更新上次攻击时间
+            setLastAttackTime(stack, player.level().getGameTime());
+        }
+    }
+
+    // 执行超必杀模式远程攻击
+    private void executeUltimateRangedAttack(Player player, ItemStack stack, float chargeTime) {
+        List<String> riders = getScrambleRiders(stack);
+        if (!riders.isEmpty()) {
+            // 播放远程超必杀音效
+            RiderSounds.playSound(player.level(), player, RiderSounds.ULTIMATE_TIME_BREAK);
+            
+            // 对每个选中的骑士执行增强的远程特殊攻击
+            Vec3 lookAngle = player.getLookAngle().scale(chargeTime * 3.0);
+            for (String rider : riders) {
+                HeiseiRiderEffect effect = HeiseiRiderEffectManager.getRiderEffect(rider);
+                if (effect != null) {
+                    effect.executeSpecialAttack(player.level(), player, lookAngle);
+                }
+            }
+            
+            // 添加额外的全屏特效或范围伤害
+            executeUltimateSpecialEffects(player.level(), player);
+            
+            // 更新上次攻击时间
+            setLastAttackTime(stack, player.level().getGameTime());
         }
     }
 

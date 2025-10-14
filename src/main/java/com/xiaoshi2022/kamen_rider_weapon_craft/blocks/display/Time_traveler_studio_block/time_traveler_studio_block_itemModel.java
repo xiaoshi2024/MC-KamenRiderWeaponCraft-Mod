@@ -1,9 +1,8 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.blocks.display.Time_traveler_studio_block;
 
 import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.display.time_traveler_studio_item;
-import software.bernie.geckolib.model.GeoModel;
-
 import net.minecraft.resources.ResourceLocation;
+import software.bernie.geckolib.model.GeoModel;
 
 public class time_traveler_studio_block_itemModel extends GeoModel<time_traveler_studio_item> {
     @Override

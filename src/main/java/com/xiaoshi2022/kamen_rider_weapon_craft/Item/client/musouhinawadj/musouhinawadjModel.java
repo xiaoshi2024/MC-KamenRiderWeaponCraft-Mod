@@ -4,7 +4,6 @@ import com.xiaoshi2022.kamen_rider_weapon_craft.kamen_rider_weapon_craft;
 import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib.core.animatable.GeoAnimatable;
 import software.bernie.geckolib.model.DefaultedGeoModel;
-import software.bernie.geckolib.model.GeoModel;
 
 public class musouhinawadjModel  <T extends GeoAnimatable> extends DefaultedGeoModel<T> {
     /**

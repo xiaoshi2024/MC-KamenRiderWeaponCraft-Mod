@@ -1,8 +1,6 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.Item.client.destroy_fifty_swords;
 
-import com.xiaoshi2022.kamen_rider_weapon_craft.Item.client.gangunsaber.gangunsaberModel;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.destroy_fifty_swords;
-import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.gangunsaber;
 import com.xiaoshi2022.kamen_rider_weapon_craft.kamen_rider_weapon_craft;
 import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib.renderer.GeoItemRenderer;

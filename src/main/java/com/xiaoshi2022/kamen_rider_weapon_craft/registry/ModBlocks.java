@@ -1,29 +1,20 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.registry;
 
 import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.custom.ModFlammableRotatedPillarBlock;
-//import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.custom.ModHangingSignBlock;
-//import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.custom.ModWallHangingSignBlock;
 import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.food.HelheimJellyBlock;
 import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.portals.*;
+import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.portals.plant.HelheimVine;
 import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.portals.plant.helheim_plant;
-import com.xiaoshi2022.kamen_rider_weapon_craft.world.inventory.SonicBowContainer;
 import com.xiaoshi2022.kamen_rider_weapon_craft.worldgen.tree.PineTreeGrower;
-import net.minecraft.client.resources.model.Material;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
-import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.portals.plant.HelheimVine;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class ModBlocks {
     // 创建一个 DeferredRegister 实例用于注册方块

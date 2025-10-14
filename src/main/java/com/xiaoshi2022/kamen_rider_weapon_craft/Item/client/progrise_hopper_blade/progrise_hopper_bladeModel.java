@@ -1,6 +1,5 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.Item.client.progrise_hopper_blade;
 
-import com.xiaoshi2022.kamen_rider_weapon_craft.Item.client.progrise_hopper_blade.progrise_hopper_bladeModel;
 import com.xiaoshi2022.kamen_rider_weapon_craft.kamen_rider_weapon_craft;
 import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib.core.animatable.GeoAnimatable;

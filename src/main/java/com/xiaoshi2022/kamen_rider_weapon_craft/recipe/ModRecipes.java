@@ -1,11 +1,11 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.recipe;
 
+import com.xiaoshi2022.kamen_rider_weapon_craft.kamen_rider_weapon_craft;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
-import com.xiaoshi2022.kamen_rider_weapon_craft.kamen_rider_weapon_craft;
 
 public class ModRecipes {
 

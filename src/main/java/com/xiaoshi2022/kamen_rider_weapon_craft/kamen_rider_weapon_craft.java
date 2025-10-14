@@ -1,22 +1,22 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft;
 
+import com.xiaoshi2022.kamen_rider_weapon_craft.event.ItemTooltipHandler;
 import com.xiaoshi2022.kamen_rider_weapon_craft.event.LivingHurtHandler;
 import com.xiaoshi2022.kamen_rider_weapon_craft.event.WitherSpawnHandler;
-import com.xiaoshi2022.kamen_rider_weapon_craft.event.ItemTooltipHandler;
-import com.xiaoshi2022.kamen_rider_weapon_craft.procedures.KRWBoot;
 import com.xiaoshi2022.kamen_rider_weapon_craft.network.*;
 import com.xiaoshi2022.kamen_rider_weapon_craft.particle.ModParticles;
+import com.xiaoshi2022.kamen_rider_weapon_craft.procedures.KRWBoot;
 import com.xiaoshi2022.kamen_rider_weapon_craft.procedures.PullSounds;
 import com.xiaoshi2022.kamen_rider_weapon_craft.procedures.PullSoundsClient;
 import com.xiaoshi2022.kamen_rider_weapon_craft.recipe.ModRecipes;
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.*;
+import com.xiaoshi2022.kamen_rider_weapon_craft.rider.RiderEffectEntityRegistry;
 import com.xiaoshi2022.kamen_rider_weapon_craft.tab.ModTab;
 import com.xiaoshi2022.kamen_rider_weapon_craft.util.FruitConversionRegistry;
 import com.xiaoshi2022.kamen_rider_weapon_craft.villagers.LockSeedMerchantProfession;
 import com.xiaoshi2022.kamen_rider_weapon_craft.villagers.TimeTravelerProfession;
 import com.xiaoshi2022.kamen_rider_weapon_craft.worldgen.tree.ModFoliagePlacers;
 import com.xiaoshi2022.kamen_rider_weapon_craft.worldgen.tree.ModTrunkPlacerTypes;
-import com.xiaoshi2022.kamen_rider_weapon_craft.rider.RiderEffectEntityRegistry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.ComposterBlock;

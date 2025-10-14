@@ -33,7 +33,6 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nullable;
-import java.util.Random;
 
 public class RiderFusionMachineBlock extends BaseEntityBlock implements EntityBlock {
     public static final IntegerProperty ANIMATION = IntegerProperty.create("animation", 0, 4);

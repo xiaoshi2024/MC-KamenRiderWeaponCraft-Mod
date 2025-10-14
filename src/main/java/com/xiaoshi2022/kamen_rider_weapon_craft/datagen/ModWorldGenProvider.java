@@ -1,11 +1,11 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.datagen;
 
 import com.xiaoshi2022.kamen_rider_weapon_craft.kamen_rider_weapon_craft;
-import com.xiaoshi2022.kamen_rider_weapon_craft.worldgen.dimension.ModDimensions;
 import com.xiaoshi2022.kamen_rider_weapon_craft.worldgen.ModBiomeModifiers;
 import com.xiaoshi2022.kamen_rider_weapon_craft.worldgen.ModConfiguredFeatures;
 import com.xiaoshi2022.kamen_rider_weapon_craft.worldgen.ModPlacedFeatures;
 import com.xiaoshi2022.kamen_rider_weapon_craft.worldgen.biome.ModBiomes;
+import com.xiaoshi2022.kamen_rider_weapon_craft.worldgen.dimension.ModDimensions;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.RegistrySetBuilder;
 import net.minecraft.core.registries.Registries;

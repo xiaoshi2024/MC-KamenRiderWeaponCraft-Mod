@@ -1,9 +1,8 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.blocks.display.riderfusionmachine_block;
 
 import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.display.rider_fusion_machine_item;
-import software.bernie.geckolib.model.GeoModel;
-
 import net.minecraft.resources.ResourceLocation;
+import software.bernie.geckolib.model.GeoModel;
 
 public class riderfusionmachine_itemModel extends GeoModel<rider_fusion_machine_item> {
     @Override

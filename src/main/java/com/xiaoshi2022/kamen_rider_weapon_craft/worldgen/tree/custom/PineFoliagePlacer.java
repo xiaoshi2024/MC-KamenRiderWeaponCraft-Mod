@@ -15,7 +15,10 @@ import net.minecraft.world.level.levelgen.feature.configurations.TreeConfigurati
 import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacer;
 import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacerType;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
 
 public class PineFoliagePlacer extends FoliagePlacer {
     public static final Codec<PineFoliagePlacer> CODEC = RecordCodecBuilder.create(instance ->

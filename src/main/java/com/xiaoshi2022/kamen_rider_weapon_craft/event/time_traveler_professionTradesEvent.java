@@ -2,13 +2,12 @@ package com.xiaoshi2022.kamen_rider_weapon_craft.event;
 
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModItems;
 import com.xiaoshi2022.kamen_rider_weapon_craft.villagers.TimeTravelerProfession;
-import net.minecraft.world.item.Items;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.event.village.VillagerTradesEvent;
-import net.minecraftforge.common.BasicItemListing;
-
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraftforge.common.BasicItemListing;
+import net.minecraftforge.event.village.VillagerTradesEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class time_traveler_professionTradesEvent { // ${mod_class} 占位符：你的MOD主类名
