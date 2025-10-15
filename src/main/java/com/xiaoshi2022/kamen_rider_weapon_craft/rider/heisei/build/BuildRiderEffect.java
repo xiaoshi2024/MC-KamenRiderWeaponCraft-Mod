@@ -1,6 +1,6 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.build;
 
-import com.xiaoshi2022.kamen_rider_weapon_craft.rider.effect.HeiseiRiderEffect;
+import com.xiaoshi2022.kamen_rider_weapon_craft.rider.effect.AbstractHeiseiRiderEffect;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -19,7 +19,7 @@ import net.minecraft.world.phys.Vec3;
  * 注意：目前系统实际使用的是 com.xiaoshi2022.kamen_rider_weapon_craft.rider.effect.impl.BuildEffect 类
  * 如需使用此类，请在 HeiseiRiderEffectManager.java 中修改注册信息
  */
-public class BuildRiderEffect implements HeiseiRiderEffect {
+public class BuildRiderEffect extends AbstractHeiseiRiderEffect {
 
     // 单一形态 - 气泡兔坦（RabbitTank Sparkling）
     // 攻击和防御参数

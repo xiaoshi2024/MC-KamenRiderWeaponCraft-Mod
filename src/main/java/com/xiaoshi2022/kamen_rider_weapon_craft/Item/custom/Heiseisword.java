@@ -1,5 +1,6 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom;
 
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.event.Superpower.RiderEnergyHandler;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.client.Heiseisword.HeiseiswordRenderer;
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.effect.HeiseiRiderEffect;
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.effect.HeiseiRiderEffectManager;
@@ -21,6 +22,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
+import net.minecraft.client.Minecraft;
 import software.bernie.geckolib.animatable.GeoItem;
 import software.bernie.geckolib.animatable.SingletonGeoAnimatable;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -667,6 +669,17 @@ public class Heiseisword extends SwordItem implements GeoItem {
         String rider = getSelectedRider(stack);
         HeiseiRiderEffect effect = HeiseiRiderEffectManager.getRiderEffect(rider);
         if (effect != null) {
+            // 检查骑士能量是否足够
+            double energyCost = HeiseiRiderEffectManager.getRiderEnergyCost(rider);
+            if (!RiderEnergyHandler.canUseRiderEnergy(player) || !RiderEnergyHandler.consumeRiderEnergy(player, energyCost)) {
+                // 能量不足，显示屏幕中央提示
+                if (!player.level().isClientSide && player instanceof ServerPlayer serverPlayer) {
+                    // 在服务端，通过客户端消息传递到屏幕中央
+                    serverPlayer.displayClientMessage(Component.literal("§c骑士能量不足，无法使用此技能！"), true);
+                }
+                return false;
+            }
+            
             // 不再在攻击时播放骑士名称音效和Dual Time Break音效
             // 这些音效现在只在击败实体后才会触发
 
@@ -721,6 +734,23 @@ public class Heiseisword extends SwordItem implements GeoItem {
         // 移除攻击时播放的音效，改为在击败实体后播放
         // 音效将在onLeftClickEntity方法中，当实体被击败时触发
         
+        // 计算总能量消耗（每个骑士的能量消耗之和）
+        double totalEnergyCost = 0;
+        for (String rider : riders) {
+            totalEnergyCost += HeiseiRiderEffectManager.getRiderEnergyCost(rider);
+        }
+        
+        // Scramble模式下能量消耗增加20%作为组合消耗
+        totalEnergyCost *= 1.2;
+        
+        // 检查骑士能量是否足够
+        if (!RiderEnergyHandler.canUseRiderEnergy(player) || !RiderEnergyHandler.consumeRiderEnergy(player, totalEnergyCost)) {
+            // 能量不足，显示屏幕中央提示
+            if (!player.level().isClientSide && player instanceof ServerPlayer serverPlayer) {
+                serverPlayer.displayClientMessage(Component.literal("§c骑士能量不足，无法使用Scramble Time Break！"), true);
+            }
+            return;
+        }
 
         // 移除特效数量限制，确保所有粒子效果都能显示
         for (int i = 0; i < riderCount; i++) {
@@ -735,6 +765,27 @@ public class Heiseisword extends SwordItem implements GeoItem {
     // 执行X键触发的超必杀攻击（独立于叠加必杀的功能）
     private void executeXKeyUltimateAttack(Level level, Player player, ItemStack stack) {
         List<String> riders = getScrambleRiders(stack);
+        
+        // 计算总能量消耗（每个骑士的能量消耗之和）
+        double totalEnergyCost = 0;
+        for (String rider : riders) {
+            HeiseiRiderEffect effect = HeiseiRiderEffectManager.getRiderEffect(rider);
+            if (effect != null) {
+                totalEnergyCost += effect.getEnergyCost();
+            }
+        }
+        
+        // 超必杀模式下能量消耗增加50%作为增强消耗
+        totalEnergyCost *= 1.5;
+        
+        // 检查骑士能量是否足够
+        if (!RiderEnergyHandler.canUseRiderEnergy(player) || !RiderEnergyHandler.consumeRiderEnergy(player, totalEnergyCost)) {
+            // 能量不足，显示屏幕中央提示
+            if (!player.level().isClientSide && player instanceof ServerPlayer serverPlayer) {
+                serverPlayer.displayClientMessage(Component.literal("§c骑士能量不足，无法使用X键超必杀！"), true);
+            }
+            return;
+        }
         
         // 移除特效数量限制，确保所有粒子效果都能显示
         for (int i = 0; i < riders.size(); i++) {
@@ -753,6 +804,27 @@ public class Heiseisword extends SwordItem implements GeoItem {
     // 执行Ultimate Time Break（叠加必杀）
     private void executeUltimateTimeBreak(Level level, Player player, ItemStack stack) {
         List<String> riders = getScrambleRiders(stack);
+        
+        // 计算总能量消耗（每个骑士的能量消耗之和）
+        double totalEnergyCost = 0;
+        for (String rider : riders) {
+            HeiseiRiderEffect effect = HeiseiRiderEffectManager.getRiderEffect(rider);
+            if (effect != null) {
+                totalEnergyCost += effect.getEnergyCost();
+            }
+        }
+        
+        // 超必杀模式下能量消耗增加50%作为增强消耗
+        totalEnergyCost *= 1.5;
+        
+        // 检查骑士能量是否足够
+        if (!RiderEnergyHandler.canUseRiderEnergy(player) || !RiderEnergyHandler.consumeRiderEnergy(player, totalEnergyCost)) {
+            // 能量不足，显示屏幕中央提示
+            if (!player.level().isClientSide && player instanceof ServerPlayer serverPlayer) {
+                serverPlayer.displayClientMessage(Component.literal("§c骑士能量不足，无法使用Ultimate Time Break！"), true);
+            }
+            return;
+        }
         
         // 移除特效数量限制，确保所有粒子效果都能显示
         for (int i = 0; i < riders.size(); i++) {
@@ -854,6 +926,18 @@ public class Heiseisword extends SwordItem implements GeoItem {
         if (rider != null && !rider.isEmpty()) {
             HeiseiRiderEffect effect = HeiseiRiderEffectManager.getRiderEffect(rider);
             if (effect != null) {
+                // 远程攻击能量消耗根据充能时间调整
+                double energyCost = HeiseiRiderEffectManager.getRiderEnergyCost(rider) * (0.5 + chargeTime * 0.5);
+                
+                // 检查骑士能量是否足够
+                if (!RiderEnergyHandler.canUseRiderEnergy(player) || !RiderEnergyHandler.consumeRiderEnergy(player, energyCost)) {
+                    // 能量不足，显示屏幕中央提示
+                    if (!player.level().isClientSide && player instanceof ServerPlayer serverPlayer) {
+                        serverPlayer.displayClientMessage(Component.literal("§c骑士能量不足，无法使用远程攻击！"), true);
+                    }
+                    return;
+                }
+                
                 // 播放远程攻击音效
                 SoundEvent nameSound = HeiseiRiderEffectManager.getRiderNameSound(rider);
                 if (nameSound != null) {
@@ -874,6 +958,28 @@ public class Heiseisword extends SwordItem implements GeoItem {
     private void executeScrambleRangedAttack(Player player, ItemStack stack, float chargeTime) {
         List<String> riders = getScrambleRiders(stack);
         if (!riders.isEmpty()) {
+            // 计算总能量消耗（每个骑士的能量消耗之和）
+            double totalEnergyCost = 0;
+            for (String rider : riders) {
+                HeiseiRiderEffect effect = HeiseiRiderEffectManager.getRiderEffect(rider);
+                if (effect != null) {
+                    totalEnergyCost += effect.getEnergyCost();
+                }
+            }
+            
+            // Scramble模式下能量消耗增加20%作为组合消耗
+            // 远程攻击能量消耗根据充能时间调整
+            totalEnergyCost *= 1.2 * (0.5 + chargeTime * 0.5);
+            
+            // 检查骑士能量是否足够
+            if (!RiderEnergyHandler.canUseRiderEnergy(player) || !RiderEnergyHandler.consumeRiderEnergy(player, totalEnergyCost)) {
+                // 能量不足，显示屏幕中央提示
+                if (!player.level().isClientSide && player instanceof ServerPlayer serverPlayer) {
+                    serverPlayer.displayClientMessage(Component.literal("§c骑士能量不足，无法使用Scramble远程攻击！"), true);
+                }
+                return;
+            }
+            
             // 播放远程攻击音效
             RiderSounds.playSound(player.level(), player, RiderSounds.SCRAMBLE_TIME_BREAK);
             
@@ -895,6 +1001,28 @@ public class Heiseisword extends SwordItem implements GeoItem {
     private void executeUltimateRangedAttack(Player player, ItemStack stack, float chargeTime) {
         List<String> riders = getScrambleRiders(stack);
         if (!riders.isEmpty()) {
+            // 计算总能量消耗（每个骑士的能量消耗之和）
+            double totalEnergyCost = 0;
+            for (String rider : riders) {
+                HeiseiRiderEffect effect = HeiseiRiderEffectManager.getRiderEffect(rider);
+                if (effect != null) {
+                    totalEnergyCost += effect.getEnergyCost();
+                }
+            }
+            
+            // 超必杀模式下能量消耗增加50%作为增强消耗
+            // 远程攻击能量消耗根据充能时间调整
+            totalEnergyCost *= 1.5 * (0.5 + chargeTime * 0.5);
+            
+            // 检查骑士能量是否足够
+            if (!RiderEnergyHandler.canUseRiderEnergy(player) || !RiderEnergyHandler.consumeRiderEnergy(player, totalEnergyCost)) {
+                // 能量不足，显示屏幕中央提示
+                if (!player.level().isClientSide && player instanceof ServerPlayer serverPlayer) {
+                    serverPlayer.displayClientMessage(Component.literal("§c骑士能量不足，无法使用Ultimate远程攻击！"), true);
+                }
+                return;
+            }
+            
             // 播放远程超必杀音效
             RiderSounds.playSound(player.level(), player, RiderSounds.ULTIMATE_TIME_BREAK);
             

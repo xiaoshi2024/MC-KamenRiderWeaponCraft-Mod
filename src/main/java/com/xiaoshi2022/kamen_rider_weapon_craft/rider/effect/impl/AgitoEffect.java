@@ -1,13 +1,13 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.rider.effect.impl;
 
-import com.xiaoshi2022.kamen_rider_weapon_craft.rider.effect.HeiseiRiderEffect;
+import com.xiaoshi2022.kamen_rider_weapon_craft.rider.effect.AbstractHeiseiRiderEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
-public class AgitoEffect implements HeiseiRiderEffect {
+public class AgitoEffect extends AbstractHeiseiRiderEffect {
 
     @Override
     public void executeSpecialAttack(Level level, Player player, Vec3 direction) {

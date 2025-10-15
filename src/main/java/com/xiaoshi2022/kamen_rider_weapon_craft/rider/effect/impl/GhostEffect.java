@@ -1,6 +1,6 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.rider.effect.impl;
 
-import com.xiaoshi2022.kamen_rider_weapon_craft.rider.effect.HeiseiRiderEffect;
+import com.xiaoshi2022.kamen_rider_weapon_craft.rider.effect.AbstractHeiseiRiderEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class GhostEffect implements HeiseiRiderEffect {
+public class GhostEffect extends AbstractHeiseiRiderEffect {
     
     // 随机数生成器
     private final Random random = new Random();

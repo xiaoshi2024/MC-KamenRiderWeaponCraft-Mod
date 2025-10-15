@@ -47,6 +47,20 @@ public class HeiseiRiderEffectManager {
     public static HeiseiRiderEffect getRiderEffect(String name) {
         return RIDER_EFFECTS.get(name);
     }
+    
+    // 安全获取骑士能量消耗，确保即使没有实现也能正常工作
+    public static double getRiderEnergyCost(String name) {
+        HeiseiRiderEffect effect = getRiderEffect(name);
+        if (effect != null) {
+            try {
+                return effect.getEnergyCost();
+            } catch (AbstractMethodError e) {
+                // 如果骑士效果没有实现getEnergyCost方法，返回默认值20
+                return 20.0;
+            }
+        }
+        return 20.0; // 默认能量消耗值
+    }
 
     // 获取骑士名称音效
     public static SoundEvent getRiderNameSound(String name) {

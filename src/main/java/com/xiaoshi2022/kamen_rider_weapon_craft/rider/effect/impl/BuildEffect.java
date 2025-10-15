@@ -1,12 +1,12 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.rider.effect.impl;
 
-import com.xiaoshi2022.kamen_rider_weapon_craft.rider.effect.HeiseiRiderEffect;
+import com.xiaoshi2022.kamen_rider_weapon_craft.rider.effect.AbstractHeiseiRiderEffect;
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.build.BuildRiderEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
-public class BuildEffect implements HeiseiRiderEffect {
+public class BuildEffect extends AbstractHeiseiRiderEffect {
 
     @Override
     public void executeSpecialAttack(Level level, Player player, Vec3 direction) {
@@ -48,5 +48,10 @@ public class BuildEffect implements HeiseiRiderEffect {
     @Override
     public float getEffectRange() {
         return 5.0f;
+    }
+    
+    @Override
+    public double getEnergyCost() {
+        return 20.0; // Build骑士技能消耗20点骑士能量
     }
 }

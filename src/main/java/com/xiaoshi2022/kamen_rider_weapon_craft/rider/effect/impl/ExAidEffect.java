@@ -1,7 +1,7 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.rider.effect.impl;
 
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModEntityTypes;
-import com.xiaoshi2022.kamen_rider_weapon_craft.rider.effect.HeiseiRiderEffect;
+import com.xiaoshi2022.kamen_rider_weapon_craft.rider.effect.AbstractHeiseiRiderEffect;
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.exaid.ExAidSlashEffectEntity;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 @Mod.EventBusSubscriber
-public class ExAidEffect implements HeiseiRiderEffect {
+public class ExAidEffect extends AbstractHeiseiRiderEffect {
 
     // 存储需要受到持续伤害的实体和对应的剩余时间（游戏刻）
     private static final Map<LivingEntity, Integer> DAMAGE_TARGETS = new HashMap<>();

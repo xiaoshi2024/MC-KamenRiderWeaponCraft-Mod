@@ -21,4 +21,7 @@ public interface HeiseiRiderEffect {
 
     // 特效范围
     float getEffectRange();
+    
+    // 获取骑士能量消耗
+    double getEnergyCost();
 }

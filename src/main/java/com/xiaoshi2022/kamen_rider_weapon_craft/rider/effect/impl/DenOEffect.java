@@ -1,6 +1,6 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.rider.effect.impl;
 
-import com.xiaoshi2022.kamen_rider_weapon_craft.rider.effect.HeiseiRiderEffect;
+import com.xiaoshi2022.kamen_rider_weapon_craft.rider.effect.AbstractHeiseiRiderEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
@@ -9,7 +9,7 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.Random;
 
-public class DenOEffect implements HeiseiRiderEffect {
+public class DenOEffect extends AbstractHeiseiRiderEffect {
 
     // 电王的不同形态
     private enum DenOForm {
