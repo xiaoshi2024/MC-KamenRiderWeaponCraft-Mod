@@ -2,6 +2,8 @@ package com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom;
 
 import com.xiaoshi2022.kamen_rider_boss_you_and_me.event.Superpower.RiderEnergyHandler;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.client.Heiseisword.HeiseiswordRenderer;
+import com.xiaoshi2022.kamen_rider_weapon_craft.network.HeiseiswordRiderSelectionPacket;
+import com.xiaoshi2022.kamen_rider_weapon_craft.network.NetworkHandler;
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.effect.HeiseiRiderEffect;
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.effect.HeiseiRiderEffectManager;
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.sound.RiderSounds;
@@ -283,14 +285,34 @@ public class Heiseisword extends SwordItem implements GeoItem {
         if (isSelected && entity instanceof Player player) {
             // 检测Y键按下且不在冷却期
             if (KeyBinding.OPEN_LOCKSEED.isDown() && !isRiderSelectionOnCooldown(stack, level)) {
-                // 在客户端直接处理选择逻辑
-                // NBT数据会自动同步到服务端
-                handleRiderSelectionInternal(player, stack);
-                // 更新上次选择时间，设置冷却
-                setLastRiderSelectionTime(stack, level.getGameTime());
+                // 客户端只负责发送网络包到服务端
+                if (level.isClientSide) {
+                    // 发送骑士选择请求到服务端
+                    NetworkHandler.INSTANCE.sendToServer(new HeiseiswordRiderSelectionPacket());
+                    
+                    // 在客户端也设置冷却，避免快速连续发送多个包
+                    setLastRiderSelectionTime(stack, level.getGameTime());
+                }
+                // 服务端处理逻辑会在handleRiderSelectionOnServer方法中进行
             }
         }
         super.inventoryTick(stack, level, entity, slotId, isSelected);
+    }
+    
+    /**
+     * 服务端处理骑士选择的静态方法
+     * 由HeiseiswordRiderSelectionPacket调用
+     */
+    public static void handleRiderSelectionOnServer(ServerPlayer player, ItemStack stack) {
+        if (stack.getItem() instanceof Heiseisword heiseisword) {
+            // 检查冷却
+            if (!heiseisword.isRiderSelectionOnCooldown(stack, player.level())) {
+                // 实际处理骑士选择逻辑
+                heiseisword.handleRiderSelectionInternal(player, stack);
+                // 设置冷却时间
+                heiseisword.setLastRiderSelectionTime(stack, player.level().getGameTime());
+            }
+        }
     }
     
     @Override
@@ -298,7 +320,7 @@ public class Heiseisword extends SwordItem implements GeoItem {
         return super.canContinueUsing(oldStack, newStack);
     }
 
-    // 内部处理骑士选择逻辑
+    // 内部处理骑士选择逻辑（在服务端执行）
     private void handleRiderSelectionInternal(Player player, ItemStack stack) {
         if (isFinishTimeMode(stack)) {
             // 必杀时刻模式：处理Finish Time模式下的选择

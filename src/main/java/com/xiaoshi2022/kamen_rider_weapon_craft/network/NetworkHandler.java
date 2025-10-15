@@ -66,5 +66,13 @@ public class NetworkHandler {
                 DrawMusouSaberPacket::decode,
                 DrawMusouSaberPacket::handle
         );
+        
+        INSTANCE.registerMessage(
+                packetId++,
+                HeiseiswordRiderSelectionPacket.class,
+                HeiseiswordRiderSelectionPacket::encode,
+                HeiseiswordRiderSelectionPacket::decode,
+                HeiseiswordRiderSelectionPacket::handle
+        );
     }
 }
