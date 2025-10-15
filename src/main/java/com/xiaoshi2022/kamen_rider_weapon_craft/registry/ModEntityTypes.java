@@ -2,9 +2,10 @@ package com.xiaoshi2022.kamen_rider_weapon_craft.registry;
 
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.client.daidaimaru.entity.ThrownDaidaimaru;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.prop.client.entity.LaserBeamEntity;
-import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.exaid.ExAidSlashEffectEntity;
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.build.BuildRiderEntity;
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.drive.DriveRiderEntity;
+import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.exaid.ExAidSlashEffectEntity;
+import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.ghost.GhostHeroicSoulEntity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -58,6 +59,15 @@ public class ModEntityTypes {
                             .setUpdateInterval(1)
                             .setShouldReceiveVelocityUpdates(false)
                             .build("exaid_slash_effect"));
+    
+    // Kamen Rider Ghost 伟人魂实体
+    public static final RegistryObject<EntityType<GhostHeroicSoulEntity>> GHOST_HEROIC_SOUL = 
+            ENTITIES.register("ghost_heroic_soul", 
+                    () -> EntityType.Builder.<GhostHeroicSoulEntity>of(GhostHeroicSoulEntity::new, MobCategory.MISC)
+                            .setTrackingRange(64)
+                            .setUpdateInterval(1)
+                            .setShouldReceiveVelocityUpdates(false)
+                            .build("ghost_heroic_soul"));
 
     public static void register(IEventBus modEventBus) {
         ENTITIES.register(modEventBus);

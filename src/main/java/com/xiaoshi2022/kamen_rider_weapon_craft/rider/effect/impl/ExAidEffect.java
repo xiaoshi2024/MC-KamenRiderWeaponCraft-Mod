@@ -1,7 +1,7 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.rider.effect.impl;
 
-import com.xiaoshi2022.kamen_rider_weapon_craft.rider.effect.HeiseiRiderEffect;
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModEntityTypes;
+import com.xiaoshi2022.kamen_rider_weapon_craft.rider.effect.HeiseiRiderEffect;
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.exaid.ExAidSlashEffectEntity;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;

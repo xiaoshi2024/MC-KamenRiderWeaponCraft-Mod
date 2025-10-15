@@ -1,6 +1,7 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.event;
 
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.client.daidaimaru.ThrownDaidaimaruRenderer;
+import com.xiaoshi2022.kamen_rider_weapon_craft.Item.client.musousaberd.musousaberdRenderer;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.prop.client.arrowx.LaserBeamEntityRenderer;
 import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.client.RiderFusionMachine.RiderFusionMachineBlockRenderer;
 import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.client.Time_traveler_studio_block.Time_traveler_studio_blockRenderer;
@@ -20,7 +21,6 @@ import com.xiaoshi2022.kamen_rider_weapon_craft.util.KeyBinding;
 import com.xiaoshi2022.kamen_rider_weapon_craft.util.PlayerUtils;
 import com.xiaoshi2022.kamen_rider_weapon_craft.weapon_mapBOOK.weapon_map;
 import net.minecraft.client.Minecraft;
-import com.xiaoshi2022.kamen_rider_weapon_craft.Item.client.musousaberd.musousaberdRenderer;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
@@ -121,6 +121,8 @@ public class ClientEvents {
             EntityRenderers.register(ModEntityTypes.THROWN_DAIDAIMARU.get(), ThrownDaidaimaruRenderer::new);
             EntityRenderers.register(ModEntityTypes.LASER_BEAM.get(), LaserBeamEntityRenderer::new);
             EntityRenderers.register(ModEntityTypes.EXAID_SLASH_EFFECT.get(), ExAidSlashEffectRenderer::new);
+            // 注册Ghost伟人魂实体渲染器
+            EntityRenderers.register(ModEntityTypes.GHOST_HEROIC_SOUL.get(), com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.ghost.GhostHeroicSoulRenderer::new);
             event.registerBlockEntityRenderer(ModBlockEntities.LOCKSEEDIRONBARS_ENTITY.get(), lockseedIronBarsEntityRenderer::new);
         }
         @SubscribeEvent
