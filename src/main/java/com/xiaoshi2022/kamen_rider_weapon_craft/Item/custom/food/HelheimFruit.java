@@ -111,11 +111,21 @@ public class HelheimFruit extends Item implements GeoItem {
                             System.err.println("INVES_HEILEHIM initialization failed");
                             return stack;
                         }
-                        // 调用 PlayerShape.updateShapes 方法进行变形
-                        if (PlayerShape.updateShapes(serverPlayer, invesHeilehimEntity)) {
-                            System.out.println("Player transformed to INVES_HEILEHIM successfully");
-                        } else {
-                            System.err.println("Player transformation failed");
+                        // 调用 PlayerShape.updateShapes 方法进行变形 - 使用反射检查以避免缺少模组时崩溃
+                        try {
+                            // 动态加载类来检查walkers模组是否存在
+                            Class<?> playerShapeClass = Class.forName("tocraft.walkers.api.PlayerShape");
+                            // 使用反射调用updateShapes方法
+                            java.lang.reflect.Method updateShapesMethod = playerShapeClass.getMethod("updateShapes", ServerPlayer.class, LivingEntity.class);
+                            boolean result = (boolean) updateShapesMethod.invoke(null, serverPlayer, invesHeilehimEntity);
+                            if (result) {
+                                System.out.println("Player transformed to INVES_HEILEHIM successfully");
+                            } else {
+                                System.err.println("Player transformation failed");
+                            }
+                        } catch (Exception e) {
+                            // 如果walkers模组不存在或发生其他错误，记录日志但不崩溃
+                            System.out.println("Walkers mod not available, skipping transformation: " + e.getMessage());
                         }
                     }
                 }

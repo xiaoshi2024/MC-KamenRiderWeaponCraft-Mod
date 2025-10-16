@@ -1,6 +1,6 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom;
 
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.event.Superpower.RiderEnergyHandler;
+import com.xiaoshi2022.kamen_rider_weapon_craft.rider.energy.HeiseiswordEnergyManager;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.client.Heiseisword.HeiseiswordRenderer;
 import com.xiaoshi2022.kamen_rider_weapon_craft.network.HeiseiswordRiderSelectionPacket;
 import com.xiaoshi2022.kamen_rider_weapon_craft.network.NetworkHandler;
@@ -596,6 +596,13 @@ public class Heiseisword extends SwordItem implements GeoItem {
     // 执行普通攻击
     @Override
     public boolean onLeftClickEntity(ItemStack stack, Player player, net.minecraft.world.entity.Entity entity) {
+        // 保存攻击前实体的生命值，用于计算实际造成的伤害
+        float damageDealt = 0.0f;
+        if (entity instanceof net.minecraft.world.entity.LivingEntity livingEntity && !player.level().isClientSide) {
+            damageDealt = livingEntity.getHealth();
+        }
+        
+        boolean result;
         if (!player.level().isClientSide) {
             // 检查是否处于超必杀准备就绪状态（由X键触发）
             boolean isXKeyUltimateReady = stack.getOrCreateTag().getBoolean("isXKeyUltimateReady");
@@ -614,12 +621,10 @@ public class Heiseisword extends SwordItem implements GeoItem {
                     HeiseiRiderEffectManager.playUltimateFinishSoundSequence(player.level(), player, riders);
                 }
                 
-                return true;
-            }
-            
-            if (isFinishTimeMode(stack)) {
+                result = true;
+            } else if (isFinishTimeMode(stack)) {
                 // Finish Time模式下的攻击
-                boolean result = handleFinishTimeAttack(player, stack);
+                result = handleFinishTimeAttack(player, stack);
                 // 在Finish Time模式下，我们仍然需要检查实体是否被击败
                 if (entity instanceof net.minecraft.world.entity.LivingEntity livingEntity && !livingEntity.isAlive()) {
                     // 实体被击败，根据当前模式播放相应的音效
@@ -632,10 +637,10 @@ public class Heiseisword extends SwordItem implements GeoItem {
                         List<String> riders = getScrambleRiders(stack);
                         // 使用优化的批量播放方法，减少线程创建
                         List<RiderSounds.DelayedSound> sounds = new ArrayList<>();
-                         
+                          
                         // 添加Hey音效（无延迟）
                         sounds.add(new RiderSounds.DelayedSound(RiderSounds.HEY, 0));
-                         
+                          
                         // 然后按顺序添加所有选中骑士的名称音效
                         int delay = 20;
                         for (String riderName : riders) {
@@ -647,17 +652,16 @@ public class Heiseisword extends SwordItem implements GeoItem {
                         }
                         // 添加Scramble Time Break音效
                         sounds.add(new RiderSounds.DelayedSound(RiderSounds.SCRAMBLE_TIME_BREAK, delay + 20));
-                         
+                          
                         // 批量播放所有音效，显著减少资源消耗
                         RiderSounds.playDelayedSoundSequence(player.level(), player, sounds);
                     }
                 }
-                return result;
             } else {
                 String rider = getSelectedRider(stack);
                 if (rider != null && !rider.isEmpty()) {
                     // 普通模式下的攻击
-                    boolean result = handleNormalAttack(player, stack);
+                    result = handleNormalAttack(player, stack);
                     // 检查实体是否被击败
                     if (entity instanceof net.minecraft.world.entity.LivingEntity livingEntity && !livingEntity.isAlive()) {
                         // 实体被击败，先播放骑士名称音效，然后播放Dual Time Break音效
@@ -676,11 +680,25 @@ public class Heiseisword extends SwordItem implements GeoItem {
                             }
                         }
                     }
-                    return result;
+                } else {
+                    result = super.onLeftClickEntity(stack, player, entity);
                 }
             }
+        } else {
+            result = super.onLeftClickEntity(stack, player, entity);
         }
-        return super.onLeftClickEntity(stack, player, entity);
+        
+        // 在攻击完成后，计算实际造成的伤害并恢复能量
+        if (!player.level().isClientSide && entity instanceof net.minecraft.world.entity.LivingEntity livingEntity) {
+            // 计算实际造成的伤害
+            float actualDamage = damageDealt - livingEntity.getHealth();
+            if (actualDamage > 0) {
+                // 根据造成的伤害恢复能量
+                HeiseiswordEnergyManager.recoverEnergyByDamage(player, actualDamage);
+            }
+        }
+        
+        return result;
     }
 
     // 处理普通模式攻击
@@ -693,9 +711,9 @@ public class Heiseisword extends SwordItem implements GeoItem {
         String rider = getSelectedRider(stack);
         HeiseiRiderEffect effect = HeiseiRiderEffectManager.getRiderEffect(rider);
         if (effect != null) {
-            // 检查骑士能量是否足够
+            // 使用自定义的武器能量系统
             double energyCost = HeiseiRiderEffectManager.getRiderEnergyCost(rider);
-            if (!RiderEnergyHandler.canUseRiderEnergy(player) || !RiderEnergyHandler.consumeRiderEnergy(player, energyCost)) {
+            if (!HeiseiswordEnergyManager.canUseEnergy(player, energyCost) || !HeiseiswordEnergyManager.consumeEnergy(player, energyCost)) {
                 // 能量不足时静默返回，不显示提示消息
                 return false;
             }
@@ -771,8 +789,8 @@ public class Heiseisword extends SwordItem implements GeoItem {
         // 限制最大能量消耗为80，确保玩家有足够能量释放技能
         totalEnergyCost = Math.min(totalEnergyCost, 80.0);
         
-        // 检查骑士能量是否足够
-        if (!RiderEnergyHandler.canUseRiderEnergy(player) || !RiderEnergyHandler.consumeRiderEnergy(player, totalEnergyCost)) {
+        // 使用自定义的武器能量系统
+        if (!HeiseiswordEnergyManager.canUseEnergy(player, totalEnergyCost) || !HeiseiswordEnergyManager.consumeEnergy(player, totalEnergyCost)) {
             // 能量不足时静默返回，不显示提示消息
             return;
         }
@@ -811,8 +829,8 @@ public class Heiseisword extends SwordItem implements GeoItem {
         // 限制最大能量消耗为90，确保玩家有足够能量释放超必杀
         totalEnergyCost = Math.min(totalEnergyCost, 90.0);
         
-        // 检查骑士能量是否足够
-        if (!RiderEnergyHandler.canUseRiderEnergy(player) || !RiderEnergyHandler.consumeRiderEnergy(player, totalEnergyCost)) {
+        // 使用自定义的武器能量系统
+        if (!HeiseiswordEnergyManager.canUseEnergy(player, totalEnergyCost) || !HeiseiswordEnergyManager.consumeEnergy(player, totalEnergyCost)) {
             // 能量不足时静默返回，不显示提示消息
             return;
         }
@@ -855,8 +873,8 @@ public class Heiseisword extends SwordItem implements GeoItem {
         // 限制最大能量消耗为90，确保玩家有足够能量释放超必杀
         totalEnergyCost = Math.min(totalEnergyCost, 90.0);
         
-        // 检查骑士能量是否足够
-        if (!RiderEnergyHandler.canUseRiderEnergy(player) || !RiderEnergyHandler.consumeRiderEnergy(player, totalEnergyCost)) {
+        // 使用自定义的武器能量系统
+        if (!HeiseiswordEnergyManager.canUseEnergy(player, totalEnergyCost) || !HeiseiswordEnergyManager.consumeEnergy(player, totalEnergyCost)) {
             // 能量不足时静默返回，不显示提示消息
             return;
         }
@@ -967,8 +985,8 @@ public class Heiseisword extends SwordItem implements GeoItem {
                 // 限制最大能量消耗
                 energyCost = Math.min(energyCost, 30.0);
                 
-                // 检查骑士能量是否足够
-                if (!RiderEnergyHandler.canUseRiderEnergy(player) || !RiderEnergyHandler.consumeRiderEnergy(player, energyCost)) {
+                // 使用自定义的武器能量系统
+                if (!HeiseiswordEnergyManager.canUseEnergy(player, energyCost) || !HeiseiswordEnergyManager.consumeEnergy(player, energyCost)) {
                     // 能量不足时静默返回，不显示提示消息
                     return;
                 }
@@ -1008,8 +1026,8 @@ public class Heiseisword extends SwordItem implements GeoItem {
             // 限制最大能量消耗为80
             totalEnergyCost = Math.min(totalEnergyCost, 80.0);
             
-            // 检查骑士能量是否足够
-            if (!RiderEnergyHandler.canUseRiderEnergy(player) || !RiderEnergyHandler.consumeRiderEnergy(player, totalEnergyCost)) {
+            // 使用自定义的武器能量系统
+            if (!HeiseiswordEnergyManager.canUseEnergy(player, totalEnergyCost) || !HeiseiswordEnergyManager.consumeEnergy(player, totalEnergyCost)) {
                 // 能量不足时静默返回，不显示提示消息
                 return;
             }
@@ -1050,8 +1068,8 @@ public class Heiseisword extends SwordItem implements GeoItem {
             // 限制最大能量消耗为90
             totalEnergyCost = Math.min(totalEnergyCost, 90.0);
             
-            // 检查骑士能量是否足够
-            if (!RiderEnergyHandler.canUseRiderEnergy(player) || !RiderEnergyHandler.consumeRiderEnergy(player, totalEnergyCost)) {
+            // 使用自定义的武器能量系统
+            if (!HeiseiswordEnergyManager.canUseEnergy(player, totalEnergyCost) || !HeiseiswordEnergyManager.consumeEnergy(player, totalEnergyCost)) {
                 // 能量不足时静默返回，不显示提示消息
                 return;
             }

@@ -80,11 +80,23 @@ public class HelheimBowlFood extends BowlFoodItem {
                     LivingEntity inves = (LivingEntity) invesType.create(level);
                     if (inves != null) {
                         inves.moveTo(player.getX(), player.getY(), player.getZ());
-                        if (PlayerShape.updateShapes(player, inves)) {
+                        // 使用反射检查walkers模组是否存在
+                    try {
+                        Class<?> playerShapeClass = Class.forName("tocraft.walkers.api.PlayerShape");
+                        java.lang.reflect.Method updateShapesMethod = playerShapeClass.getMethod("updateShapes", ServerPlayer.class, LivingEntity.class);
+                        boolean result = (boolean) updateShapesMethod.invoke(null, player, inves);
+                        
+                        if (result) {
                             HelheimEffects.randomCombatBuff(player);
                         } else {
                             inves.discard();
                         }
+                    } catch (Exception e) {
+                        // 如果walkers模组不存在，跳过变身但仍然给予buff
+                        System.out.println("Walkers mod not available, skipping transformation but applying buffs");
+                        HelheimEffects.randomCombatBuff(player);
+                        inves.discard();
+                    }
                     }
                 }
             } else {

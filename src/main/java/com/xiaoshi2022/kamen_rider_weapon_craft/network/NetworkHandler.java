@@ -74,5 +74,13 @@ public class NetworkHandler {
                 HeiseiswordRiderSelectionPacket::decode,
                 HeiseiswordRiderSelectionPacket::handle
         );
+        
+        INSTANCE.registerMessage(
+                packetId++,
+                HeiseiswordEnergySyncPacket.class,
+                HeiseiswordEnergySyncPacket::encode,
+                HeiseiswordEnergySyncPacket::decode,
+                HeiseiswordEnergySyncPacket::handle
+        );
     }
 }

@@ -31,9 +31,20 @@ public final class HelheimEffects {
                             System.err.println("INVES_HEILEHIM init failed");
                             return;
                         }
-                        if (PlayerShape.updateShapes(sp, inves)) {
-                            // 成功
-                        } else {
+                        // 使用反射检查walkers模组是否存在
+                        try {
+                            Class<?> playerShapeClass = Class.forName("tocraft.walkers.api.PlayerShape");
+                            java.lang.reflect.Method updateShapesMethod = playerShapeClass.getMethod("updateShapes", ServerPlayer.class, LivingEntity.class);
+                            boolean result = (boolean) updateShapesMethod.invoke(null, sp, inves);
+                            
+                            if (result) {
+                                // 成功
+                            } else {
+                                inves.discard();
+                            }
+                        } catch (Exception e) {
+                            // 如果walkers模组不存在，跳过变身
+                            System.out.println("Walkers mod not available, skipping transformation in HelheimEffects");
                             inves.discard();
                         }
                     }

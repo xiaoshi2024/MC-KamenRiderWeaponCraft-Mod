@@ -67,6 +67,9 @@ public class ExAidSlashEffectEntity extends Entity implements GeoEntity {
     @Override
     public void tick() {
         super.tick();
+        
+        // 检查特效是否靠近释放者，如果是则立即移除
+        checkNearbyPlayers();
 
         lifetime++;
         if (lifetime > MAX_LIFETIME) {
@@ -81,7 +84,8 @@ public class ExAidSlashEffectEntity extends Entity implements GeoEntity {
         }
 
         // 如果有明确的目标实体，并且还没有击中任何实体，优先跟踪目标实体
-        if (targetEntity != null && hitEntity == null && !targetEntity.isRemoved()) {
+        // 确保不会跟踪到释放者
+        if (targetEntity != null && hitEntity == null && !targetEntity.isRemoved() && targetEntity != owner) {
             // 跟踪目标实体，即使没有直接碰撞
             double randomOffsetX = (this.level().random.nextDouble() - 0.5) * 1.0;
             double randomOffsetY = (this.level().random.nextDouble() - 0.5) * 0.8;
@@ -107,7 +111,14 @@ public class ExAidSlashEffectEntity extends Entity implements GeoEntity {
             }
         } else if (hitEntity != null && !hitEntity.isRemoved()) {
             // 设置特效实体的位置为被击中实体的位置
-            this.setPos(hitEntity.getX(), hitEntity.getY() + hitEntity.getBbHeight() * 0.5, hitEntity.getZ());
+            // 确保不会跟踪到释放者
+            if (hitEntity != owner) {
+                this.setPos(hitEntity.getX(), hitEntity.getY() + hitEntity.getBbHeight() * 0.5, hitEntity.getZ());
+            } else {
+                // 如果hitEntity是释放者，立即移除特效
+                this.remove(RemovalReason.DISCARDED);
+                return;
+            }
             followTicks++;
 
             // 在跟随期间持续生成粒子效果
@@ -132,10 +143,19 @@ public class ExAidSlashEffectEntity extends Entity implements GeoEntity {
 
     // 设置特效应该跟踪的目标实体
     public void setTargetEntity(Entity targetEntity) {
-        this.targetEntity = targetEntity;
-        // 在服务器端同步目标实体信息
-        if (!this.level().isClientSide) {
-            syncTargetEntity(targetEntity);
+        // 确保不会将释放者设置为目标
+        if (targetEntity != null && targetEntity != owner) {
+            this.targetEntity = targetEntity;
+            // 在服务器端同步目标实体信息
+            if (!this.level().isClientSide) {
+                syncTargetEntity(targetEntity);
+            }
+        } else {
+            // 如果尝试设置释放者为目标，则不设置任何目标
+            this.targetEntity = null;
+            if (!this.level().isClientSide) {
+                syncTargetEntity(null);
+            }
         }
     }
 
@@ -176,7 +196,9 @@ public class ExAidSlashEffectEntity extends Entity implements GeoEntity {
                             entity != owner &&
                             !entity.isSpectator() &&
                             entity.isAlive() &&
-                            !(entity instanceof Player && entity == owner));
+                            !(entity instanceof Player && entity == owner) &&
+                            // 确保不会检测到释放者
+                            !(entity == owner));
 
             for (Entity entity : nearbyEntities) {
                 if (entity == owner) {
@@ -330,6 +352,23 @@ public class ExAidSlashEffectEntity extends Entity implements GeoEntity {
             ExAidSlashEffectEntity effect = new ExAidSlashEffectEntity(level, owner, new Vec3(x, y, z), direction);
             effect.setTargetEntity(target); // 设置目标实体进行跟踪
             level.addFreshEntity(effect);
+        }
+    }
+    
+    /**
+     * 检查周围是否有释放者，如果特效靠近释放者则消除，避免特效跑到释放者身上
+     */
+    private void checkNearbyPlayers() {
+        // 只检查释放者是否在范围内
+        if (owner != null && owner.isAlive()) {
+            // 计算特效与释放者的距离
+            double distance = this.distanceTo(owner);
+            
+            // 增加距离检测范围到2格，更早移除靠近释放者的特效
+            if (distance < 2.0D) {
+                this.remove(RemovalReason.DISCARDED);
+                return;
+            }
         }
     }
 }
