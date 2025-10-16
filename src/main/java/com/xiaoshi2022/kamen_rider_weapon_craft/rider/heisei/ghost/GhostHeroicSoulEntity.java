@@ -73,7 +73,9 @@ public class GhostHeroicSoulEntity extends Projectile implements GeoEntity {
         super(entityType, level);
         this.noPhysics = true;
     }
-
+    
+    // 移除属性相关的静态方法
+    
     // 私有构造函数，用于生成新的特效实体
     private GhostHeroicSoulEntity(Level level, Player player, Vec3 direction, int color, float damage, boolean isFireDamage) {
         super(ModEntityTypes.GHOST_HEROIC_SOUL.get(), level);
@@ -347,13 +349,21 @@ public class GhostHeroicSoulEntity extends Projectile implements GeoEntity {
                 });
     }
     
+    // 自定义护甲属性
+    private double armor = 12.0D; // 护甲值
+    private double armorToughness = 6.0D; // 护甲韧性
+    private double knockbackResistance = 0.2D; // 击退抗性
+    
     // 允许实体受到伤害
     @Override
     public boolean hurt(DamageSource source, float amount) {
         // 只有敌对实体的伤害才有效
         if (source.getEntity() != null && source.getEntity() instanceof LivingEntity) {
+            // 计算护甲减免
+            float damageAfterArmor = calculateDamageAfterArmor(amount);
+            
             // 扣除生命值
-            this.health -= amount;
+            this.health -= damageAfterArmor;
             
             // 如果生命值低于等于0，实体消失
             if (this.health <= 0) {
@@ -375,6 +385,15 @@ public class GhostHeroicSoulEntity extends Projectile implements GeoEntity {
             return true;
         }
         return super.hurt(source, amount);
+    }
+    
+    // 计算护甲减免后的伤害
+    private float calculateDamageAfterArmor(float damage) {
+        // 护甲减免计算公式
+        float reduction = (float)Math.min(0.8F, armor * 0.04F);
+        float effectiveDamage = damage * (1.0F - reduction);
+        
+        return effectiveDamage;
     }
     
     // 确保实体可以被选择和攻击

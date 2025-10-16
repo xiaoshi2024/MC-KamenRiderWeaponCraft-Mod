@@ -5,6 +5,7 @@ import com.xiaoshi2022.kamen_rider_weapon_craft.Item.prop.client.entity.LaserBea
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.build.BuildRiderEntity;
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.drive.DriveRiderEntity;
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.exaid.ExAidSlashEffectEntity;
+import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.gaim.GaimLockSeedEntity;
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.ghost.GhostHeroicSoulEntity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
@@ -68,6 +69,15 @@ public class ModEntityTypes {
                             .setUpdateInterval(1)
                             .setShouldReceiveVelocityUpdates(false)
                             .build("ghost_heroic_soul"));
+                            
+    // Kamen Rider Gaim 锁种特效实体
+    public static final RegistryObject<EntityType<GaimLockSeedEntity>> GAIM_LOCK_SEED = 
+            ENTITIES.register("gaim_lock_seed", 
+                    () -> EntityType.Builder.<GaimLockSeedEntity>of(GaimLockSeedEntity::new, MobCategory.MISC)
+                            .setTrackingRange(64)
+                            .setUpdateInterval(1)
+                            .setShouldReceiveVelocityUpdates(false)
+                            .build("gaim_lock_seed"));
 
     public static void register(IEventBus modEventBus) {
         ENTITIES.register(modEventBus);

@@ -216,7 +216,9 @@ public class Heiseisword extends SwordItem implements GeoItem {
                 return Ingredient.of();
             }
         }, 3, 2.4f, new Item.Properties());
-        // 移除SingletonGeoAnimatable注册，避免多人游戏中的状态共享问题
+
+        SingletonGeoAnimatable.registerSyncedAnimatable(this);
+
     }
 
     @Override

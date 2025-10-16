@@ -3,6 +3,7 @@ package com.xiaoshi2022.kamen_rider_weapon_craft.rider;
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModEntityTypes;
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.build.BuildRiderEntityRenderer;
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.drive.DriveRiderEntityRenderer;
+import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.gaim.GaimLockSeedRenderer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -40,6 +41,9 @@ public class RiderEffectEntityRegistry {
         // 注册Drive骑士特效实体渲染器
         registerDriveRiderRenderers(event);
         
+        // 注册铠武锁种特效实体渲染器
+        registerGaimRiderRenderers(event);
+        
         // 这里可以添加更多骑士特效实体的注册方法
     }
 
@@ -59,5 +63,14 @@ public class RiderEffectEntityRegistry {
     private static void registerDriveRiderRenderers(EntityRenderersEvent.RegisterRenderers event) {
         // 使用与项目中其他实体一致的注册方式，保持代码风格统一
         event.registerEntityRenderer(ModEntityTypes.DRIVE_RIDER_EFFECT.get(), DriveRiderEntityRenderer::new);
+    }
+    
+    /**
+     * 注册铠武骑士相关的特效实体渲染器
+     * @param event 实体渲染器注册事件
+     */
+    private static void registerGaimRiderRenderers(EntityRenderersEvent.RegisterRenderers event) {
+        // 使用与项目中其他实体一致的注册方式，保持代码风格统一
+        event.registerEntityRenderer(ModEntityTypes.GAIM_LOCK_SEED.get(), GaimLockSeedRenderer::new);
     }
 }

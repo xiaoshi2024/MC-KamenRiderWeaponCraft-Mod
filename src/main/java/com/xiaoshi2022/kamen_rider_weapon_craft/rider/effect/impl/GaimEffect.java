@@ -1,6 +1,7 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.rider.effect.impl;
 
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.effect.AbstractHeiseiRiderEffect;
+import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.gaim.GaimLockSeedEntity;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
@@ -19,11 +20,15 @@ public class GaimEffect extends AbstractHeiseiRiderEffect {
 
     @Override
     public void executeSpecialAttack(Level level, Player player, Vec3 direction) {
+        // 无论客户端还是服务器端，都生成锁种特效实体
+        // 调整锁种出现几率：橙子(Orange)出现几率大，菠萝(Pineapple)出现几率小
+        LockSeed selectedSeed = getWeightedRandomLockSeed(level);
+        
+        // 创建并生成锁种特效实体
+        spawnLockSeedEntity(level, player, direction, selectedSeed);
+        
         if (!level.isClientSide) {
             // 服务器端：发动Kachidoki Arms攻击，使用不同的锁种能力
-            // 随机选择一个锁种
-            LockSeed selectedSeed = LockSeed.values()[level.random.nextInt(LockSeed.values().length)];
-            
             switch (selectedSeed) {
                 case Orange:
                     executeOrangeLockSeed(level, player, direction);
@@ -41,8 +46,31 @@ public class GaimEffect extends AbstractHeiseiRiderEffect {
             
             // 给予玩家相关的增益效果
             player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 300, 1));
-        } else {
-            // 客户端：粒子效果已移除，后续将使用geo动画还原
+        }
+    }
+    
+    /**
+     * 生成锁种特效实体
+     */
+    private void spawnLockSeedEntity(Level level, Player player, Vec3 direction, LockSeed lockSeed) {
+        // 计算生成位置（在玩家前方稍远处）
+        Vec3 spawnPos = player.getEyePosition().add(direction.normalize().scale(1.0));
+        
+        // 根据锁种类型创建对应的实体
+        // 对于菠萝锁种，在GaimEffect.executePineappleLockSeed中单独处理以实现流星雨效果
+        // 这里只处理其他锁种
+        if (lockSeed != LockSeed.Pineapple) {
+            GaimLockSeedEntity lockSeedEntity = new GaimLockSeedEntity(
+                    level,
+                    player,
+                    spawnPos,
+                    direction,
+                    lockSeed.name().toUpperCase(),
+                    getAttackDamage()
+            );
+            
+            // 将实体添加到世界中
+            level.addFreshEntity(lockSeedEntity);
         }
     }
     
@@ -59,13 +87,39 @@ public class GaimEffect extends AbstractHeiseiRiderEffect {
                     }
                 });
         }
+        
+        // 为玩家添加速度2和力量2效果
+        player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 300, 1)); // 速度2，持续15秒
+        player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 300, 1));  // 力量2，持续15秒
     }
     
     private void executePineappleLockSeed(Level level, Player player, Vec3 direction) {
-        // 菠萝锁种：范围爆炸
-        Vec3 targetPos = player.getEyePosition(1.0f).add(direction.scale(4.0));
-        level.explode(player, targetPos.x, targetPos.y, targetPos.z, 
-            getAttackDamage() / 3, Level.ExplosionInteraction.MOB);
+        // 菠萝锁种：流星雨效果
+        // 生成多个菠萝锁种实体，形成流星雨效果
+        for (int i = 0; i < 5; i++) {
+            // 计算略微不同的发射角度，形成扩散的流星雨效果
+            float spreadAngle = (level.random.nextFloat() - 0.5f) * 0.4f; // -20°到20°的随机角度
+            Vec3 spreadDirection = new Vec3(
+                direction.x + (level.random.nextFloat() - 0.5f) * 0.3f,
+                direction.y + spreadAngle,
+                direction.z + (level.random.nextFloat() - 0.5f) * 0.3f
+            ).normalize();
+            
+            // 计算生成位置
+            Vec3 spawnPos = player.getEyePosition().add(spreadDirection.scale(1.0));
+            
+            // 创建并生成菠萝锁种实体
+            GaimLockSeedEntity lockSeedEntity = new GaimLockSeedEntity(
+                    level,
+                    player,
+                    spawnPos,
+                    spreadDirection,
+                    LockSeed.Pineapple.name().toUpperCase(),
+                    getAttackDamage() * 0.6f // 调整伤害以适应多个实体
+            );
+            
+            level.addFreshEntity(lockSeedEntity);
+        }
     }
     
     private void executeBananaLockSeed(Level level, Player player, Vec3 direction) {
@@ -123,5 +177,24 @@ public class GaimEffect extends AbstractHeiseiRiderEffect {
     @Override
     public float getEffectRange() {
         return 8.0f;
+    }
+    
+    /**
+     * 根据权重随机选择锁种
+     * 增加Orange的出现几率，减少Pineapple的出现几率
+     */
+    private LockSeed getWeightedRandomLockSeed(Level level) {
+        // 权重设置：Orange=50%, Banana=20%, Melon=20%, Pineapple=10%
+        int randomValue = level.random.nextInt(100);
+        
+        if (randomValue < 50) {
+            return LockSeed.Orange;
+        } else if (randomValue < 70) {
+            return LockSeed.Banana;
+        } else if (randomValue < 90) {
+            return LockSeed.Melon;
+        } else {
+            return LockSeed.Pineapple;
+        }
     }
 }
