@@ -59,8 +59,11 @@ public class ExAidEffect extends AbstractHeiseiRiderEffect {
                 float initialDamage = getAttackDamage() * 0.5f;
 
                 // 确保伤害能够造成，即使实体有一定的抗性
-                boolean hurt = livingEntity.hurt(
-                        level.damageSources().playerAttack(player), initialDamage);
+                // 再次确认不是释放者本人，防止误判造成自伤
+                if (livingEntity != player) {
+                    boolean hurt = livingEntity.hurt(
+                            level.damageSources().playerAttack(player), initialDamage);
+                }
 
                 // 无论是否成功造成伤害，都添加到持续伤害列表
                 addToDamageTargets(livingEntity, player);
@@ -91,7 +94,10 @@ public class ExAidEffect extends AbstractHeiseiRiderEffect {
 
     // 添加实体到持续伤害列表
     private void addToDamageTargets(LivingEntity target, Player player) {
-        DAMAGE_TARGETS.put(target, DURATION);
+        // 确保不会将释放者添加到持续伤害列表
+        if (target != player) {
+            DAMAGE_TARGETS.put(target, DURATION);
+        }
     }
 
     // 修复：事件订阅器需要是静态的
@@ -115,6 +121,7 @@ public class ExAidEffect extends AbstractHeiseiRiderEffect {
             int remainingTicks = entry.getValue() - 1;
 
             // 如果目标已经死亡或不再有效，从列表中移除
+            // 允许对其他玩家（包括敌对玩家）造成持续伤害，但确保不会伤害释放者
             if (target == null || !target.isAlive() || target.isRemoved()) {
                 damageIterator.remove();
                 continue;
@@ -173,7 +180,7 @@ public class ExAidEffect extends AbstractHeiseiRiderEffect {
     // 生成持续伤害的小型特效
     private static void spawnDotEffect(LivingEntity target) {
         Level level = target.level();
-        if (!level.isClientSide) {
+        if (!level.isClientSide && target != null) {
             double x = target.getX() + (level.random.nextDouble() - 0.5) * 0.8;
             double y = target.getY() + target.getBbHeight() * 0.5 + (level.random.nextDouble() - 0.5) * 0.5;
             double z = target.getZ() + (level.random.nextDouble() - 0.5) * 0.8;
@@ -189,8 +196,8 @@ public class ExAidEffect extends AbstractHeiseiRiderEffect {
             effect.noPhysics = true;
             effect.setInvulnerable(true);
 
-            // 重要：设置owner为null，确保这些小特效不会跟踪到任何实体
-            effect.setOwner(null);
+            // 重要：不要设置owner，防止这些小特效造成误伤
+            // 注意：直接不设置owner，而不是设置为null
 
             level.addFreshEntity(effect);
         }

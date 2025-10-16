@@ -711,8 +711,8 @@ public class Heiseisword extends SwordItem implements GeoItem {
         String rider = getSelectedRider(stack);
         HeiseiRiderEffect effect = HeiseiRiderEffectManager.getRiderEffect(rider);
         if (effect != null) {
-            // 使用自定义的武器能量系统
-            double energyCost = HeiseiRiderEffectManager.getRiderEnergyCost(rider);
+            // 使用自定义的武器能量系统 - 增加能量消耗（提高到原来的2倍）
+            double energyCost = HeiseiRiderEffectManager.getRiderEnergyCost(rider) * 2.0;
             if (!HeiseiswordEnergyManager.canUseEnergy(player, energyCost) || !HeiseiswordEnergyManager.consumeEnergy(player, energyCost)) {
                 // 能量不足时静默返回，不显示提示消息
                 return false;
@@ -783,11 +783,11 @@ public class Heiseisword extends SwordItem implements GeoItem {
             avgEnergyCost = sumCost / riders.size();
         }
         
-        // 多骑士组合攻击时，总消耗为：平均消耗 * 骑士数量 * 0.8（降低组合消耗）
-        double totalEnergyCost = avgEnergyCost * riders.size() * 0.8;
+        // 多骑士组合攻击时，总消耗为：平均消耗 * 骑士数量 * 1.5（增加组合消耗以提高平衡性）
+        double totalEnergyCost = avgEnergyCost * riders.size() * 1.5;
         
-        // 限制最大能量消耗为80，确保玩家有足够能量释放技能
-        totalEnergyCost = Math.min(totalEnergyCost, 80.0);
+        // 限制最大能量消耗为100，确保玩家有足够能量释放技能
+        totalEnergyCost = Math.min(totalEnergyCost, 100.0);
         
         // 使用自定义的武器能量系统
         if (!HeiseiswordEnergyManager.canUseEnergy(player, totalEnergyCost) || !HeiseiswordEnergyManager.consumeEnergy(player, totalEnergyCost)) {
@@ -823,11 +823,11 @@ public class Heiseisword extends SwordItem implements GeoItem {
             avgEnergyCost = sumCost / riders.size();
         }
         
-        // 超必杀模式下，总消耗为：平均消耗 * 骑士数量 * 0.9（降低组合消耗）
-        double totalEnergyCost = avgEnergyCost * riders.size() * 0.9;
+        // 超必杀模式下，总消耗为：平均消耗 * 骑士数量 * 1.8（增加组合消耗以提高平衡性）
+        double totalEnergyCost = avgEnergyCost * riders.size() * 1.8;
         
-        // 限制最大能量消耗为90，确保玩家有足够能量释放超必杀
-        totalEnergyCost = Math.min(totalEnergyCost, 90.0);
+        // 限制最大能量消耗为100，确保玩家有足够能量释放超必杀
+        totalEnergyCost = Math.min(totalEnergyCost, 100.0);
         
         // 使用自定义的武器能量系统
         if (!HeiseiswordEnergyManager.canUseEnergy(player, totalEnergyCost) || !HeiseiswordEnergyManager.consumeEnergy(player, totalEnergyCost)) {
@@ -979,11 +979,11 @@ public class Heiseisword extends SwordItem implements GeoItem {
         if (rider != null && !rider.isEmpty()) {
             HeiseiRiderEffect effect = HeiseiRiderEffectManager.getRiderEffect(rider);
             if (effect != null) {
-                // 远程攻击能量消耗根据充能时间调整
-                double energyCost = HeiseiRiderEffectManager.getRiderEnergyCost(rider) * (0.5 + chargeTime * 0.5);
+                // 远程攻击能量消耗根据充能时间调整 - 增加消耗（提高基础倍率）
+                double energyCost = HeiseiRiderEffectManager.getRiderEnergyCost(rider) * (0.8 + chargeTime * 0.7);
                 
                 // 限制最大能量消耗
-                energyCost = Math.min(energyCost, 30.0);
+                energyCost = Math.min(energyCost, 40.0);
                 
                 // 使用自定义的武器能量系统
                 if (!HeiseiswordEnergyManager.canUseEnergy(player, energyCost) || !HeiseiswordEnergyManager.consumeEnergy(player, energyCost)) {
@@ -1020,11 +1020,11 @@ public class Heiseisword extends SwordItem implements GeoItem {
                 }
             }
             
-            // 远程攻击能量消耗根据充能时间调整，并使用更合理的计算方式
-            totalEnergyCost *= (0.5 + chargeTime * 0.5);
+            // 远程攻击能量消耗根据充能时间调整，并增加消耗
+            totalEnergyCost *= (0.8 + chargeTime * 0.7);
             
-            // 限制最大能量消耗为80
-            totalEnergyCost = Math.min(totalEnergyCost, 80.0);
+            // 限制最大能量消耗为100
+            totalEnergyCost = Math.min(totalEnergyCost, 100.0);
             
             // 使用自定义的武器能量系统
             if (!HeiseiswordEnergyManager.canUseEnergy(player, totalEnergyCost) || !HeiseiswordEnergyManager.consumeEnergy(player, totalEnergyCost)) {
@@ -1062,11 +1062,11 @@ public class Heiseisword extends SwordItem implements GeoItem {
                 }
             }
             
-            // 远程攻击能量消耗根据充能时间调整，并使用更合理的计算方式
-            totalEnergyCost *= (0.5 + chargeTime * 0.5);
+            // 远程攻击能量消耗根据充能时间调整，并增加消耗
+            totalEnergyCost *= (0.9 + chargeTime * 0.8);
             
-            // 限制最大能量消耗为90
-            totalEnergyCost = Math.min(totalEnergyCost, 90.0);
+            // 限制最大能量消耗为100
+            totalEnergyCost = Math.min(totalEnergyCost, 100.0);
             
             // 使用自定义的武器能量系统
             if (!HeiseiswordEnergyManager.canUseEnergy(player, totalEnergyCost) || !HeiseiswordEnergyManager.consumeEnergy(player, totalEnergyCost)) {

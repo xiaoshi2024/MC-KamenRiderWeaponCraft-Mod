@@ -18,8 +18,8 @@ public class HeiseiswordEnergyManager {
     // 默认最大能量值
     private static final double DEFAULT_MAX_ENERGY = 100.0;
     
-    // 能量恢复速率（每秒恢复的能量）
-    private static final double ENERGY_REGEN_RATE = 5.0;
+    // 能量恢复速率（每秒恢复的能量）- 降低恢复速率以提高平衡性
+    private static final double ENERGY_REGEN_RATE = 2.0;
     
     /**
      * 获取玩家的当前能量值
@@ -146,8 +146,8 @@ public class HeiseiswordEnergyManager {
     public static void recoverEnergyByDamage(Player player, float damage) {
         if (player == null) return;
         
-        // 计算恢复的能量（按伤害比例恢复，例如伤害的50%）
-        double recoveryAmount = damage * 0.5;
+        // 计算恢复的能量（降低恢复比例到伤害的25%以提高平衡性）
+        double recoveryAmount = damage * 0.25;
         recoverEnergy(player, recoveryAmount);
     }
     

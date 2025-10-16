@@ -1,6 +1,4 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.food.helheimfoods.foodeffects;
-
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ModEntityTypes;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -22,7 +20,15 @@ public final class HelheimEffects {
         if (!player.level().isClientSide && player.getRandom().nextInt(100) < 40) {
             player.stopRiding();
             if (player instanceof ServerPlayer sp) {
-                EntityType<?> invesType = ModEntityTypes.INVES_HEILEHIM.get();
+                EntityType<?> invesType = null;
+            try {
+                Class<?> modEntityTypesClass = Class.forName("com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ModEntityTypes");
+                Object field = modEntityTypesClass.getDeclaredField("INVES_HEILEHIM").get(null);
+                java.lang.reflect.Method getMethod = field.getClass().getMethod("get");
+                invesType = (EntityType<?>) getMethod.invoke(field);
+            } catch (Exception e) {
+                System.out.println("Failed to access ModEntityTypes.INVES_HEILEHIM: " + e.getMessage());
+            }
                 if (invesType != null) {
                     LivingEntity inves = (LivingEntity) invesType.create(sp.level());
                     if (inves != null) {

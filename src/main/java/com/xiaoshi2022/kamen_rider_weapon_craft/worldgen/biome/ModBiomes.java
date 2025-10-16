@@ -1,6 +1,4 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.worldgen.biome;
-
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ModEntityTypes;
 import com.xiaoshi2022.kamen_rider_weapon_craft.kamen_rider_weapon_craft;
 import com.xiaoshi2022.kamen_rider_weapon_craft.worldgen.ModPlacedFeatures;
 import net.minecraft.core.registries.Registries;
@@ -40,7 +38,16 @@ public class ModBiomes {
         BiomeDefaultFeatures.commonSpawns(spawnBuilder);
 
         // 添加自定义实体生成规则
-        spawnBuilder.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(ModEntityTypes.INVES_HEILEHIM.get(), 20, 1, 2));
+        // 使用反射安全地访问boss模组的实体类型
+        try {
+            Class<?> modEntityTypesClass = Class.forName("com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ModEntityTypes");
+            Object field = modEntityTypesClass.getDeclaredField("INVES_HEILEHIM").get(null);
+            java.lang.reflect.Method getMethod = field.getClass().getMethod("get");
+            EntityType<?> invesType = (EntityType<?>) getMethod.invoke(field);
+            spawnBuilder.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(invesType, 100, 1, 3));
+        } catch (Exception e) {
+            System.out.println("Failed to add INVES_HEILEHIM spawn to biome: " + e.getMessage());
+        }
 
         BiomeGenerationSettings.Builder biomeBuilder =
                 new BiomeGenerationSettings.Builder(context.lookup(Registries.PLACED_FEATURE), context.lookup(Registries.CONFIGURED_CARVER));

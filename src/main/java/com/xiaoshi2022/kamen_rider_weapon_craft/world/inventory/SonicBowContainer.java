@@ -52,10 +52,41 @@ public class SonicBowContainer extends AbstractContainerMenu implements Supplier
             @Override public int getMaxStackSize() { return 1; }
 
             @Override public boolean mayPlace(ItemStack stack) {
-                return stack.getItem() == ModItems.MELON.get()
-                        || stack.getItem() == com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems.LEMON_ENERGY.get()
-                        || stack.getItem() == ModItems.CHERYY.get()
-                        || stack.getItem() == com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems.PEACH_ENERGY.get();
+                // 基础检查：检查mod自己的物品
+                boolean isModItem = stack.getItem() == ModItems.MELON.get() || stack.getItem() == ModItems.CHERYY.get();
+                
+                // 使用反射安全地检查boss模组物品
+                try {
+                    // 动态加载boss模组的ModItems类
+                    Class<?> bossModItemsClass = Class.forName("com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems");
+                    
+                    // 获取LEMON_ENERGY字段
+                    java.lang.reflect.Field lemonEnergyField = bossModItemsClass.getDeclaredField("LEMON_ENERGY");
+                    lemonEnergyField.setAccessible(true);
+                    Object lemonEnergyRegistry = lemonEnergyField.get(null);
+                    // 获取get方法
+                    java.lang.reflect.Method getMethod = lemonEnergyRegistry.getClass().getMethod("get");
+                    Object lemonEnergyItem = getMethod.invoke(lemonEnergyRegistry);
+                    
+                    // 获取PEACH_ENERGY字段
+                    java.lang.reflect.Field peachEnergyField = bossModItemsClass.getDeclaredField("PEACH_ENERGY");
+                    peachEnergyField.setAccessible(true);
+                    Object peachEnergyRegistry = peachEnergyField.get(null);
+                    // 获取get方法
+                    java.lang.reflect.Method getMethod2 = peachEnergyRegistry.getClass().getMethod("get");
+                    Object peachEnergyItem = getMethod2.invoke(peachEnergyRegistry);
+                    
+                    // 检查是否是boss模组的物品
+                    isModItem = isModItem || stack.getItem() == lemonEnergyItem || stack.getItem() == peachEnergyItem;
+                } catch (ClassNotFoundException e) {
+                    // boss模组不存在，只检查自己的物品
+                    System.out.println("Boss mod not available, skipping boss items check in SonicBowContainer");
+                } catch (Exception e) {
+                    // 其他错误，记录但不崩溃
+                    System.out.println("Error checking boss items: " + e.getMessage());
+                }
+                
+                return isModItem;
             }
 
             @Override public void set(ItemStack stack) {
@@ -128,25 +159,46 @@ public class SonicBowContainer extends AbstractContainerMenu implements Supplier
             ((sonicarrow) bow.getItem()).switchMode(bow, sonicarrow.Mode.DEFAULT);
         } else {
             // 槽位里还有锁种 → 根据锁种类型切形态
-            sonicarrow.Mode newMode;
-            if (lastInput.getItem() == com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems.LEMON_ENERGY.get()) {
-                newMode = sonicarrow.Mode.LEMON;
-            } else if (lastInput.getItem() == ModItems.CHERYY.get()) {
-                newMode = sonicarrow.Mode.CHERRY;
-            } else if (lastInput.getItem() == com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems.PEACH_ENERGY.get()) {
-                newMode = sonicarrow.Mode.PEACH;
-            } else {
-                newMode = sonicarrow.Mode.MELON;
-            }
+            sonicarrow.Mode newMode = decideMode();
             ((sonicarrow) bow.getItem()).switchMode(bow, newMode);
         }
     }
 
     private sonicarrow.Mode decideMode() {
-        if (lastInput.getItem() == com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems.LEMON_ENERGY.get()) return sonicarrow.Mode.LEMON;
+        // 先检查mod自己的物品
         if (lastInput.getItem() == ModItems.CHERYY.get()) return sonicarrow.Mode.CHERRY;
         if (lastInput.getItem() == ModItems.MELON.get()) return sonicarrow.Mode.MELON;
-        if (lastInput.getItem() == com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems.PEACH_ENERGY.get()) return sonicarrow.Mode.PEACH;
+        
+        // 使用反射安全地检查boss模组物品
+        try {
+            // 动态加载boss模组的ModItems类
+            Class<?> bossModItemsClass = Class.forName("com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems");
+            
+            // 检查LEMON_ENERGY
+            java.lang.reflect.Field lemonEnergyField = bossModItemsClass.getDeclaredField("LEMON_ENERGY");
+            lemonEnergyField.setAccessible(true);
+            Object lemonEnergyRegistry = lemonEnergyField.get(null);
+            java.lang.reflect.Method getMethod = lemonEnergyRegistry.getClass().getMethod("get");
+            Object lemonEnergyItem = getMethod.invoke(lemonEnergyRegistry);
+            
+            if (lastInput.getItem() == lemonEnergyItem) return sonicarrow.Mode.LEMON;
+            
+            // 检查PEACH_ENERGY
+            java.lang.reflect.Field peachEnergyField = bossModItemsClass.getDeclaredField("PEACH_ENERGY");
+            peachEnergyField.setAccessible(true);
+            Object peachEnergyRegistry = peachEnergyField.get(null);
+            java.lang.reflect.Method getMethod2 = peachEnergyRegistry.getClass().getMethod("get");
+            Object peachEnergyItem = getMethod2.invoke(peachEnergyRegistry);
+            
+            if (lastInput.getItem() == peachEnergyItem) return sonicarrow.Mode.PEACH;
+        } catch (ClassNotFoundException e) {
+            // boss模组不存在，跳过boss物品检查
+            System.out.println("Boss mod not available, skipping boss items check in decideMode");
+        } catch (Exception e) {
+            // 其他错误，记录但不崩溃
+            System.out.println("Error in decideMode: " + e.getMessage());
+        }
+        
         return sonicarrow.Mode.DEFAULT;
     }
 

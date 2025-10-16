@@ -36,6 +36,31 @@ public class SonicBowGuiScreen extends AbstractContainerScreen<SonicBowContainer
 
     private static final ResourceLocation texture = new ResourceLocation("kamen_rider_weapon_craft:textures/screens/sonic_bow_gui.png");
 
+    // 通过反射安全地比较物品是否与boss模组中的物品相等
+    private boolean isItemEqual(Object item, String className, String fieldName) {
+        try {
+            // 动态加载boss模组的ModItems类
+            Class<?> bossModItemsClass = Class.forName(className);
+            // 获取指定字段
+            java.lang.reflect.Field field = bossModItemsClass.getDeclaredField(fieldName);
+            field.setAccessible(true);
+            // 获取RegistryObject实例
+            Object registryObject = field.get(null);
+            // 调用get()方法获取实际的物品实例
+            java.lang.reflect.Method getMethod = registryObject.getClass().getMethod("get");
+            Object bossItem = getMethod.invoke(registryObject);
+            // 比较物品是否相等
+            return item == bossItem;
+        } catch (ClassNotFoundException e) {
+            // boss模组不存在，返回false
+            System.out.println("Boss mod not available, skipping boss items check in SonicBowGuiScreen");
+        } catch (Exception e) {
+            // 其他错误，记录但不崩溃
+            System.out.println("Error checking boss items in SonicBowGuiScreen: " + e.getMessage());
+        }
+        return false;
+    }
+
     @Override
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(guiGraphics);
@@ -158,11 +183,12 @@ public class SonicBowGuiScreen extends AbstractContainerScreen<SonicBowContainer
 
                         // 2. 立即决定模式
                         sonicarrow.Mode newMode;
-                        if (input.getItem() == com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems.LEMON_ENERGY.get()) {
+                        // 使用反射安全检查boss模组物品
+                        if (isItemEqual(input.getItem(), "com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems", "LEMON_ENERGY")) {
                             newMode = sonicarrow.Mode.LEMON;
                         } else if (input.getItem() == ModItems.CHERYY.get()) {
                             newMode = sonicarrow.Mode.CHERRY;
-                        } else if (input.getItem() == com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems.PEACH_ENERGY.get()) {
+                        } else if (isItemEqual(input.getItem(), "com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems", "PEACH_ENERGY")) {
                             newMode = sonicarrow.Mode.PEACH;
                         } else {
                             newMode = sonicarrow.Mode.MELON;

@@ -1,6 +1,6 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.food;
 
-import com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ModEntityTypes;
+// 移除直接导入boss模组类，改用反射安全检查
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.food.HelheimFruit.HelheimFruitRenderer;
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.EffectInit;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
@@ -97,39 +97,118 @@ public class HelheimFruit extends Item implements GeoItem {
     public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
         // 确保只在服务器端执行逻辑
         if (!level.isClientSide && entity instanceof Player player) {
+            // 检查是否有walkers模组，先尝试进化为人类的逻辑
+            try {
+                Class<?> playerShapeClass = Class.forName("tocraft.walkers.api.PlayerShape");
+                ServerPlayer serverPlayer = (ServerPlayer) player;
+                
+                // 检查玩家是否已经变形
+                java.lang.reflect.Method getCurrentShapeMethod = playerShapeClass.getMethod("getCurrentShape", Player.class);
+                LivingEntity currentShape = (LivingEntity) getCurrentShapeMethod.invoke(null, player);
+                
+                // 如果玩家已经变形，检查是否可以进化为人类
+                if (currentShape != null) {
+                    System.out.println("[HelheimFruit] Player is transformed, checking Helmheim Power level");
+                    
+                    // 检查赫尔海姆之力等级
+                    int helmheimPowerLevel = -1;
+                    for (MobEffectInstance effect : player.getActiveEffects()) {
+                        if (effect.getEffect() == EffectInit.HELMHEIM_POWER.get()) {
+                            helmheimPowerLevel = effect.getAmplifier();
+                            System.out.println("[HelheimFruit] Detected Helmheim Power level: " + (helmheimPowerLevel + 1));
+                            break;
+                        }
+                    }
+                    
+                    // 如果赫尔海姆之力等级大于1（即2级或3级），进化为人类
+                    if (helmheimPowerLevel >= 1) {
+                        System.out.println("[HelheimFruit] High enough power level, evolving to human");
+                        
+                        // 根据PlayerShape源码，使用updateShapes方法传入null来清除变形
+                        java.lang.reflect.Method updateShapesMethod = playerShapeClass.getMethod("updateShapes", ServerPlayer.class, LivingEntity.class);
+                        boolean result = (boolean) updateShapesMethod.invoke(null, serverPlayer, null);
+                        
+                        if (result) {
+                            System.out.println("[HelheimFruit] Successfully evolved to human form");
+                            // 发送进化消息
+                            player.sendSystemMessage(Component.translatable("message.kamen_rider_weapon_craft.helmheim_power.evolved_to_human"));
+                            
+                            // 给予玩家强化的赫尔海姆之力效果作为奖励
+                            player.addEffect(new MobEffectInstance(
+                                    EffectInit.HELMHEIM_POWER.get(),
+                                    120 * 20, // 120秒
+                                    helmheimPowerLevel, // 保持原等级
+                                    false,
+                                    false
+                            ));
+                        } else {
+                            System.out.println("[HelheimFruit] Failed to evolve to human form");
+                        }
+                        
+                        // 无论是否进化成功，都继续下面的逻辑
+                    }
+                }
+            } catch (ClassNotFoundException e) {
+                System.out.println("[HelheimFruit] Walkers mod not available, skipping human evolution check");
+            } catch (Exception e) {
+                System.out.println("[HelheimFruit] Error during human evolution check: " + e.getMessage());
+                e.printStackTrace();
+            }
+            
             // 40% 概率变形为异域者（INVES_HEILEHIM）
             if (player.getRandom().nextInt(100) < 40) { // 40% 概率
                 player.stopRiding();
                 ServerPlayer serverPlayer = (ServerPlayer) player;
-                EntityType<?> invesHeilehimType = ModEntityTypes.INVES_HEILEHIM.get();
-                if (invesHeilehimType != null) {
-                    LivingEntity invesHeilehimEntity = (LivingEntity) invesHeilehimType.create(level);
-                    if (invesHeilehimEntity != null) {
-                        // 初始化实体并设置位置
-                        invesHeilehimEntity.moveTo(player.getX(), player.getY(), player.getZ());
-                        if (!invesHeilehimEntity.isAlive()) {
-                            System.err.println("INVES_HEILEHIM initialization failed");
-                            return stack;
-                        }
-                        // 调用 PlayerShape.updateShapes 方法进行变形 - 使用反射检查以避免缺少模组时崩溃
-                        try {
-                            // 动态加载类来检查walkers模组是否存在
-                            Class<?> playerShapeClass = Class.forName("tocraft.walkers.api.PlayerShape");
-                            // 使用反射调用updateShapes方法
-                            java.lang.reflect.Method updateShapesMethod = playerShapeClass.getMethod("updateShapes", ServerPlayer.class, LivingEntity.class);
-                            boolean result = (boolean) updateShapesMethod.invoke(null, serverPlayer, invesHeilehimEntity);
-                            if (result) {
-                                System.out.println("Player transformed to INVES_HEILEHIM successfully");
-                            } else {
-                                System.err.println("Player transformation failed");
+                
+                // 使用反射安全地检查boss模组和创建实体
+                try {
+                    // 动态加载ModEntityTypes类
+                    Class<?> modEntityTypesClass = Class.forName("com.xiaoshi2022.kamen_rider_boss_you_and_me.entity.ModEntityTypes");
+                    // 获取INVES_HEILEHIM静态字段
+                    java.lang.reflect.Field invesHeilehimField = modEntityTypesClass.getDeclaredField("INVES_HEILEHIM");
+                    invesHeilehimField.setAccessible(true);
+                    // 获取RegistryObject对象
+                    Object registryObject = invesHeilehimField.get(null);
+                    // 调用get()方法获取EntityType
+                    java.lang.reflect.Method getMethod = registryObject.getClass().getMethod("get");
+                    EntityType<?> invesHeilehimType = (EntityType<?>) getMethod.invoke(registryObject);
+                    
+                    if (invesHeilehimType != null) {
+                        LivingEntity invesHeilehimEntity = (LivingEntity) invesHeilehimType.create(level);
+                        if (invesHeilehimEntity != null) {
+                            // 初始化实体并设置位置
+                            invesHeilehimEntity.moveTo(player.getX(), player.getY(), player.getZ());
+                            if (!invesHeilehimEntity.isAlive()) {
+                                System.err.println("INVES_HEILEHIM initialization failed");
+                                return stack;
                             }
-                        } catch (Exception e) {
-                            // 如果walkers模组不存在或发生其他错误，记录日志但不崩溃
-                            System.out.println("Walkers mod not available, skipping transformation: " + e.getMessage());
+                            // 调用 PlayerShape.updateShapes 方法进行变形 - 使用反射检查以避免缺少模组时崩溃
+                            try {
+                                // 动态加载类来检查walkers模组是否存在
+                                Class<?> playerShapeClass = Class.forName("tocraft.walkers.api.PlayerShape");
+                                // 使用updateShapes方法进行变形
+                                java.lang.reflect.Method updateShapesMethod = playerShapeClass.getMethod("updateShapes", ServerPlayer.class, LivingEntity.class);
+                                boolean result = (boolean) updateShapesMethod.invoke(null, serverPlayer, invesHeilehimEntity);
+                                if (result) {
+                                    System.out.println("Player transformed to INVES_HEILEHIM successfully");
+                                } else {
+                                    System.err.println("Player transformation failed");
+                                }
+                            } catch (Exception e) {
+                                // 如果walkers模组不存在或发生其他错误，记录日志但不崩溃
+                                System.out.println("Walkers mod not available, skipping transformation: " + e.getMessage());
+                            }
                         }
                     }
+                } catch (ClassNotFoundException e) {
+                    // 如果boss模组不存在，忽略这个功能但不崩溃
+                    System.out.println("Boss mod not available, skipping INVES_HEILEHIM transformation");
+                } catch (Exception e) {
+                    // 记录其他错误的详细信息
+                    System.out.println("Error during INVES_HEILEHIM transformation: " + e.getMessage());
                 }
             }
+            
             // 在finishUsingItem方法中修改赫尔海姆之力的赋予逻辑
             if (player.getRandom().nextInt(100) < 60) {
                 // 随机给予1-3级效果

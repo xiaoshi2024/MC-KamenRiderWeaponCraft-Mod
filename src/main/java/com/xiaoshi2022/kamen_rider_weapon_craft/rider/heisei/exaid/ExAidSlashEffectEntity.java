@@ -104,10 +104,9 @@ public class ExAidSlashEffectEntity extends Entity implements GeoEntity {
             // 跟随一段时间后停止跟随，让特效自由漂浮
             if (followTicks > 60) {
                 followTicks = 0;
-                double randomMotionX = (this.level().random.nextDouble() - 0.5) * 0.3;
-                double randomMotionY = 0.1 + this.level().random.nextDouble() * 0.3;
-                double randomMotionZ = (this.level().random.nextDouble() - 0.5) * 0.3;
-                this.setDeltaMovement(randomMotionX, randomMotionY, randomMotionZ);
+                // 设置随机移动，但避免移动回释放者方向
+                Vec3 motionAwayFromOwner = getMotionAwayFromOwner();
+                this.setDeltaMovement(motionAwayFromOwner);
             }
         } else if (hitEntity != null && !hitEntity.isRemoved()) {
             // 设置特效实体的位置为被击中实体的位置
@@ -130,15 +129,52 @@ public class ExAidSlashEffectEntity extends Entity implements GeoEntity {
             if (followTicks > 30) {
                 hitEntity = null;
                 followTicks = 0;
+                // 设置随机移动，但避免移动回释放者方向
+                Vec3 motionAwayFromOwner = getMotionAwayFromOwner();
+                this.setDeltaMovement(motionAwayFromOwner);
             }
         } else {
-            // 每刻轻微移动，给特效一个流动感
-            Vec3 motion = getDeltaMovement().add(0, 0.01, 0);
-            this.setDeltaMovement(motion);
+            // 保持初始方向移动，减少随机性，防止特效返回
+            Vec3 currentMotion = getDeltaMovement();
+            // 确保特效有足够的速度
+            if (currentMotion.length() < 0.5) {
+                // 如果速度太小，使用远离释放者的方向
+                Vec3 motionAwayFromOwner = getMotionAwayFromOwner();
+                this.setDeltaMovement(motionAwayFromOwner);
+            } else {
+                // 轻微调整方向，保持移动感但不会轻易返回
+                this.setDeltaMovement(currentMotion.normalize().scale(0.8).add(
+                        (this.level().random.nextDouble() - 0.5) * 0.1,
+                        0.02 + this.level().random.nextDouble() * 0.05,
+                        (this.level().random.nextDouble() - 0.5) * 0.1
+                ));
+            }
 
             // 检查是否击中实体
             checkEntityCollision();
         }
+    }
+    
+    // 获取远离释放者的运动向量
+    private Vec3 getMotionAwayFromOwner() {
+        if (owner != null && !owner.isRemoved()) {
+            // 计算从释放者到特效的向量，确保特效远离释放者
+            Vec3 ownerToEffect = this.position().subtract(owner.position());
+            if (ownerToEffect.length() > 0.1) {
+                // 远离释放者的方向，增加一些随机性
+                return ownerToEffect.normalize().scale(0.5).add(
+                        (this.level().random.nextDouble() - 0.5) * 0.3,
+                        0.1 + this.level().random.nextDouble() * 0.3,
+                        (this.level().random.nextDouble() - 0.5) * 0.3
+                );
+            }
+        }
+        // 如果无法计算远离释放者的方向，使用随机方向
+        return new Vec3(
+                (this.level().random.nextDouble() - 0.5) * 0.5,
+                0.1 + this.level().random.nextDouble() * 0.3,
+                (this.level().random.nextDouble() - 0.5) * 0.5
+        );
     }
 
     // 设置特效应该跟踪的目标实体
@@ -190,17 +226,20 @@ public class ExAidSlashEffectEntity extends Entity implements GeoEntity {
     // 检查是否击中实体
     private void checkEntityCollision() {
         if (hitEntity == null) {
+            // 确保特效已经远离释放者足够距离才允许检测实体
+            if (owner != null && this.distanceTo(owner) < 3.0D) {
+                return; // 太靠近释放者，不进行实体检测
+            }
+            
             // 扩大检测范围，确保能够检测到实体
             List<Entity> nearbyEntities = this.level().getEntities(this, this.getBoundingBox().inflate(2.0D),
                     entity -> entity instanceof net.minecraft.world.entity.LivingEntity &&
-                            entity != owner &&
+                            entity != owner &&  // 确保不是释放者
                             !entity.isSpectator() &&
-                            entity.isAlive() &&
-                            !(entity instanceof Player && entity == owner) &&
-                            // 确保不会检测到释放者
-                            !(entity == owner));
+                            entity.isAlive());
 
             for (Entity entity : nearbyEntities) {
+                // 再次确认不是释放者
                 if (entity == owner) {
                     continue;
                 }
@@ -223,19 +262,28 @@ public class ExAidSlashEffectEntity extends Entity implements GeoEntity {
                 this.setDeltaMovement(0, 0, 0);
                 
                 // 在服务器端对击中的实体造成伤害
-                if (!this.level().isClientSide) {
+                if (!this.level().isClientSide && owner != null) { // 确保owner不为null
                     if (entity instanceof net.minecraft.world.entity.LivingEntity livingEntity) {
-                        // 创建一个特殊的伤害源，代表Ex-Aid的技能伤害
-                        net.minecraft.world.damagesource.DamageSource damageSource = level().damageSources().playerAttack((Player)owner);
-                        
-                        // 立即造成一次基础伤害
-                        livingEntity.hurt(damageSource, 5.0F);
-                        
-                        // 添加凋零效果作为持续伤害的实现
-                        livingEntity.addEffect(new net.minecraft.world.effect.MobEffectInstance(
-                                net.minecraft.world.effect.MobEffects.WITHER,
-                                40, 1, false, false
-                        ));
+                        // 确保不会对释放者造成伤害或效果，但允许对其他玩家（包括敌对玩家）造成伤害
+                        if (livingEntity != owner) {
+                            try {
+                                // 创建一个特殊的伤害源，代表Ex-Aid的技能伤害
+                                net.minecraft.world.damagesource.DamageSource damageSource = level().damageSources().playerAttack((Player)owner);
+                                
+                                // 立即造成一次基础伤害
+                                livingEntity.hurt(damageSource, 5.0F);
+                                
+                                // 添加凋零效果作为持续伤害的实现
+                                livingEntity.addEffect(new net.minecraft.world.effect.MobEffectInstance(
+                                        net.minecraft.world.effect.MobEffects.WITHER,
+                                        40, 1, false, false
+                                ));
+                            } catch (ClassCastException e) {
+                                // 防止owner不是Player类型时出现异常
+                                // 如果owner不是Player，使用魔法伤害源
+                                livingEntity.hurt(level().damageSources().magic(), 5.0F);
+                            }
+                        }
                     }
                 }
 
@@ -328,8 +376,13 @@ public class ExAidSlashEffectEntity extends Entity implements GeoEntity {
     public static void spawnEffect(Level level, Entity owner, Vec3 direction) {
         // 只在服务器端生成实体，确保所有客户端都能通过数据包同步看到
         if (!level.isClientSide) {
-            Vec3 startPos = owner.getEyePosition(1.0F).add(direction.scale(1.0));
+            // 增加特效起始距离到2.5单位，避免太靠近释放者
+            Vec3 startPos = owner.getEyePosition(1.0F).add(direction.scale(2.5));
             ExAidSlashEffectEntity effect = new ExAidSlashEffectEntity(level, owner, startPos, direction);
+            
+            // 设置初始速度，让特效直接飞向指定方向而不是漂浮
+            effect.setDeltaMovement(direction.scale(1.2));
+            
             level.addFreshEntity(effect);
         }
     }
