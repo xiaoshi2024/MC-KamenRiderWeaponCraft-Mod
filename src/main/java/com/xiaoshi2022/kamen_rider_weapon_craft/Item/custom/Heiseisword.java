@@ -696,11 +696,7 @@ public class Heiseisword extends SwordItem implements GeoItem {
             // 检查骑士能量是否足够
             double energyCost = HeiseiRiderEffectManager.getRiderEnergyCost(rider);
             if (!RiderEnergyHandler.canUseRiderEnergy(player) || !RiderEnergyHandler.consumeRiderEnergy(player, energyCost)) {
-                // 能量不足，显示屏幕中央提示
-                if (!player.level().isClientSide && player instanceof ServerPlayer serverPlayer) {
-                    // 在服务端，通过客户端消息传递到屏幕中央
-                    serverPlayer.displayClientMessage(Component.literal("§c骑士能量不足，无法使用此技能！"), true);
-                }
+                // 能量不足时静默返回，不显示提示消息
                 return false;
             }
             
@@ -758,21 +754,26 @@ public class Heiseisword extends SwordItem implements GeoItem {
         // 移除攻击时播放的音效，改为在击败实体后播放
         // 音效将在onLeftClickEntity方法中，当实体被击败时触发
         
-        // 计算总能量消耗（每个骑士的能量消耗之和）
-        double totalEnergyCost = 0;
-        for (String rider : riders) {
-            totalEnergyCost += HeiseiRiderEffectManager.getRiderEnergyCost(rider);
+        // 计算总能量消耗，但采用更合理的计算方式，避免能量消耗过高
+        // 基础消耗为每个骑士平均消耗的80%（降低总消耗）
+        double avgEnergyCost = 20.0; // 默认平均消耗
+        if (!riders.isEmpty()) {
+            double sumCost = 0;
+            for (String rider : riders) {
+                sumCost += HeiseiRiderEffectManager.getRiderEnergyCost(rider);
+            }
+            avgEnergyCost = sumCost / riders.size();
         }
         
-        // Scramble模式下能量消耗增加20%作为组合消耗
-        totalEnergyCost *= 1.2;
+        // 多骑士组合攻击时，总消耗为：平均消耗 * 骑士数量 * 0.8（降低组合消耗）
+        double totalEnergyCost = avgEnergyCost * riders.size() * 0.8;
+        
+        // 限制最大能量消耗为80，确保玩家有足够能量释放技能
+        totalEnergyCost = Math.min(totalEnergyCost, 80.0);
         
         // 检查骑士能量是否足够
         if (!RiderEnergyHandler.canUseRiderEnergy(player) || !RiderEnergyHandler.consumeRiderEnergy(player, totalEnergyCost)) {
-            // 能量不足，显示屏幕中央提示
-            if (!player.level().isClientSide && player instanceof ServerPlayer serverPlayer) {
-                serverPlayer.displayClientMessage(Component.literal("§c骑士能量不足，无法使用Scramble Time Break！"), true);
-            }
+            // 能量不足时静默返回，不显示提示消息
             return;
         }
 
@@ -790,24 +791,29 @@ public class Heiseisword extends SwordItem implements GeoItem {
     private void executeXKeyUltimateAttack(Level level, Player player, ItemStack stack) {
         List<String> riders = getScrambleRiders(stack);
         
-        // 计算总能量消耗（每个骑士的能量消耗之和）
-        double totalEnergyCost = 0;
-        for (String rider : riders) {
-            HeiseiRiderEffect effect = HeiseiRiderEffectManager.getRiderEffect(rider);
-            if (effect != null) {
-                totalEnergyCost += effect.getEnergyCost();
+        // 计算总能量消耗，但采用更合理的计算方式，避免能量消耗过高
+        // 基础消耗为每个骑士平均消耗的90%（超必杀比普通组合稍高）
+        double avgEnergyCost = 20.0; // 默认平均消耗
+        if (!riders.isEmpty()) {
+            double sumCost = 0;
+            for (String rider : riders) {
+                HeiseiRiderEffect effect = HeiseiRiderEffectManager.getRiderEffect(rider);
+                if (effect != null) {
+                    sumCost += effect.getEnergyCost();
+                }
             }
+            avgEnergyCost = sumCost / riders.size();
         }
         
-        // 超必杀模式下能量消耗增加50%作为增强消耗
-        totalEnergyCost *= 1.5;
+        // 超必杀模式下，总消耗为：平均消耗 * 骑士数量 * 0.9（降低组合消耗）
+        double totalEnergyCost = avgEnergyCost * riders.size() * 0.9;
+        
+        // 限制最大能量消耗为90，确保玩家有足够能量释放超必杀
+        totalEnergyCost = Math.min(totalEnergyCost, 90.0);
         
         // 检查骑士能量是否足够
         if (!RiderEnergyHandler.canUseRiderEnergy(player) || !RiderEnergyHandler.consumeRiderEnergy(player, totalEnergyCost)) {
-            // 能量不足，显示屏幕中央提示
-            if (!player.level().isClientSide && player instanceof ServerPlayer serverPlayer) {
-                serverPlayer.displayClientMessage(Component.literal("§c骑士能量不足，无法使用X键超必杀！"), true);
-            }
+            // 能量不足时静默返回，不显示提示消息
             return;
         }
         
@@ -829,24 +835,29 @@ public class Heiseisword extends SwordItem implements GeoItem {
     private void executeUltimateTimeBreak(Level level, Player player, ItemStack stack) {
         List<String> riders = getScrambleRiders(stack);
         
-        // 计算总能量消耗（每个骑士的能量消耗之和）
-        double totalEnergyCost = 0;
-        for (String rider : riders) {
-            HeiseiRiderEffect effect = HeiseiRiderEffectManager.getRiderEffect(rider);
-            if (effect != null) {
-                totalEnergyCost += effect.getEnergyCost();
+        // 计算总能量消耗，但采用更合理的计算方式，避免能量消耗过高
+        // 基础消耗为每个骑士平均消耗的90%（超必杀比普通组合稍高）
+        double avgEnergyCost = 20.0; // 默认平均消耗
+        if (!riders.isEmpty()) {
+            double sumCost = 0;
+            for (String rider : riders) {
+                HeiseiRiderEffect effect = HeiseiRiderEffectManager.getRiderEffect(rider);
+                if (effect != null) {
+                    sumCost += effect.getEnergyCost();
+                }
             }
+            avgEnergyCost = sumCost / riders.size();
         }
         
-        // 超必杀模式下能量消耗增加50%作为增强消耗
-        totalEnergyCost *= 1.5;
+        // 超必杀模式下，总消耗为：平均消耗 * 骑士数量 * 0.9（降低组合消耗）
+        double totalEnergyCost = avgEnergyCost * riders.size() * 0.9;
+        
+        // 限制最大能量消耗为90，确保玩家有足够能量释放超必杀
+        totalEnergyCost = Math.min(totalEnergyCost, 90.0);
         
         // 检查骑士能量是否足够
         if (!RiderEnergyHandler.canUseRiderEnergy(player) || !RiderEnergyHandler.consumeRiderEnergy(player, totalEnergyCost)) {
-            // 能量不足，显示屏幕中央提示
-            if (!player.level().isClientSide && player instanceof ServerPlayer serverPlayer) {
-                serverPlayer.displayClientMessage(Component.literal("§c骑士能量不足，无法使用Ultimate Time Break！"), true);
-            }
+            // 能量不足时静默返回，不显示提示消息
             return;
         }
         
@@ -953,12 +964,12 @@ public class Heiseisword extends SwordItem implements GeoItem {
                 // 远程攻击能量消耗根据充能时间调整
                 double energyCost = HeiseiRiderEffectManager.getRiderEnergyCost(rider) * (0.5 + chargeTime * 0.5);
                 
+                // 限制最大能量消耗
+                energyCost = Math.min(energyCost, 30.0);
+                
                 // 检查骑士能量是否足够
                 if (!RiderEnergyHandler.canUseRiderEnergy(player) || !RiderEnergyHandler.consumeRiderEnergy(player, energyCost)) {
-                    // 能量不足，显示屏幕中央提示
-                    if (!player.level().isClientSide && player instanceof ServerPlayer serverPlayer) {
-                        serverPlayer.displayClientMessage(Component.literal("§c骑士能量不足，无法使用远程攻击！"), true);
-                    }
+                    // 能量不足时静默返回，不显示提示消息
                     return;
                 }
                 
@@ -991,16 +1002,15 @@ public class Heiseisword extends SwordItem implements GeoItem {
                 }
             }
             
-            // Scramble模式下能量消耗增加20%作为组合消耗
-            // 远程攻击能量消耗根据充能时间调整
-            totalEnergyCost *= 1.2 * (0.5 + chargeTime * 0.5);
+            // 远程攻击能量消耗根据充能时间调整，并使用更合理的计算方式
+            totalEnergyCost *= (0.5 + chargeTime * 0.5);
+            
+            // 限制最大能量消耗为80
+            totalEnergyCost = Math.min(totalEnergyCost, 80.0);
             
             // 检查骑士能量是否足够
             if (!RiderEnergyHandler.canUseRiderEnergy(player) || !RiderEnergyHandler.consumeRiderEnergy(player, totalEnergyCost)) {
-                // 能量不足，显示屏幕中央提示
-                if (!player.level().isClientSide && player instanceof ServerPlayer serverPlayer) {
-                    serverPlayer.displayClientMessage(Component.literal("§c骑士能量不足，无法使用Scramble远程攻击！"), true);
-                }
+                // 能量不足时静默返回，不显示提示消息
                 return;
             }
             
@@ -1034,16 +1044,15 @@ public class Heiseisword extends SwordItem implements GeoItem {
                 }
             }
             
-            // 超必杀模式下能量消耗增加50%作为增强消耗
-            // 远程攻击能量消耗根据充能时间调整
-            totalEnergyCost *= 1.5 * (0.5 + chargeTime * 0.5);
+            // 远程攻击能量消耗根据充能时间调整，并使用更合理的计算方式
+            totalEnergyCost *= (0.5 + chargeTime * 0.5);
+            
+            // 限制最大能量消耗为90
+            totalEnergyCost = Math.min(totalEnergyCost, 90.0);
             
             // 检查骑士能量是否足够
             if (!RiderEnergyHandler.canUseRiderEnergy(player) || !RiderEnergyHandler.consumeRiderEnergy(player, totalEnergyCost)) {
-                // 能量不足，显示屏幕中央提示
-                if (!player.level().isClientSide && player instanceof ServerPlayer serverPlayer) {
-                    serverPlayer.displayClientMessage(Component.literal("§c骑士能量不足，无法使用Ultimate远程攻击！"), true);
-                }
+                // 能量不足时静默返回，不显示提示消息
                 return;
             }
             

@@ -176,10 +176,17 @@ public class GaimLockSeedEntity extends Entity implements GeoEntity {
     private boolean isHostileTarget(net.minecraft.world.entity.LivingEntity entity) {
         if (owner instanceof net.minecraft.world.entity.player.Player player) {
             // 敌对玩家
-            if (entity instanceof net.minecraft.world.entity.player.Player && 
-                !player.getTeam().equals(((net.minecraft.world.entity.player.Player) entity).getTeam()) &&
-                player.canHarmPlayer((net.minecraft.world.entity.player.Player) entity)) {
-                return true;
+            if (entity instanceof net.minecraft.world.entity.player.Player targetPlayer) {
+                // 检查玩家是否可以互相攻击
+                if (player.canHarmPlayer(targetPlayer)) {
+                    return true;
+                }
+                // 检查队伍（如果都有队伍且不同）
+                net.minecraft.world.scores.Team playerTeam = player.getTeam();
+                net.minecraft.world.scores.Team targetTeam = targetPlayer.getTeam();
+                if (playerTeam != null && targetTeam != null && !playerTeam.equals(targetTeam)) {
+                    return true;
+                }
             }
             
             // 敌对生物
