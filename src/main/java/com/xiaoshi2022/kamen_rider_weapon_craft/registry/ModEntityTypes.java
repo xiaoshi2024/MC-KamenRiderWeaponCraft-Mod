@@ -7,6 +7,7 @@ import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.drive.DriveRiderEnt
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.exaid.ExAidSlashEffectEntity;
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.gaim.GaimLockSeedEntity;
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.ghost.GhostHeroicSoulEntity;
+import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.wizard.WizardRiderEntity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -78,6 +79,16 @@ public class ModEntityTypes {
                             .setUpdateInterval(1)
                             .setShouldReceiveVelocityUpdates(false)
                             .build("gaim_lock_seed"));
+
+    // Wizard魔法特效实体
+    public static final RegistryObject<EntityType<WizardRiderEntity>> WIZARD_EFFECT =
+            ENTITIES.register("wizard_effect",
+                    () -> EntityType.Builder.<WizardRiderEntity>of(WizardRiderEntity::new, MobCategory.MISC)
+                            .sized(0.5f, 0.5f)
+                            .clientTrackingRange(8)
+                            .updateInterval(1)
+                            .build("wizard_effect")
+            );
 
     public static void register(IEventBus modEventBus) {
         ENTITIES.register(modEventBus);

@@ -61,9 +61,11 @@ public class Heiseisword extends SwordItem implements GeoItem {
     // 添加冷却时间相关常量和NBT键
     private static final String TAG_LAST_ATTACK_TIME = "lastAttackTime";
     private static final String TAG_LAST_RIDER_SELECTION_TIME = "lastRiderSelectionTime"; // 上次选择骑士的时间
+    private static final String TAG_LAST_FINISH_TIME_ENTER = "lastFinishTimeEnter"; // 上次进入必杀模式的时间
     private static final int ATTACK_COOLDOWN_TICKS = 10; // 攻击冷却时间（约0.5秒）
     private static final int ULTIMATE_ATTACK_COOLDOWN_TICKS = 40; // 超必杀冷却时间（约2秒）
     private static final int RIDER_SELECTION_COOLDOWN_TICKS = 15; // 骑士选择冷却时间（约0.75秒）
+    private static final int FINISH_TIME_COOLDOWN_TICKS = 300; // 必杀模式冷却时间（15秒）
 
     // 添加获取上次攻击时间的方法
     private long getLastAttackTime(ItemStack stack) {
@@ -177,6 +179,24 @@ public class Heiseisword extends SwordItem implements GeoItem {
     // 设置上次旋转时间
     private void setLastRotationTime(ItemStack stack, long time) {
         stack.getOrCreateTag().putLong(TAG_LAST_ROTATION_TIME, time);
+    }
+    
+    // 获取上次进入必杀模式的时间
+    private long getLastFinishTimeEnter(ItemStack stack) {
+        if (!stack.hasTag()) return 0;
+        return stack.getTag().getLong(TAG_LAST_FINISH_TIME_ENTER);
+    }
+    
+    // 设置上次进入必杀模式的时间
+    private void setLastFinishTimeEnter(ItemStack stack, long time) {
+        stack.getOrCreateTag().putLong(TAG_LAST_FINISH_TIME_ENTER, time);
+    }
+    
+    // 检查必杀模式是否在冷却中
+    private boolean isFinishTimeOnCooldown(ItemStack stack, Level level) {
+        long lastEnterTime = getLastFinishTimeEnter(stack);
+        long currentTime = level.getGameTime();
+        return (currentTime - lastEnterTime) < FINISH_TIME_COOLDOWN_TICKS;
     }
 
     // 获取当前旋转位置
@@ -442,10 +462,23 @@ public class Heiseisword extends SwordItem implements GeoItem {
 
         boolean currentMode = isFinishTimeMode(stack);
         boolean newMode = !currentMode;
+
+        // 如果是要进入必杀模式，检查是否在冷却中
+        if (newMode && isFinishTimeOnCooldown(stack, level)) {
+            // 冷却中，显示剩余时间
+            long remainingTicks = FINISH_TIME_COOLDOWN_TICKS - (level.getGameTime() - getLastFinishTimeEnter(stack));
+            int remainingSeconds = (int) remainingTicks / 20;
+            if (!level.isClientSide && player instanceof ServerPlayer serverPlayer) {
+                serverPlayer.displayClientMessage(Component.literal("必杀模式冷却中，剩余 " + remainingSeconds + " 秒"), true);
+            }
+            return InteractionResultHolder.pass(stack);
+        }
+
         setFinishTimeMode(stack, newMode);
 
         if (newMode) {
-            // 进入Finish Time模式
+            // 进入Finish Time模式，记录进入时间
+            setLastFinishTimeEnter(stack, level.getGameTime());
             HeiseiRiderEffectManager.playFinishTimeSound(level, player);
             setScrambleRiders(stack, new ArrayList<>());
             setRotationCount(stack, 0);
