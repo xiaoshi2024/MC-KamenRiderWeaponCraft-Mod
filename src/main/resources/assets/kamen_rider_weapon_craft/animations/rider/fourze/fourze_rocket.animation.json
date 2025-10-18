@@ -2,9 +2,18 @@
 	"format_version": "1.8.0",
 	"animations": {
 		"fly": {
+			"loop": "hold_on_last_frame",
 			"animation_length": 1,
 			"bones": {
 				"fourze_rocket": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.75": {
+							"vector": [0, 0, -120]
+						}
+					},
 					"position": {
 						"0.0": {
 							"vector": [0, -2.4, 0]
