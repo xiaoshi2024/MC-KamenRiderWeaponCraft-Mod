@@ -8,6 +8,7 @@ import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.exaid.ExAidSlashEff
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.gaim.GaimLockSeedEntity;
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.ghost.GhostHeroicSoulEntity;
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.wizard.WizardRiderEntity;
+import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.fourze.FourzeRocketEntity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -88,6 +89,16 @@ public class ModEntityTypes {
                             .clientTrackingRange(8)
                             .updateInterval(1)
                             .build("wizard_effect")
+            );
+            
+    // Fourze火箭炮实体
+    public static final RegistryObject<EntityType<FourzeRocketEntity>> FOURZE_ROCKET =
+            ENTITIES.register("fourze_rocket",
+                    () -> EntityType.Builder.<FourzeRocketEntity>of(FourzeRocketEntity::new, MobCategory.MISC)
+                            .sized(0.4f, 0.4f)  // 火箭炮大小
+                            .clientTrackingRange(16)  // 客户端追踪距离
+                            .updateInterval(1)  // 更新频率
+                            .build("fourze_rocket")
             );
 
     public static void register(IEventBus modEventBus) {

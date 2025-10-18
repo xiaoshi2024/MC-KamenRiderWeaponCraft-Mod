@@ -109,9 +109,7 @@ public class WizardEffect extends AbstractHeiseiRiderEffect {
     
     private void executeHurricaneMagic(Level level, Player player, Vec3 direction) {
         // 飓风魔龙之力：制造强大风暴
-        // 创建一个强力风暴
-        level.explode(player, player.getX(), player.getY(), player.getZ(), 
-            getEffectRange() * 1.5f, Level.ExplosionInteraction.MOB);
+        // 移除了爆炸效果，避免地形破坏
         
         // 对周围敌人造成伤害和强力击退效果
         level.getEntities(player, player.getBoundingBox().inflate(getEffectRange() * 2.0))

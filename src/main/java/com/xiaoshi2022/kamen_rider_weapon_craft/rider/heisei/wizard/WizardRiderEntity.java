@@ -223,8 +223,8 @@ public class WizardRiderEntity extends Projectile implements GeoEntity {
     }
 
     private void handleHurricaneDragonEffect(LivingEntity target) {
-        // 对目标造成伤害
-        target.hurt(this.level().damageSources().mobProjectile(this, (LivingEntity) this.getOwner()), this.getDamage());
+        // 对目标造成伤害（略微降低伤害值）
+        target.hurt(this.level().damageSources().mobProjectile(this, (LivingEntity) this.getOwner()), this.getDamage() * 0.8f);
 
         // 卷起附近的敌对实体（很高）
         AABB area = this.getBoundingBox().inflate(12.0);
@@ -250,6 +250,39 @@ public class WizardRiderEntity extends Projectile implements GeoEntity {
 
                 // 对玩家和怪物都添加眩晕效果
                 livingTarget.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 100, 0));
+            }
+        }
+        
+        // 添加不会破坏地形的爆炸效果
+        Vec3 center = this.position();
+        float explosionRadius = 3.0F;
+        
+        this.level().explode(
+            this,
+            center.x,
+            center.y,
+            center.z,
+            explosionRadius,
+            Level.ExplosionInteraction.NONE // 不破坏地形
+        );
+        
+        // 对爆炸范围内的实体造成额外伤害
+        AABB explosionArea = this.getBoundingBox().inflate(explosionRadius);
+        List<LivingEntity> explosionEntities = this.level().getEntitiesOfClass(LivingEntity.class, explosionArea, 
+            entity -> entity != this.getOwner() && entity.isAlive());
+        
+        LivingEntity owner = (LivingEntity) this.getOwner();
+        float explosionDamage = this.getDamage() * 0.5f;
+        
+        for (LivingEntity entity : explosionEntities) {
+            // 计算距离衰减
+            double distance = entity.distanceTo(this);
+            float finalDamage = (float) (explosionDamage * (1.0 - distance / (explosionRadius * 2.0)));
+            
+            if (finalDamage > 0) {
+                if (owner != null) {
+                    entity.hurt(this.level().damageSources().indirectMagic(this, owner), finalDamage);
+                }
             }
         }
     }
