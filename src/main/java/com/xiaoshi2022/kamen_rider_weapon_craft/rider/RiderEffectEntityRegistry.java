@@ -7,6 +7,7 @@ import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.fourze.FourzeRocket
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.ooo.OOOGeoEntityRenderer;
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.gaim.GaimLockSeedRenderer;
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.wizard.WizardRiderEntityRenderer;
+import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.w.WTornadoRenderer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -55,6 +56,9 @@ public class RiderEffectEntityRegistry {
         
         // 注册OOO细胞硬币斩实体渲染器
         registerOOORiderRenderers(event);
+        
+        // 注册W骑士龙卷风实体渲染器
+        registerWRiderRenderers(event);
         
         // 这里可以添加更多骑士特效实体的注册方法
     }
@@ -111,5 +115,14 @@ public class RiderEffectEntityRegistry {
     private static void registerOOORiderRenderers(EntityRenderersEvent.RegisterRenderers event) {
         // 使用与项目中其他实体一致的注册方式，保持代码风格统一
         event.registerEntityRenderer(ModEntityTypes.OOO_GEO_EFFECT.get(), OOOGeoEntityRenderer::new);
+    }
+    
+    /**
+     * 注册W骑士相关的特效实体渲染器
+     * @param event 实体渲染器注册事件
+     */
+    private static void registerWRiderRenderers(EntityRenderersEvent.RegisterRenderers event) {
+        // 使用与项目中其他实体一致的注册方式，保持代码风格统一
+        event.registerEntityRenderer(ModEntityTypes.W_TORNADO.get(), WTornadoRenderer::new);
     }
 }

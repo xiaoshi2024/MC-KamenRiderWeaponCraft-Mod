@@ -7,9 +7,11 @@ import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.drive.DriveRiderEnt
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.exaid.ExAidSlashEffectEntity;
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.gaim.GaimLockSeedEntity;
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.ghost.GhostHeroicSoulEntity;
+import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.w.WTornadoEntity;
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.wizard.WizardRiderEntity;
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.fourze.FourzeRocketEntity;
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.ooo.OOOGeoEntity;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -110,6 +112,16 @@ public class ModEntityTypes {
                             .setUpdateInterval(1)
                             .setShouldReceiveVelocityUpdates(false)
                             .build("ooo_geo_effect"));
+
+    // Kamen Rider W 龙卷风实体
+    public static final RegistryObject<EntityType<WTornadoEntity>> W_TORNADO = 
+            ENTITIES.register("w_tornado", 
+                    () -> EntityType.Builder.<WTornadoEntity>of(WTornadoEntity::new, MobCategory.MISC)
+                            .sized(1.5F, 2.0F)
+                            .setTrackingRange(10)
+                            .setUpdateInterval(1)
+                            .setShouldReceiveVelocityUpdates(true)
+                            .build("w_tornado"));
 
     public static void register(IEventBus modEventBus) {
         ENTITIES.register(modEventBus);
