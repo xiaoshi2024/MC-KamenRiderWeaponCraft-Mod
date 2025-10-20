@@ -11,9 +11,9 @@ import com.xiaoshi2022.kamen_rider_weapon_craft.network.NetworkHandler;
  * 用于替代外部boss模组的蓝条系统，避免与其他模组冲突
  */
 public class HeiseiswordEnergyManager {
-    // NBT标签常量
-    private static final String TAG_CURRENT_ENERGY = "heiseisword_current_energy";
-    private static final String TAG_MAX_ENERGY = "heiseisword_max_energy";
+    // NBT标签常量 - 使用更唯一的标签名以避免与其他模组冲突
+    private static final String TAG_CURRENT_ENERGY = "kamen_rider_craft_heiseisword_current_energy";
+    private static final String TAG_MAX_ENERGY = "kamen_rider_craft_heiseisword_max_energy";
     
     // 默认最大能量值
     private static final double DEFAULT_MAX_ENERGY = 100.0;
@@ -25,22 +25,22 @@ public class HeiseiswordEnergyManager {
      * 获取玩家的当前能量值
      */
     public static double getCurrentEnergy(Player player) {
-        if (player == null || player.getPersistentData().getCompound(Player.PERSISTED_NBT_TAG).getCompound("heiseisword_energy").isEmpty()) {
+        if (player == null || player.getPersistentData().getCompound(Player.PERSISTED_NBT_TAG).getCompound("kamen_rider_craft_heiseisword_energy").isEmpty()) {
             // 初始化能量
             setCurrentEnergy(player, DEFAULT_MAX_ENERGY);
             return DEFAULT_MAX_ENERGY;
         }
-        return player.getPersistentData().getCompound(Player.PERSISTED_NBT_TAG).getCompound("heiseisword_energy").getDouble(TAG_CURRENT_ENERGY);
+        return player.getPersistentData().getCompound(Player.PERSISTED_NBT_TAG).getCompound("kamen_rider_craft_heiseisword_energy").getDouble(TAG_CURRENT_ENERGY);
     }
     
     /**
      * 获取玩家的最大能量值
      */
     public static double getMaxEnergy(Player player) {
-        if (player == null || player.getPersistentData().getCompound(Player.PERSISTED_NBT_TAG).getCompound("heiseisword_energy").isEmpty()) {
+        if (player == null || player.getPersistentData().getCompound(Player.PERSISTED_NBT_TAG).getCompound("kamen_rider_craft_heiseisword_energy").isEmpty()) {
             return DEFAULT_MAX_ENERGY;
         }
-        return player.getPersistentData().getCompound(Player.PERSISTED_NBT_TAG).getCompound("heiseisword_energy").getDouble(TAG_MAX_ENERGY);
+        return player.getPersistentData().getCompound(Player.PERSISTED_NBT_TAG).getCompound("kamen_rider_craft_heiseisword_energy").getDouble(TAG_MAX_ENERGY);
     }
     
     /**
@@ -54,10 +54,10 @@ public class HeiseiswordEnergyManager {
         energy = Math.max(0.0, Math.min(energy, maxEnergy));
         
         CompoundTag persistedData = player.getPersistentData().getCompound(Player.PERSISTED_NBT_TAG);
-        CompoundTag energyData = persistedData.getCompound("heiseisword_energy");
+        CompoundTag energyData = persistedData.getCompound("kamen_rider_craft_heiseisword_energy");
         energyData.putDouble(TAG_CURRENT_ENERGY, energy);
         energyData.putDouble(TAG_MAX_ENERGY, maxEnergy); // 确保最大能量也被保存
-        persistedData.put("heiseisword_energy", energyData);
+        persistedData.put("kamen_rider_craft_heiseisword_energy", energyData);
         player.getPersistentData().put(Player.PERSISTED_NBT_TAG, persistedData);
         
         // 发送能量同步包到客户端
@@ -73,11 +73,11 @@ public class HeiseiswordEnergyManager {
         maxEnergy = Math.max(1.0, maxEnergy); // 确保最大能量至少为1
         
         CompoundTag persistedData = player.getPersistentData().getCompound(Player.PERSISTED_NBT_TAG);
-        CompoundTag energyData = persistedData.getCompound("heiseisword_energy");
+        CompoundTag energyData = persistedData.getCompound("kamen_rider_craft_heiseisword_energy");
         double currentEnergy = Math.min(energyData.getDouble(TAG_CURRENT_ENERGY), maxEnergy); // 确保当前能量不超过新的最大能量
         energyData.putDouble(TAG_CURRENT_ENERGY, currentEnergy);
         energyData.putDouble(TAG_MAX_ENERGY, maxEnergy);
-        persistedData.put("heiseisword_energy", energyData);
+        persistedData.put("kamen_rider_craft_heiseisword_energy", energyData);
         player.getPersistentData().put(Player.PERSISTED_NBT_TAG, persistedData);
         
         // 发送能量同步包到客户端

@@ -1,70 +1,36 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.rider.effect.impl;
 
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.effect.AbstractHeiseiRiderEffect;
+import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.ooo.OOOGeoEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 public class OOOEffect extends AbstractHeiseiRiderEffect {
 
-    // OOO的基本联组
-    private enum OOOCombo {
-        TATOBA(1.0, 0.8, 0.0), // 鹰虎蝗（金色）
-        LATORARTAR(0.0, 0.5, 0.0), // 狮虎豹（绿色）
-        SHAUTA(0.0, 0.0, 1.0), // 鲨鳗章（蓝色）
-        PUTOTYRA(0.8, 0.0, 0.0);  // 翼角暴（紫色）
-        
-        private final double r, g, b;
-        
-        OOOCombo(double r, double g, double b) {
-            this.r = r;
-            this.g = g;
-            this.b = b;
-        }
-        
-        public double getR() { return r; }
-        public double getG() { return g; }
-        public double getB() { return b; }
-    }
+    // 只保留恐龙联组(Putotyra)
+    private static final String PUTOTYRA = "putotyra"; // 翼角暴（紫色）
+    private static final double R = 0.8, G = 0.0, B = 0.8; // 紫色RGB值
 
     @Override
     public void executeSpecialAttack(Level level, Player player, Vec3 direction) {
         if (!level.isClientSide) {
-            // 服务器端：发动Scanning Charge，使用不同的联组能力
-            // 随机选择一个联组
-            OOOCombo selectedCombo = OOOCombo.values()[level.random.nextInt(OOOCombo.values().length)];
+            // 服务器端：发动Scanning Charge，仅使用恐龙联组
             
-            // 根据所选联组执行不同的攻击
-            executeComboAttack(level, player, direction, selectedCombo);
+            // 执行恐龙联组的攻击效果
+            executeFullPowerAttack(level, player);
+            
+            // 执行细胞硬币吞噬效果，传入方向向量
+            executeCellMedalSlash(level, player, direction);
             
             // 给予玩家硬币相关的增益效果
             player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 300, 1));
         } else {
             // 客户端：粒子效果已移除，后续将使用geo动画还原
-        }
-    }
-    
-    private void executeComboAttack(Level level, Player player, Vec3 direction, OOOCombo combo) {
-        // 根据所选联组执行不同的攻击效果
-        switch (combo) {
-            case TATOBA:
-                // 鹰虎蝗联组：平衡的攻击，对前方造成伤害
-                executeBalancedAttack(level, player, direction);
-                break;
-            case LATORARTAR:
-                // 狮虎豹联组：力量型攻击，对周围造成伤害
-                executePowerAttack(level, player);
-                break;
-            case SHAUTA:
-                // 鲨鳗章联组：水属性攻击，远程打击
-                executeWaterAttack(level, player, direction);
-                break;
-            case PUTOTYRA:
-                // 翼角暴联组：全能型攻击，对大范围造成伤害
-                executeFullPowerAttack(level, player);
-                break;
         }
     }
     
@@ -142,6 +108,67 @@ public class OOOEffect extends AbstractHeiseiRiderEffect {
                 ((net.minecraft.world.entity.LivingEntity) entity).addEffect(new MobEffectInstance(
                     MobEffects.WEAKNESS, 150, 0));
             });
+    }
+    
+    private void executeDefenseAttack(Level level, Player player) {
+        // 防御型攻击，对周围敌人造成伤害并提供防御增益
+        // 优化：使用更高效的实体查找方式
+        level.getEntitiesOfClass(net.minecraft.world.entity.LivingEntity.class, 
+                player.getBoundingBox().inflate(6.0),
+                entity -> entity != player) // 提前过滤掉玩家自己
+            .forEach(entity -> {
+                ((net.minecraft.world.entity.LivingEntity) entity).hurt(
+                    level.damageSources().playerAttack(player), getAttackDamage() * 0.8f);
+            });
+        
+        // 给予玩家防御增益
+        player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 300, 1));
+    }
+    
+    /**
+     * 执行细胞硬币斩攻击
+     * @param level 世界对象
+     * @param player 玩家
+     * @param direction 攻击方向（用于实现跟随挥舞效果）
+     * @param combo 联组类型
+     */
+    /**
+     * 执行细胞硬币吞噬攻击 - 恐龙联组专属效果
+     * @param level 世界对象
+     * @param player 玩家
+     * @param direction 攻击方向
+     */
+    private void executeCellMedalSlash(Level level, Player player, Vec3 direction) {
+        float attackDamage = getAttackDamage();
+        
+        // 首先尝试查找攻击方向上最近的敌对实体
+        LivingEntity target = findNearestTargetInDirection(level, player, direction, 10.0);
+        
+        // 执行恐龙联组的细胞硬币吞噬效果
+        // 如果有目标，传入目标信息；如果没有，仍然生成但会自动寻找目标
+        OOOGeoEffect.spawnCellMedalSwallow(level, player, direction, attackDamage * 1.5f, target);
+    }
+    
+    /**
+     * 在指定方向上查找最近的敌对实体
+     */
+    private LivingEntity findNearestTargetInDirection(Level level, Player player, Vec3 direction, double maxRange) {
+        Vec3 start = player.getEyePosition(1.0f);
+        Vec3 end = start.add(direction.scale(maxRange));
+        
+        // 创建一个沿着方向的AABB来搜索实体
+        AABB searchBox = new AABB(start, end).inflate(2.0);
+        
+        // 查找最近的敌对实体
+        return level.getEntitiesOfClass(LivingEntity.class, searchBox, 
+                entity -> entity != player && entity.isAlive() && player.canAttack(entity))
+                .stream()
+                .min((e1, e2) -> {
+                    double d1 = e1.distanceToSqr(start);
+                    double d2 = e2.distanceToSqr(start);
+                    return Double.compare(d1, d2);
+                })
+                .orElse(null);
     }
 
     @Override

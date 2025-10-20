@@ -9,6 +9,7 @@ import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.gaim.GaimLockSeedEn
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.ghost.GhostHeroicSoulEntity;
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.wizard.WizardRiderEntity;
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.fourze.FourzeRocketEntity;
+import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.ooo.OOOGeoEntity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -100,6 +101,15 @@ public class ModEntityTypes {
                             .updateInterval(1)  // 更新频率
                             .build("fourze_rocket")
             );
+    
+    // Kamen Rider OOO 细胞硬币斩实体
+    public static final RegistryObject<EntityType<OOOGeoEntity>> OOO_GEO_EFFECT = 
+            ENTITIES.register("ooo_geo_effect", 
+                    () -> EntityType.Builder.<OOOGeoEntity>of(OOOGeoEntity::new, MobCategory.MISC)
+                            .setTrackingRange(64)
+                            .setUpdateInterval(1)
+                            .setShouldReceiveVelocityUpdates(false)
+                            .build("ooo_geo_effect"));
 
     public static void register(IEventBus modEventBus) {
         ENTITIES.register(modEventBus);

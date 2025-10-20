@@ -9,7 +9,6 @@ import com.xiaoshi2022.kamen_rider_weapon_craft.procedures.KRWBoot;
 import com.xiaoshi2022.kamen_rider_weapon_craft.procedures.PullSounds;
 import com.xiaoshi2022.kamen_rider_weapon_craft.procedures.PullSoundsClient;
 import com.xiaoshi2022.kamen_rider_weapon_craft.recipe.ModRecipes;
-import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModAttributes;
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.*;
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.RiderEffectEntityRegistry;
 import com.xiaoshi2022.kamen_rider_weapon_craft.tab.ModTab;
@@ -60,7 +59,6 @@ public class kamen_rider_weapon_craft {
         ModSounds.REGISTRY.register(modEventBus);
         ModItems.ITEMS.register(modEventBus);
         ModBlocks.BLOCKS.register(modEventBus);
-        ModAttributes.ATTRIBUTES.register(modEventBus);
         ModFluids.FLUIDS.register(modEventBus);
         ModFluids.FLUID_TYPES.register(modEventBus);
         ModTab.TABS.register(modEventBus);
