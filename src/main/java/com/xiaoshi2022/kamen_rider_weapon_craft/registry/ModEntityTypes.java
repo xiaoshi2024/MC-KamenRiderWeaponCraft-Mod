@@ -11,6 +11,7 @@ import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.w.WTornadoEntity;
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.wizard.WizardRiderEntity;
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.fourze.FourzeRocketEntity;
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.ooo.OOOGeoEntity;
+import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.decade.DecadeRiderEntity;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
@@ -122,6 +123,15 @@ public class ModEntityTypes {
                             .setUpdateInterval(1)
                             .setShouldReceiveVelocityUpdates(true)
                             .build("w_tornado"));
+    
+    // Kamen Rider Decade 次元踢特效实体
+    public static final RegistryObject<EntityType<DecadeRiderEntity>> DECADE_RIDER = 
+            ENTITIES.register("decade_rider", 
+                    () -> EntityType.Builder.<DecadeRiderEntity>of(DecadeRiderEntity::new, MobCategory.MISC)
+                            .setTrackingRange(64)
+                            .setUpdateInterval(1)
+                            .setShouldReceiveVelocityUpdates(false)
+                            .build("decade_rider"));
 
     public static void register(IEventBus modEventBus) {
         ENTITIES.register(modEventBus);
