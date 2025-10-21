@@ -1,0 +1,40 @@
+{
+	"schemaVersion": 1,
+	"id": "kamen_rider_weapon_craft",
+	"version": "0.3.0",
+	"name": "KamenRiderWeaponCraft Mod",
+	"description": "This is a mod based on the Kamen Rider series, bringing various iconic weapons into your game mc...",
+	"authors": [
+		"xiaoshi2022"
+	],
+	"contact": {
+		"homepage": "https://space.bilibili.com/1410016591",
+		"sources": "https://github.com/FabricMC/fabric-example-mod"
+	},
+	"license": "MIT",
+	"icon": "assets/kamen_rider_weapon_craft/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"com.xiaoshi2022.kamen_rider_weapon_craft.Kamen_Rider_Weapon_Craft"
+		],
+		"fabric-datagen": [
+			"com.xiaoshi2022.kamen_rider_weapon_craft.Kamen_Rider_Weapon_CraftDataGenerator"
+		],
+		"client": [
+			"com.xiaoshi2022.kamen_rider_weapon_craft.KamenRiderWeaponClient"
+		]
+	},
+	"mixins": [
+		"kamen_rider_weapon_craft.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.17.3",
+		"minecraft": "~1.21.6",
+		"java": ">=21",
+		"fabric-api": "*"
+	},
+	"suggests": {
+		"another-mod": "*"
+	}
+}
