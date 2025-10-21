@@ -1,8 +1,0 @@
-{
-  "parent": "block/tinted_cross",
-  "textures": {
-    "cross": "kamen_rider_weapon_craft:block/helheim_plant_3",
-    "particle": "kamen_rider_weapon_craft:block/helheim_plant_3"
-  },
-  "render_type": "cutout"
-}

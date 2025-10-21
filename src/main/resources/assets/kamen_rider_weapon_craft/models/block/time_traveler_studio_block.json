@@ -1,8 +1,0 @@
-{
-  "parent": "block/cube_all",
-  "textures": {
-    "all": "kamen_rider_weapon_craft:block/time_traveler_studio_block",
-    "particle": "kamen_rider_weapon_craft:block/time_traveler_studio_block"
-  },
-  "render_type": "solid"
-}
