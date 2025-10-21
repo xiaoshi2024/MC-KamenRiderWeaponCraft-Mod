@@ -1,7 +1,0 @@
-{
-  "parent": "minecraft:block/cube_all",
-  "textures": {
-    "all": "kamen_rider_weapon_craft:block/helheim_jelly_block"
-  },
-  "render_type": "minecraft:translucent"
-}

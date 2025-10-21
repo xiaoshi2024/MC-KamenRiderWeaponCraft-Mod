@@ -1,7 +1,0 @@
-{
-  "entities": ["minecraft:player"],
-  "slots": [
-    "belt",
-    "waist_left"
-  ]
-}

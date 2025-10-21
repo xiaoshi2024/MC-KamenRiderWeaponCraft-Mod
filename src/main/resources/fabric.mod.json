@@ -1,0 +1,37 @@
+{
+	"schemaVersion": 1,
+	"id": "kamen_rider_weapon_craft",
+	"version": "${version}",
+	"name": "Kamen_Rider_Weapon_Craft",
+	"description": "This is an example description! Tell everyone what your mod is about!",
+	"authors": [
+		"Me!"
+	],
+	"contact": {
+		"homepage": "https://fabricmc.net/",
+		"sources": "https://github.com/FabricMC/fabric-example-mod"
+	},
+	"license": "CC0-1.0",
+	"icon": "assets/kamen_rider_weapon_craft/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"com.xiaoshi2022.kamen_rider_weapon_craft.Kamen_Rider_Weapon_Craft"
+		],
+		"fabric-datagen": [
+			"com.xiaoshi2022.kamen_rider_weapon_craft.Kamen_Rider_Weapon_CraftDataGenerator"
+		]
+	},
+	"mixins": [
+		"kamen_rider_weapon_craft.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.17.3",
+		"minecraft": "~1.21.6",
+		"java": ">=21",
+		"fabric-api": "*"
+	},
+	"suggests": {
+		"another-mod": "*"
+	}
+}
