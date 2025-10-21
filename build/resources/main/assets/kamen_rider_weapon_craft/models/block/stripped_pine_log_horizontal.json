@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column_horizontal",
+  "textures": {
+    "end": "kamen_rider_weapon_craft:block/stripped_pine_log_top",
+    "side": "kamen_rider_weapon_craft:block/stripped_pine_log"
+  }
+}

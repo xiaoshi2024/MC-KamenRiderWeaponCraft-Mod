@@ -1,0 +1,49 @@
+{
+  "credit": "Made with Blockbench",
+  "parent": "builtin/entity",
+  "texture_size": [
+    32,
+    32
+  ],
+  "display": {
+    "gui": {
+      "rotation": [
+        -98.12,
+        -42.26,
+        -95.46
+      ],
+      "translation": [
+        -5,
+        -5.25,
+        0
+      ]
+    },
+    "head": {
+      "rotation": [
+        -180,
+        -92,
+        0
+      ],
+      "translation": [
+        0,
+        20.25,
+        0
+      ]
+    },
+    "fixed": {
+      "rotation": [
+        -90,
+        48.25,
+        90
+      ],
+      "translation": [
+        4,
+        -6,
+        0
+      ]
+    }
+  },
+  "textures": {
+    "particle": "item/zanvat_sword"
+  }
+}

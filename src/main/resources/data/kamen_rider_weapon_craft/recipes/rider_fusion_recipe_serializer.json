@@ -1,0 +1,26 @@
+{
+  "type": "kamen_rider_weapon_craft:rider_fusion_recipe_serializer",
+  "fusion_time": 400,
+  "ingredients": {
+    "0": {
+      "item": "minecraft:gold_ingot",
+      "count": 1
+    },
+    "1": {
+      "item": "kamen_rider_weapon_craft:rider_forging_alloy_ore",
+      "count": 1
+    },
+    "2": {
+      "item": "minecraft:redstone",
+      "count": 1
+    },
+    "3": {
+      "item": "minecraft:coal",
+      "count": 1
+    }
+  },
+  "output": {
+    "item": "kamen_rider_weapon_craft:rider_circuit_board",
+    "count": 1
+  }
+}

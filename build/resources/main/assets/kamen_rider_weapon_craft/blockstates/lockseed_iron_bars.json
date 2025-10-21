@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "kamen_rider_weapon_craft:block/lockseed_iron_bars" },
+    "facing=east": { "model": "kamen_rider_weapon_craft:block/lockseed_iron_bars", "y": 90 },
+    "facing=south": { "model": "kamen_rider_weapon_craft:block/lockseed_iron_bars", "y": 180 },
+    "facing=west": { "model": "kamen_rider_weapon_craft:block/lockseed_iron_bars", "y": 270 }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "silent": true,
+  "answers": [
+    {
+      "name": "just_passing_by",
+      "constraints": "adventurer",
+      "priority": 1,
+      "results": [
+        {
+          "actions": {
+            "next": "just_passing_by"
+          }
+        }
+      ]
+    }
+  ]
+}

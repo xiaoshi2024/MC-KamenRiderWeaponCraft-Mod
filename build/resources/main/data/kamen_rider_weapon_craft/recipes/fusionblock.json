@@ -1,0 +1,31 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "rider_smelt",
+  "category": "equipment",
+  "pattern": [
+    " a ",
+    "aba",
+    "cde"
+  ],
+  "key": {
+    "a": {
+      "tag": "forge:stained_glass"
+    },
+    "b": {
+      "item": "minecraft:gold_ingot"
+    },
+    "c": {
+      "item": "kamen_rider_weapon_craft:rider_forging_alloy_ore"
+    },
+    "d": {
+      "item": "minecraft:blast_furnace"
+    },
+    "e": {
+      "item": "minecraft:diamond"
+    }
+  },
+  "result": {
+    "item": "kamen_rider_weapon_craft:rider_fusion_machine_item",
+    "count": 1
+  }
+}

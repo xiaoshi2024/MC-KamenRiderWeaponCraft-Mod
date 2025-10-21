@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:block",
+  "random_sequence": "kamen_rider_weapon_craft:blocks/helheim_jelly_block",
+  "pools": [
+    {
+      "rolls": 1.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "kamen_rider_weapon_craft:helheim_jelly_block"
+        }
+      ]
+    }
+  ]
+}

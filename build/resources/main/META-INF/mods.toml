@@ -1,0 +1,35 @@
+modLoader="javafml"
+loaderVersion="x.x.x"
+license="MIT"
+
+[[mods]]
+modId="kamen_rider_weapon_craft"
+logoFile="kamen_rider_weapon_craft.png"
+version="0.2.2beta"
+displayName="KamenRiderWeaponCraft"
+displayURL="https://space.bilibili.com/1410016591"
+authors="xiaoshi2022,emm_114514(json develop),xiaohaoxiaohao(Partial models),cjiangqiu"
+description='''
+This is a mod based on the Kamen Rider series, bringing various iconic weapons into your game mc...
+'''
+
+[[dependencies.kamen_rider_weapon_craft]]
+modId="forge"
+mandatory=true
+versionRange="x.x.x"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.kamen_rider_weapon_craft]]
+modId="geckolib"
+mandatory=true
+versionRange="[0,)"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.kamen_rider_weapon_craft]]
+modId="minecraft"
+mandatory=true
+versionRange="1.20.1"
+ordering="NONE"
+side="BOTH"

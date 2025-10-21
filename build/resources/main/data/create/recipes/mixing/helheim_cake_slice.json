@@ -1,0 +1,11 @@
+{
+  "type": "create:mixing",
+  "ingredients": [
+    { "item": "kamen_rider_weapon_craft:helheimfruit" },
+    { "item": "minecraft:wheat", "count": 2 },
+    { "item": "minecraft:sugar" },
+    { "item": "minecraft:egg" }
+  ],
+  "results": [{ "item": "kamen_rider_weapon_craft:helheim_cake_slice", "count": 3 }],
+  "heatRequirement": "heated"
+}

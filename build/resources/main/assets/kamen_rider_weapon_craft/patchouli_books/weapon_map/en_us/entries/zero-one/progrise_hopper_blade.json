@@ -1,0 +1,11 @@
+{
+  "name": "Progrise Hopper Blade",
+  "icon": "kamen_rider_weapon_craft:progrise_hopper_blade",
+  "category": "kamen_rider_weapon_craft:zero-one",
+  "pages": [
+    {
+      "type": "text",
+      "text": "This is a locust weapon, this weapon has several animations and sound effects, when the player can pull the locust when the right button, pull 5 times can trigger the weapon must kill standby, in the standby sound, attacking creatures will have 6 bonus damage"
+    }
+  ]
+}

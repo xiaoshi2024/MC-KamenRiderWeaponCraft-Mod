@@ -1,0 +1,32 @@
+{
+  "answers": [
+    {
+      "name": "street",
+      "results": [
+        {
+          "actions": {
+            "say": "just_passing_by.win.street",
+            "positive": 3
+          }
+        }
+      ]
+    },
+    {
+      "name": "how",
+      "results": [
+        {
+          "actions": {
+            "say": "just_passing_by.win.how",
+            "positive": 2
+          }
+        },
+        {
+          "actions": {
+            "say": "just_passing_by.off.how",
+            "positive": 1
+          }
+        }
+      ]
+    }
+  ]
+}

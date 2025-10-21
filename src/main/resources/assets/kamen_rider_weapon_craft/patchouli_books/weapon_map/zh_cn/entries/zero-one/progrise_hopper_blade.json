@@ -1,0 +1,11 @@
+{
+  "name": "升程蝗虫砍击者",
+  "icon": "kamen_rider_weapon_craft:progrise_hopper_blade",
+  "category": "kamen_rider_weapon_craft:zero-one",
+  "pages": [
+    {
+      "type": "text",
+      "text": "这是一个蝗虫的武器，此武器有个几个动画和音效，当玩家右键时可以拉动蝗虫，拉动5次可以触发武器必杀待机，在待机音响的时候，攻击生物会有6点加成上伤害。"
+    }
+  ]
+}

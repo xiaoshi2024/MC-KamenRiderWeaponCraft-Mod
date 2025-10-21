@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "kamen_rider_weapon_craft:pine_planks"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "kamen_rider_weapon_craft:blocks/pine_planks"
+}

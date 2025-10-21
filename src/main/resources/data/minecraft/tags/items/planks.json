@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:oak_planks",
+    "minecraft:spruce_planks",
+    "kamen_rider_weapon_craft:pine_planks"
+  ]
+}

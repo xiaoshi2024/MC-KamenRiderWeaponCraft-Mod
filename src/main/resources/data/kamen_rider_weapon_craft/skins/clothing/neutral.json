@@ -1,0 +1,22 @@
+{
+  "kamen_rider_weapon_craft:skins/clothing/normal/neutral/time_traveler_profession/time_traveler_profession.png": {
+    "profession": "kamen_rider_weapon_craft:time_traveler_profession",
+    "chance": 100,
+    "temperature": 0
+  },
+  "kamen_rider_weapon_craft:skins/clothing/normal/neutral/lockseed_merchant/lockseed_merchant.png": {
+    "profession": "kamen_rider_weapon_craft:lockseed_merchant",
+    "chance": 100,
+    "temperature": 0
+  },
+  "kamen_rider_weapon_craft:skins/clothing/normal/neutral/cultist/cultist.png": {
+    "profession": "mca:cultist",
+    "chance": 54,
+    "temperature": 0
+  },
+  "kamen_rider_weapon_craft:skins/clothing/normal/neutral/cultist/cultist2.png": {
+    "profession": "mca:cultist",
+    "chance": 42,
+    "temperature": 1
+  }
+}

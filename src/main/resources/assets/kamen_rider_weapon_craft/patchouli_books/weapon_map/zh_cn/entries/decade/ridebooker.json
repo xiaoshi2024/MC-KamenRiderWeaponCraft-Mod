@@ -1,0 +1,11 @@
+{
+  "name": "卡盒剑",
+  "icon": "kamen_rider_weapon_craft:ridebooker",
+  "category": "kamen_rider_weapon_craft:decade",
+  "pages": [
+    {
+      "type": "text",
+      "text": "在剧中时空旅行者小明哥可以用这武器来装卡，还可以枪模式和剑模式，玩家可以shift按下右键来触发动画噢"
+    }
+  ]
+}

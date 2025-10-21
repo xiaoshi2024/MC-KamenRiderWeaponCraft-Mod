@@ -1,0 +1,11 @@
+{
+  "name": "骑士电路板",
+  "icon": "kamen_rider_weapon_craft:rider_circuit_board",
+  "category": "kamen_rider_weapon_craft:fusion",
+  "pages": [
+    {
+      "type": "text",
+      "text": "这是合成出的武器材料"
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    { "item": "kamen_rider_weapon_craft:rider_basic_weapon" },
+    { "item": "kamen_rider_weapon_craft:rider_circuit_board" },
+    { "item": "kamen_rider_boss_you_and_me:bananafruit" }
+  ],
+  "result": { "item": "kamen_rider_weapon_craft:bana_spear" }
+}

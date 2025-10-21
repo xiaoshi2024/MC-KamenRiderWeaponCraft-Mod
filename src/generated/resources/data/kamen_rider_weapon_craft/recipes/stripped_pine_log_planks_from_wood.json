@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "kamen_rider_weapon_craft:stripped_pine_log"
+    }
+  ],
+  "result": {
+    "count": 4,
+    "item": "kamen_rider_weapon_craft:pine_planks"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    { "item": "kamen_rider_weapon_craft:helheim_juice_bucket" },
+    { "item": "minecraft:slime_ball" }
+  ],
+  "result": { "item": "kamen_rider_weapon_craft:helheim_jelly_block", "count": 1 }
+}

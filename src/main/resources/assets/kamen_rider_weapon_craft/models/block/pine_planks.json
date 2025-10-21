@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "kamen_rider_weapon_craft:block/pine_planks"
+  }
+}

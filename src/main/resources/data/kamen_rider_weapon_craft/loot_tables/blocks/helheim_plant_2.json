@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:block",
+  "random_sequence": "kamen_rider_weapon_craft:blocks/helheim_plant_2",
+  "pools": [
+    {
+      "rolls": 1.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "kamen_rider_weapon_craft:helheim_plant_2"
+        }
+      ]
+    }
+  ]
+}

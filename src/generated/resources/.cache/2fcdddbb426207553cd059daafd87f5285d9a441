@@ -1,0 +1,10 @@
+// 1.20.1	2025-08-30T08:48:45.738015	Tags for minecraft:block mod id kamen_rider_weapon_craft
+6f899b8ad8caea95006455967a77b1ff77bb83f1 data/forge/tags/blocks/logs_that_can_sustain_pine_leaves.json
+a690f7f27b73879f5674a1d139d55aa8549053c0 data/forge/tags/blocks/pine_leaves.json
+e023a66768d44b5a462e8daa083ebb9e197ebf80 data/forge/tags/blocks/pine_logs.json
+a690f7f27b73879f5674a1d139d55aa8549053c0 data/minecraft/tags/blocks/leaves.json
+6f899b8ad8caea95006455967a77b1ff77bb83f1 data/minecraft/tags/blocks/logs.json
+6f899b8ad8caea95006455967a77b1ff77bb83f1 data/minecraft/tags/blocks/logs_that_burn.json
+d8bfca0cef508914aab3e67072880ecfe917386d data/minecraft/tags/blocks/mineable/axe.json
+a690f7f27b73879f5674a1d139d55aa8549053c0 data/minecraft/tags/blocks/mineable/hoe.json
+d8bfca0cef508914aab3e67072880ecfe917386d data/minecraft/tags/blocks/planks.json

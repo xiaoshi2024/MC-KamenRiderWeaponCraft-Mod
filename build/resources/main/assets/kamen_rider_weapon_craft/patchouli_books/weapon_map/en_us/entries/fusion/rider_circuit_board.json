@@ -1,0 +1,11 @@
+{
+  "name": "Rider Circuit Board",
+  "icon": "kamen_rider_weapon_craft:rider_circuit_board",
+  "category": "kamen_rider_weapon_craft:fusion",
+  "pages": [
+    {
+      "type": "text",
+      "text": "this is a crafted weapon material"
+    }
+  ]
+}

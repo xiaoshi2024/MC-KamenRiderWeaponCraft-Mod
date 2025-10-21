@@ -1,0 +1,6 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "kamen_rider_weapon_craft:item/helheim_crack"
+  }
+}

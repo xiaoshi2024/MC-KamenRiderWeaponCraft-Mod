@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "a ",
+    "ba"
+  ],
+  "key": {
+    "a": {
+      "item": "minecraft:sand"
+    },
+    "b": {
+      "item": "kamen_rider_weapon_craft:rider_pass"
+    }
+  },
+  "result": {
+    "item": "kamen_rider_weapon_craft:timesand_item",
+    "count": 1
+  }
+}

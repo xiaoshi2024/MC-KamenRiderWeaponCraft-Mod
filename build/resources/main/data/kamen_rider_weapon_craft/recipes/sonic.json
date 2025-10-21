@@ -1,0 +1,31 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "rider_smelt",
+  "category": "equipment",
+  "pattern": [
+    " ab",
+    "cdb",
+    " eb"
+  ],
+  "key": {
+    "a": {
+      "item": "kamen_rider_weapon_craft:rider_basic_weapon"
+    },
+    "b": {
+      "item": "kamen_rider_weapon_craft:rider_forging_alloy_ore"
+    },
+    "c": {
+      "item": "kamen_rider_weapon_craft:rider_circuit_board"
+    },
+    "d": {
+      "item": "minecraft:string"
+    },
+    "e": {
+      "item": "minecraft:red_wool"
+    }
+  },
+  "result": {
+    "item": "kamen_rider_weapon_craft:sonicarrow",
+    "count": 1
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "name": "sonicarrow",
+  "icon": "kamen_rider_weapon_craft:sonicarrow",
+  "category": "kamen_rider_weapon_craft:gamur",
+  "pages": [
+    {
+      "type": "text",
+      "text": "This can be a melee or ranged weapon, the bow wing is very sharp, pressing the mod's universal button X will trigger a boot sound, and when you put this weapon in your off-hand press the Y key to open the GUI, where you can put locks such as melon"
+    },
+    {
+      "type": "image",
+      "images": ["kamen_rider_weapon_craft:textures/gui/entries/sonicarrow.png"]
+    }
+  ]
+}

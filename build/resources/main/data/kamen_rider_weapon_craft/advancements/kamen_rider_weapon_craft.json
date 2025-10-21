@@ -1,0 +1,51 @@
+{
+  "criteria": {
+    "sonicarrow": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "kamen_rider_weapon_craft:sonicarrow"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "daidaimaru": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "kamen_rider_weapon_craft:daidaimaru"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "background": "kamen_rider_weapon_craft:textures/gui/advan/curse_block.png",
+    "description": {
+      "translate": "advancement.kamen_rider_weapon_craft.kamen_rider_weapon_craft.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "kamen_rider_weapon_craft:sonicarrow"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancement.kamen_rider_weapon_craft.kamen_rider_weapon_craft.title"
+    }
+  },
+  "requirements": [
+    [
+      "sonicarrow",
+      "daidaimaru"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

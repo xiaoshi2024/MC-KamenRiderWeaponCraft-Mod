@@ -1,0 +1,11 @@
+{
+  "name": "无双军刀",
+  "icon": "kamen_rider_weapon_craft:musousaberd",
+  "category": "kamen_rider_weapon_craft:gamur",
+  "pages": [
+    {
+      "type": "text",
+      "text": "这武器是一把军刀，在剧中中也可以用作枪支"
+    }
+  ]
+}

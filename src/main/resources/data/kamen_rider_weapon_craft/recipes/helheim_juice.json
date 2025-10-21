@@ -1,0 +1,23 @@
+{
+  "type": "crafting_shaped",
+  "pattern": [
+    " X ",
+    " a ",
+    " b "
+  ],
+  "key": {
+    "X": {
+      "item": "minecraft:sugar"
+    },
+    "a": {
+      "item": "kamen_rider_weapon_craft:helheimfruit"
+    },
+    "b": {
+      "item": "minecraft:bucket"
+    }
+  },
+  "result": {
+    "item": "kamen_rider_weapon_craft:helheim_juice_bucket",
+    "count": 1
+  }
+}

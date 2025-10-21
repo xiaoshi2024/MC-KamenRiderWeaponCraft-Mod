@@ -1,0 +1,139 @@
+{
+  "credit": "Made with Blockbench",
+  "parent": "builtin/entity",
+  "texture_size": [
+    64,
+    64
+  ],
+  "display": {
+    "thirdperson_righthand": {
+      "rotation": [
+        -179.55999999999995,
+        -10.829999999999927,
+        -175.42999999999984
+      ],
+      "translation": [
+        -0.5,
+        -7.75,
+        3.5
+      ],
+      "scale": [
+        0.7,
+        0.7,
+        0.7
+      ]
+    },
+    "thirdperson_lefthand": {
+      "rotation": [
+        0,
+        -180,
+        0
+      ],
+      "translation": [
+        1.25,
+        -7.75,
+        3.5
+      ],
+      "scale": [
+        0.7,
+        0.7,
+        0.7
+      ]
+    },
+    "firstperson_righthand": {
+      "rotation": [
+        -140.55000000000018,
+        -4.320000000000164,
+        -165.6199999999999
+      ],
+      "translation": [
+        -3.5,
+        -0.75,
+        1
+      ],
+      "scale": [
+        0.66,
+        0.66,
+        0.66
+      ]
+    },
+    "firstperson_lefthand": {
+      "rotation": [
+        -155.71000000000004,
+        1.550000000000182,
+        171.15999999999985
+      ],
+      "translation": [
+        0,
+        -6,
+        0
+      ]
+    },
+    "ground": {
+      "translation": [
+        0,
+        7.75,
+        0
+      ],
+      "scale": [
+        0.77,
+        0.77,
+        0.77
+      ]
+    },
+    "gui": {
+      "rotation": [
+        -98.61000000000013,
+        62.73999999999978,
+        92.63000000000011
+      ],
+      "translation": [
+        3.75,
+        -8.25,
+        0
+      ],
+      "scale": [
+        0.7793,
+        0.7793,
+        0.7793
+      ]
+    },
+    "head": {
+      "rotation": [
+        -113.48000000000002,
+        -70.19999999999982,
+        -112.23000000000002
+      ],
+      "translation": [
+        0,
+        10.75,
+        -0.75
+      ],
+      "scale": [
+        0.39,
+        0.39,
+        0.39
+      ]
+    },
+    "fixed": {
+      "rotation": [
+        0,
+        -90,
+        0
+      ],
+      "translation": [
+        1.5,
+        -8.25,
+        1.25
+      ],
+      "scale": [
+        0.65,
+        0.65,
+        0.65
+      ]
+    }
+  },
+  "textures": {
+    "particle": "kamen_rider_weapon_craft:item/sonic_arrow_cherry"
+  }
+}

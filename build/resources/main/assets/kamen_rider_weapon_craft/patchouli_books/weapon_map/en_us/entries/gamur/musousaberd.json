@@ -1,0 +1,11 @@
+{
+  "name": "musousaberd",
+  "icon": "kamen_rider_weapon_craft:musousaberd",
+  "category": "kamen_rider_weapon_craft:gamur",
+  "pages": [
+    {
+      "type": "text",
+      "text": "The musousaberd weapon is a saber that can also be used as a gun in the show"
+    }
+  ]
+}
