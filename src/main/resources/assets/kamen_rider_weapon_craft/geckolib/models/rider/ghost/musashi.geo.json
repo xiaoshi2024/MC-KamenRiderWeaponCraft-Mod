@@ -1,0 +1,184 @@
+{
+	"format_version": "1.12.0",
+	"minecraft:geometry": [
+		{
+			"description": {
+				"identifier": "geometry.unknown",
+				"texture_width": 64,
+				"texture_height": 64,
+				"visible_bounds_width": 2,
+				"visible_bounds_height": 3.5,
+				"visible_bounds_offset": [0, 1.25, 0]
+			},
+			"bones": [
+				{
+					"name": "musashi",
+					"pivot": [0, 18, 0]
+				},
+				{
+					"name": "Head",
+					"parent": "musashi",
+					"pivot": [0, 24, 0.3],
+					"cubes": [
+						{
+							"origin": [-3.6, 24, -3.7],
+							"size": [7, 7.3, 7.1],
+							"uv": {
+								"north": {"uv": [24, 18], "uv_size": [7, 7.5]},
+								"east": {"uv": [19, 26], "uv_size": [7, 7.5]},
+								"south": {"uv": [26, 26], "uv_size": [7, 7.5]},
+								"west": {"uv": [27, 0], "uv_size": [7, 7.5]},
+								"up": {"uv": [34, 0], "uv_size": [7, 7]},
+								"down": {"uv": [34, 14], "uv_size": [7, -7]}
+							}
+						},
+						{
+							"origin": [-3.6, 24, -3.7],
+							"size": [7, 7.3, 7.1],
+							"inflate": 0.5,
+							"uv": {
+								"north": {"uv": [27, 8], "uv_size": [7, 7.5]},
+								"east": {"uv": [31, 16], "uv_size": [7, 7.5]},
+								"south": {"uv": [33, 24], "uv_size": [7, 7.5]},
+								"west": {"uv": [33, 32], "uv_size": [7, 7.5]},
+								"up": {"uv": [19, 34], "uv_size": [7, 7]},
+								"down": {"uv": [26, 41], "uv_size": [7, -7]}
+							}
+						}
+					]
+				},
+				{
+					"name": "bone",
+					"parent": "Head",
+					"pivot": [0, 30.9, 0.3],
+					"cubes": [
+						{
+							"origin": [-1, 30.9, -0.7],
+							"size": [2, 2, 2],
+							"uv": {
+								"north": {"uv": [19, 24], "uv_size": [2, 2]},
+								"east": {"uv": [21, 24], "uv_size": [2, 2]},
+								"south": {"uv": [27, 16], "uv_size": [2, 2]},
+								"west": {"uv": [29, 16], "uv_size": [2, 2]},
+								"up": {"uv": [31, 24], "uv_size": [2, 2]},
+								"down": {"uv": [34, 16], "uv_size": [2, -2]}
+							}
+						},
+						{
+							"origin": [-0.6, 32.8, -0.4],
+							"size": [1.2, 2, 1.4],
+							"pivot": [0, 32.8, 0.3],
+							"rotation": [-12.5, 0, 0],
+							"uv": {
+								"north": {"uv": [23, 24], "uv_size": [1, 2]},
+								"east": {"uv": [14, 36], "uv_size": [1.5, 2]},
+								"south": {"uv": [14, 38], "uv_size": [1, 2]},
+								"west": {"uv": [36, 14], "uv_size": [1.5, 2]},
+								"up": {"uv": [38, 14], "uv_size": [1, 1.5]},
+								"down": {"uv": [15, 39.5], "uv_size": [1, -1.5]}
+							}
+						}
+					]
+				},
+				{
+					"name": "Body",
+					"parent": "musashi",
+					"pivot": [0, 24, 0],
+					"cubes": [
+						{
+							"origin": [-3.8, 12, -2],
+							"size": [7.7, 12, 4],
+							"uv": {
+								"north": {"uv": [16, 0], "uv_size": [7.5, 12]},
+								"east": {"uv": [0, 36], "uv_size": [4, 12]},
+								"south": {"uv": [16, 12], "uv_size": [7.5, 12]},
+								"west": {"uv": [4, 36], "uv_size": [4, 12]},
+								"up": {"uv": [41, 10], "uv_size": [7.5, 4]},
+								"down": {"uv": [19, 45], "uv_size": [7.5, -4]}
+							}
+						},
+						{
+							"origin": [-3.8, 6.1, -1.4],
+							"size": [7.7, 17.9, 4.3],
+							"inflate": 0.25,
+							"pivot": [0, 0, 0.9],
+							"rotation": [2, 0, 0],
+							"uv": {
+								"north": {"uv": [0, 0], "uv_size": [7.5, 18]},
+								"east": {"uv": [0, 18], "uv_size": [4.5, 18]},
+								"south": {"uv": [8, 0], "uv_size": [7.5, 18]},
+								"west": {"uv": [5, 18], "uv_size": [4.5, 18]},
+								"up": {"uv": [41, 0], "uv_size": [7.5, 4.5]},
+								"down": {"uv": [41, 9.5], "uv_size": [7.5, -4.5]}
+							}
+						}
+					]
+				},
+				{
+					"name": "Left Arm",
+					"parent": "musashi",
+					"pivot": [5, 22, 0],
+					"cubes": [
+						{
+							"origin": [4, 18.3, -1.6],
+							"size": [2.3, 5.7, 3],
+							"uv": {
+								"north": {"uv": [43, 20], "uv_size": [2.5, 5.5]},
+								"east": {"uv": [27, 41], "uv_size": [3, 5.5]},
+								"south": {"uv": [43, 26], "uv_size": [2.5, 5.5]},
+								"west": {"uv": [30, 41], "uv_size": [3, 5.5]},
+								"up": {"uv": [43, 44], "uv_size": [2.5, 3]},
+								"down": {"uv": [17, 48], "uv_size": [2.5, -3]}
+							}
+						},
+						{
+							"origin": [4, 5.8, -1.6],
+							"size": [2.3, 18.2, 3],
+							"inflate": 0.25,
+							"uv": {
+								"north": {"uv": [40, 14], "uv_size": [2.5, 18]},
+								"east": {"uv": [24, 0], "uv_size": [3, 18]},
+								"south": {"uv": [40, 32], "uv_size": [2.5, 18]},
+								"west": {"uv": [16, 24], "uv_size": [3, 18]},
+								"up": {"uv": [20, 45], "uv_size": [2.5, 3]},
+								"down": {"uv": [23, 48], "uv_size": [2.5, -3]}
+							}
+						}
+					]
+				},
+				{
+					"name": "Right Arm",
+					"parent": "musashi",
+					"pivot": [-5, 22, 0],
+					"cubes": [
+						{
+							"origin": [-6.3, 18.3, -1.6],
+							"size": [2.3, 5.7, 3],
+							"uv": {
+								"north": {"uv": [14, 42], "uv_size": [2.5, 5.5]},
+								"east": {"uv": [33, 40], "uv_size": [3, 5.5]},
+								"south": {"uv": [43, 14], "uv_size": [2.5, 5.5]},
+								"west": {"uv": [36, 40], "uv_size": [3, 5.5]},
+								"up": {"uv": [43, 32], "uv_size": [2.5, 3]},
+								"down": {"uv": [43, 38], "uv_size": [2.5, -3]}
+							}
+						},
+						{
+							"origin": [-6.3, 5.8, -1.6],
+							"size": [2.3, 18.2, 3],
+							"inflate": 0.25,
+							"uv": {
+								"north": {"uv": [8, 36], "uv_size": [2.5, 18]},
+								"east": {"uv": [10, 18], "uv_size": [3, 18]},
+								"south": {"uv": [11, 36], "uv_size": [2.5, 18]},
+								"west": {"uv": [13, 18], "uv_size": [3, 18]},
+								"up": {"uv": [43, 38], "uv_size": [2.5, 3]},
+								"down": {"uv": [43, 44], "uv_size": [2.5, -3]}
+							}
+						}
+					]
+				}
+			]
+		}
+	]
+}

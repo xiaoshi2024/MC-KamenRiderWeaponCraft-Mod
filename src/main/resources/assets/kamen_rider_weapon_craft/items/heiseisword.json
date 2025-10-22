@@ -1,0 +1,9 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "kamen_rider_weapon_craft:item/heiseisword",
+    "model": {
+      "type": "geckolib:geckolib"
+    }
+  }
+}

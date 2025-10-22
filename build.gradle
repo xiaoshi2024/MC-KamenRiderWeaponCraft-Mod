@@ -25,6 +25,7 @@ fabricApi {
 }
 
 dependencies {
+
 	// To change the versions see the gradle.properties file
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
@@ -32,7 +33,11 @@ dependencies {
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-	
+
+	// 添加本地模组依赖
+	modImplementation files('libs/geckolib-fabric-1.21.6-5.2.0.jar')
+	modImplementation files('libs/modmenu-15.0.0.jar')
+	modImplementation files('libs/placeholder-api-2.7.1+1.21.6.jar')
 }
 
 processResources {

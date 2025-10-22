@@ -1,0 +1,157 @@
+{
+  "credit": "Made with Blockbench",
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "kamen_rider_weapon_craft:textures/item/heiseisword.png"
+  },
+  "display": {
+    "thirdperson_righthand": {
+      "rotation": [
+        11.78,
+        86.17,
+        -7.39
+      ],
+      "translation": [
+        0,
+        0.75,
+        1.25
+      ],
+      "scale": [
+        1.1015625,
+        1.158203125,
+        1
+      ]
+    },
+    "thirdperson_lefthand": {
+      "rotation": [
+        -35.75,
+        -87.25,
+        -32.5
+      ],
+      "translation": [
+        0,
+        0.75,
+        0.5
+      ],
+      "scale": [
+        0.959375,
+        1.109765625,
+        0.85
+      ]
+    },
+    "firstperson_righthand": {
+      "rotation": [
+        -19.23,
+        79.61,
+        29.57
+      ],
+      "translation": [
+        1.13,
+        2.2,
+        1.13
+      ],
+      "scale": [
+        0.91828125,
+        1.0042187500000002,
+        1.0862500000000002
+      ]
+    },
+    "firstperson_lefthand": {
+      "rotation": [
+        161,
+        -67.75,
+        155
+      ],
+      "translation": [
+        1.13,
+        2.95,
+        1.88
+      ],
+      "scale": [
+        0.8010937500000002,
+        0.9182812500000002,
+        0.8792187500000002
+      ]
+    },
+    "gui": {
+      "rotation": [
+        -175.53,
+        -4.76,
+        -136.83
+      ],
+      "translation": [
+        -4,
+        -4.75,
+        0
+      ],
+      "scale": [
+        0.92578125,
+        0.92578125,
+        0.92578125
+      ]
+    },
+    "head": {
+      "translation": [
+        0,
+        0,
+        -9.25
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ]
+    },
+    "fixed": {
+      "rotation": [
+        0,
+        0,
+        36
+      ],
+      "translation": [
+        3.75,
+        -6.5,
+        0
+      ],
+      "scale": [
+        1.19140625,
+        1.19140625,
+        1.19140625
+      ]
+    },
+    "ground": {
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        3,
+        0
+      ],
+      "scale": [
+        0.75,
+        0.75,
+        0.75
+      ]
+    },
+    "item_frame": {
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        0.75,
+        0.75,
+        0.75
+      ]
+    }
+  }
+}

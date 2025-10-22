@@ -1,24 +1,31 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft;
 
+import com.xiaoshi2022.kamen_rider_weapon_craft.component.ModComponents;
+import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModItemGroups;
+import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModItems;
+import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModSounds;
 import net.fabricmc.api.ModInitializer;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class Kamen_Rider_Weapon_Craft implements ModInitializer {
-	public static final String MOD_ID = "kamen_rider_weapon_craft";
+    public static final String MOD_ID = "kamen_rider_weapon_craft";
+    public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
-	// This logger is used to write text to the console and the log file.
-	// It is considered best practice to use your mod id as the logger's name.
-	// That way, it's clear which mod wrote info, warnings, and errors.
-	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
+    @Override
+    public void onInitialize() {
+        // 1. 先初始化组件
+        ModComponents.initialize();
 
-	@Override
-	public void onInitialize() {
-		// This code runs as soon as Minecraft is in a mod-load-ready state.
-		// However, some things (like resources) may still be uninitialized.
-		// Proceed with mild caution.
+        // 2. 再初始化物品（这会创建HEISEI_SWORD实例）
+        ModItems.initialize();
 
-		LOGGER.info("Hello Fabric world!");
-	}
+        // 3. 然后初始化物品组（这会使用HEISEI_SWORD）
+        ModItemGroups.initialize();
+
+        // 4. 最后初始化音效
+        ModSounds.initialize();
+
+        LOGGER.info("Hello Fabric world! All components initialized in correct order.");
+    }
 }
