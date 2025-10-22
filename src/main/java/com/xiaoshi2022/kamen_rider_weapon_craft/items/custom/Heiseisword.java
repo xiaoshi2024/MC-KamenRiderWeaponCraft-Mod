@@ -96,7 +96,8 @@ public class Heiseisword extends Item implements GeoItem {
             private HeiseiswordRenderer renderer;
 
             @Override
-            public @Nullable GeoItemRenderer<?> getGeoItemRenderer() {
+            @Nullable
+            public GeoItemRenderer<Heiseisword> getGeoItemRenderer() {
                 if (this.renderer == null)
                     this.renderer = new HeiseiswordRenderer();
 
