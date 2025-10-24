@@ -4,10 +4,13 @@ import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModEntityTypes;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.projectile.ProjectileUtil;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
@@ -17,6 +20,7 @@ import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import java.util.List;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animatable.manager.AnimatableManager;
@@ -152,22 +156,99 @@ public class BuildRiderEntity extends Entity implements GeoEntity {
     }
 
     private void explode() {
-        // 创建爆炸粒子效果
-        if (this.getWorld() instanceof ServerWorld) {
-            ServerWorld serverWorld = (ServerWorld) this.getWorld();
-            for (int i = 0; i < 10; i++) {
+        if (this.getWorld() instanceof ServerWorld serverWorld) {
+            // 创建爆炸粒子效果
+            for (int i = 0; i < 20; i++) {
                 double offsetX = (this.random.nextDouble() - 0.5) * 2.0;
                 double offsetY = (this.random.nextDouble() - 0.5) * 2.0;
                 double offsetZ = (this.random.nextDouble() - 0.5) * 2.0;
 
-                // 使用正确的服务器端粒子生成API
                 serverWorld.spawnParticles(
                         ParticleTypes.EXPLOSION,
                         this.getX(), this.getY(), this.getZ(),
                         1, offsetX * 0.1, offsetY * 0.1, offsetZ * 0.1, 0.0
                 );
             }
+            
+            // 1. 弹飞玩家（如果是对着脚下打）
+            if (this.owner instanceof ServerPlayerEntity player) {
+                // 检查玩家是否在爆炸附近（对着脚下打）
+                double distanceToPlayer = this.squaredDistanceTo(player);
+                if (distanceToPlayer < 4.0) { // 2格范围内认为是对着脚下打
+                    // 弹飞玩家，向上和稍微向后的力
+                    Vec3d playerPos = player.getPos();
+                    Vec3d explosionPos = this.getPos();
+                    Vec3d direction = playerPos.subtract(explosionPos).normalize().multiply(1.5);
+                    
+                    // 调整力度使玩家飞到约6格高
+                    direction = new Vec3d(direction.x, 2.5, direction.z);
+                    
+                    player.setVelocity(direction);
+                    player.velocityModified = true;
+                    
+                    // 为玩家添加摔落保护效果（使用缓降效果来防止摔落伤害）
+                    // 持续5秒，足够玩家安全落地
+                    player.addStatusEffect(new StatusEffectInstance(
+                        StatusEffects.SLOW_FALLING, 
+                        100, // 5秒（20tick/秒 * 5秒）
+                        0,   // 效果等级
+                        false, // 不显示粒子效果
+                        false  // 不在图标上显示
+                    ));
+                }
+            }
+            
+            // 2. 对5格范围内的实体产生吸力并在爆炸时造成伤害
+            List<LivingEntity> nearbyEntities = serverWorld.getNonSpectatingEntities(
+                    LivingEntity.class,
+                    this.getBoundingBox().expand(5.0) // 5格半径范围
+            );
+            
+            // 计算爆炸中心
+            Vec3d explosionCenter = this.getPos();
+            
+            // 对每个附近的实体应用效果
+            for (LivingEntity entity : nearbyEntities) {
+                // 只排除发射器自己，确保敌对玩家也会受到吸力效果
+                if (entity == this.owner) continue;
+                
+                // 计算实体到爆炸中心的向量
+                Vec3d entityPos = entity.getPos();
+                Vec3d toCenter = explosionCenter.subtract(entityPos);
+                double distance = toCenter.length();
+                
+                if (distance > 0) {
+                    // 应用吸力效果（根据距离调整力度）
+                    double force = Math.max(0.1, (5.0 - distance) * 0.3);
+                    // 对玩家实体增加额外的吸力，使其更有效
+                    if (entity instanceof ServerPlayerEntity) {
+                        force *= 1.2; // 增加20%的吸力对玩家更有效
+                    }
+                    Vec3d pullDirection = toCenter.normalize().multiply(force);
+                    
+                    // 应用吸力
+                    entity.addVelocity(pullDirection.x, pullDirection.y * 0.5, pullDirection.z);
+                    entity.velocityModified = true;
+                    
+                    // 对实体造成伤害
+                    try {
+                        DamageSource damageSource;
+                        if (this.owner != null) {
+                            damageSource = this.getDamageSources().mobProjectile(this, this.owner);
+                        } else {
+                            damageSource = this.getDamageSources().magic();
+                        }
+                        
+                        // 根据距离调整伤害（越近伤害越高）
+                        float adjustedDamage = getDamage() * (1.0f - (float)(distance / 10.0f));
+                        entity.damage(serverWorld, damageSource, adjustedDamage);
+                    } catch (Exception e) {
+                        System.err.println("Build实体爆炸伤害处理失败: " + e.getMessage());
+                    }
+                }
+            }
         }
+        
         // 确保实体被移除
         this.discard();
     }

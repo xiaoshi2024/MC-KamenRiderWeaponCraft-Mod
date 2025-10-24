@@ -1,10 +1,15 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.items.custom;
 
+
+import com.mojang.datafixers.util.Pair;
+import net.minecraft.text.Text;
+
 import com.xiaoshi2022.kamen_rider_weapon_craft.component.ridermodComponents;
 import com.xiaoshi2022.kamen_rider_weapon_craft.items.client.Heiseisword.HeiseiswordRenderer;
 import com.xiaoshi2022.kamen_rider_weapon_craft.key.KeyBindings;
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.effect.HeiseiRiderEffectManager;
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.effect.HeiseiRiderEffect;
+import com.xiaoshi2022.kamen_rider_weapon_craft.rider.energy.HeiseiswordEnergyManager;
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.sound.RiderSounds;
 import net.minecraft.component.type.AttributeModifierSlot;
 import net.minecraft.component.type.AttributeModifiersComponent;
@@ -21,13 +26,16 @@ import net.minecraft.item.consume.UseAction;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvent;
-import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
+import net.minecraft.network.packet.s2c.play.EntityEquipmentUpdateS2CPacket;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import software.bernie.geckolib.animatable.GeoItem;
 import software.bernie.geckolib.animatable.SingletonGeoAnimatable;
 import software.bernie.geckolib.animatable.client.GeoRenderProvider;
@@ -39,11 +47,13 @@ import software.bernie.geckolib.animation.RawAnimation;
 import software.bernie.geckolib.renderer.GeoItemRenderer;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.function.Consumer;
 
 public class Heiseisword extends Item implements GeoItem {
+    // 日志记录器
+    private static final Logger LOGGER = LoggerFactory.getLogger(Heiseisword.class);
     // 动画定义
     private static final RawAnimation ROTATE_POSITION_1 = RawAnimation.begin().thenPlay("rotate_pos1");
     private static final RawAnimation ROTATE_POSITION_2 = RawAnimation.begin().thenPlay("rotate_pos2");
@@ -58,6 +68,11 @@ public class Heiseisword extends Item implements GeoItem {
     private static final int ULTIMATE_ATTACK_COOLDOWN_TICKS = 40;
     private static final int RIDER_SELECTION_COOLDOWN_TICKS = 15;
     private static final int FINISH_TIME_COOLDOWN_TICKS = 300;
+    
+    // 能量消耗常量
+    private static final double NORMAL_ATTACK_ENERGY_COST = 10.0;
+    private static final double SCRAMBLE_ATTACK_ENERGY_COST = 25.0;
+    private static final double ULTIMATE_ATTACK_ENERGY_COST = 50.0;
 
     // 武器属性常量
     private static final float ATTACK_DAMAGE = 33.0f;
@@ -154,7 +169,9 @@ public class Heiseisword extends Item implements GeoItem {
     }
 
     private void setUltimateMode(ItemStack stack, boolean mode) {
+        // 在Fabric中，设置组件后不需要手动调用markDirty，set方法会自动处理
         stack.set(ridermodComponents.IS_ULTIMATE_MODE, mode);
+        // ItemStack本身没有markDirty()方法，组件更改会自动同步
     }
 
     private long getLastFinishTimeEnter(ItemStack stack) {
@@ -279,17 +296,9 @@ public class Heiseisword extends Item implements GeoItem {
             setLastFinishTimeEnter(stack, world.getTime());
             setScrambleRiders(stack, new ArrayList<>());
             setUltimateMode(stack, false);
-            // 保存当前选择的骑士
-            String savedRider = getSelectedRider(stack);
-            setSelectedRider(stack, null);
             setCurrentRotationPosition(stack, 0);
-            // 恢复之前选择的骑士
-            setSelectedRider(stack, savedRider);
 
-            // 播放音效
-            if (player instanceof ServerPlayerEntity) {
-                RiderSounds.playFinishTimeSound(world, player);
-            }
+            // 移除音效播放，所有音效将在击败实体时由EntityDeathEventListener统一播放
         } else {
             setScrambleRiders(stack, new ArrayList<>());
             setSelectedRider(stack, null);
@@ -418,8 +427,8 @@ public class Heiseisword extends Item implements GeoItem {
         boolean ultimateKeyPressed = checkUltimateKeyPressed(player);
         if (ultimateKeyPressed && !isUltimateMode(stack)) {
             setUltimateMode(stack, true);
-            // 播放超必杀启动音效
-            RiderSounds.playUltimateActivationSound(world, player);
+            // 播放快速Hey Say音效
+            RiderSounds.playRapidSelectionSound(world, player);
             triggerUltimateAnimation(world, player, stack);
 
             // 自动选择所有骑士用于超必杀
@@ -513,23 +522,83 @@ public class Heiseisword extends Item implements GeoItem {
     
     /**
      * 静态方法：处理从服务端接收到的终极模式按键事件
+     * 修改为确保所有玩家在多人游戏中都能触发超必杀
      */
     public static void handleUltimateKeyPress(ServerPlayerEntity player) {
         ItemStack mainHandStack = player.getMainHandStack();
         if (mainHandStack.getItem() instanceof Heiseisword heiseisword) {
-            // 检查是否在Finish Time模式下
-            if (heiseisword.isFinishTimeMode(mainHandStack) && !heiseisword.isUltimateMode(mainHandStack)) {
-                heiseisword.setUltimateMode(mainHandStack, true);
-                // 播放超必杀启动音效
-                RiderSounds.playUltimateActivationSound(player.getWorld(), player);
-                heiseisword.triggerUltimateAnimation(player.getWorld(), player, mainHandStack);
+            // 详细日志，帮助调试多人游戏问题
+            LOGGER.info("Player {} attempting to activate ultimate mode. FinishTimeMode: {}, UltimateMode: {}",
+                    player.getName().getString(),
+                    heiseisword.isFinishTimeMode(mainHandStack),
+                    heiseisword.isUltimateMode(mainHandStack));
 
-                // 自动选择所有骑士用于超必杀
-                List<String> riderOrder = HeiseiRiderEffectManager.getRiderOrder();
-                heiseisword.setScrambleRiders(mainHandStack, new java.util.ArrayList<>(riderOrder));
+            if (heiseisword.isFinishTimeMode(mainHandStack)) {
+                // 检查是否在Finish Time模式下且未激活超必杀
+                if (!heiseisword.isUltimateMode(mainHandStack)) {
+                    // 确保所有玩家都能激活超必杀模式
+                    heiseisword.setUltimateMode(mainHandStack, true);
 
-                player.sendMessage(Text.literal("超必杀模式激活! 已选择所有骑士"), true);
+                    // 自动选择所有骑士用于超必杀
+                    List<String> riderOrder = HeiseiRiderEffectManager.getRiderOrder();
+                    heiseisword.setScrambleRiders(mainHandStack, new java.util.ArrayList<>(riderOrder));
+
+                    // 关键修复：在设置所有状态后再同步
+                    syncItemStackToAllClients(player, mainHandStack);
+
+                    // 确保动画在多人游戏中正确触发
+                    heiseisword.triggerUltimateAnimation(player.getWorld(), player, mainHandStack);
+
+                    // 播放快速Hey Say音效
+                    RiderSounds.playRapidSelectionSound(player.getWorld(), player);
+
+                    // 发送消息给玩家
+                    player.sendMessage(Text.literal("超必杀模式激活! 已选择所有骑士"), true);
+
+                    // 添加详细日志
+                    LOGGER.info("Player {} successfully activated ultimate mode. Synced to all clients.",
+                            player.getName().getString());
+
+                } else {
+                    // 如果已经是超必杀模式，发送提示
+                    player.sendMessage(Text.literal("已经处于超必杀模式中!"), true);
+                }
+            } else {
+                // 如果不在Finish Time模式，提示玩家
+                player.sendMessage(Text.literal("需要先进入Finish Time模式!"), true);
             }
+        } else {
+            LOGGER.warn("Player {} attempted ultimate mode without Heiseisword in main hand",
+                    player.getName().getString());
+        }
+    }
+
+    /**
+     * 关键修复：同步物品堆栈状态到所有客户端
+     */
+    private static void syncItemStackToAllClients(ServerPlayerEntity player, ItemStack stack) {
+        if (player == null || stack.isEmpty()) return;
+        
+        try {
+            // 方法1: 同步整个物品栏（基础同步）
+            player.playerScreenHandler.syncState();
+            player.getInventory().markDirty();
+            
+            // 方法2: 发送装备更新包（更精确）
+            ServerWorld world = (ServerWorld) player.getWorld();
+            List<Pair<EquipmentSlot, ItemStack>> equipmentUpdates = new ArrayList<>();
+            equipmentUpdates.add(new Pair<>(EquipmentSlot.MAINHAND, stack));
+            
+            EntityEquipmentUpdateS2CPacket packet = new EntityEquipmentUpdateS2CPacket(player.getId(), equipmentUpdates);
+            world.getChunkManager().sendToNearbyPlayers(player, packet);
+            
+            // 确保玩家自己也能看到更新
+            player.networkHandler.sendPacket(packet);
+            
+            LOGGER.debug("Successfully synced item stack state for player: {}", player.getName().getString());
+        } catch (Exception e) {
+            LOGGER.error("Failed to sync item stack for player {}: {}", 
+                    player.getName().getString(), e.getMessage());
         }
     }
 
@@ -540,18 +609,21 @@ public class Heiseisword extends Item implements GeoItem {
         String animationName = "pos" + (position + 1);
 
         if (world instanceof ServerWorld serverWorld) {
+            // 修复多人游戏动画同步问题，正确传递动画触发器
             triggerAnim(player, GeoItem.getOrAssignId(stack, serverWorld), "rotation", animationName);
         }
     }
 
     private void triggerUltimateAnimation(World world, PlayerEntity player, ItemStack stack) {
         if (world instanceof ServerWorld serverWorld) {
+            // 修复多人游戏超必杀动画同步问题，确保所有玩家都能触发
             triggerAnim(player, GeoItem.getOrAssignId(stack, serverWorld), "ultimate", "ultimate_time_break");
         }
     }
 
     private void triggerRangedAttackAnimation(World world, PlayerEntity player, ItemStack stack) {
         if (world instanceof ServerWorld serverWorld) {
+            // 修复多人游戏远程攻击动画同步问题
             triggerAnim(player, GeoItem.getOrAssignId(stack, serverWorld), "rotation", "pos1");
         }
     }
@@ -560,6 +632,14 @@ public class Heiseisword extends Item implements GeoItem {
 
     private void executeNormalRangedAttack(PlayerEntity player, ItemStack stack, float chargeTime) {
         if (chargeTime < 0.1F) return;
+
+        // 检查能量是否足够
+        if (!HeiseiswordEnergyManager.canUseEnergy(player, NORMAL_ATTACK_ENERGY_COST)) {
+            if (player instanceof ServerPlayerEntity serverPlayer) {
+                serverPlayer.sendMessage(Text.literal("能量不足! 当前能量: " + HeiseiswordEnergyManager.getCurrentEnergy(player)), true);
+            }
+            return;
+        }
 
         String rider = getSelectedRider(stack);
         if (rider == null || rider.isEmpty()) {
@@ -581,17 +661,28 @@ public class Heiseisword extends Item implements GeoItem {
                 RiderSounds.playAttackSound(player.getWorld(), player, nameSound);
             }
 
+            // 消耗能量
+            HeiseiswordEnergyManager.consumeEnergy(player, NORMAL_ATTACK_ENERGY_COST);
+            
             setLastAttackTime(stack, player.getWorld().getTime());
             
             // 显示攻击信息
             if (player instanceof ServerPlayerEntity serverPlayer) {
-                serverPlayer.sendMessage(Text.literal("发动 " + rider + " 攻击!"), true);
+                serverPlayer.sendMessage(Text.literal("发动 " + rider + " 攻击! 剩余能量: " + HeiseiswordEnergyManager.getCurrentEnergy(player)), true);
             }
         }
     }
 
     private void executeScrambleRangedAttack(PlayerEntity player, ItemStack stack, float chargeTime) {
         if (chargeTime < 0.1F) return;
+
+        // 检查能量是否足够
+        if (!HeiseiswordEnergyManager.canUseEnergy(player, SCRAMBLE_ATTACK_ENERGY_COST)) {
+            if (player instanceof ServerPlayerEntity serverPlayer) {
+                serverPlayer.sendMessage(Text.literal("能量不足! 当前能量: " + HeiseiswordEnergyManager.getCurrentEnergy(player)), true);
+            }
+            return;
+        }
 
         List<String> scrambleRiders = getScrambleRiders(stack);
         if (scrambleRiders.isEmpty()) {
@@ -613,63 +704,74 @@ public class Heiseisword extends Item implements GeoItem {
             }
         }
 
-        // 播放Scramble攻击音效
-        HeiseiRiderEffectManager.playScrambleTimeBreakSound(player.getWorld(), player, scrambleRiders);
+        // 移除音效播放，所有音效将在击败实体时由EntityDeathEventListener统一播放
 
+        // 消耗能量
+        HeiseiswordEnergyManager.consumeEnergy(player, SCRAMBLE_ATTACK_ENERGY_COST);
+        
         setLastAttackTime(stack, player.getWorld().getTime());
         
-        // 攻击后重置必杀模式
-        setFinishTimeMode(stack, false);
+        // 移除重置必杀模式，让玩家可以持续使用Scramble模式
+        // setFinishTimeMode(stack, false);
         
         if (player instanceof ServerPlayerEntity serverPlayer) {
-            serverPlayer.sendMessage(Text.literal("Scramble Time Break!"), true);
+            serverPlayer.sendMessage(Text.literal("Scramble Time Break! 剩余能量: " + HeiseiswordEnergyManager.getCurrentEnergy(player)), true);
         }
     }
 
     private void executeUltimateRangedAttack(PlayerEntity player, ItemStack stack, float chargeTime) {
         if (chargeTime < 0.1F) return;
 
-        List<String> riders = getScrambleRiders(stack);
-        if (riders.isEmpty()) {
-            if (player instanceof ServerPlayerEntity serverPlayer) {
-                serverPlayer.sendMessage(Text.literal("未选择骑士!"), true);
-            }
-            return;
-        }
-
-        // 对每个选中的骑士执行超增强的远程特殊攻击
-        Vec3d lookAngle = player.getRotationVector().multiply(chargeTime * 3.0);
-        for (String rider : riders) {
-            HeiseiRiderEffect effect = HeiseiRiderEffectManager.getRiderEffect(rider);
-            if (effect != null) {
-                // 超必杀版攻击：基于chargeTime大幅增加伤害
-                float damageMultiplier = 2.0f + (chargeTime * 1.0f);
-                // 这里可以通过修改lookAngle来调整攻击强度
-                effect.executeSpecialAttack(player.getWorld(), player, lookAngle);
-            }
-        }
-
-        // 不再直接播放超必杀音效，音效将在玩家击败实体时由EntityDeathEventListener播放
-        // HeiseiRiderEffectManager.playUltimateTimeBreakSound(player.getWorld(), player);
-
-        // 添加额外的特效
-        executeUltimateSpecialEffects(player.getWorld(), player);
-
-        setLastAttackTime(stack, player.getWorld().getTime());
-        
-        // 攻击后重置所有模式
-        setFinishTimeMode(stack, false);
-        setUltimateMode(stack, false);
-
+        // 确保在服务器端执行，并且为所有玩家提供相同的功能
         if (player instanceof ServerPlayerEntity serverPlayer) {
-            serverPlayer.sendMessage(Text.literal("ULTIMATE TIME BREAK!"), true);
+            // 检查能量是否足够
+            if (!HeiseiswordEnergyManager.canUseEnergy(player, ULTIMATE_ATTACK_ENERGY_COST)) {
+                serverPlayer.sendMessage(Text.literal("能量不足! 当前能量: " + HeiseiswordEnergyManager.getCurrentEnergy(player)), true);
+                return;
+            }
+
+            List<String> riders = getScrambleRiders(stack);
+            if (riders.isEmpty()) {
+                serverPlayer.sendMessage(Text.literal("未选择骑士!"), true);
+                return;
+            }
+
+            // 对每个选中的骑士执行超增强的远程特殊攻击
+            Vec3d lookAngle = player.getRotationVector().multiply(chargeTime * 3.0);
+            for (String rider : riders) {
+                HeiseiRiderEffect effect = HeiseiRiderEffectManager.getRiderEffect(rider);
+                if (effect != null) {
+                    // 超必杀版攻击：基于chargeTime大幅增加伤害
+                    float damageMultiplier = 2.0f + (chargeTime * 1.0f);
+                    // 执行特殊攻击，确保所有玩家都能触发
+                    effect.executeSpecialAttack(player.getWorld(), player, lookAngle);
+                }
+            }
+
+            // 添加额外的特效
+            executeUltimateSpecialEffects(player.getWorld(), player);
+
+            // 消耗能量
+            HeiseiswordEnergyManager.consumeEnergy(player, ULTIMATE_ATTACK_ENERGY_COST);
+            
+            setLastAttackTime(stack, player.getWorld().getTime());
+            
+            // 攻击后重置所有模式
+            setFinishTimeMode(stack, false);
+            setUltimateMode(stack, false);
+
+            // 发送消息和触发动画
+            serverPlayer.sendMessage(Text.literal("ULTIMATE TIME BREAK! 剩余能量: " + HeiseiswordEnergyManager.getCurrentEnergy(player)), true);
             triggerUltimateAnimation(player.getWorld(), player, stack);
         }
     }
 
     // 执行超必杀特殊效果
     private void executeUltimateSpecialEffects(World world, PlayerEntity player) {
-        if (world.isClient() || !(world instanceof ServerWorld serverWorld)) return;
+        // 确保在服务器端执行，并且为所有玩家提供相同的功能
+        if (world.isClient() || !(world instanceof ServerWorld serverWorld) || !(player instanceof ServerPlayerEntity)) {
+            return;
+        }
 
         // 实现爆炸效果和范围伤害
         // 1. 创建视觉效果（可以在实际实现中添加粒子效果）
@@ -678,6 +780,7 @@ public class Heiseisword extends Item implements GeoItem {
         double radius = 20.0;
         float baseDamage = 150.0f;
         
+        // 确保为所有玩家计算范围伤害，不受房主限制
         world.getOtherEntities(player, player.getBoundingBox().expand(radius),
                         entity -> entity instanceof LivingEntity && entity != player)
                 .forEach(entity -> {
@@ -687,6 +790,7 @@ public class Heiseisword extends Item implements GeoItem {
                         double damageMultiplier = Math.max(0.5, 1.0 - (distance / (radius * radius)));
                         float finalDamage = (float)(baseDamage * damageMultiplier);
                         
+                        // 使用正确的伤害来源，确保所有玩家都能正确应用伤害
                         DamageSource damageSource = player.getDamageSources().playerAttack(player);
                         livingEntity.damage(serverWorld, damageSource, finalDamage);
                         

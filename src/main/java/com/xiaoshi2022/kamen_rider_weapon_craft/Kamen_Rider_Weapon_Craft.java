@@ -2,6 +2,7 @@ package com.xiaoshi2022.kamen_rider_weapon_craft;
 
 import com.xiaoshi2022.kamen_rider_weapon_craft.component.ridermodComponents;
 import com.xiaoshi2022.kamen_rider_weapon_craft.event.EntityDeathEventListener;
+import com.xiaoshi2022.kamen_rider_weapon_craft.event.HeiseiswordEnergyEventListener;
 import com.xiaoshi2022.kamen_rider_weapon_craft.network.NetworkHandler;
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModEntityTypes;
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModItemGroups;
@@ -32,6 +33,9 @@ public class Kamen_Rider_Weapon_Craft implements ModInitializer {
 
         // 注册实体死亡事件监听器
         EntityDeathEventListener.register();
+        
+        // 注册能量恢复事件监听器
+        HeiseiswordEnergyEventListener.register();
 
         // 3. 初始化网络处理器
         NetworkHandler.register();
@@ -39,8 +43,8 @@ public class Kamen_Rider_Weapon_Craft implements ModInitializer {
         // 4. 最后初始化音效
         ModSounds.initialize();
         
-        // 5. 注册实体死亡事件监听器
-        EntityDeathEventListener.register();
+        // 移除重复的注册
+        // EntityDeathEventListener.register();
 
         LOGGER.info("Hello Fabric world! All components initialized in correct order.");
     }

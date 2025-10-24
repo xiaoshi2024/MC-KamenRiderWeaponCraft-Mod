@@ -162,16 +162,31 @@ public class RiderSounds {
                 }
             }).start();
         } else {
-            // 服务器端使用服务器调度器
+            // 服务器端使用Timer来处理延迟
             ServerWorld serverWorld = (ServerWorld) world;
-            serverWorld.getServer().execute(() -> {
-                for (DelayedSound delayedSound : sounds) {
-                    playSound(world, player, delayedSound.sound);
-                }
-            });
+            Timer timer = new Timer(true);
+            for (DelayedSound delayedSound : sounds) {
+                final DelayedSound finalSound = delayedSound;
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        serverWorld.getServer().execute(() -> {
+                            playSound(world, player, finalSound.sound);
+                        });
+                    }
+                }, delayedSound.delayTicks * 50L);
+            }
         }
     }
 
+    // 播放骑士名称音效
+    public static void playRiderNameSound(World world, PlayerEntity player, String riderName) {
+        SoundEvent soundEvent = getRiderNameSound(riderName);
+        if (soundEvent != null) {
+            playSound(world, player, soundEvent);
+        }
+    }
+    
     // 根据骑士名称获取对应的音效
     public static SoundEvent getRiderNameSound(String riderName) {
         return switch (riderName) {

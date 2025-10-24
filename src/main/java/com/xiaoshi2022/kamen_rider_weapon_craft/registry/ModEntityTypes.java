@@ -1,6 +1,7 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.registry;
 
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.builds.BuildRiderEntity;
+import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.exaid.ExAidSlashEffectEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
@@ -23,6 +24,15 @@ public class ModEntityTypes {
                     .maxTrackingRange(64)
                     .trackingTickInterval(1)
                     .build(RegistryKey.of(Registries.ENTITY_TYPE.getKey(), Identifier.of(MOD_ID, "build_rider_effect")))
+    );
+    public static final EntityType<?> EXAID_SLASH_EFFECT = Registry.register(
+            Registries.ENTITY_TYPE,
+            Identifier.of(MOD_ID, "exaid_slash_effect"),
+            EntityType.Builder.create(ExAidSlashEffectEntity::new, SpawnGroup.MISC)
+                    .dimensions(1.5f, 3.0f)
+                    .maxTrackingRange(64)
+                    .trackingTickInterval(1)
+                    .build(RegistryKey.of(Registries.ENTITY_TYPE.getKey(), Identifier.of(MOD_ID, "exaid_slash_effect")))
     );
 
     public static void initialize() {

@@ -24,6 +24,7 @@ public class NetworkHandler {
     // 定义按键类型常量
     public static final String RIDER_SELECTION = "rider_selection";
     public static final String ULTIMATE_MODE = "ultimate_mode";
+    public static final String COMBINATION_XY = "combination_xy";
 
     // 定义Payload记录
     public record KeyPressPayload(String keyType, boolean isPressed) implements CustomPayload {
@@ -82,6 +83,7 @@ public class NetworkHandler {
 
     /**
      * 在服务端处理按键按下事件
+     * 确保所有玩家都能触发对应的动作，不区分房主和普通玩家
      */
     private static void handleKeyPressOnServer(ServerPlayerEntity player, String keyType, boolean isPressed) {
         // 安全检查
@@ -93,11 +95,12 @@ public class NetworkHandler {
         // 确保只在按键按下时处理（避免重复处理）
         if (isPressed) {
             // 根据按键类型调用相应的处理方法
+            // 为所有玩家执行相同的处理逻辑，不区分房主和普通玩家
             switch (keyType) {
                 case RIDER_SELECTION:
                     Heiseisword.handleRiderSelectionKeyPress(player);
                     break;
-                case ULTIMATE_MODE:
+                case ULTIMATE_MODE, COMBINATION_XY:
                     Heiseisword.handleUltimateKeyPress(player);
                     break;
                 default:

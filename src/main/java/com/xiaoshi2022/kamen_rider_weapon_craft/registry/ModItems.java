@@ -23,6 +23,7 @@ public class ModItems {
         return Registry.register(Registries.ITEM, Identifier.of(MOD_ID, name),
                 function.apply(new Item.Settings()
                         .maxCount(1)
+                        .maxDamage(1000) // 添加耐久值1000
                         .registryKey(RegistryKey.of(RegistryKeys.ITEM, Identifier.of(MOD_ID, name)))));
     }
 }

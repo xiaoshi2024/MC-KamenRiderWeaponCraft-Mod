@@ -1,6 +1,7 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.rider;
 
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModEntityTypes;
+import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.exaid.ExAidSlashEffectRenderer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
@@ -24,6 +25,7 @@ public class RiderEffectEntityRegistry {
 
         // 注册Build骑士特效实体渲染器
         registerBuildRiderRenderers();
+        registerExaidSlashEffectRenderer();
 
         // 暂时注释掉其他尚未实现的渲染器注册
         // registerDriveRiderRenderers();
@@ -43,6 +45,11 @@ public class RiderEffectEntityRegistry {
     private static void registerBuildRiderRenderers() {
         EntityRendererRegistry.register(ModEntityTypes.BUILD_RIDER_EFFECT,
                 (EntityRendererFactory.Context context) -> new BuildRiderRenderer(context));
+    }
+
+    private static void registerExaidSlashEffectRenderer() {
+        EntityRendererRegistry.register(ModEntityTypes.EXAID_SLASH_EFFECT,
+                (EntityRendererFactory.Context context) -> new ExAidSlashEffectRenderer(context));
     }
 
     // 暂时注释掉其他尚未实现的渲染器注册方法

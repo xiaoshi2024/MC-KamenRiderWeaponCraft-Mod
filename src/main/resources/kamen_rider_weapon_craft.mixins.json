@@ -4,7 +4,7 @@
 	"compatibilityLevel": "JAVA_21",
 	"mixins": [
 		"LivingEntityMixin",
-		"ExampleMixin"
+      "KRWMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

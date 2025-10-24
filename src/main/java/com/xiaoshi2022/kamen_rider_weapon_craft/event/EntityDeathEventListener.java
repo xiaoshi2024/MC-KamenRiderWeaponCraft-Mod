@@ -13,10 +13,8 @@ import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.ActionResult;
 import net.minecraft.world.World;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import net.minecraft.sound.SoundEvent;
+import java.util.*;
 
 /**
  * 实体死亡事件监听器，用于在玩家击败实体时播放特殊音效
@@ -89,11 +87,15 @@ public class EntityDeathEventListener {
         // 尝试从不同来源获取玩家
         PlayerEntity killingPlayer = null;
 
-        // 1. 首先从伤害来源获取攻击者
+        // 1. 首先检查伤害源是否直接来自玩家
         if (damageSource.getAttacker() instanceof PlayerEntity player) {
             killingPlayer = player;
         }
-        // 2. 如果伤害来源没有玩家，从最近攻击者缓存中查找
+        // 2. 尝试获取伤害源的来源（source）
+        else if (damageSource.getSource() instanceof PlayerEntity player) {
+            killingPlayer = player;
+        }
+        // 3. 最后从最近攻击者缓存中查找
         else if (RECENT_ATTACKERS.containsKey(entityUuid)) {
             UUID playerUuid = RECENT_ATTACKERS.get(entityUuid);
             if (world instanceof ServerWorld serverWorld) {
@@ -139,15 +141,15 @@ public class EntityDeathEventListener {
                         java.util.Collections.emptyList()
                 );
 
-                // 根据不同模式选择不同音效
+                // 根据不同模式选择对应的音效序列方法
                 if (isUltimateMode) {
-                    // 超必杀模式 - 播放ULTIMATE_TIME_BREAK
-                    RiderSounds.playSound(world, player, RiderSounds.ULTIMATE_TIME_BREAK);
+                    // 超必杀模式 - 使用内置的超必杀音效序列方法
+                    RiderSounds.playUltimateFinishSoundSequence(world, player, scrambleRiders);
                 } else if (!scrambleRiders.isEmpty()) {
-                    // 混乱模式 - 播放SCRAMBLE_TIME_BREAK
-                    RiderSounds.playSound(world, player, RiderSounds.SCRAMBLE_TIME_BREAK);
+                    // 混乱模式 - 使用内置的混乱音效序列方法
+                    RiderSounds.playScrambleFinishSoundSequence(world, player, scrambleRiders);
                 } else {
-                    // 普通模式 - 播放DUAL_TIME_BREAK
+                    // 普通模式 - 直接播放DUAL_TIME_BREAK音效
                     RiderSounds.playSound(world, player, RiderSounds.DUAL_TIME_BREAK);
                 }
 

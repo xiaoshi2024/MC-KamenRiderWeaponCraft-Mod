@@ -1,6 +1,7 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.rider.effect;
 
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.effect.impl.BuildEffect;
+import com.xiaoshi2022.kamen_rider_weapon_craft.rider.effect.impl.ExAidEffect;
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.sound.RiderSounds;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -22,7 +23,7 @@ public class HeiseiRiderEffectManager {
         // 注册所有骑士及其音效，使用匿名内部类实现基础功能
         // 特别为Build注册自定义的BuildEffect类，其他骑士使用基础效果
         registerRider("Build", new BuildEffect(), RiderSounds.NAME_BUILD);
-        registerRider("Ex-Aid", new BaseRiderEffect("Ex-Aid", 14.0f, 6.0f, 20.0), RiderSounds.NAME_EXAID);
+        registerRider("Ex-Aid", new ExAidEffect(), RiderSounds.NAME_EXAID);
         registerRider("Ghost", new BaseRiderEffect("Ghost", 16.0f, 4.0f, 20.0), RiderSounds.NAME_GHOST);
         registerRider("Drive", new BaseRiderEffect("Drive", 15.0f, 5.0f, 20.0), RiderSounds.NAME_DRIVE);
         registerRider("Gaim", new BaseRiderEffect("Gaim", 16.0f, 4.0f, 20.0), RiderSounds.NAME_GAIM);
@@ -156,24 +157,8 @@ public class HeiseiRiderEffectManager {
     public static void playScrambleTimeBreakSound(World world, PlayerEntity player, List<String> selectedRiders) {
         if (selectedRiders.isEmpty()) return;
 
-        // 不再播放Scramble音效，音效将在EntityDeathEventListener中播放
-        // RiderSounds.playSound(world, player, RiderSounds.SCRAMBLE_TIME_BREAK);
-
-        // 延迟播放骑士名称音效
-        for (int i = 0; i < selectedRiders.size(); i++) {
-            final int delay = i * 10; // 每个骑士名称音效间隔10ticks
-            final String riderName = selectedRiders.get(i);
- 
-            // 简化处理，直接在服务器上执行
-            if (world instanceof ServerWorld) {
-                world.getServer().execute(() -> {
-                    SoundEvent nameSound = getRiderNameSound(riderName);
-                    if (nameSound != null) {
-                        RiderSounds.playSound(world, player, nameSound);
-                    }
-                });
-            }
-        }
+        // 不再播放音效，音效将在EntityDeathEventListener中播放
+        // 所有骑士名称音效和Time Break音效都将在击败实体时播放
     }
 
     // 播放最终攻击音效（无参数版本）- 用于超必杀模式
@@ -188,24 +173,9 @@ public class HeiseiRiderEffectManager {
         // 先播放基础音效
         playUltimateTimeBreakSound(world, player);
 
-        // 然后播放所有选中骑士的名称音效
-        if (!selectedRiders.isEmpty()) {
-            // 延迟播放骑士名称音效
-            for (int i = 0; i < selectedRiders.size(); i++) {
-                final int delay = i * 8 + 40; // 延迟40ticks后开始，每个间隔8ticks
-                final String riderName = selectedRiders.get(i);
-
-                // 简化处理，直接在服务器上执行
-            if (world instanceof ServerWorld) {
-                world.getServer().execute(() -> {
-                    SoundEvent nameSound = getRiderNameSound(riderName);
-                    if (nameSound != null) {
-                        RiderSounds.playSound(world, player, nameSound);
-                    }
-                });
-            }
-            }
-        }
+        // 注意：骑士名称音效和最终击败音效都将在EntityDeathEventListener中播放
+        // 这里不再直接播放任何音效，以避免与EntityDeathEventListener中的音效重叠
+        // 根据注释，所有音效都应该在击败实体时播放，而不是在攻击时播放
     }
 
     // 获取所有已注册骑士的数量
