@@ -4,7 +4,7 @@ import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModEntityTypes;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
-import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.build.BuildRiderRenderer;
+import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.builds.BuildRiderRenderer;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 
 /**

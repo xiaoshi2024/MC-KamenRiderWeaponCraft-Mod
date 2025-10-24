@@ -1,6 +1,6 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.registry;
 
-import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.build.BuildRiderEntity;
+import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.builds.BuildRiderEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
