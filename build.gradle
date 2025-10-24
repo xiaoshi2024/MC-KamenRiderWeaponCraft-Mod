@@ -35,9 +35,9 @@ dependencies {
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
 	// 添加本地模组依赖
-	modImplementation files('libs/geckolib-fabric-1.21.6-5.2.0.jar')
-	modImplementation files('libs/modmenu-15.0.0.jar')
-	modImplementation files('libs/placeholder-api-2.7.1+1.21.6.jar')
+	modImplementation files('libs/geckolib.jar')
+	modImplementation files('libs/modmenu.jar')
+	modImplementation files('libs/placeholder-api.jar')
 }
 
 processResources {

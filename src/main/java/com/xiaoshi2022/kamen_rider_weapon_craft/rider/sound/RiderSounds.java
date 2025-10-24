@@ -1,9 +1,9 @@
-// rider/sound/RiderSounds.java
 package com.xiaoshi2022.kamen_rider_weapon_craft.rider.sound;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
@@ -66,118 +66,109 @@ public class RiderSounds {
     public static void playSound(World world, PlayerEntity player, SoundEvent sound) {
         if (world.isClient()) {
             world.playSound(player, player.getX(), player.getY(), player.getZ(),
-                    sound, SoundCategory.PLAYERS, 1.0F, 1.0F);
+                    RegistryEntry.of(sound), SoundCategory.PLAYERS, 1.0F, 1.0F);
         } else {
             // 在服务器端也播放音效
             ((ServerWorld) world).playSound(null, player.getX(), player.getY(), player.getZ(),
-                    sound, SoundCategory.PLAYERS, 1.0F, 1.0F);
+                    RegistryEntry.of(sound), SoundCategory.PLAYERS, 1.0F, 1.0F);
         }
     }
 
-    // 优化版延迟播放音效 - 使用Fabric的调度系统
+    // 播放选择音效："Hey! △△!"
+    public static void playSelectionSound(World world, PlayerEntity player, SoundEvent nameSound) {
+        // 先播放"Hey"音效
+        playSound(world, player, HEY);
+
+        // 延迟播放骑士名称音效
+        if (nameSound != null) {
+            playDelayedSound(world, player, nameSound, 10); // 延迟10ticks（0.5秒）
+        }
+    }
+
+    // 播放攻击音效：只播放骑士名称，不再播放Dual Time Break
+    // 注意：Dual Time Break音效现在会在玩家击败实体时由EntityDeathEventListener播放
+    public static void playAttackSound(World world, PlayerEntity player, SoundEvent nameSound) {
+        if (nameSound != null) {
+            // 只播放骑士名称音效
+            playSound(world, player, nameSound);
+        }
+    }
+
+    // 播放Finish Time音效
+    public static void playFinishTimeSound(World world, PlayerEntity player) {
+        playSound(world, player, FINISH_TIME);
+    }
+
+    // 播放Rider Time启动音效
+    public static void playRiderTimeSound(World world, PlayerEntity player) {
+        playSound(world, player, RIDE_HEI_SABER);
+    }
+
+    // 播放超必杀激活音效
+    public static void playUltimateActivationSound(World world, PlayerEntity player) {
+        playSound(world, player, ULTIMATE_TIME_BREAK);
+    }
+
+    // 快速连续播放"Hey Say"音效（用于快速选择）
+    public static void playRapidSelectionSound(World world, PlayerEntity player) {
+        playSound(world, player, HEY_SAY_RAPID);
+    }
+
+    // 简化版延迟播放音效 - 使用服务器的调度系统
     public static void playDelayedSound(World world, PlayerEntity player, SoundEvent sound, int delayTicks) {
         if (world.isClient()) {
-            // 客户端延迟播放 - 直接使用Timer
-            Timer timer = new Timer(true);
-            timer.schedule(new TimerTask() {
-                @Override
-                public void run() {
+            // 客户端延迟播放
+            new Thread(() -> {
+                try {
+                    Thread.sleep(delayTicks * 50L);
                     playSound(world, player, sound);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
                 }
-            }, delayTicks * 50L);
+            }).start();
         } else {
-            // 服务器端延迟播放 - 使用服务器调度器
+            // 简化处理，直接在服务器上执行
             ServerWorld serverWorld = (ServerWorld) world;
             serverWorld.getServer().execute(() -> {
-                Timer timer = new Timer(true);
-                timer.schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        playSound(world, player, sound);
-                    }
-                }, delayTicks * 50L);
+                playSound(world, player, sound);
             });
+        }
+    }
+
+    // 内部类：用于批量延迟播放音效的结构体
+    public static class DelayedSound {
+        public final SoundEvent sound;
+        public final int delayTicks;
+
+        public DelayedSound(SoundEvent sound, int delayTicks) {
+            this.sound = sound;
+            this.delayTicks = delayTicks;
         }
     }
 
     // 新增方法：批量播放延迟音效序列 - 优化多音效播放性能
     public static void playDelayedSoundSequence(World world, PlayerEntity player, List<DelayedSound> sounds) {
         if (world.isClient()) {
-            // 客户端使用单个定时器处理所有音效
-            Timer timer = new Timer(true);
-            for (DelayedSound delayedSound : sounds) {
-                timer.schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        playSound(world, player, delayedSound.soundEvent);
+            // 客户端使用线程处理所有音效
+            new Thread(() -> {
+                for (DelayedSound delayedSound : sounds) {
+                    try {
+                        Thread.sleep(delayedSound.delayTicks * 50L);
+                        playSound(world, player, delayedSound.sound);
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                        break;
                     }
-                }, delayedSound.delayTicks * 50L);
-            }
+                }
+            }).start();
         } else {
             // 服务器端使用服务器调度器
             ServerWorld serverWorld = (ServerWorld) world;
             serverWorld.getServer().execute(() -> {
-                Timer timer = new Timer(true);
                 for (DelayedSound delayedSound : sounds) {
-                    timer.schedule(new TimerTask() {
-                        @Override
-                        public void run() {
-                            playSound(world, player, delayedSound.soundEvent);
-                        }
-                    }, delayedSound.delayTicks * 50L);
+                    playSound(world, player, delayedSound.sound);
                 }
             });
-        }
-    }
-
-    // 延迟音效数据类
-    public static class DelayedSound {
-        public final SoundEvent soundEvent;
-        public final int delayTicks;
-
-        public DelayedSound(SoundEvent soundEvent, int delayTicks) {
-            this.soundEvent = soundEvent;
-            this.delayTicks = delayTicks;
-        }
-    }
-
-    // 播放选择音效："Hey!" + 骑士名称
-    public static void playSelectionSound(World world, PlayerEntity player, SoundEvent riderNameSound) {
-        playSound(world, player, HEY);
-        playDelayedSound(world, player, riderNameSound, 20);
-    }
-
-    // 播放攻击音效：骑士名称 + "Dual Time Break!"
-    public static void playAttackSound(World world, PlayerEntity player, SoundEvent riderNameSound) {
-        playSound(world, player, riderNameSound);
-    }
-
-    // 新方法：在击败实体后播放特殊音效
-    public static void playKillSound(World world, PlayerEntity player, SoundEvent specialSound) {
-        playSound(world, player, specialSound);
-    }
-
-    // 播放骑士时间音效
-    public static void playRiderTimeSound(World world, PlayerEntity player) {
-        playSound(world, player, RIDE_HEI_SABER);
-    }
-
-    // 播放必杀时刻音效
-    public static void playFinishTimeSound(World world, PlayerEntity player) {
-        playSound(world, player, FINISH_TIME);
-    }
-
-    // 播放超必杀激活音效
-    public static void playUltimateActivationSound(World world, PlayerEntity player) {
-        // 播放嘿嘿待机音或其他超必杀启动音效
-        playSound(world, player, HEY_SAY_RAPID);
-    }
-
-    // 播放选择音效（通过骑士名称字符串）
-    public static void playSelectionSound(World world, PlayerEntity player, String riderName) {
-        SoundEvent nameSound = getRiderNameSound(riderName);
-        if (nameSound != null) {
-            playSelectionSound(world, player, nameSound);
         }
     }
 
@@ -213,8 +204,6 @@ public class RiderSounds {
 
         // 添加Hey音效（无延迟）
         sounds.add(new DelayedSound(HEY, 0));
-
-        // 然后按顺序添加所有选中骑士的名称音效
         int delay = 20;
         for (String riderName : riders) {
             SoundEvent nameSound = getRiderNameSound(riderName);
@@ -237,8 +226,6 @@ public class RiderSounds {
 
         // 添加Hey音效（无延迟）
         sounds.add(new DelayedSound(HEY, 0));
-
-        // 然后按顺序添加所有选中骑士的名称音效
         int delay = 20;
         for (String riderName : riders) {
             SoundEvent nameSound = getRiderNameSound(riderName);

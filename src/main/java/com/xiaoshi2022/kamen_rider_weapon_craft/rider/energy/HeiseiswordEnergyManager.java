@@ -51,7 +51,7 @@ public class HeiseiswordEnergyManager {
         if (player == null) return 0.0;
         
         NbtCompound energyData = getOrCreateEnergyData(player);
-        // Fabric 1.21.6中NbtCompound.getDouble返回Optional<Double>
+        // 使用orElse处理Optional<Double>返回值
         return energyData.contains("current_energy") ? energyData.getDouble("current_energy").orElse(0.0) : 0.0;
     }
 
@@ -62,7 +62,7 @@ public class HeiseiswordEnergyManager {
         if (player == null) return DEFAULT_MAX_ENERGY;
         
         NbtCompound energyData = getOrCreateEnergyData(player);
-        // Fabric 1.21.6中NbtCompound.getDouble返回Optional<Double>
+        // 使用orElse处理Optional<Double>返回值
         return energyData.contains("max_energy") ? energyData.getDouble("max_energy").orElse(DEFAULT_MAX_ENERGY) : DEFAULT_MAX_ENERGY;
     }
 
@@ -98,7 +98,7 @@ public class HeiseiswordEnergyManager {
         
         UUID playerId = player.getUuid();
         NbtCompound energyData = getOrCreateEnergyData(player);
-        double currentEnergy = Math.min(energyData.getDouble("current_energy").orElse(0.0), maxEnergy);
+        double currentEnergy = Math.min(getCurrentEnergy(player), maxEnergy);
         energyData.putDouble("current_energy", currentEnergy);
         energyData.putDouble("max_energy", maxEnergy);
         
