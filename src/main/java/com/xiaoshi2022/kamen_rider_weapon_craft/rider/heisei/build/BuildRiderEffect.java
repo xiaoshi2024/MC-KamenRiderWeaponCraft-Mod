@@ -33,7 +33,7 @@ public class BuildRiderEffect extends AbstractHeiseiRiderEffect {
 
 
     @Override
-    public void executeSpecialAttack(Level level, Player player, Vec3 direction) {
+    public void executePlayerSpecialAttack(Level level, Player player, Vec3 direction) {
         if (!level.isClientSide) {
             // 执行公式踢（气泡兔坦形态的招牌技能）
             executeFormulaKick(level, player, direction);

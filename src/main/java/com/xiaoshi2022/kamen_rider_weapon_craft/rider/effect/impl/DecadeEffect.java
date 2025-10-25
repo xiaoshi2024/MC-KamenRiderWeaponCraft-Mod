@@ -11,7 +11,7 @@ import net.minecraft.world.phys.Vec3;
 public class DecadeEffect extends AbstractHeiseiRiderEffect {
 
     @Override
-    public void executeSpecialAttack(Level level, Player player, Vec3 direction) {
+    public void executePlayerSpecialAttack(Level level, Player player, Vec3 direction) {
         if (!level.isClientSide) {
             // 服务器端：发动Dimension Kick攻击，使用专门的特效实体
             DecadeRiderEffect.spawnDimensionKickEffect(level, player, direction, getAttackDamage());

@@ -22,7 +22,7 @@ public class DenOEffect extends AbstractHeiseiRiderEffect {
     private final Random random = new Random();
 
     @Override
-    public void executeSpecialAttack(Level level, Player player, Vec3 direction) {
+    public void executePlayerSpecialAttack(Level level, Player player, Vec3 direction) {
         if (!level.isClientSide) {
             // 随机选择一个电王形态
             DenOForm selectedForm = DenOForm.values()[random.nextInt(DenOForm.values().length)];

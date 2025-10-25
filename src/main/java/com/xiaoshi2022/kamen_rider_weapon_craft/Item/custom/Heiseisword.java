@@ -119,7 +119,7 @@ public class Heiseisword extends SwordItem implements GeoItem {
     }
 
     // 设置Scramble选择的骑士列表
-    private void setScrambleRiders(ItemStack stack, List<String> riders) {
+    public static void setScrambleRiders(ItemStack stack, List<String> riders) {
         CompoundTag tag = stack.getOrCreateTag();
         
         // 清除旧数据
@@ -1211,6 +1211,68 @@ public class Heiseisword extends SwordItem implements GeoItem {
 
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {
-        return this.cache;
+        return cache;
+    }
+    
+    // 静态方法，允许AI类访问和修改武器状态
+    public static String getSelectedRiderStatic(ItemStack stack) {
+        if (!stack.hasTag()) return "";
+        return stack.getTag().getString(TAG_SELECTED_RIDER);
+    }
+    
+    public static void setSelectedRiderStatic(ItemStack stack, String riderName) {
+        stack.getOrCreateTag().putString(TAG_SELECTED_RIDER, riderName != null ? riderName : "");
+    }
+    
+    public static List<String> getScrambleRidersStatic(ItemStack stack) {
+        List<String> riders = new ArrayList<>();
+        if (!stack.hasTag()) return riders;
+        
+        CompoundTag tag = stack.getTag();
+        if (!tag.contains("scrambleRiders_size")) return riders;
+        
+        int size = tag.getInt("scrambleRiders_size");
+        for (int i = 0; i < size; i++) {
+            if (tag.contains("scrambleRiders_" + i)) {
+                riders.add(tag.getString("scrambleRiders_" + i));
+            }
+        }
+        return riders;
+    }
+    
+    public static void setScrambleRidersStatic(ItemStack stack, List<String> riders) {
+        CompoundTag tag = stack.getOrCreateTag();
+        
+        // 清除旧数据
+        if (tag.contains("scrambleRiders_size")) {
+            int oldSize = tag.getInt("scrambleRiders_size");
+            for (int i = 0; i < oldSize; i++) {
+                tag.remove("scrambleRiders_" + i);
+            }
+        }
+        
+        // 保存新数据
+        tag.putInt("scrambleRiders_size", riders.size());
+        for (int i = 0; i < riders.size(); i++) {
+            tag.putString("scrambleRiders_" + i, riders.get(i));
+        }
+    }
+    
+    public static boolean isFinishTimeModeStatic(ItemStack stack) {
+        if (!stack.hasTag()) return false;
+        return stack.getTag().getBoolean(TAG_IS_FINISH_TIME_MODE);
+    }
+    
+    public static void setFinishTimeModeStatic(ItemStack stack, boolean mode) {
+        stack.getOrCreateTag().putBoolean(TAG_IS_FINISH_TIME_MODE, mode);
+    }
+    
+    public static boolean isUltimateModeStatic(ItemStack stack) {
+        if (!stack.hasTag()) return false;
+        return stack.getTag().getBoolean(TAG_IS_ULTIMATE_MODE);
+    }
+    
+    public static void setUltimateModeStatic(ItemStack stack, boolean mode) {
+        stack.getOrCreateTag().putBoolean(TAG_IS_ULTIMATE_MODE, mode);
     }
 }

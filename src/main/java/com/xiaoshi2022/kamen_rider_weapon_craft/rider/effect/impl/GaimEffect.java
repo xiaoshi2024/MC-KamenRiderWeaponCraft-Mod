@@ -19,7 +19,7 @@ public class GaimEffect extends AbstractHeiseiRiderEffect {
     }
 
     @Override
-    public void executeSpecialAttack(Level level, Player player, Vec3 direction) {
+    public void executePlayerSpecialAttack(Level level, Player player, Vec3 direction) {
         // 无论客户端还是服务器端，都生成锁种特效实体
         // 调整锁种出现几率：橙子(Orange)出现几率大，菠萝(Pineapple)出现几率小
         LockSeed selectedSeed = getWeightedRandomLockSeed(level);

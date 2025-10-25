@@ -20,7 +20,7 @@ public class RyukiEffect extends AbstractHeiseiRiderEffect {
     }
 
     @Override
-    public void executeSpecialAttack(Level level, Player player, Vec3 direction) {
+    public void executePlayerSpecialAttack(Level level, Player player, Vec3 direction) {
         if (!level.isClientSide) {
             // 服务器端：发动Dragon Rider Kick攻击，使用不同的卡片能力
             // 随机选择一个卡片能力

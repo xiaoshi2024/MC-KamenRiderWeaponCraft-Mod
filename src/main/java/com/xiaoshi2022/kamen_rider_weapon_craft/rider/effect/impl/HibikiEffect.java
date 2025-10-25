@@ -10,7 +10,7 @@ import net.minecraft.world.phys.Vec3;
 public class HibikiEffect extends AbstractHeiseiRiderEffect {
 
     @Override
-    public void executeSpecialAttack(Level level, Player player, Vec3 direction) {
+    public void executePlayerSpecialAttack(Level level, Player player, Vec3 direction) {
         if (!level.isClientSide) {
             // 服务器端：发动音击之技，释放强大的音波攻击
             // 1. 创建一个环形的音波，对周围敌人造成伤害

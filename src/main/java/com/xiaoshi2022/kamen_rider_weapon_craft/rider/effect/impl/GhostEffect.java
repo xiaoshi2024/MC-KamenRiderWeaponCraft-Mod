@@ -65,7 +65,7 @@ public class GhostEffect extends AbstractHeiseiRiderEffect {
     }
 
     @Override
-    public void executeSpecialAttack(Level level, Player player, Vec3 direction) {
+    public void executePlayerSpecialAttack(Level level, Player player, Vec3 direction) {
         if (!level.isClientSide) {
             // 获取未使用的伟人魂列表
             List<HeroicSoul> availableSouls = new ArrayList<>();

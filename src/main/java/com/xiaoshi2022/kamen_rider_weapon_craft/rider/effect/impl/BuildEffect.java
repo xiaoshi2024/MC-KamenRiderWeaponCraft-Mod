@@ -2,19 +2,26 @@ package com.xiaoshi2022.kamen_rider_weapon_craft.rider.effect.impl;
 
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.effect.AbstractHeiseiRiderEffect;
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.build.BuildRiderEntity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 
 public class BuildEffect extends AbstractHeiseiRiderEffect {
 
     @Override
-    public void executeSpecialAttack(Level level, Player player, Vec3 direction) {
+    public void executePlayerSpecialAttack(Level level, Player player, Vec3 direction) {
         if (!level.isClientSide) {
-            // 服务器端：使用BuildRiderEntity生成特效实体，有几率触发
+            // 服务器端：使用BuildRiderEntity生成特效实体
+            // 使用静态方法创建Build特效实体
             BuildRiderEntity.trySpawnEffect(level, player, direction, getAttackDamage());
             
-            // 为玩家添加气泡兔坦形态的增益效果
+            // 添加音效
+            level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.BLAZE_SHOOT, SoundSource.PLAYERS, 1.0F, 0.8F + level.random.nextFloat() * 0.4F);
+            
+            // 添加气泡兔坦形态的增益效果
             player.addEffect(new net.minecraft.world.effect.MobEffectInstance(
                 net.minecraft.world.effect.MobEffects.MOVEMENT_SPEED, 200, 1));
             

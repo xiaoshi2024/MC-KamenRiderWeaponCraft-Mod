@@ -4,6 +4,8 @@ package com.xiaoshi2022.kamen_rider_weapon_craft.rider.effect;
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.effect.impl.*;
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.sound.RiderSounds;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 
@@ -73,23 +75,37 @@ public class HeiseiRiderEffectManager {
     }
 
     // 播放选择音效："Hey! △△!"
-    public static void playSelectionSound(Level level, Player player, String riderName) {
+    public static void playSelectionSound(Level level, LivingEntity shooter, String riderName) {
         SoundEvent nameSound = getRiderNameSound(riderName);
         if (nameSound != null) {
-            RiderSounds.playSelectionSound(level, player, nameSound);
+            // 支持玩家和非玩家实体
+            if (shooter instanceof Player player) {
+                RiderSounds.playSelectionSound(level, player, nameSound);
+            } else {
+                // 为非玩家实体播放音效，使用HOSTILE音源
+                level.playSound(null, shooter.getX(), shooter.getY(), shooter.getZ(), 
+                    nameSound, SoundSource.HOSTILE, 1.0F, 1.0F);
+            }
         }
     }
 
     // 播放攻击音效："△△! Dual Time Break!"
-    public static void playAttackSound(Level level, Player player, String riderName) {
+    public static void playAttackSound(Level level, LivingEntity shooter, String riderName) {
         SoundEvent nameSound = getRiderNameSound(riderName);
         if (nameSound != null) {
-            RiderSounds.playAttackSound(level, player, nameSound);
+            // 支持玩家和非玩家实体
+            if (shooter instanceof Player player) {
+                RiderSounds.playAttackSound(level, player, nameSound);
+            } else {
+                // 为非玩家实体播放音效，使用HOSTILE音源
+                level.playSound(null, shooter.getX(), shooter.getY(), shooter.getZ(), 
+                    nameSound, SoundSource.HOSTILE, 1.0F, 1.0F);
+            }
         }
     }
 
     // 简化Scramble Time Break音效 - 使用优化的批量播放方法
-    public static void playScrambleTimeBreakSound(Level level, Player player, List<String> selectedRiders) {
+    public static void playScrambleTimeBreakSound(Level level, LivingEntity shooter, List<String> selectedRiders) {
         if (selectedRiders.isEmpty()) return;
 
         // 使用优化的批量播放方法，减少线程创建
@@ -106,14 +122,22 @@ public class HeiseiRiderEffectManager {
         }
         
         // 批量播放所有音效，显著减少资源消耗
-        RiderSounds.playDelayedSoundSequence(level, player, sounds);
+        if (shooter instanceof Player player) {
+            RiderSounds.playDelayedSoundSequence(level, player, sounds);
+        } else {
+            // 简化版：直接播放第一个音效，为非玩家实体使用HOSTILE音源
+            if (!sounds.isEmpty()) {
+                level.playSound(null, shooter.getX(), shooter.getY(), shooter.getZ(), 
+                    sounds.get(0).soundEvent, SoundSource.HOSTILE, 1.0F, 1.0F);
+            }
+        }
         
         // Scramble Time Break音效现在只在击败实体后才会触发
         // 实际的Scramble Time Break音效会在实体被击败时通过新的方法触发
     }
 
     // 播放超必杀的骑士名称部分音效
-    public static void playUltimateTimeBreakNameSounds(Level level, Player player, List<String> selectedRiders) {
+    public static void playUltimateTimeBreakNameSounds(Level level, LivingEntity shooter, List<String> selectedRiders) {
         // 不需要再播放Hey Say音效，因为已经在playUltimateActivationSound中播放过了
 
         // 使用优化的批量播放方法，减少线程创建
@@ -131,17 +155,25 @@ public class HeiseiRiderEffectManager {
         }
         
         // 批量播放所有音效，显著减少资源消耗
-        RiderSounds.playDelayedSoundSequence(level, player, sounds);
+        if (shooter instanceof Player player) {
+            RiderSounds.playDelayedSoundSequence(level, player, sounds);
+        } else {
+            // 简化版：直接播放第一个音效，为非玩家实体使用HOSTILE音源
+            if (!sounds.isEmpty()) {
+                level.playSound(null, shooter.getX(), shooter.getY(), shooter.getZ(), 
+                    sounds.get(0).soundEvent, SoundSource.HOSTILE, 1.0F, 1.0F);
+            }
+        }
     }
     
     // 简化Ultimate Time Break音效 - 使用优化的批量播放方法
-    public static void playUltimateTimeBreakSound(Level level, Player player, List<String> selectedRiders) {
+    public static void playUltimateTimeBreakSound(Level level, LivingEntity shooter, List<String> selectedRiders) {
         // 现在这个方法只播放超必杀的骑士名称部分，最后报名音效会在击败实体后触发
-        playUltimateTimeBreakNameSounds(level, player, selectedRiders);
+        playUltimateTimeBreakNameSounds(level, shooter, selectedRiders);
     }
     
     // 播放完整的超必杀音效序列（在击败实体后触发）
-    public static void playUltimateFinishSoundSequence(Level level, Player player, List<String> selectedRiders) {
+    public static void playUltimateFinishSoundSequence(Level level, LivingEntity shooter, List<String> selectedRiders) {
         // 使用优化的批量播放方法，减少线程创建
         List<RiderSounds.DelayedSound> sounds = new ArrayList<>();
         
@@ -160,24 +192,59 @@ public class HeiseiRiderEffectManager {
         sounds.add(new RiderSounds.DelayedSound(RiderSounds.ULTIMATE_TIME_BREAK, delay + 20));
         
         // 批量播放所有音效，显著减少资源消耗
-        RiderSounds.playDelayedSoundSequence(level, player, sounds);
+        if (shooter instanceof Player player) {
+            RiderSounds.playDelayedSoundSequence(level, player, sounds);
+        } else {
+            // 简化版：直接播放第一个音效和终极音效，使用HOSTILE音源
+            if (!sounds.isEmpty()) {
+                level.playSound(null, shooter.getX(), shooter.getY(), shooter.getZ(), 
+                    sounds.get(0).soundEvent, SoundSource.HOSTILE, 1.0F, 1.0F);
+                // 直接播放终极音效
+                level.playSound(null, shooter.getX(), shooter.getY(), shooter.getZ(), 
+                    RiderSounds.ULTIMATE_TIME_BREAK, SoundSource.HOSTILE, 1.0F, 1.0F);
+            }
+        }
     }
     
     // 新方法：在击败实体后播放特殊音效
-    public static void playKillSound(Level level, Player player, SoundEvent specialSound) {
-        RiderSounds.playKillSound(level, player, specialSound);
+    public static void playKillSound(Level level, LivingEntity shooter, SoundEvent specialSound) {
+        if (shooter instanceof Player player) {
+            RiderSounds.playKillSound(level, player, specialSound);
+        } else {
+            // 为非玩家实体播放音效，使用HOSTILE音源
+            level.playSound(null, shooter.getX(), shooter.getY(), shooter.getZ(), 
+                specialSound, SoundSource.HOSTILE, 1.0F, 1.0F);
+        }
     }
 
-    public static void playRiderTimeSound(Level level, Player player) {
-        RiderSounds.playSound(level, player, RiderSounds.RIDE_HEI_SABER);
+    public static void playRiderTimeSound(Level level, LivingEntity shooter) {
+        if (shooter instanceof Player player) {
+            RiderSounds.playSound(level, player, RiderSounds.RIDE_HEI_SABER);
+        } else {
+            // 为非玩家实体播放音效，使用HOSTILE音源
+            level.playSound(null, shooter.getX(), shooter.getY(), shooter.getZ(), 
+                RiderSounds.RIDE_HEI_SABER, SoundSource.HOSTILE, 1.0F, 1.0F);
+        }
     }
 
-    public static void playFinishTimeSound(Level level, Player player) {
-        RiderSounds.playSound(level, player, RiderSounds.FINISH_TIME);
+    public static void playFinishTimeSound(Level level, LivingEntity shooter) {
+        if (shooter instanceof Player player) {
+            RiderSounds.playSound(level, player, RiderSounds.FINISH_TIME);
+        } else {
+            // 为非玩家实体播放音效，使用HOSTILE音源
+            level.playSound(null, shooter.getX(), shooter.getY(), shooter.getZ(), 
+                RiderSounds.FINISH_TIME, SoundSource.HOSTILE, 1.0F, 1.0F);
+        }
     }
 
 
-    public static void playUltimateActivationSound(Level level, Player player) {
-        RiderSounds.playSound(level, player, RiderSounds.HEY_SAY_RAPID);
+    public static void playUltimateActivationSound(Level level, LivingEntity shooter) {
+        if (shooter instanceof Player player) {
+            RiderSounds.playSound(level, player, RiderSounds.HEY_SAY_RAPID);
+        } else {
+            // 为非玩家实体播放音效，使用HOSTILE音源
+            level.playSound(null, shooter.getX(), shooter.getY(), shooter.getZ(), 
+                RiderSounds.HEY_SAY_RAPID, SoundSource.HOSTILE, 1.0F, 1.0F);
+        }
     }
 }

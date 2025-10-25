@@ -10,7 +10,7 @@ import net.minecraft.world.phys.Vec3;
 public class KabutoEffect extends AbstractHeiseiRiderEffect {
 
     @Override
-    public void executeSpecialAttack(Level level, Player player, Vec3 direction) {
+    public void executePlayerSpecialAttack(Level level, Player player, Vec3 direction) {
         if (!level.isClientSide) {
             // 服务器端：发动Rider Kick，使用Clock Up能力
             // 1. 给予玩家极高的速度和抗性效果，模拟Clock Up

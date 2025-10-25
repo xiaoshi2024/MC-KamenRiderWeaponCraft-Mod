@@ -2,6 +2,7 @@ package com.xiaoshi2022.kamen_rider_weapon_craft.rider.effect.impl;
 
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.effect.AbstractHeiseiRiderEffect;
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.ooo.OOOGeoEffect;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
@@ -17,7 +18,7 @@ public class OOOEffect extends AbstractHeiseiRiderEffect {
     private static final double R = 0.8, G = 0.0, B = 0.8; // 紫色RGB值
 
     @Override
-    public void executeSpecialAttack(Level level, Player player, Vec3 direction) {
+    public void executePlayerSpecialAttack(Level level, Player player, Vec3 direction) {
         if (!level.isClientSide) {
             // 服务器端：发动Scanning Charge，仅使用恐龙联组
             
@@ -32,6 +33,77 @@ public class OOOEffect extends AbstractHeiseiRiderEffect {
         } else {
             // 客户端：粒子效果已移除，后续将使用geo动画还原
         }
+    }
+    
+    /**
+     * 为非玩家实体（如僵尸）实现OOO特有的攻击效果
+     */
+    @Override
+    public void executeNonPlayerSpecialAttack(Level level, LivingEntity shooter, Vec3 direction) {
+        if (!level.isClientSide) {
+            // 服务器端：为非玩家实体执行恐龙联组攻击
+            
+            // 执行范围攻击
+            executeNonPlayerRangeAttack(level, shooter);
+            
+            // 执行细胞硬币吞噬效果，传入方向向量
+            executeNonPlayerCellMedalSlash(level, shooter, direction);
+        }
+    }
+    
+    /**
+     * 为非玩家实体执行范围攻击
+     */
+    private void executeNonPlayerRangeAttack(Level level, LivingEntity shooter) {
+        // 对周围敌人造成伤害
+        float attackDamage = getAttackDamage() * 0.7f;
+        DamageSource damageSource = level.damageSources().mobAttack(shooter);
+        
+        level.getEntitiesOfClass(LivingEntity.class, 
+                shooter.getBoundingBox().inflate(getEffectRange() / 2),
+                entity -> entity != shooter && entity.isAlive())
+            .forEach(entity -> {
+                entity.hurt(damageSource, attackDamage);
+                
+                // 给予敌人虚弱效果
+                entity.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 150, 0));
+            });
+    }
+    
+    /**
+     * 为非玩家实体执行细胞硬币吞噬攻击
+     */
+    private void executeNonPlayerCellMedalSlash(Level level, LivingEntity shooter, Vec3 direction) {
+        float attackDamage = getAttackDamage() * 1.5f;
+        
+        // 首先尝试查找攻击方向上最近的敌对实体
+        LivingEntity target = findNearestTargetInDirection(level, shooter, direction, 10.0);
+        
+        // 执行恐龙联组的细胞硬币吞噬效果
+        // 使用非玩家专用的静态方法
+        OOOGeoEffect.spawnCellMedalSwallow(level, shooter, direction, attackDamage, target);
+    }
+    
+    /**
+     * 在指定方向上查找最近的敌对实体（支持任何LivingEntity）
+     */
+    private LivingEntity findNearestTargetInDirection(Level level, LivingEntity shooter, Vec3 direction, double maxRange) {
+        Vec3 start = shooter.getEyePosition(1.0f);
+        Vec3 end = start.add(direction.scale(maxRange));
+        
+        // 创建一个沿着方向的AABB来搜索实体
+        net.minecraft.world.phys.AABB searchBox = new net.minecraft.world.phys.AABB(start, end).inflate(2.0);
+        
+        // 查找最近的敌对实体
+        return level.getEntitiesOfClass(LivingEntity.class, searchBox, 
+                entity -> entity != shooter && entity.isAlive())
+                .stream()
+                .min((e1, e2) -> {
+                    double d1 = e1.distanceToSqr(start);
+                    double d2 = e2.distanceToSqr(start);
+                    return Double.compare(d1, d2);
+                })
+                .orElse(null);
     }
     
     private void executeBalancedAttack(Level level, Player player, Vec3 direction) {

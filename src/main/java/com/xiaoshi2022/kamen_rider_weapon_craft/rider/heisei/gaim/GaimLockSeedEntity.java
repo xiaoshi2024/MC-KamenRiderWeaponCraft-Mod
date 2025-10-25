@@ -67,7 +67,8 @@ public class GaimLockSeedEntity extends Entity implements GeoEntity {
         this.attackDirection = new Vec3(0, 0, 1);
     }
 
-    public GaimLockSeedEntity(Level level, Player owner, Vec3 position, Vec3 direction, String lockSeedType, float damage) {
+    // 修改构造函数支持所有LivingEntity
+    public GaimLockSeedEntity(Level level, LivingEntity owner, Vec3 position, Vec3 direction, String lockSeedType, float damage) {
         super(ModEntityTypes.GAIM_LOCK_SEED.get(), level);
         this.setPos(position);
         this.owner = owner;
@@ -159,7 +160,18 @@ public class GaimLockSeedEntity extends Entity implements GeoEntity {
                 if (isHostileTarget(livingEntity)) {
                     // 对目标造成伤害
                     float cutDamage = damage * 0.3f; // 切割伤害为基础伤害的30%
-                    livingEntity.hurt(level().damageSources().playerAttack((net.minecraft.world.entity.player.Player) owner), cutDamage);
+                    
+                    // 根据owner类型选择合适的伤害源
+                    DamageSource damageSource;
+                    if (owner instanceof Player player) {
+                        damageSource = level().damageSources().playerAttack(player);
+                    } else if (owner instanceof net.minecraft.world.entity.Mob mob) {
+                        damageSource = level().damageSources().mobAttack(mob);
+                    } else {
+                        damageSource = level().damageSources().magic();
+                    }
+                    
+                    livingEntity.hurt(damageSource, cutDamage);
                     
                     // 添加视觉效果，例如粒子
                     if (level().isClientSide) {
@@ -193,8 +205,12 @@ public class GaimLockSeedEntity extends Entity implements GeoEntity {
             if (entity.getType().getCategory().isFriendly() == false && entity.isAlive()) {
                 return true;
             }
+        } else if (owner instanceof net.minecraft.world.entity.Mob mob) {
+            // 对于非玩家生物，使用其原生的攻击判断
+            return mob.canAttack(entity) && entity.isAlive();
         }
-        return false;
+        // 对于其他情况，默认为敌对目标
+        return entity.isAlive();
     }
     
     /**
@@ -325,5 +341,23 @@ public class GaimLockSeedEntity extends Entity implements GeoEntity {
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {
         return cache;
+    }
+    
+    // 静态生成方法，支持所有LivingEntity
+    public static void spawnLockSeed(Level level, LivingEntity owner, Vec3 direction, String lockSeedType, float damage) {
+        if (!level.isClientSide) {
+            // 计算生成位置
+            Vec3 spawnPos = owner.getEyePosition().add(direction.scale(1.5));
+            
+            // 创建锁种实体
+            GaimLockSeedEntity lockSeed = new GaimLockSeedEntity(level, owner, spawnPos, direction, lockSeedType, damage);
+            
+            level.addFreshEntity(lockSeed);
+        }
+    }
+    
+    // 保持向后兼容性的重载方法
+    public static void spawnLockSeed(Level level, Player player, Vec3 direction, String lockSeedType, float damage) {
+        spawnLockSeed(level, (LivingEntity) player, direction, lockSeedType, damage);
     }
 }

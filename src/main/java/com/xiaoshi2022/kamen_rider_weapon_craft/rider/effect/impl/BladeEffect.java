@@ -10,7 +10,7 @@ import net.minecraft.world.phys.Vec3;
 public class BladeEffect extends AbstractHeiseiRiderEffect {
 
     @Override
-    public void executeSpecialAttack(Level level, Player player, Vec3 direction) {
+    public void executePlayerSpecialAttack(Level level, Player player, Vec3 direction) {
         if (!level.isClientSide) {
             // 服务器端：发动Lightning Slash攻击，使用Blade的光刃
             // 1. 向前方发射光刃，对直线上的敌人造成伤害

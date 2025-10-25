@@ -406,6 +406,14 @@ public class OOOGeoEntity extends AbstractHurtingProjectile implements GeoEntity
             return (LivingEntity) owner;
         }
         
+        // 然后查找其他非玩家LivingEntity（如僵尸）
+        for (LivingEntity entity : this.level().getEntitiesOfClass(LivingEntity.class, 
+                this.getBoundingBox().inflate(20.0D))) {
+            if (entity.getUUID().equals(uuid) && entity.isAlive()) {
+                return entity;
+            }
+        }
+        
         return null;
     }
     

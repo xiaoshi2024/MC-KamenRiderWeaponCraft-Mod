@@ -477,13 +477,7 @@ public class DriveRiderEntity extends Projectile implements GeoEntity {
         UUID uuid = this.getOwnerUUID();
         if (uuid == null || this.level() == null) return null;
 
-        // 首先尝试查找玩家（玩家是最常见的主人）
-        Entity owner = this.level().getPlayerByUUID(uuid);
-        if (owner instanceof LivingEntity) {
-            return (LivingEntity) owner;
-        }
-
-        // 如果不是玩家，通过获取范围内实体的方式来查找
+        // 首先尝试查找所有实体，不限于玩家类型
         AABB searchArea = this.getBoundingBox().inflate(32.0D); // 扩大搜索范围，例如32格
         List<Entity> entities = this.level().getEntities(this, searchArea, entity ->
                 entity instanceof LivingEntity && entity.getUUID().equals(uuid)
@@ -491,6 +485,12 @@ public class DriveRiderEntity extends Projectile implements GeoEntity {
 
         if (!entities.isEmpty()) {
             return (LivingEntity) entities.get(0);
+        }
+
+        // 如果没有找到，再尝试查找玩家（作为备选）
+        Entity owner = this.level().getPlayerByUUID(uuid);
+        if (owner instanceof LivingEntity) {
+            return (LivingEntity) owner;
         }
 
         return null;

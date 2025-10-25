@@ -267,8 +267,15 @@ public class ExAidSlashEffectEntity extends Entity implements GeoEntity {
                         // 确保不会对释放者造成伤害或效果，但允许对其他玩家（包括敌对玩家）造成伤害
                         if (livingEntity != owner) {
                             try {
-                                // 创建一个特殊的伤害源，代表Ex-Aid的技能伤害
-                                net.minecraft.world.damagesource.DamageSource damageSource = level().damageSources().playerAttack((Player)owner);
+                                // 创建一个特殊的伤害源，根据owner类型选择合适的伤害源
+                                net.minecraft.world.damagesource.DamageSource damageSource;
+                                if (owner instanceof Player player) {
+                                    damageSource = level().damageSources().playerAttack(player);
+                                } else if (owner instanceof net.minecraft.world.entity.Mob mob) {
+                                    damageSource = level().damageSources().mobAttack(mob);
+                                } else {
+                                    damageSource = level().damageSources().magic();
+                                }
                                 
                                 // 立即造成一次基础伤害
                                 livingEntity.hurt(damageSource, 5.0F);

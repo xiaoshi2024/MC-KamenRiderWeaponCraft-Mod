@@ -11,7 +11,7 @@ import net.minecraft.world.phys.Vec3;
 public class DriveEffect extends AbstractHeiseiRiderEffect {
 
     @Override
-    public void executeSpecialAttack(Level level, Player player, Vec3 direction) {
+    public void executePlayerSpecialAttack(Level level, Player player, Vec3 direction) {
         if (!level.isClientSide) {
             // 服务器端：发动SpeeDemon攻击，高速移动并对敌人造成伤害
             // 1. 给予玩家极高的速度和抗性效果

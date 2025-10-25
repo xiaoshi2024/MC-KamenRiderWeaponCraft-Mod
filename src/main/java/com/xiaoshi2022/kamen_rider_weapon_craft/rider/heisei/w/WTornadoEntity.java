@@ -3,7 +3,6 @@ package com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.w;
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModEntityTypes;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -18,7 +17,7 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 public class WTornadoEntity extends net.minecraft.world.entity.Entity implements GeoEntity {
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     private static final RawAnimation SPIN_ANIMATION = RawAnimation.begin().thenLoop("spin");
-    private Vec3 targetDirection;
+    private Vec3 targetDirection = Vec3.ZERO; // 初始化默认值，避免null
     private int lifetime = 0;
     private static final int MAX_LIFETIME = 60; // 3秒（60tick）
 
@@ -31,7 +30,7 @@ public class WTornadoEntity extends net.minecraft.world.entity.Entity implements
     }
 
     public void setDirection(Vec3 direction) {
-        this.targetDirection = direction.normalize();
+        this.targetDirection = direction != null ? direction.normalize() : Vec3.ZERO;
     }
 
     @Override
@@ -68,10 +67,11 @@ public class WTornadoEntity extends net.minecraft.world.entity.Entity implements
                     
                     // 卷起敌人：提升到空中并随龙卷风移动
                     // 设置实体在空中的位置，稍微高于龙卷风中心
+                    Vec3 moveDirection = (targetDirection != null && targetDirection.lengthSqr() > 0.01) ? targetDirection : Vec3.ZERO;
                     entity.setDeltaMovement(
-                        targetDirection.x * 0.5, // 水平方向随龙卷风移动
+                        moveDirection.x * 0.5, // 水平方向随龙卷风移动
                         0.4, // 向上的力
-                        targetDirection.z * 0.5
+                        moveDirection.z * 0.5
                     );
                     entity.fallDistance = 0.0f; // 防止坠落伤害
                     entity.setNoGravity(true); // 暂时禁用重力
@@ -132,14 +132,20 @@ public class WTornadoEntity extends net.minecraft.world.entity.Entity implements
                 state.setAndContinue(SPIN_ANIMATION)));
     }
 
-    // 静态方法用于生成龙卷风
-    public static void trySpawnTornado(Level level, Player player, Vec3 direction) {
+    // 静态方法用于生成龙卷风 - 修改为支持所有LivingEntity
+    public static void trySpawnTornado(Level level, LivingEntity shooter, Vec3 direction) {
         if (!level.isClientSide) { // 只在服务器端生成实体
             WTornadoEntity tornado = new WTornadoEntity(level);
             tornado.setDirection(direction);
-            tornado.setPos(player.getEyePosition().add(direction.scale(1.0)));
+            // 使用getEyePosition方法，适用于所有LivingEntity
+            tornado.setPos(shooter.getEyePosition().add(direction.scale(1.0)));
             level.addFreshEntity(tornado);
         }
+    }
+    
+    // 保持向后兼容性的重载方法
+    public static void trySpawnTornado(Level level, Player player, Vec3 direction) {
+        trySpawnTornado(level, (LivingEntity) player, direction);
     }
     
     /**

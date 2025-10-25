@@ -5,6 +5,7 @@ import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.wizard.WizardRiderE
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
@@ -12,7 +13,7 @@ import net.minecraft.world.phys.Vec3;
 public class WizardEffect extends AbstractHeiseiRiderEffect {
 
     @Override
-    public void executeSpecialAttack(Level level, Player player, Vec3 direction) {
+    public void executePlayerSpecialAttack(Level level, Player player, Vec3 direction) {
         if (!level.isClientSide) {
             // 服务器端：发动元素魔龙攻击
             // 随机选择一个元素魔龙力量

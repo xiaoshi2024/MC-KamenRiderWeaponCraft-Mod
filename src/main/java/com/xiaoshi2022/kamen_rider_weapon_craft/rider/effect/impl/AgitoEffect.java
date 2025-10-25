@@ -10,7 +10,7 @@ import net.minecraft.world.phys.Vec3;
 public class AgitoEffect extends AbstractHeiseiRiderEffect {
 
     @Override
-    public void executeSpecialAttack(Level level, Player player, Vec3 direction) {
+    public void executePlayerSpecialAttack(Level level, Player player, Vec3 direction) {
         if (!level.isClientSide) {
             // 服务器端：发动Ground Flame攻击，造成范围伤害并给予玩家力量效果
             level.getEntities(player, player.getBoundingBox().inflate(getEffectRange()))

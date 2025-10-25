@@ -31,7 +31,7 @@ public class ExAidEffect extends AbstractHeiseiRiderEffect {
     private static int nextEffectId = 0;
 
     @Override
-    public void executeSpecialAttack(Level level, Player player, Vec3 direction) {
+    public void executePlayerSpecialAttack(Level level, Player player, Vec3 direction) {
         // 统一在服务器端处理攻击逻辑和特效生成，确保同步一致性
         if (!level.isClientSide) {
             // 为玩家添加增益效果

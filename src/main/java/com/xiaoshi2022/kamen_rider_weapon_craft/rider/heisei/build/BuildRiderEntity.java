@@ -258,13 +258,13 @@ public class BuildRiderEntity extends Projectile implements GeoEntity {
     // 检查是否可以攻击目标
     private boolean canAttack(LivingEntity target) {
         LivingEntity owner = getOwner();
-        if (owner == null) return true;
-
+        
         // 不能攻击自己或主人
-        if (target == owner) return false;
-
-        // 检查敌对关系
-        return owner.canAttack(target);
+        if (owner != null && target == owner) return false;
+        
+        // 对于非玩家实体（如僵尸）释放的技能，简化逻辑
+        // 只确保不会攻击释放者自己，不检查其他敌对关系
+        return true;
     }
 
     // 获取实体的主人
@@ -272,13 +272,7 @@ public class BuildRiderEntity extends Projectile implements GeoEntity {
         UUID uuid = this.getOwnerUUID();
         if (uuid == null || this.level() == null) return null;
 
-        // 首先尝试查找玩家（玩家是最常见的主人）
-        Entity owner = this.level().getPlayerByUUID(uuid);
-        if (owner instanceof LivingEntity) {
-            return (LivingEntity) owner;
-        }
-
-        // 如果不是玩家，通过获取范围内实体的方式来查找
+        // 首先尝试查找所有实体，不限于玩家类型
         // 使用 getEntitiesOfClass 方法，这是公共方法
         AABB searchArea = this.getBoundingBox().inflate(32.0D); // 扩大搜索范围，例如32格
         List<Entity> entities = this.level().getEntities(this, searchArea, entity ->
@@ -287,6 +281,12 @@ public class BuildRiderEntity extends Projectile implements GeoEntity {
 
         if (!entities.isEmpty()) {
             return (LivingEntity) entities.get(0);
+        }
+
+        // 如果没有找到，再尝试查找玩家（作为备选）
+        Entity owner = this.level().getPlayerByUUID(uuid);
+        if (owner instanceof LivingEntity) {
+            return (LivingEntity) owner;
         }
 
         return null;

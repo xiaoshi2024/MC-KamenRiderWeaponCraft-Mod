@@ -105,7 +105,8 @@ public class WizardRiderEntity extends Projectile implements GeoEntity {
             List<Entity> entities = this.level().getEntities(this, this.getBoundingBox().inflate(3.0)); // 扩大碰撞范围，符合魔龙体型
 
             for (Entity entity : entities) {
-                if (entity instanceof LivingEntity livingEntity && entity != this.getOwner() && !entity.isAlliedTo(this.getOwner())) {
+                Entity ownerEntity = this.getOwner();
+            if (entity instanceof LivingEntity livingEntity && entity != ownerEntity && (ownerEntity == null || !entity.isAlliedTo(ownerEntity))) {
                     this.hasCollided = true; // 标记已碰撞，防止重复处理
 
                     // 根据不同元素魔龙类型造成不同的伤害效果
@@ -141,18 +142,44 @@ public class WizardRiderEntity extends Projectile implements GeoEntity {
 
     private void handleFlameDragonEffect(LivingEntity target) {
         // 对目标造成火焰伤害
-        target.hurt(this.level().damageSources().mobProjectile(this, (LivingEntity) this.getOwner()), this.getDamage());
+        Entity ownerEntity = this.getOwner();
+        LivingEntity owner = ownerEntity instanceof LivingEntity ? (LivingEntity) ownerEntity : null;
+        if (owner != null) {
+            target.hurt(this.level().damageSources().mobProjectile(this, owner), this.getDamage());
+        } else {
+            target.hurt(this.level().damageSources().magic(), this.getDamage());
+        }
         target.setSecondsOnFire(8); // 设置目标着火8秒
 
         // 从当前位置发射多个烈焰蛋
         for (int i = 0; i < 3; i++) {
-            SmallFireball fireball = new SmallFireball(
-                    this.level(),
-                    (LivingEntity) this.getOwner(),
-                    (this.random.nextDouble() - 0.5) * 0.5, // 随机散布
-                    (this.random.nextDouble() - 0.5) * 0.5,
-                    (this.random.nextDouble() - 0.5) * 0.5
-            );
+            // 复用之前定义的owner变量，避免变量名重复
+            
+            SmallFireball fireball;
+            if (owner != null) {
+                fireball = new SmallFireball(
+                        this.level(),
+                        owner,
+                        (this.random.nextDouble() - 0.5) * 0.5, // 随机散布
+                        (this.random.nextDouble() - 0.5) * 0.5,
+                        (this.random.nextDouble() - 0.5) * 0.5
+                );
+            } else {
+                // 如果owner不是LivingEntity，使用标准的SmallFireball构造函数
+                double motionX = (this.random.nextDouble() - 0.5) * 0.5;
+                double motionY = (this.random.nextDouble() - 0.5) * 0.5;
+                double motionZ = (this.random.nextDouble() - 0.5) * 0.5;
+                
+                fireball = new SmallFireball(
+                        this.level(),
+                        this.getX(),
+                        this.getY(),
+                        this.getZ(),
+                        motionX,
+                        motionY,
+                        motionZ
+                );
+            }
 
             fireball.setPos(this.getX(), this.getY() + 1.0, this.getZ());
             fireball.setDeltaMovement(
@@ -171,7 +198,11 @@ public class WizardRiderEntity extends Projectile implements GeoEntity {
                     entity != this.getOwner() &&
                     !entity.isAlliedTo(this.getOwner()) &&
                     entity != target) {
-                nearbyLiving.hurt(this.level().damageSources().indirectMagic(this, (LivingEntity) this.getOwner()), this.getDamage() * 0.5f);
+                if (owner != null) {
+                        nearbyLiving.hurt(this.level().damageSources().indirectMagic(this, owner), this.getDamage() * 0.5f);
+                    } else {
+                        nearbyLiving.hurt(this.level().damageSources().magic(), this.getDamage() * 0.5f);
+                    }
                 nearbyLiving.setSecondsOnFire(4);
             }
         }
@@ -179,7 +210,13 @@ public class WizardRiderEntity extends Projectile implements GeoEntity {
 
     private void handleWaterDragonEffect(LivingEntity target) {
         // 对目标造成伤害
-        target.hurt(this.level().damageSources().mobProjectile(this, (LivingEntity) this.getOwner()), this.getDamage() * 1.1f);
+        Entity ownerEntity = this.getOwner();
+        LivingEntity owner = ownerEntity instanceof LivingEntity ? (LivingEntity) ownerEntity : null;
+        if (owner != null) {
+            target.hurt(this.level().damageSources().mobProjectile(this, owner), this.getDamage() * 1.1f);
+        } else {
+            target.hurt(this.level().damageSources().magic(), this.getDamage() * 1.1f);
+        }
 
         // 检测附近水源并冰冻
         int freezeRadius = 5;
@@ -212,8 +249,7 @@ public class WizardRiderEntity extends Projectile implements GeoEntity {
         List<Entity> nearbyEntities = this.level().getEntities(this, area);
         for (Entity entity : nearbyEntities) {
             if (entity instanceof LivingEntity nearbyLiving &&
-                    entity != this.getOwner() &&
-                    !entity.isAlliedTo(this.getOwner())) {
+                    entity != ownerEntity) {
                 nearbyLiving.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 80, 1));
                 if (nearbyLiving.isOnFire()) {
                     nearbyLiving.clearFire();
@@ -230,10 +266,10 @@ public class WizardRiderEntity extends Projectile implements GeoEntity {
         AABB area = this.getBoundingBox().inflate(12.0);
         List<Entity> nearbyEntities = this.level().getEntities(this, area);
 
+        Entity ownerEntity = this.getOwner();
         for (Entity entity : nearbyEntities) {
             if (entity instanceof LivingEntity livingTarget &&
-                    entity != this.getOwner() &&
-                    !entity.isAlliedTo(this.getOwner())) {
+                    entity != ownerEntity) {
 
                 // 强力向上卷起
                 livingTarget.setDeltaMovement(
@@ -266,13 +302,14 @@ public class WizardRiderEntity extends Projectile implements GeoEntity {
             Level.ExplosionInteraction.NONE // 不破坏地形
         );
         
+        // 获取并缓存owner引用
+        LivingEntity owner = ownerEntity instanceof LivingEntity ? (LivingEntity)ownerEntity : null;
+        float explosionDamage = this.getDamage() * 0.5f;
+        
         // 对爆炸范围内的实体造成额外伤害
         AABB explosionArea = this.getBoundingBox().inflate(explosionRadius);
         List<LivingEntity> explosionEntities = this.level().getEntitiesOfClass(LivingEntity.class, explosionArea, 
-            entity -> entity != this.getOwner() && entity.isAlive());
-        
-        LivingEntity owner = (LivingEntity) this.getOwner();
-        float explosionDamage = this.getDamage() * 0.5f;
+            entity -> entity != ownerEntity && entity.isAlive());
         
         for (LivingEntity entity : explosionEntities) {
             // 计算距离衰减
@@ -282,6 +319,8 @@ public class WizardRiderEntity extends Projectile implements GeoEntity {
             if (finalDamage > 0) {
                 if (owner != null) {
                     entity.hurt(this.level().damageSources().indirectMagic(this, owner), finalDamage);
+                } else {
+                    entity.hurt(this.level().damageSources().magic(), finalDamage);
                 }
             }
         }
@@ -289,7 +328,13 @@ public class WizardRiderEntity extends Projectile implements GeoEntity {
 
     private void handleLandDragonEffect(LivingEntity target) {
         // 对目标造成高伤害
-        target.hurt(this.level().damageSources().mobProjectile(this, (LivingEntity) this.getOwner()), this.getDamage() * 1.3f);
+        Entity ownerEntity = this.getOwner();
+        LivingEntity owner = ownerEntity instanceof LivingEntity ? (LivingEntity)ownerEntity : null;
+        if (owner != null) {
+            target.hurt(this.level().damageSources().mobProjectile(this, owner), this.getDamage() * 1.3f);
+        } else {
+            target.hurt(this.level().damageSources().magic(), this.getDamage() * 1.3f);
+        }
 
         // 生成8X8的石头墙把目标围起来
         int centerX = (int) target.getX();
@@ -327,9 +372,11 @@ public class WizardRiderEntity extends Projectile implements GeoEntity {
         // 延迟爆炸效果
         this.level().getServer().execute(() -> {
             // 创建爆炸
+            Entity lambdaOwnerEntity = this.getOwner();
+            LivingEntity explosionOwner = lambdaOwnerEntity instanceof LivingEntity ? (LivingEntity)lambdaOwnerEntity : null;
             Explosion explosion = new Explosion(
                     this.level(),
-                    (LivingEntity) this.getOwner(),
+                    explosionOwner, // 可以传入null，不会导致问题
                     null,
                     null,
                     target.getX(),

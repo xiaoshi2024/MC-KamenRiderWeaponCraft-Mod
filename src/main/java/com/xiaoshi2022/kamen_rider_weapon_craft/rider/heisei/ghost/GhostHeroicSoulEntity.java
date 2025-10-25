@@ -76,20 +76,20 @@ public class GhostHeroicSoulEntity extends Projectile implements GeoEntity {
     
     // 移除属性相关的静态方法
     
-    // 私有构造函数，用于生成新的特效实体
-    private GhostHeroicSoulEntity(Level level, Player player, Vec3 direction, int color, float damage, boolean isFireDamage) {
+    // 私有构造函数，用于生成新的特效实体，支持所有LivingEntity
+    private GhostHeroicSoulEntity(Level level, LivingEntity owner, Vec3 direction, int color, float damage, boolean isFireDamage) {
         super(ModEntityTypes.GHOST_HEROIC_SOUL.get(), level);
-        this.setOwner(player);
+        this.setOwner(owner);
         this.noPhysics = true;
-        this.setPos(player.getEyePosition().add(direction.scale(1.0)));
+        this.setPos(owner.getEyePosition().add(direction.scale(1.0)));
         this.attackDirection = direction;
         this.soulColor = color;
         // 降低伤害值以平衡游戏
         this.damage = damage * 0.75F; // 降低25%的伤害
         this.isFireDamage = isFireDamage;
-        this.setOwnerUUID(player.getUUID());
-        this.setYRot(player.getYRot());
-        this.setXRot(player.getXRot());
+        this.setOwnerUUID(owner.getUUID());
+        this.setYRot(owner.getYRot());
+        this.setXRot(owner.getXRot());
         this.entityData.set(COLOR, color);
         this.entityData.set(ATTACKED, false);
         this.setSoulType("MUSASHI");
@@ -133,13 +133,18 @@ public class GhostHeroicSoulEntity extends Projectile implements GeoEntity {
         this.ownerUUID = uuid;
     }
 
-    // 生成实体的静态方法
-    public static void trySpawnEffect(Level level, Player player, Vec3 direction, int color, float damage, boolean isFireDamage, String soulType) {
+    // 生成实体的静态方法，支持所有LivingEntity
+    public static void trySpawnEffect(Level level, LivingEntity owner, Vec3 direction, int color, float damage, boolean isFireDamage, String soulType) {
         if (!level.isClientSide) {
-            GhostHeroicSoulEntity soulEntity = new GhostHeroicSoulEntity(level, player, direction, color, damage, isFireDamage);
+            GhostHeroicSoulEntity soulEntity = new GhostHeroicSoulEntity(level, owner, direction, color, damage, isFireDamage);
             soulEntity.setSoulType(soulType);
             level.addFreshEntity(soulEntity);
         }
+    }
+    
+    // 保持向后兼容性的重载方法
+    public static void trySpawnEffect(Level level, Player player, Vec3 direction, int color, float damage, boolean isFireDamage, String soulType) {
+        trySpawnEffect(level, (LivingEntity) player, direction, color, damage, isFireDamage, soulType);
     }
 
     @Override
@@ -500,53 +505,54 @@ public class GhostHeroicSoulEntity extends Projectile implements GeoEntity {
         // 这些属性已经在其他方法中设置，但我们再次确认
     }
     
-    // 判断目标是否为敌对目标（怪物或敌对玩家）
-    private boolean isHostileTarget(LivingEntity target, Player owner) {
+    // 判断目标是否为敌对目标
+    private boolean isHostileTarget(LivingEntity target, LivingEntity owner) {
+        if (owner == null) {
+            return false;
+        }
+        
         // 1. 检查是否为标准敌对怪物类别
         if (target.getType().getCategory() == net.minecraft.world.entity.MobCategory.MONSTER) {
             return true;
         }
         
-        // 2. 检查是否为敌对玩家
-        if (target instanceof Player) {
-            Player targetPlayer = (Player) target;
-            
-            // 添加owner空值检查
-            if (owner != null) {
+        // 2. 对于玩家类型owner的特殊处理
+        if (owner instanceof Player player) {
+            // 检查是否为敌对玩家
+            if (target instanceof Player) {
+                Player targetPlayer = (Player) target;
+                
                 // 不同队伍的玩家视为敌对
-                if (owner.getTeam() != null && targetPlayer.getTeam() != null) {
-                    if (!owner.getTeam().isAlliedTo(targetPlayer.getTeam())) {
+                if (player.getTeam() != null && targetPlayer.getTeam() != null) {
+                    if (!player.getTeam().isAlliedTo(targetPlayer.getTeam())) {
                         return true;
                     }
                 }
                 
                 // 在PvP服务器上，非同一队伍的玩家视为敌对
-                return owner.canHarmPlayer(targetPlayer);
+                return player.canHarmPlayer(targetPlayer);
             }
             
-            // 当没有owner时，默认将其他玩家视为非敌对
-            return false;
-        }
-        
-        // 3. 检查实体是否伤害过玩家（只检查getLastHurtMob方法）
-        // 这是LivingEntity类中可用的方法
-        if (target.getLastHurtMob() == owner) {
-            return true;
-        }
-        
-        // 4. 特殊处理：对于Mob类型，检查是否将玩家作为目标
-        if (target instanceof net.minecraft.world.entity.Mob) {
-            net.minecraft.world.entity.Mob mob = (net.minecraft.world.entity.Mob) target;
-            if (mob.getTarget() != null && mob.getTarget() instanceof Player) {
+            // 3. 检查实体是否伤害过玩家
+            if (target.getLastHurtMob() == player) {
                 return true;
             }
+            
+            // 4. 特殊处理：对于Mob类型，检查是否将玩家作为目标
+            if (target instanceof net.minecraft.world.entity.Mob) {
+                net.minecraft.world.entity.Mob mob = (net.minecraft.world.entity.Mob) target;
+                if (mob.getTarget() != null && mob.getTarget() instanceof Player) {
+                    return true;
+                }
+            }
+        }
+        // 3. 对于非玩家生物，使用其原生的攻击判断
+        else if (owner instanceof net.minecraft.world.entity.Mob mobOwner) {
+            return mobOwner.canAttack(target) && target.isAlive();
         }
         
-        // 5. 检查是否为实体类别的敌对生物
-        // 对于附属模组，很多敌对生物可能被归为其他类别但仍然主动攻击玩家
-        // 尝试获取实体类型名称进行判断
+        // 4. 检查是否为实体类别的敌对生物
         String entityTypeName = target.getType().toString();
-        // 简单的关键词匹配机制，可根据需要扩展
         if (entityTypeName.contains("hostile") || 
             entityTypeName.contains("enemy") || 
             entityTypeName.contains("boss") || 
