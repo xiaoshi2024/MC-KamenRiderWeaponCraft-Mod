@@ -9,7 +9,7 @@ import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-
+import net.minecraft.world.phys.AABB;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Random;
@@ -20,9 +20,9 @@ public class ZombieHeiseiswordGoal extends Goal {
     private int cooldown = 0;
     private int riderSelectionCooldown = 0;
     private int modeSwitchCooldown = 0;
-    private static final int MIN_COOLDOWN = 20; // 最小冷却时间（1秒）
-    private static final int MAX_COOLDOWN = 100; // 最大冷却时间（5秒）
-    private static final int RIDER_SELECTION_INTERVAL = 40; // 骑士选择间隔（2秒）
+    private static final int MIN_COOLDOWN = 10; // 最小冷却时间（0.5秒）- 降低以提高敏捷度
+    private static final int MAX_COOLDOWN = 50; // 最大冷却时间（2.5秒）- 降低以提高敏捷度
+    private static final int RIDER_SELECTION_INTERVAL = 20; // 骑士选择间隔（1秒）- 降低以提高敏捷度
     private static final int MODE_SWITCH_INTERVAL = 100; // 模式切换间隔（5秒）
     private static final double ENERGY_RECOVERY_AMOUNT = 5.0; // 僵尸使用武器时的能量恢复量
 
@@ -184,36 +184,15 @@ public class ZombieHeiseiswordGoal extends Goal {
 
     // 执行普通模式下的动作
     private void performNormalAction(Heiseisword heiseisword, ItemStack stack, Level level, LivingEntity target, Vec3 direction) {
-        String selectedRider = Heiseisword.getSelectedRiderStatic(stack);
-        
-        if (selectedRider != null && !selectedRider.isEmpty()) {
-            // 获取骑士特效对象
-            HeiseiRiderEffect riderEffect = HeiseiRiderEffectManager.getRiderEffect(selectedRider);
-            
-            // 70%概率执行普通攻击，30%概率执行远程攻击
-            if (random.nextDouble() < 0.7) {
-                // 近战攻击
-                if (zombie.distanceTo(target) < 2.5) {
-                    // 直接调用骑士的特殊攻击效果
-                    riderEffect.executeSpecialAttack(level, zombie, direction);
-                    
-                    // 播放攻击音效
-                    HeiseiRiderEffectManager.playAttackSound(level, zombie, selectedRider);
-                    
-                    // 更新攻击时间
-                    stack.getOrCreateTag().putLong("lastAttackTime", level.getGameTime());
-                }
-            } else {
-                // 远程攻击
-                float chargeTime = 0.5F + random.nextFloat() * 0.5F; // 半满到满蓄力
-                riderEffect.executeSpecialAttack(level, zombie, direction.scale(chargeTime * 2.0));
-                
-                // 播放攻击音效
-                HeiseiRiderEffectManager.playAttackSound(level, zombie, selectedRider);
-                
-                // 更新攻击时间
-                stack.getOrCreateTag().putLong("lastAttackTime", level.getGameTime());
+        // 70%概率执行普通攻击，30%概率执行远程攻击
+        if (random.nextDouble() < 0.7) {
+            // 近战攻击
+            if (zombie.distanceTo(target) < 2.5) {
+                performNormalAttack(heiseisword, stack, level, target, direction);
             }
+        } else {
+            // 远程攻击
+            performRangedAttack(heiseisword, stack, level, target, direction);
         }
     }
 
@@ -279,9 +258,85 @@ public class ZombieHeiseiswordGoal extends Goal {
         Heiseisword.setScrambleRidersStatic(stack, currentScrambleRiders);
     }
 
+    // 号召附近的僵尸规避即将释放的特效
+    private void callZombiesToAvoidEffects(Level level, Vec3 direction) {
+        if (level.isClientSide()) return;
+        
+        // 查找范围内的其他僵尸
+        double leaderRange = 16.0; // 僵尸首领影响范围
+        Vec3 pos = zombie.position();
+        AABB searchArea = new AABB(pos.x(), pos.y(), pos.z(), pos.x(), pos.y(), pos.z()).inflate(leaderRange);
+        List<Zombie> nearbyZombies = level.getEntitiesOfClass(Zombie.class, searchArea);
+        
+        for (Zombie nearbyZombie : nearbyZombies) {
+            // 跳过自己和已经是僵尸首领的僵尸
+            if (nearbyZombie == zombie || nearbyZombie.getPersistentData().contains("IsZombieLeader")) {
+                continue;
+            }
+            
+            // 计算规避方向 - 与攻击方向相反
+            Vec3 avoidanceDirection = new Vec3(-direction.x, 0, -direction.z).normalize();
+            
+            // 让僵尸朝相反方向移动以规避特效
+            if (nearbyZombie.getNavigation() != null) {
+                double targetX = nearbyZombie.getX() + avoidanceDirection.x * 3.0;
+                double targetY = nearbyZombie.getY();
+                double targetZ = nearbyZombie.getZ() + avoidanceDirection.z * 3.0;
+                
+                // 设置僵尸移动到安全位置
+                nearbyZombie.getNavigation().moveTo(targetX, targetY, targetZ, 1.0);
+                
+                // 添加临时加速效果，让僵尸更快地规避
+                nearbyZombie.addEffect(new net.minecraft.world.effect.MobEffectInstance(
+                    net.minecraft.world.effect.MobEffects.MOVEMENT_SPEED, 40, 1));
+            }
+        }
+    }
+
+    // 执行普通攻击动作
+    private void performNormalAttack(Heiseisword heiseisword, ItemStack stack, Level level, LivingEntity target, Vec3 direction) {
+        String selectedRider = Heiseisword.getSelectedRiderStatic(stack);
+        
+        if (selectedRider != null && !selectedRider.isEmpty()) {
+            // 号召附近僵尸规避
+            callZombiesToAvoidEffects(level, direction);
+            
+            // 执行骑士特效
+            HeiseiRiderEffectManager.getRiderEffect(selectedRider).executeSpecialAttack(level, zombie, direction);
+            
+            // 播放攻击音效
+            HeiseiRiderEffectManager.playAttackSound(level, zombie, selectedRider);
+            
+            // 更新攻击时间
+            stack.getOrCreateTag().putLong("lastAttackTime", level.getGameTime());
+        }
+    }
+
+    // 执行远程攻击动作
+    private void performRangedAttack(Heiseisword heiseisword, ItemStack stack, Level level, LivingEntity target, Vec3 direction) {
+        String selectedRider = Heiseisword.getSelectedRiderStatic(stack);
+        
+        if (selectedRider != null && !selectedRider.isEmpty()) {
+            // 号召附近僵尸规避
+            callZombiesToAvoidEffects(level, direction);
+            
+            float chargeTime = 0.5F + random.nextFloat() * 0.5F; // 半满到满蓄力
+            HeiseiRiderEffectManager.getRiderEffect(selectedRider).executeSpecialAttack(level, zombie, direction.scale(chargeTime * 2.0));
+            
+            // 播放攻击音效
+            HeiseiRiderEffectManager.playAttackSound(level, zombie, selectedRider);
+            
+            // 更新攻击时间
+            stack.getOrCreateTag().putLong("lastAttackTime", level.getGameTime());
+        }
+    }
+
     // 执行Scramble攻击
     private void executeScrambleAttack(Heiseisword heiseisword, ItemStack stack, Level level, LivingEntity target, Vec3 direction, List<String> riders) {
         if (!riders.isEmpty()) {
+            // 号召附近僵尸规避大范围特效
+            callZombiesToAvoidEffects(level, direction);
+            
             // 播放Scramble攻击音效
             HeiseiRiderEffectManager.playScrambleTimeBreakSound(level, zombie, riders);
             
@@ -295,6 +350,9 @@ public class ZombieHeiseiswordGoal extends Goal {
     // 执行超必杀攻击
     private void executeUltimateAttack(Heiseisword heiseisword, ItemStack stack, Level level, LivingEntity target, Vec3 direction, List<String> riders) {
         if (!riders.isEmpty()) {
+            // 号召附近僵尸规避超必杀特效
+            callZombiesToAvoidEffects(level, direction);
+            
             // 播放超必杀音效
             HeiseiRiderEffectManager.playUltimateTimeBreakSound(level, zombie, riders);
             

@@ -14,6 +14,7 @@ import com.xiaoshi2022.kamen_rider_weapon_craft.rider.RiderEffectEntityRegistry;
 import com.xiaoshi2022.kamen_rider_weapon_craft.tab.ModTab;
 import com.xiaoshi2022.kamen_rider_weapon_craft.util.FruitConversionRegistry;
 import com.xiaoshi2022.kamen_rider_weapon_craft.command.SummonWithHeiseiswordCommand;
+import com.xiaoshi2022.kamen_rider_weapon_craft.command.TestHeiseiswordZombieCommand;
 import com.xiaoshi2022.kamen_rider_weapon_craft.villagers.LockSeedMerchantProfession;
 import com.xiaoshi2022.kamen_rider_weapon_craft.villagers.TimeTravelerProfession;
 import com.xiaoshi2022.kamen_rider_weapon_craft.worldgen.tree.ModFoliagePlacers;
@@ -200,5 +201,7 @@ public class kamen_rider_weapon_craft {
     public static void registerCommands(RegisterCommandsEvent event) {
         // 注册新的通用命令
         SummonWithHeiseiswordCommand.register(event.getDispatcher());
+        // 注册平成剑僵尸测试命令
+        TestHeiseiswordZombieCommand.register(event.getDispatcher());
     }
 }

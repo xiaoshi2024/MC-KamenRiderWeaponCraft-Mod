@@ -9,7 +9,7 @@
         {
           "type": "minecraft:item",
           "name": "kamen_rider_weapon_craft:heiseisword",
-          "weight": 1,
+          "weight": 100,
           "functions": [
             {
               "function": "minecraft:set_count",
@@ -17,23 +17,6 @@
                 "type": "minecraft:constant",
                 "value": 1
               }
-            },
-            {
-              "function": "minecraft:condition",
-              "condition": "minecraft:entity_properties",
-              "entity": "this",
-              "predicate": {
-                "nbt": "{HeiseiswordZombie:1b}"
-              },
-              "functions": [
-                {
-                  "function": "minecraft:set_count",
-                  "count": {
-                    "type": "minecraft:constant",
-                    "value": 1
-                  }
-                }
-              ]
             }
           ]
         }
@@ -46,7 +29,7 @@
           "condition": "minecraft:entity_properties",
           "entity": "this",
           "predicate": {
-            "nbt": "{HeiseiswordZombie:1b}"
+            "nbt": "{Tags:[\"HeiseiswordZombie\"]}"
           }
         }
       ]

@@ -196,7 +196,21 @@ public class WizardEffect extends AbstractHeiseiRiderEffect {
         return 20.0; // 使用默认能量消耗
     }
     
-    // 元素魔龙特效相关资源需求：
+    @Override
+    public void executeNonPlayerSpecialAttack(Level level, LivingEntity shooter, Vec3 direction) {
+        if (!level.isClientSide) {
+            // 为非玩家实体（如僵尸）生成Wizard特效实体
+            // 随机选择一个元素魔龙力量
+            WizardRiderEntity.DragonMagicType selectedDragon = WizardRiderEntity.DragonMagicType.values()[level.random.nextInt(WizardRiderEntity.DragonMagicType.values().length)];
+            
+            // 生成对应的元素魔龙特效实体
+            WizardRiderEntity.trySpawnEffect(level, shooter, direction, getAttackDamage(), selectedDragon);
+            
+            // 给予实体增益效果
+            shooter.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 200, 1));
+        }
+    }
+}
     // 1. 单个统一的geo模型文件：
     //    - dragon_wizard.geo.json (人形魔龙模型)
     // 2. 单个统一的纹理文件：
@@ -206,4 +220,3 @@ public class WizardEffect extends AbstractHeiseiRiderEffect {
     //    - dragon_wizard_waterdragon.animation.json
     //    - dragon_wizard_hurricanedragon.animation.json
     //    - dragon_wizard_landdragon.animation.json
-}

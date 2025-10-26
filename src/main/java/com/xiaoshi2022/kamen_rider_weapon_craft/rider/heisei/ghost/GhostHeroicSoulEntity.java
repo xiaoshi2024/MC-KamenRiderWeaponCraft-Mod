@@ -5,11 +5,14 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.level.Level;
@@ -285,12 +288,12 @@ public class GhostHeroicSoulEntity extends Projectile implements GeoEntity {
         }
         
         double searchRange = 10.0; // 扩大搜索范围到10格
-        Player owner = (Player) getOwner();
+        Entity owner = getOwner();
         
-        // 查找最近的敌对生物或敌对玩家
+        // 查找最近的敌对生物或敌对玩家，添加owner的空值和类型检查
         LivingEntity nearestTarget = this.level().getEntitiesOfClass(LivingEntity.class, 
                 this.getBoundingBox().inflate(searchRange),
-                e -> e != owner && e.isAlive() && isHostileTarget(e, owner))
+                e -> owner != null && e != owner && e.isAlive() && isHostileTarget(e, owner))
                 .stream()
                 .min(java.util.Comparator.comparingDouble(this::distanceToSqr))
                 .orElse(null);
@@ -310,12 +313,20 @@ public class GhostHeroicSoulEntity extends Projectile implements GeoEntity {
         }
         
         double range = 2.0;
-        Player owner = (Player) getOwner();
+        Entity owner = getOwner();
         
         // 优先攻击追踪目标
-        if (trackingTarget != null && trackingTarget.isAlive() && this.distanceToSqr(trackingTarget) <= range * range) {
-            // 造成伤害
-            trackingTarget.hurt(this.level().damageSources().playerAttack(owner), damage);
+        if (owner != null && trackingTarget != null && trackingTarget.isAlive() && this.distanceToSqr(trackingTarget) <= range * range) {
+            // 造成伤害，根据所有者类型选择适当的伤害源
+            DamageSource damageSource;
+            if (owner instanceof Player player) {
+                damageSource = this.level().damageSources().playerAttack(player);
+            } else if (owner instanceof Mob mob) {
+                damageSource = this.level().damageSources().mobAttack(mob);
+            } else {
+                damageSource = this.level().damageSources().generic();
+            }
+            trackingTarget.hurt(damageSource, damage);
             
             // 如果是火属性，设置目标着火
             if (isFireDamage) {
@@ -335,8 +346,16 @@ public class GhostHeroicSoulEntity extends Projectile implements GeoEntity {
                 this.getBoundingBox().inflate(range),
                 e -> e != owner && e.isAlive() && isHostileTarget(e, owner))
                 .stream().findFirst().ifPresent(entity -> {
-                    // 造成伤害
-                    entity.hurt(this.level().damageSources().playerAttack(owner), damage);
+                    // 造成伤害，根据所有者类型选择适当的伤害源
+                    DamageSource damageSource;
+                    if (owner instanceof Player player) {
+                        damageSource = this.level().damageSources().playerAttack(player);
+                    } else if (owner instanceof Mob mob) {
+                        damageSource = this.level().damageSources().mobAttack(mob);
+                    } else {
+                        damageSource = this.level().damageSources().generic();
+                    }
+                    entity.hurt(damageSource, damage);
                     
                     // 如果是火属性，设置目标着火
                     if (isFireDamage) {
@@ -443,7 +462,8 @@ public class GhostHeroicSoulEntity extends Projectile implements GeoEntity {
     private void makeHostilesAttackThisEntity() {
         double range = 15.0; // 扩大范围到15格
         final UUID thisUUID = this.getUUID();
-        Player owner = (Player) this.getOwner();
+        // 不再强制转换为Player，而是检查类型
+        Entity owner = this.getOwner();
         
         // 获取所有可能的敌对生物
         this.level().getEntitiesOfClass(net.minecraft.world.entity.Mob.class, 
@@ -505,61 +525,21 @@ public class GhostHeroicSoulEntity extends Projectile implements GeoEntity {
         // 这些属性已经在其他方法中设置，但我们再次确认
     }
     
-    // 判断目标是否为敌对目标
-    private boolean isHostileTarget(LivingEntity target, LivingEntity owner) {
+    private boolean isHostileTarget(LivingEntity target, Entity owner) {
+        // 检查目标是否对owner具有敌对性
         if (owner == null) {
             return false;
         }
         
-        // 1. 检查是否为标准敌对怪物类别
-        if (target.getType().getCategory() == net.minecraft.world.entity.MobCategory.MONSTER) {
+        // 基础敌对生物判断
+        if (target.getType().is(EntityTypeTags.RAIDERS) || target instanceof Monster) {
             return true;
         }
         
-        // 2. 对于玩家类型owner的特殊处理
-        if (owner instanceof Player player) {
-            // 检查是否为敌对玩家
-            if (target instanceof Player) {
-                Player targetPlayer = (Player) target;
-                
-                // 不同队伍的玩家视为敌对
-                if (player.getTeam() != null && targetPlayer.getTeam() != null) {
-                    if (!player.getTeam().isAlliedTo(targetPlayer.getTeam())) {
-                        return true;
-                    }
-                }
-                
-                // 在PvP服务器上，非同一队伍的玩家视为敌对
-                return player.canHarmPlayer(targetPlayer);
-            }
-            
-            // 3. 检查实体是否伤害过玩家
-            if (target.getLastHurtMob() == player) {
-                return true;
-            }
-            
-            // 4. 特殊处理：对于Mob类型，检查是否将玩家作为目标
-            if (target instanceof net.minecraft.world.entity.Mob) {
-                net.minecraft.world.entity.Mob mob = (net.minecraft.world.entity.Mob) target;
-                if (mob.getTarget() != null && mob.getTarget() instanceof Player) {
-                    return true;
-                }
-            }
-        }
-        // 3. 对于非玩家生物，使用其原生的攻击判断
-        else if (owner instanceof net.minecraft.world.entity.Mob mobOwner) {
-            return mobOwner.canAttack(target) && target.isAlive();
-        }
-        
-        // 4. 检查是否为实体类别的敌对生物
-        String entityTypeName = target.getType().toString();
-        if (entityTypeName.contains("hostile") || 
-            entityTypeName.contains("enemy") || 
-            entityTypeName.contains("boss") || 
-            entityTypeName.contains("evil") || 
-            entityTypeName.contains("demon") ||
-            entityTypeName.contains("monster")) {
-            return true;
+        // 如果owner是玩家，检查玩家之间的敌对关系
+        if (owner instanceof Player playerOwner && target instanceof Player) {
+            return !target.getUUID().equals(playerOwner.getUUID()) && 
+                   playerOwner.getTeam() != null && !playerOwner.getTeam().isAlliedTo(target.getTeam());
         }
         
         return false;

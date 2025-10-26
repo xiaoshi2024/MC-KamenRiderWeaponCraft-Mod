@@ -1,8 +1,11 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.rider.effect.impl;
 
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.effect.AbstractHeiseiRiderEffect;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
@@ -146,5 +149,19 @@ public class KuugaEffect extends AbstractHeiseiRiderEffect {
     @Override
     public float getEffectRange() {
         return 15.0f;
+    }
+    
+    @Override
+    public void executeNonPlayerSpecialAttack(Level level, LivingEntity shooter, Vec3 direction) {
+        if (!level.isClientSide) {
+            // 为非玩家实体（如僵尸）生成Kuuga特效实体
+//            com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.kuuga.KuugaRiderEntity.trySpawnEffect(level, shooter, direction, getAttackDamage());
+
+            // 添加音效
+            level.playSound(null, shooter.getX(), shooter.getY(), shooter.getZ(), SoundEvents.IRON_GOLEM_HURT, SoundSource.HOSTILE, 1.0F, 0.8F + level.random.nextFloat() * 0.4F);
+            
+            // 给予实体强化效果
+            shooter.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 200, 1));
+        }
     }
 }

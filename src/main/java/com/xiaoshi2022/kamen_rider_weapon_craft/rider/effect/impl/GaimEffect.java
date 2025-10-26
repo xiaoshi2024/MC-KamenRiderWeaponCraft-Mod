@@ -4,6 +4,7 @@ import com.xiaoshi2022.kamen_rider_weapon_craft.rider.effect.AbstractHeiseiRider
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.gaim.GaimLockSeedEntity;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
@@ -148,15 +149,24 @@ public class GaimEffect extends AbstractHeiseiRiderEffect {
         // 西瓜锁种：防御和反击
         // 给予玩家短暂的无敌效果
         player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 60, 255));
+    }
+    
+    /**
+     * 根据权重随机选择锁种
+     */
+    private LockSeed getWeightedRandomLockSeed(Level level) {
+        // 增加Orange的出现几率，减少Pineapple的出现几率
+        int rand = level.random.nextInt(100); // 生成0-99的随机数
         
-        // 反弹周围敌人的攻击（简化实现为直接伤害）
-        level.getEntities(player, player.getBoundingBox().inflate(getEffectRange()))
-            .forEach(entity -> {
-                if (entity instanceof net.minecraft.world.entity.LivingEntity && entity != player) {
-                    ((net.minecraft.world.entity.LivingEntity) entity).hurt(
-                        level.damageSources().playerAttack(player), getAttackDamage() * 0.6f);
-                }
-            });
+        if (rand < 40) { // 40%几率
+            return LockSeed.Orange;
+        } else if (rand < 65) { // 25%几率
+            return LockSeed.Banana;
+        } else if (rand < 85) { // 20%几率
+            return LockSeed.Melon;
+        } else { // 15%几率
+            return LockSeed.Pineapple;
+        }
     }
 
     @Override
@@ -171,30 +181,49 @@ public class GaimEffect extends AbstractHeiseiRiderEffect {
 
     @Override
     public float getAttackDamage() {
-        return 50.0f; // 普通骑士 - Gaim拥有多种锁种和强大的铠甲形态，伤害略高于普通骑士
+        return 52.0f; // 提升伤害值，使铠武的攻击更加有效
     }
 
     @Override
     public float getEffectRange() {
-        return 8.0f;
+        return 12.0f; // 扩大效果范围
+    }
+    
+    @Override
+    public void executeNonPlayerSpecialAttack(Level level, LivingEntity shooter, Vec3 direction) {
+        if (!level.isClientSide) {
+            // 为非玩家实体（如僵尸）生成Gaim锁种特效实体
+            // 调整锁种出现几率：橙子(Orange)出现几率大，菠萝(Pineapple)出现几率小
+            LockSeed selectedSeed = getWeightedRandomLockSeed(level);
+            
+            // 创建并生成锁种特效实体
+            spawnLockSeedEntityForMob(level, shooter, direction, selectedSeed);
+            
+            // 给予实体增益效果
+            shooter.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 300, 1));
+        }
     }
     
     /**
-     * 根据权重随机选择锁种
-     * 增加Orange的出现几率，减少Pineapple的出现几率
+     * 为非玩家实体生成锁种特效实体
      */
-    private LockSeed getWeightedRandomLockSeed(Level level) {
-        // 权重设置：Orange=50%, Banana=20%, Melon=20%, Pineapple=10%
-        int randomValue = level.random.nextInt(100);
+    private void spawnLockSeedEntityForMob(Level level, LivingEntity shooter, Vec3 direction, LockSeed lockSeed) {
+        // 计算生成位置（在实体前方稍远处）
+        Vec3 spawnPos = shooter.getEyePosition().add(direction.normalize().scale(1.0));
         
-        if (randomValue < 50) {
-            return LockSeed.Orange;
-        } else if (randomValue < 70) {
-            return LockSeed.Banana;
-        } else if (randomValue < 90) {
-            return LockSeed.Melon;
-        } else {
-            return LockSeed.Pineapple;
+        // 根据锁种类型创建对应的实体
+        if (lockSeed != LockSeed.Pineapple) {
+            GaimLockSeedEntity lockSeedEntity = new GaimLockSeedEntity(
+                    level,
+                    shooter,
+                    spawnPos,
+                    direction,
+                    lockSeed.name().toUpperCase(),
+                    getAttackDamage()
+            );
+            
+            // 将实体添加到世界中
+            level.addFreshEntity(lockSeedEntity);
         }
     }
 }

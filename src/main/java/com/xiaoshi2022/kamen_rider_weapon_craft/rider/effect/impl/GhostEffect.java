@@ -1,6 +1,9 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.rider.effect.impl;
 
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.effect.AbstractHeiseiRiderEffect;
+import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.ghost.GhostHeroicSoulEntity;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
@@ -216,5 +219,26 @@ public class GhostEffect extends AbstractHeiseiRiderEffect {
     @Override
     public float getEffectRange() {
         return 15.0f; // 扩大伟人魂技能的效果范围
+    }
+    
+    @Override
+    public void executeNonPlayerSpecialAttack(Level level, LivingEntity shooter, Vec3 direction) {
+        if (!level.isClientSide) {
+            // 为非玩家实体（如僵尸）生成Ghost特效
+            // 使用正确的GhostHeroicSoulEntity.trySpawnEffect方法签名
+            com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.ghost.GhostHeroicSoulEntity.trySpawnEffect(
+                level, shooter, direction, 
+                0xFF00FFFF, // 青色魂
+                getAttackDamage() / 3.0f, 
+                false, 
+                "specter"
+            );
+            
+            // 添加音效
+            level.playSound(null, shooter.getX(), shooter.getY(), shooter.getZ(), SoundEvents.SOUL_ESCAPE, SoundSource.HOSTILE, 1.0F, 0.8F + level.random.nextFloat() * 0.4F);
+            
+            // 给予实体隐身效果
+            shooter.addEffect(new MobEffectInstance(MobEffects.INVISIBILITY, 100, 0));
+        }
     }
 }

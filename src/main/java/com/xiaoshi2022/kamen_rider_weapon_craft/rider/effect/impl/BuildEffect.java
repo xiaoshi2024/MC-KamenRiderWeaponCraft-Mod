@@ -61,4 +61,23 @@ public class BuildEffect extends AbstractHeiseiRiderEffect {
     public double getEnergyCost() {
         return 20.0; // Build骑士技能消耗20点骑士能量
     }
+    
+    @Override
+    public void executeNonPlayerSpecialAttack(Level level, LivingEntity shooter, Vec3 direction) {
+        if (!level.isClientSide) {
+            // 为非玩家实体（如僵尸）生成Build特效实体
+            BuildRiderEntity.trySpawnEffect(level, shooter, direction, getAttackDamage());
+            
+            // 添加音效
+            level.playSound(null, shooter.getX(), shooter.getY(), shooter.getZ(), SoundEvents.BLAZE_SHOOT, SoundSource.HOSTILE, 1.0F, 0.8F + level.random.nextFloat() * 0.4F);
+            
+            // 给予实体增益效果
+            shooter.addEffect(new net.minecraft.world.effect.MobEffectInstance(
+                net.minecraft.world.effect.MobEffects.MOVEMENT_SPEED, 200, 1));
+            
+            // 增加伤害抵抗（坦克防御特性）
+            shooter.addEffect(new net.minecraft.world.effect.MobEffectInstance(
+                net.minecraft.world.effect.MobEffects.DAMAGE_RESISTANCE, 200, 1));
+        }
+    }
 }
