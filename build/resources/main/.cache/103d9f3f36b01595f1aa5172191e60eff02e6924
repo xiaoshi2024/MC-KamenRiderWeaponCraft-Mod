@@ -1,8 +1,8 @@
-// 1.20.1	2025-08-30T09:36:43.0094759	Registries
+// 1.20.1	2025-10-28T12:07:27.5341638	Registries
 4b8ead516a395f35d85f5015a97dbfe904d5874d data/kamen_rider_weapon_craft/dimension/helheim.json
 405755074b82aab88c7dfa2286b9a9c80293f34c data/kamen_rider_weapon_craft/dimension_type/helheim_type.json
 c5aa96875b8ced4c79873c206f611a21367aec5b data/kamen_rider_weapon_craft/forge/biome_modifier/add_tree_pine.json
-40da26d601267c12a11da346a7bdeb6c5912bf95 data/kamen_rider_weapon_craft/worldgen/biome/helheim_biome.json
+f98b985c2e0c0f5fc4eef116bf4fb8a42eeea7fa data/kamen_rider_weapon_craft/worldgen/biome/helheim_biome.json
 d1309816260dd20bb76f5ce55e2afef6db6316d7 data/kamen_rider_weapon_craft/worldgen/configured_feature/helheimvine.json
 2c75ebb2efb308bedd79129075b6729ba54a3d8c data/kamen_rider_weapon_craft/worldgen/configured_feature/helheim_plant.json
 c7e41516c3d8958fc811dc1ab36ae454a2b9d0db data/kamen_rider_weapon_craft/worldgen/configured_feature/helheim_plant_2.json

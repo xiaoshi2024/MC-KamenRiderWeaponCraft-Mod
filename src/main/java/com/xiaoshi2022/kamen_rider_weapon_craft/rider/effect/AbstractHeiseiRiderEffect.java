@@ -49,16 +49,41 @@ public abstract class AbstractHeiseiRiderEffect implements HeiseiRiderEffect {
             // 播放攻击音效
             HeiseiRiderEffectManager.playAttackSound(level, shooter, getRiderName());
             
-            // 执行范围攻击
-            for (LivingEntity target : level.getEntitiesOfClass(LivingEntity.class, 
-                    new net.minecraft.world.phys.AABB(shooter.position(), shooter.position()).inflate(getEffectRange()),
+            // 获取shooter的朝向，如果direction为空则使用shooter的lookAngle
+            Vec3 attackDirection = direction != null && direction.lengthSqr() > 0 ? 
+                                   direction.normalize() : shooter.getLookAngle();
+            
+            // 执行前方定向攻击而非全范围攻击
+            float attackRange = getEffectRange();
+            float width = attackRange / 2; // 攻击宽度为范围的一半，使攻击区域呈长方体向前延伸
+            
+            // 计算攻击区域的起始和结束点
+            Vec3 start = shooter.position().add(0, shooter.getEyeHeight() * 0.5, 0); // 从shooter胸部高度开始
+            Vec3 end = start.add(attackDirection.scale(attackRange)); // 向前延伸attackRange距离
+            
+            // 创建一个向前延伸的长方体区域，而非以shooter为中心的立方体
+            net.minecraft.world.phys.AABB attackBox = new net.minecraft.world.phys.AABB(
+                Math.min(start.x, end.x) - width,
+                Math.min(start.y, end.y) - 1, // 向下延伸1格
+                Math.min(start.z, end.z) - width,
+                Math.max(start.x, end.x) + width,
+                Math.max(start.y, end.y) + 1, // 向上延伸1格
+                Math.max(start.z, end.z) + width
+            );
+            
+            // 只攻击shooter前方区域内的实体
+            for (LivingEntity target : level.getEntitiesOfClass(LivingEntity.class, attackBox,
                     entity -> entity != shooter && entity != null && entity.isAlive())) {
-                DamageSource damageSource = level.damageSources().mobAttack(shooter);
-                target.hurt(damageSource, getAttackDamage()); // 使用全额伤害
+                // 额外检查目标是否在shooter的前方（通过计算点积）
+                Vec3 targetRelative = target.position().subtract(start);
+                if (targetRelative.dot(attackDirection) > 0) { // 点积为正表示在前方
+                    DamageSource damageSource = level.damageSources().mobAttack(shooter);
+                    target.hurt(damageSource, getAttackDamage()); // 使用全额伤害
+                }
             }
             
             // 添加更多通用特效逻辑
-            applyVisualEffects(level, shooter, direction);
+            applyVisualEffects(level, shooter, attackDirection);
             
             // 子类可以重写此方法以提供更具特色的特效
         }
@@ -110,9 +135,55 @@ public abstract class AbstractHeiseiRiderEffect implements HeiseiRiderEffect {
     
     /**
      * 执行特殊攻击效果 - 原始方法，仅适用于玩家
-     * 子类必须实现此方法
+     * 提供默认的前方定向攻击实现，子类可以重写以提供更定制化的玩家特效
      */
-    public abstract void executePlayerSpecialAttack(Level level, Player player, Vec3 direction);
+    public void executePlayerSpecialAttack(Level level, Player player, Vec3 direction) {
+        if (!level.isClientSide) {
+            // 播放骑士选择音效
+            HeiseiRiderEffectManager.playSelectionSound(level, player, getRiderName());
+            
+            // 播放攻击音效
+            HeiseiRiderEffectManager.playAttackSound(level, player, getRiderName());
+            
+            // 获取player的朝向，如果direction为空则使用player的lookAngle
+            Vec3 attackDirection = direction != null && direction.lengthSqr() > 0 ? 
+                                   direction.normalize() : player.getLookAngle();
+            
+            // 执行前方定向攻击而非全范围攻击
+            float attackRange = getEffectRange();
+            float width = attackRange / 2; // 攻击宽度为范围的一半，使攻击区域呈长方体向前延伸
+            
+            // 计算攻击区域的起始和结束点
+            Vec3 start = player.position().add(0, player.getEyeHeight() * 0.5, 0); // 从player胸部高度开始
+            Vec3 end = start.add(attackDirection.scale(attackRange)); // 向前延伸attackRange距离
+            
+            // 创建一个向前延伸的长方体区域，而非以player为中心的立方体
+            net.minecraft.world.phys.AABB attackBox = new net.minecraft.world.phys.AABB(
+                Math.min(start.x, end.x) - width,
+                Math.min(start.y, end.y) - 1, // 向下延伸1格
+                Math.min(start.z, end.z) - width,
+                Math.max(start.x, end.x) + width,
+                Math.max(start.y, end.y) + 1, // 向上延伸1格
+                Math.max(start.z, end.z) + width
+            );
+            
+            // 只攻击player前方区域内的实体
+            for (LivingEntity target : level.getEntitiesOfClass(LivingEntity.class, attackBox,
+                    entity -> entity != player && entity != null && entity.isAlive())) {
+                // 额外检查目标是否在player的前方（通过计算点积）
+                Vec3 targetRelative = target.position().subtract(start);
+                if (targetRelative.dot(attackDirection) > 0) { // 点积为正表示在前方
+                    DamageSource damageSource = level.damageSources().playerAttack(player);
+                    target.hurt(damageSource, getAttackDamage()); // 使用全额伤害
+                }
+            }
+            
+            // 添加更多通用特效逻辑
+            applyVisualEffects(level, player, attackDirection);
+            
+            // 子类可以重写此方法以提供更具特色的特效
+        }
+    }
     
     /**
      * 返回骑士名称

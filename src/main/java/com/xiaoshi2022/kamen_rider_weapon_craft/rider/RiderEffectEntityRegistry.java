@@ -8,7 +8,10 @@ import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.fourze.FourzeRocket
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.ooo.OOOGeoEntityRenderer;
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.gaim.GaimLockSeedRenderer;
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.w.WTornadoRenderer;
+import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.den_o.DenOTrainRenderer;
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.wizard.WizardRiderEntityRenderer;
+import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.kiva.KivaBatRenderer;
+import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.hibiki.HibikiDrumEffectRenderer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -63,6 +66,15 @@ public class RiderEffectEntityRegistry {
         
         // 注册Decade骑士次元踢实体渲染器
         registerDecadeRiderRenderers(event);
+        
+        // 注册Kiva骑士蝙蝠群实体渲染器
+        registerKivaRiderRenderers(event);
+        
+        // 注册电王列车武器实体渲染器
+        registerDenORiderRenderers(event);
+        
+        // 注册响鬼鼓锁定特效实体渲染器
+        registerHibikiRiderRenderers(event);
         
         // 这里可以添加更多骑士特效实体的注册方法
     }
@@ -137,5 +149,32 @@ public class RiderEffectEntityRegistry {
     private static void registerDecadeRiderRenderers(EntityRenderersEvent.RegisterRenderers event) {
         // 使用与项目中其他实体一致的注册方式，保持代码风格统一
         event.registerEntityRenderer(ModEntityTypes.DECADE_RIDER.get(), DecadeRiderEntityRenderer::new);
+    }
+    
+    /**
+     * 注册Kiva骑士相关的特效实体渲染器
+     * @param event 实体渲染器注册事件
+     */
+    private static void registerKivaRiderRenderers(EntityRenderersEvent.RegisterRenderers event) {
+        // 使用与项目中其他实体一致的注册方式，保持代码风格统一
+        event.registerEntityRenderer(ModEntityTypes.KIVA_BAT_EFFECT.get(), KivaBatRenderer::new);
+    }
+    
+    /**
+     * 注册电王骑士相关的特效实体渲染器
+     * @param event 实体渲染器注册事件
+     */
+    private static void registerDenORiderRenderers(EntityRenderersEvent.RegisterRenderers event) {
+        // 使用与项目中其他实体一致的注册方式，保持代码风格统一
+        event.registerEntityRenderer(ModEntityTypes.DEN_O_TRAIN.get(), DenOTrainRenderer::new);
+    }
+    
+    /**
+     * 注册响鬼骑士相关的特效实体渲染器
+     * @param event 实体渲染器注册事件
+     */
+    private static void registerHibikiRiderRenderers(EntityRenderersEvent.RegisterRenderers event) {
+        // 使用与项目中其他实体一致的注册方式，保持代码风格统一
+        event.registerEntityRenderer(ModEntityTypes.HIBIKI_DRUM_EFFECT.get(), HibikiDrumEffectRenderer::new);
     }
 }

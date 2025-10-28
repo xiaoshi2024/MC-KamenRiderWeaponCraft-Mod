@@ -1,5 +1,6 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.datagen;
 
+import com.xiaoshi2022.kamen_rider_weapon_craft.datagen.ModAdvancementProvider;
 import com.xiaoshi2022.kamen_rider_weapon_craft.kamen_rider_weapon_craft;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
@@ -34,5 +35,8 @@ public class DataGenerators {
                 new ModItemTagGenerator(packOutput, lookupProvider, blockTagGenerator, existingFileHelper));
 
         generator.addProvider(event.includeServer(), new ModRecipeProvider(packOutput));
+        
+        // 添加成就数据生成器
+        generator.addProvider(event.includeServer(), new ModAdvancementProvider(packOutput, lookupProvider));
     }
 }

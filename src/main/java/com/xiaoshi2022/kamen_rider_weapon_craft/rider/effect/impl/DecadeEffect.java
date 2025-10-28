@@ -15,6 +15,9 @@ public class DecadeEffect extends AbstractHeiseiRiderEffect {
 
     @Override
     public void executePlayerSpecialAttack(Level level, Player player, Vec3 direction) {
+        // 调用父类方法实现前方定向攻击
+        super.executePlayerSpecialAttack(level, player, direction);
+        
         if (!level.isClientSide) {
             // 为玩家生成Decade特效实体
             DecadeRiderEntity.trySpawnEffect(level, player, direction, getAttackDamage());
@@ -27,6 +30,9 @@ public class DecadeEffect extends AbstractHeiseiRiderEffect {
     
     @Override
     public void executeNonPlayerSpecialAttack(Level level, LivingEntity shooter, Vec3 direction) {
+        // 调用父类方法实现前方定向攻击
+        super.executeNonPlayerSpecialAttack(level, shooter, direction);
+        
         if (!level.isClientSide) {
             // 为非玩家实体（如僵尸）生成Decade特效实体
             DecadeRiderEntity.trySpawnEffect(level, shooter, direction, getAttackDamage());

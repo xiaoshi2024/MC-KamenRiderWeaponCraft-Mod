@@ -3,8 +3,10 @@ package com.xiaoshi2022.kamen_rider_weapon_craft.registry;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.client.daidaimaru.entity.ThrownDaidaimaru;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.prop.client.entity.LaserBeamEntity;
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.build.BuildRiderEntity;
+import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.den_o.DenOTrainEntity;
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.drive.DriveRiderEntity;
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.exaid.ExAidSlashEffectEntity;
+import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.hibiki.HibikiDrumEffectEntity;
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.gaim.GaimLockSeedEntity;
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.ghost.GhostHeroicSoulEntity;
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.w.WTornadoEntity;
@@ -12,6 +14,7 @@ import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.wizard.WizardRiderE
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.fourze.FourzeRocketEntity;
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.ooo.OOOGeoEntity;
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.decade.DecadeRiderEntity;
+import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.kiva.KivaBatEntity;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
@@ -132,6 +135,37 @@ public class ModEntityTypes {
                             .setUpdateInterval(1)
                             .setShouldReceiveVelocityUpdates(false)
                             .build("decade_rider"));
+    
+    // Kamen Rider Kiva 蝙蝠群特效实体
+    public static final RegistryObject<EntityType<KivaBatEntity>> KIVA_BAT_EFFECT = 
+            ENTITIES.register("kiva_bat_effect", 
+                    () -> EntityType.Builder.<KivaBatEntity>of(KivaBatEntity::new, MobCategory.MISC)
+                            .setTrackingRange(64)
+                            .setUpdateInterval(1)
+                            .setShouldReceiveVelocityUpdates(true)
+                            .build("kiva_bat_effect"));
+
+    // 电王列车武器实体
+    public static final RegistryObject<EntityType<DenOTrainEntity>> DEN_O_TRAIN = ENTITIES.register(
+            "den_o_train",
+            () -> EntityType.Builder.<DenOTrainEntity>
+                            of(DenOTrainEntity::new, MobCategory.MISC)
+                    .sized(1.0F, 1.0F)
+                    .setTrackingRange(80)
+                    .setUpdateInterval(3)
+                    .setShouldReceiveVelocityUpdates(true)
+                    .build(new ResourceLocation(MOD_ID, "den_o_train").toString())
+    );
+    
+    // Kamen Rider Hibiki 鼓锁定特效实体
+    public static final RegistryObject<EntityType<HibikiDrumEffectEntity>> HIBIKI_DRUM_EFFECT = 
+            ENTITIES.register("hibiki_drum_effect", 
+                    () -> EntityType.Builder.<HibikiDrumEffectEntity>of(HibikiDrumEffectEntity::new, MobCategory.MISC)
+                            .sized(0.8F, 0.8F)  // 设置合适的大小，鼓的大小
+                            .setTrackingRange(64)
+                            .setUpdateInterval(1)
+                            .setShouldReceiveVelocityUpdates(false)
+                            .build("hibiki_drum_effect"));
 
     public static void register(IEventBus modEventBus) {
         ENTITIES.register(modEventBus);

@@ -6,7 +6,6 @@ import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModItems;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
@@ -60,8 +59,8 @@ public class ZombieHeiseiswordEventHandler {
                 // 添加标记，表明这是一个平成剑僵尸
                 nbt.putBoolean(TAG_HEISEISWORD_ZOMBIE, true);
             } 
-            // 20%的几率让自然生成的僵尸持有平成剑
-            else if (zombie.level().random.nextFloat() <= 0.2f && !zombie.isBaby()) {
+            // 5%的几率让自然生成的僵尸持有平成剑
+            else if (zombie.level().random.nextFloat() <= 0.05f && !zombie.isBaby()) {
                 // 检查是否已经处理过这个僵尸或是否是自定义生成的
                 if (!nbt.contains(TAG_HEISEISWORD_ZOMBIE) && !nbt.contains("IsCustomSpawned")) {
                     // 给僵尸装备平成剑

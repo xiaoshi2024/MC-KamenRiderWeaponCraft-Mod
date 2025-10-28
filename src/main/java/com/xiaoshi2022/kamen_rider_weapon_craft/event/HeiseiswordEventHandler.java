@@ -1,7 +1,13 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.event;
 
+import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.Heiseisword;
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.energy.HeiseiswordEnergyManager;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.player.AttackEntityEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -39,5 +45,25 @@ public class HeiseiswordEventHandler {
     public static void onServerTick(TickEvent.ServerTickEvent event) {
         // 这里可以添加全局能量系统管理逻辑
         // 例如重置tick计数器等
+    }
+    
+    /**
+     * 监听玩家攻击实体事件，处理平成剑的特殊攻击效果
+     * 特别是电王模式下的武器形态攻击
+     */
+    @SubscribeEvent
+    public static void onAttackEntity(AttackEntityEvent event) {
+        Player player = event.getEntity();
+        ItemStack stack = player.getItemInHand(InteractionHand.MAIN_HAND);
+        
+        // 检查手持物品是否为平成剑
+        if (stack.getItem() instanceof Heiseisword heiseiSword) {
+            // 调用平成剑的onLeftClickEntity方法处理攻击逻辑
+            boolean handled = heiseiSword.onLeftClickEntity(stack, player, event.getTarget());
+            if (handled) {
+                // 如果攻击被处理，可以阻止默认的攻击行为
+                // event.setCanceled(true);
+            }
+        }
     }
 }

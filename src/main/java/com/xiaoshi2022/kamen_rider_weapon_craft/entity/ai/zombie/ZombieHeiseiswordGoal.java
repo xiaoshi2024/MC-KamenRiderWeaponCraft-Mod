@@ -20,10 +20,15 @@ public class ZombieHeiseiswordGoal extends Goal {
     private int cooldown = 0;
     private int riderSelectionCooldown = 0;
     private int modeSwitchCooldown = 0;
-    private static final int MIN_COOLDOWN = 10; // 最小冷却时间（0.5秒）- 降低以提高敏捷度
-    private static final int MAX_COOLDOWN = 50; // 最大冷却时间（2.5秒）- 降低以提高敏捷度
-    private static final int RIDER_SELECTION_INTERVAL = 20; // 骑士选择间隔（1秒）- 降低以提高敏捷度
-    private static final int MODE_SWITCH_INTERVAL = 100; // 模式切换间隔（5秒）
+    private int dodgeCooldown = 0;
+    private static final int MIN_COOLDOWN = 5; // 最小冷却时间（0.25秒）- 大幅降低以提高敏捷度
+    private static final int MAX_COOLDOWN = 30; // 最大冷却时间（1.5秒）- 大幅降低以提高敏捷度
+    private static final int RIDER_SELECTION_INTERVAL = 10; // 骑士选择间隔（0.5秒）- 大幅降低以提高敏捷度
+    private static final int MODE_SWITCH_INTERVAL = 80; // 模式切换间隔（4秒）
+    private static final int DODGE_COOLDOWN = 20; // 闪避冷却时间（1秒）
+    private static final double DODGE_SUCCESS_RATE = 0.8; // 80%的闪避成功率
+    private static final double AVOIDANCE_DISTANCE = 4.0; // 僵尸躲避距离
+    private static final int AVOIDANCE_EFFECT_DURATION = 60; // 躲避加速效果持续时间
     private static final double ENERGY_RECOVERY_AMOUNT = 5.0; // 僵尸使用武器时的能量恢复量
 
     public ZombieHeiseiswordGoal(Zombie zombie) {
@@ -39,6 +44,12 @@ public class ZombieHeiseiswordGoal extends Goal {
         return mainHandItem.getItem() instanceof Heiseisword && 
                zombie.getTarget() != null && 
                zombie.isAlive();
+    }
+    
+    @Override
+    public boolean canContinueToUse() {
+        // 与canUse()条件相同，确保AI持续运行
+        return canUse();
     }
 
     @Override
@@ -68,6 +79,13 @@ public class ZombieHeiseiswordGoal extends Goal {
         if (cooldown > 0) cooldown--;
         if (riderSelectionCooldown > 0) riderSelectionCooldown--;
         if (modeSwitchCooldown > 0) modeSwitchCooldown--;
+        if (dodgeCooldown > 0) dodgeCooldown--;
+        
+        // 检查是否需要闪避目标的攻击
+        if (dodgeCooldown <= 0 && shouldDodge()) {
+            performDodge();
+            dodgeCooldown = DODGE_COOLDOWN;
+        }
 
         // 随机选择骑士
         if (riderSelectionCooldown <= 0) {
@@ -91,27 +109,41 @@ public class ZombieHeiseiswordGoal extends Goal {
         zombie.getLookControl().setLookAt(target, 30.0F, 30.0F);
     }
 
-    // 初始化武器，选择第一个骑士
+    // 初始化武器，根据是否有固定骑士设置选择相应的骑士
     private void initializeWeapon() {
         ItemStack mainHandItem = zombie.getMainHandItem();
         if (mainHandItem.getItem() instanceof Heiseisword) {
-            List<String> riderOrder = HeiseiRiderEffectManager.getRiderOrder();
-            if (!riderOrder.isEmpty()) {
-                // 设置第一个骑士（Build）
-                Heiseisword.setSelectedRiderStatic(mainHandItem, riderOrder.get(0));
-                mainHandItem.getOrCreateTag().putInt("currentRotationPosition", 0);
+            // 检查是否设置了固定骑士
+            boolean isFixedRider = mainHandItem.hasTag() && mainHandItem.getTag().getBoolean("fixedRider");
+            String fixedRiderName = isFixedRider ? mainHandItem.getTag().getString("fixedRiderName") : null;
+            
+            if (isFixedRider && fixedRiderName != null && !fixedRiderName.isEmpty()) {
+                // 固定骑士模式：使用指定的骑士
+                Heiseisword.setSelectedRiderStatic(mainHandItem, fixedRiderName);
+            } else {
+                // 普通模式：选择第一个骑士（Build）
+                List<String> riderOrder = HeiseiRiderEffectManager.getRiderOrder();
+                if (!riderOrder.isEmpty()) {
+                    Heiseisword.setSelectedRiderStatic(mainHandItem, riderOrder.get(0));
+                }
             }
+            
+            // 设置旋转位置
+            mainHandItem.getOrCreateTag().putInt("currentRotationPosition", 0);
         }
     }
 
-    // 随机选择一个骑士
+    // 随机选择一个骑士或保持固定骑士
     private void selectRandomRider(Heiseisword heiseisword, ItemStack stack, Level level) {
-        // 80%概率选择骑士
-        if (random.nextDouble() < 0.8) {
-            List<String> riderOrder = HeiseiRiderEffectManager.getRiderOrder();
-            if (!riderOrder.isEmpty()) {
-                String randomRider = riderOrder.get(random.nextInt(riderOrder.size()));
-                Heiseisword.setSelectedRiderStatic(stack, randomRider);
+        // 检查是否设置了固定骑士
+        boolean isFixedRider = stack.hasTag() && stack.getTag().getBoolean("fixedRider");
+        String fixedRiderName = isFixedRider ? stack.getTag().getString("fixedRiderName") : null;
+        
+        if (isFixedRider && fixedRiderName != null && !fixedRiderName.isEmpty()) {
+            // 固定骑士模式：确保使用指定的骑士
+            String currentRider = Heiseisword.getSelectedRiderStatic(stack);
+            if (currentRider == null || !currentRider.equals(fixedRiderName)) {
+                Heiseisword.setSelectedRiderStatic(stack, fixedRiderName);
                 
                 // 更新旋转位置
                 int rotationPosition = random.nextInt(4);
@@ -119,7 +151,25 @@ public class ZombieHeiseiswordGoal extends Goal {
                 
                 // 播放选择音效
                 if (!level.isClientSide) {
-                    HeiseiRiderEffectManager.playSelectionSound(level, zombie, randomRider);
+                    HeiseiRiderEffectManager.playSelectionSound(level, zombie, fixedRiderName);
+                }
+            }
+        } else {
+            // 普通模式：随机选择骑士（80%概率）
+            if (random.nextDouble() < 0.8) {
+                List<String> riderOrder = HeiseiRiderEffectManager.getRiderOrder();
+                if (!riderOrder.isEmpty()) {
+                    String randomRider = riderOrder.get(random.nextInt(riderOrder.size()));
+                    Heiseisword.setSelectedRiderStatic(stack, randomRider);
+                    
+                    // 更新旋转位置
+                    int rotationPosition = random.nextInt(4);
+                    stack.getOrCreateTag().putInt("currentRotationPosition", rotationPosition);
+                    
+                    // 播放选择音效
+                    if (!level.isClientSide) {
+                        HeiseiRiderEffectManager.playSelectionSound(level, zombie, randomRider);
+                    }
                 }
             }
         }
@@ -127,7 +177,28 @@ public class ZombieHeiseiswordGoal extends Goal {
 
     // 随机切换模式
     private void maybeSwitchMode(Heiseisword heiseisword, ItemStack stack, Level level) {
-        // 20%概率切换模式
+        // 检查是否设置了固定骑士
+        boolean isFixedRider = stack.hasTag() && stack.getTag().getBoolean("fixedRider");
+        
+        // 固定骑士模式下不切换到必杀模式（因为会清除当前骑士选择）
+        if (isFixedRider) {
+            // 如果当前处于必杀模式，退出它
+            if (Heiseisword.isFinishTimeModeStatic(stack)) {
+                Heiseisword.setFinishTimeModeStatic(stack, false);
+                Heiseisword.setScrambleRidersStatic(stack, new java.util.ArrayList<>());
+                
+                // 重新设置固定骑士
+                String fixedRiderName = stack.getTag().getString("fixedRiderName");
+                Heiseisword.setSelectedRiderStatic(stack, fixedRiderName);
+                
+                Heiseisword.setUltimateModeStatic(stack, false);
+                stack.getOrCreateTag().putInt("currentRotationPosition", 0);
+                stack.getOrCreateTag().remove("isXKeyUltimateReady");
+            }
+            return; // 固定骑士模式下不进行其他模式切换
+        }
+        
+        // 普通模式：20%概率切换模式
         if (random.nextDouble() < 0.2) {
             boolean currentMode = Heiseisword.isFinishTimeModeStatic(stack);
             boolean newMode = !currentMode;
@@ -262,8 +333,8 @@ public class ZombieHeiseiswordGoal extends Goal {
     private void callZombiesToAvoidEffects(Level level, Vec3 direction) {
         if (level.isClientSide()) return;
         
-        // 查找范围内的其他僵尸
-        double leaderRange = 16.0; // 僵尸首领影响范围
+        // 查找更大范围内的其他僵尸
+        double leaderRange = 20.0; // 扩大僵尸首领影响范围
         Vec3 pos = zombie.position();
         AABB searchArea = new AABB(pos.x(), pos.y(), pos.z(), pos.x(), pos.y(), pos.z()).inflate(leaderRange);
         List<Zombie> nearbyZombies = level.getEntitiesOfClass(Zombie.class, searchArea);
@@ -274,22 +345,121 @@ public class ZombieHeiseiswordGoal extends Goal {
                 continue;
             }
             
-            // 计算规避方向 - 与攻击方向相反
-            Vec3 avoidanceDirection = new Vec3(-direction.x, 0, -direction.z).normalize();
+            // 计算规避方向 - 与攻击方向相反，并根据僵尸位置做个性化调整
+            Vec3 avoidanceDirection = calculateSmartAvoidanceDirection(nearbyZombie, direction);
             
-            // 让僵尸朝相反方向移动以规避特效
+            // 让僵尸朝规避方向移动以避开特效
             if (nearbyZombie.getNavigation() != null) {
-                double targetX = nearbyZombie.getX() + avoidanceDirection.x * 3.0;
+                // 根据距离动态调整躲避距离
+                double distance = nearbyZombie.distanceTo(zombie);
+                double adjustedDistance = Math.min(AVOIDANCE_DISTANCE, distance * 0.5);
+                
+                double targetX = nearbyZombie.getX() + avoidanceDirection.x * adjustedDistance;
                 double targetY = nearbyZombie.getY();
-                double targetZ = nearbyZombie.getZ() + avoidanceDirection.z * 3.0;
+                double targetZ = nearbyZombie.getZ() + avoidanceDirection.z * adjustedDistance;
                 
-                // 设置僵尸移动到安全位置
-                nearbyZombie.getNavigation().moveTo(targetX, targetY, targetZ, 1.0);
-                
-                // 添加临时加速效果，让僵尸更快地规避
-                nearbyZombie.addEffect(new net.minecraft.world.effect.MobEffectInstance(
-                    net.minecraft.world.effect.MobEffects.MOVEMENT_SPEED, 40, 1));
+                // 确保目标坐标在有效范围内
+                int blockX = (int)Math.floor(targetX);
+                int blockY = (int)Math.floor(targetY);
+                int blockZ = (int)Math.floor(targetZ);
+                if (level.getBlockState(new net.minecraft.core.BlockPos(blockX, blockY, blockZ)).isValidSpawn(level, null, null)) {
+                    // 设置更高的移动速度，让僵尸更快地规避
+                    nearbyZombie.getNavigation().moveTo(targetX, targetY, targetZ, 1.5);
+                    
+                    // 添加更强的加速效果，持续更长时间
+                    nearbyZombie.addEffect(new net.minecraft.world.effect.MobEffectInstance(
+                        net.minecraft.world.effect.MobEffects.MOVEMENT_SPEED, AVOIDANCE_EFFECT_DURATION, 2, 
+                        false, false, true));
+                    
+                    // 添加防御提升效果，减少可能受到的伤害
+                    nearbyZombie.addEffect(new net.minecraft.world.effect.MobEffectInstance(
+                        net.minecraft.world.effect.MobEffects.DAMAGE_RESISTANCE, AVOIDANCE_EFFECT_DURATION, 1, 
+                        false, false, true));
+                }
             }
+        }
+    }
+    
+    // 计算智能规避方向，考虑僵尸的当前位置和攻击方向
+    private Vec3 calculateSmartAvoidanceDirection(Zombie nearbyZombie, Vec3 attackDirection) {
+        // 基础规避方向：与攻击方向相反
+        Vec3 basicAvoidance = new Vec3(-attackDirection.x, 0, -attackDirection.z).normalize();
+        
+        // 计算从僵尸首领到附近僵尸的向量
+        Vec3 toNearbyZombie = nearbyZombie.position().subtract(zombie.position()).normalize();
+        
+        // 结合两个向量，创建一个避开攻击方向且与附近僵尸位置相关的规避路径
+        // 这使得僵尸会选择最佳的躲避路线，而不仅仅是朝攻击相反方向移动
+        Vec3 smartAvoidance = basicAvoidance.add(toNearbyZombie.scale(0.5)).normalize();
+        
+        return smartAvoidance;
+    }
+    
+    // 检查是否应该闪避
+    private boolean shouldDodge() {
+        LivingEntity target = zombie.getTarget();
+        if (target == null || !target.isAlive()) {
+            return false;
+        }
+        
+        // 如果目标正在攻击且距离较近，概率性闪避
+        double distance = zombie.distanceTo(target);
+        if (distance < 4.0) {
+            // 目标越近，闪避概率越高
+            double dodgeChance = DODGE_SUCCESS_RATE * (1.0 - (distance / 4.0));
+            return random.nextDouble() < dodgeChance;
+        }
+        
+        return false;
+    }
+    
+    // 执行闪避动作
+    private void performDodge() {
+        LivingEntity target = zombie.getTarget();
+        if (target == null || !target.isAlive()) {
+            return;
+        }
+        
+        // 计算闪避方向 - 与目标方向垂直或稍微偏移
+        Vec3 toTarget = target.position().subtract(zombie.position()).normalize();
+        
+        // 随机选择向左或向右闪避
+        boolean dodgeLeft = random.nextBoolean();
+        
+        // 计算垂直于目标方向的闪避向量
+        Vec3 dodgeDirection;
+        if (dodgeLeft) {
+            // 向左闪避 (逆时针90度)
+            dodgeDirection = new Vec3(-toTarget.z, 0, toTarget.x).normalize();
+        } else {
+            // 向右闪避 (顺时针90度)
+            dodgeDirection = new Vec3(toTarget.z, 0, -toTarget.x).normalize();
+        }
+        
+        // 添加一些随机性
+        dodgeDirection = dodgeDirection.add(new Vec3(
+            (random.nextDouble() - 0.5) * 0.4,
+            0,
+            (random.nextDouble() - 0.5) * 0.4
+        )).normalize();
+        
+        // 执行闪避移动
+        if (zombie.getNavigation() != null) {
+            // 计算闪避目标位置
+            double targetX = zombie.getX() + dodgeDirection.x * 2.5;
+            double targetY = zombie.getY();
+            double targetZ = zombie.getZ() + dodgeDirection.z * 2.5;
+            
+            // 设置高速度进行闪避
+            zombie.getNavigation().moveTo(targetX, targetY, targetZ, 2.0);
+            
+            // 为闪避添加短暂的冲刺效果
+            zombie.setDeltaMovement(dodgeDirection.scale(0.6));
+            
+            // 添加临时无敌效果（短暂的伤害减免）
+            zombie.addEffect(new net.minecraft.world.effect.MobEffectInstance(
+                net.minecraft.world.effect.MobEffects.DAMAGE_RESISTANCE, 10, 3,
+                false, false, true));
         }
     }
 

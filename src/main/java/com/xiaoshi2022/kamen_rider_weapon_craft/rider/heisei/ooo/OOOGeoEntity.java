@@ -26,6 +26,7 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.List;
 import java.util.UUID;
+import net.minecraft.world.entity.player.Player;
 
 /**
  * Kamen Rider OOO Geo实体类
@@ -204,6 +205,7 @@ public class OOOGeoEntity extends AbstractHurtingProjectile implements GeoEntity
         
         // 搜索周围的敌对实体
         Vec3 pos = this.position();
+        // 搜索周围的敌对实体，允许追踪玩家
         List<LivingEntity> nearbyEntities = this.level().getEntitiesOfClass(LivingEntity.class,
                 new AABB(pos.x - searchRange, pos.y - searchRange, pos.z - searchRange, 
                          pos.x + searchRange, pos.y + searchRange, pos.z + searchRange),
@@ -393,6 +395,18 @@ public class OOOGeoEntity extends AbstractHurtingProjectile implements GeoEntity
     public boolean isNoGravity() {
         // 根据不同联组设置是否有重力
         return "shauta".equals(this.getCoinType()) || "tatoba".equals(this.getCoinType());
+    }
+    
+    @Override
+    public boolean hurt(DamageSource source, float amount) {
+        // 允许玩家攻击摧毁细胞硬币，解决玩家无法摆脱的问题
+        if (source.getEntity() instanceof Player) {
+            // 玩家可以攻击并摧毁细胞硬币
+            this.remove(RemovalReason.DISCARDED);
+            return true;
+        }
+        // 其他伤害源仍然无法伤害细胞硬币
+        return false;
     }
     
     // 获取实体的主人

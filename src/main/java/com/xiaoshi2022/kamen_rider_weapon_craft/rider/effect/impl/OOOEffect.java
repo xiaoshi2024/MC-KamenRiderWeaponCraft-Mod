@@ -65,8 +65,10 @@ public class OOOEffect extends AbstractHeiseiRiderEffect {
             .forEach(entity -> {
                 entity.hurt(damageSource, attackDamage);
                 
-                // 给予敌人虚弱效果
-                entity.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 150, 0));
+                // 只对非玩家实体给予虚弱效果
+                if (!(entity instanceof Player)) {
+                    entity.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 150, 0));
+                }
             });
     }
     
@@ -176,9 +178,11 @@ public class OOOEffect extends AbstractHeiseiRiderEffect {
                 ((net.minecraft.world.entity.LivingEntity) entity).hurt(
                     level.damageSources().playerAttack(player), getAttackDamage() * 0.7f);
                 
-                // 给予敌人虚弱效果
-                ((net.minecraft.world.entity.LivingEntity) entity).addEffect(new MobEffectInstance(
-                    MobEffects.WEAKNESS, 150, 0));
+                // 只对非玩家实体给予虚弱效果
+                if (!(entity instanceof Player)) {
+                    ((net.minecraft.world.entity.LivingEntity) entity).addEffect(new MobEffectInstance(
+                        MobEffects.WEAKNESS, 150, 0));
+                }
             });
     }
     

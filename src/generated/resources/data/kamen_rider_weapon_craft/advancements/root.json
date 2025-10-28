@@ -1,0 +1,39 @@
+{
+  "criteria": {
+    "has_sword": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:wooden_sword"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "background": "kamen_rider_weapon_craft:textures/gui/advancements/backgrounds/kamen_rider_background.png",
+    "description": {
+      "text": "探索平成剑的力量"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "minecraft:netherite_sword",
+      "nbt": "{Damage:0}"
+    },
+    "show_toast": true,
+    "title": {
+      "text": "平成剑冒险"
+    }
+  },
+  "requirements": [
+    [
+      "has_sword"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -1,0 +1,39 @@
+{
+  "parent": "kamen_rider_weapon_craft:kamen_rider_weapon_craft",
+  "criteria": {
+    "trigger": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:stick"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "text": "第一次被平成剑僵尸攻击，遇到了DCD形态的武器僵尸"
+    },
+    "frame": "challenge",
+    "hidden": false,
+    "icon": {
+      "item": "kamen_rider_weapon_craft:heiseisword",
+      "nbt": "{Damage:0}"
+    },
+    "show_toast": true,
+    "title": {
+      "text": "腐败的时空"
+    }
+  },
+  "requirements": [
+    [
+      "trigger"
+    ]
+  ],
+  "sends_telemetry_event": true
+}
