@@ -8,14 +8,14 @@
   "display": {
     "thirdperson_righthand": {
       "rotation": [
-        3.63,
-        29.77,
-        -13.71
+        -117.53,
+        89.84,
+        117.98
       ],
       "translation": [
-        -1.75,
-        -4.75,
-        -2.5
+        -4.25,
+        -3.5,
+        0.75
       ]
     },
     "thirdperson_lefthand": {
@@ -25,16 +25,16 @@
         -13
       ],
       "translation": [
-        2.75,
+        3.5,
         -3.25,
         0
       ]
     },
     "firstperson_righthand": {
       "rotation": [
-        137.83,
-        86.29,
-        -137.77
+        -159.91,
+        87.08,
+        159.88
       ],
       "translation": [
         -1.25,

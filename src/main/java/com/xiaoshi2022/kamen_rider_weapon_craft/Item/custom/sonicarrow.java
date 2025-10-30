@@ -306,14 +306,11 @@ public class sonicarrow extends SwordItem implements GeoItem {
 
     @Override
     public void releaseUsing(ItemStack stack, Level level, LivingEntity shooter, int ticksRemaining) {
-        if (!(shooter instanceof Player player) || level.isClientSide) return;
+        if (level.isClientSide) return;
 
         ServerLevel serverLevel = (ServerLevel) level;
         Mode mode = getCurrentMode(stack);
         ModeConfig cfg = getConfig(mode);
-
-        // 冷却
-        player.getCooldowns().addCooldown(this, cfg.coolDown());
 
         // 计算充能时间（秒）
         float chargeTime = (getUseDuration(stack) - ticksRemaining) / 20F;
@@ -321,14 +318,14 @@ public class sonicarrow extends SwordItem implements GeoItem {
         // 连发
         for (int i = 0; i < cfg.burstCount(); i++) {
             // 微小散布
-            float yaw   = player.getYRot() + (i - cfg.burstCount() / 2F) * 2.5F;
-            float pitch = player.getXRot();
+            float yaw = shooter.getYRot() + (i - cfg.burstCount() / 2F) * 2.5F;
+            float pitch = shooter.getXRot();
 
             // 方向向量
             Vec3 look = Vec3.directionFromRotation(pitch, yaw).scale(cfg.shootSpeed());
 
             LaserBeamEntity laser = new LaserBeamEntity(
-                    level, player,
+                    level, shooter,
                     cfg.particle(),
                     cfg.damage(),
                     cfg.shootSound(),
@@ -336,9 +333,9 @@ public class sonicarrow extends SwordItem implements GeoItem {
                     stack
             );
             laser.setPos(
-                    player.getX(),
-                    player.getEyeY(),
-                    player.getZ()
+                    shooter.getX(),
+                    shooter.getEyeY(),
+                    shooter.getZ()
             );
             laser.shoot(look.x, look.y, look.z);
             level.addFreshEntity(laser);
@@ -353,7 +350,7 @@ public class sonicarrow extends SwordItem implements GeoItem {
         // 音效（只播一次）
         serverLevel.playSound(
                 null,
-                player.blockPosition(),
+                shooter.blockPosition(),
                 cfg.shootSound(),
                 SoundSource.PLAYERS,
                 1F,
@@ -361,11 +358,72 @@ public class sonicarrow extends SwordItem implements GeoItem {
         );
 
         // 耐久
-        stack.hurtAndBreak(cfg.burstCount(), player,
-                e -> e.broadcastBreakEvent(player.getUsedItemHand()));
+        stack.hurtAndBreak(cfg.burstCount(), shooter,
+                e -> e.broadcastBreakEvent(InteractionHand.MAIN_HAND));
 
-        // 动画
-        triggerAnim(player, GeoItem.getOrAssignId(stack, serverLevel), "pullback", "pullback");
+        // 动画 - 只对玩家播放动画
+        if (shooter instanceof Player player) {
+            // 冷却
+            player.getCooldowns().addCooldown(this, cfg.coolDown());
+            triggerAnim(player, GeoItem.getOrAssignId(stack, serverLevel), "pullback", "pullback");
+        }
+    }
+    
+    // 为非玩家实体提供一个专门的射击方法
+    public void shootProjectile(Level level, LivingEntity shooter, ItemStack stack) {
+        if (level.isClientSide) return;
+        
+        ServerLevel serverLevel = (ServerLevel) level;
+        Mode mode = getCurrentMode(stack);
+        ModeConfig cfg = getConfig(mode);
+        
+        float chargeTime = 0.5F; // 非玩家实体使用固定充能时间
+        
+        // 连发
+        for (int i = 0; i < cfg.burstCount(); i++) {
+            // 微小散布
+            float yaw = shooter.getYRot() + (i - cfg.burstCount() / 2F) * 2.5F;
+            float pitch = shooter.getXRot();
+            
+            // 方向向量
+            Vec3 look = Vec3.directionFromRotation(pitch, yaw).scale(cfg.shootSpeed());
+            
+            LaserBeamEntity laser = new LaserBeamEntity(
+                    level, shooter,
+                    cfg.particle(),
+                    cfg.damage(),
+                    cfg.shootSound(),
+                    chargeTime,
+                    stack
+            );
+            laser.setPos(
+                    shooter.getX(),
+                    shooter.getEyeY(),
+                    shooter.getZ()
+            );
+            laser.shoot(look.x, look.y, look.z);
+            level.addFreshEntity(laser);
+            
+            // 附魔效果
+            if (stack.getEnchantmentLevel(Enchantments.FLAMING_ARROWS) > 0)
+                laser.setSecondsOnFire(5);
+            if (stack.getEnchantmentLevel(Enchantments.POWER_ARROWS) > 0)
+                laser.damage += stack.getEnchantmentLevel(Enchantments.POWER_ARROWS);
+        }
+        
+        // 音效
+        serverLevel.playSound(
+                null,
+                shooter.blockPosition(),
+                cfg.shootSound(),
+                SoundSource.PLAYERS,
+                1F,
+                1F
+        );
+        
+        // 耐久消耗
+        stack.hurtAndBreak(cfg.burstCount(), shooter,
+                e -> e.broadcastBreakEvent(InteractionHand.MAIN_HAND));
     }
 
     @Override

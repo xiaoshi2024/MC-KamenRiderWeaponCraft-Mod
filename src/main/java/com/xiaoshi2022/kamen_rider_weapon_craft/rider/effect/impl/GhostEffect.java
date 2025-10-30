@@ -119,71 +119,132 @@ public class GhostEffect extends AbstractHeiseiRiderEffect {
         // 向前方发射两道火焰剑气
         Vec3 start = player.getEyePosition(1.0f);
         
+        // 使用配置的攻击范围
+        float attackRange = getEffectRange();
+        
         // 生成左右两个方向的火焰剑气
         Vec3 rightDirection = direction.yRot((float) Math.toRadians(20));
         Vec3 leftDirection = direction.yRot((float) Math.toRadians(-20));
         
-        // 右剑气
-        Vec3 rightEnd = start.add(rightDirection.scale(15.0));
+        // 右剑气 - 添加方向限制
+        Vec3 rightEnd = start.add(rightDirection.scale(attackRange));
         level.getEntitiesOfClass(LivingEntity.class, 
                 new net.minecraft.world.phys.AABB(start, rightEnd).inflate(1.5),
-                entity -> entity != player)
+                entity -> entity != player && entity.isAlive())
             .forEach(entity -> {
-                entity.hurt(level.damageSources().playerAttack(player), damage);
-                entity.setSecondsOnFire(8);
+                // 计算目标相对于起始点的向量
+                Vec3 targetRelative = entity.position().subtract(start);
+                
+                // 使用点积检查目标是否在玩家面前的角度范围内
+                // 0.6 约等于 53度角的余弦值，允许稍微宽一点的攻击角度
+                if (targetRelative.normalize().dot(direction.normalize()) > 0.6) {
+                    entity.hurt(level.damageSources().playerAttack(player), damage);
+                    entity.setSecondsOnFire(8);
+                }
             });
         
-        // 左剑气
-        Vec3 leftEnd = start.add(leftDirection.scale(15.0));
+        // 左剑气 - 添加方向限制
+        Vec3 leftEnd = start.add(leftDirection.scale(attackRange));
         level.getEntitiesOfClass(LivingEntity.class, 
                 new net.minecraft.world.phys.AABB(start, leftEnd).inflate(1.5),
-                entity -> entity != player)
+                entity -> entity != player && entity.isAlive())
             .forEach(entity -> {
-                entity.hurt(level.damageSources().playerAttack(player), damage);
-                entity.setSecondsOnFire(8);
+                // 计算目标相对于起始点的向量
+                Vec3 targetRelative = entity.position().subtract(start);
+                
+                // 使用点积检查目标是否在玩家面前的角度范围内
+                if (targetRelative.normalize().dot(direction.normalize()) > 0.6) {
+                    entity.hurt(level.damageSources().playerAttack(player), damage);
+                    entity.setSecondsOnFire(8);
+                }
             });
     }
     
     // 爱迪生魂：电磁力
     private void executeEdisonAbility(Level level, Player player, Vec3 direction, float damage) {
-        // 制造电磁力场，对周围敌人造成伤害并附加闪电效果
+        // 制造电磁力场，对前方敌人造成伤害并附加闪电效果
         Vec3 start = player.getEyePosition(1.0f);
-        Vec3 end = start.add(direction.scale(12.0));
         
-        // 对路径上的敌人造成伤害
+        // 使用配置的攻击范围
+        float attackRange = getEffectRange();
+        
+        // 限制范围到前方锥形区域
+        float width = attackRange / 2; // 攻击宽度
+        Vec3 end = start.add(direction.scale(attackRange));
+        
+        // 创建锥形攻击范围
+        net.minecraft.world.phys.AABB attackBox = new net.minecraft.world.phys.AABB(
+                Math.min(start.x, end.x) - width,
+                Math.min(start.y, end.y) - 2,
+                Math.min(start.z, end.z) - width,
+                Math.max(start.x, end.x) + width,
+                Math.max(start.y, end.y) + 2,
+                Math.max(start.z, end.z) + width
+        );
+        
+        // 对路径上的敌人造成伤害 - 添加方向检查
         level.getEntitiesOfClass(LivingEntity.class, 
-                new net.minecraft.world.phys.AABB(start, end).inflate(2.0),
-                entity -> entity != player)
+                attackBox,
+                entity -> entity != player && entity.isAlive())
             .forEach(entity -> {
-                entity.hurt(level.damageSources().playerAttack(player), damage);
-                // 给予敌人虚弱效果
-                entity.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 100, 1));
-                // 模拟电磁效果，使用粒子效果替代闪电
-                entity.addEffect(new MobEffectInstance(MobEffects.GLOWING, 100, 0));
+                // 计算目标相对于起始点的向量
+                Vec3 targetRelative = entity.position().subtract(start);
+                
+                // 使用点积检查目标是否在玩家面前的角度范围内
+                if (targetRelative.normalize().dot(direction.normalize()) > 0.7) { // 约45度范围
+                    entity.hurt(level.damageSources().playerAttack(player), damage);
+                    // 给予敌人虚弱效果
+                    entity.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 100, 1));
+                    // 模拟电磁效果
+                    entity.addEffect(new MobEffectInstance(MobEffects.GLOWING, 100, 0));
+                }
             });
     }
     
     // 牛顿魂：引力
     private void executeNewtonAbility(Level level, Player player, Vec3 direction, float damage) {
-        // 创建引力场，将敌人吸引到中心点并造成伤害
-        Vec3 center = player.getEyePosition(1.0f).add(direction.scale(6.0));
+        // 创建引力场，但限制在玩家前方
+        Vec3 start = player.getEyePosition(1.0f);
         
-        // 查找范围内的敌人
+        // 使用配置的攻击范围，只在前方创建引力场
+        float attackRange = getEffectRange();
+        float width = attackRange / 2; // 攻击宽度
+        
+        // 引力场中心点设置在玩家前方一定距离
+        Vec3 center = start.add(direction.scale(Math.min(6.0, attackRange / 2)));
+        
+        // 创建锥形攻击范围
+        net.minecraft.world.phys.AABB attackBox = new net.minecraft.world.phys.AABB(
+                center.x - width,
+                center.y - 3,
+                center.z - width,
+                center.x + width,
+                center.y + 3,
+                center.z + width
+        );
+        
+        // 查找范围内的敌人并添加方向检查
         level.getEntitiesOfClass(LivingEntity.class, 
-                new net.minecraft.world.phys.AABB(center.x - 5, center.y - 5, center.z - 5, center.x + 5, center.y + 5, center.z + 5),
-                entity -> entity != player)
+                attackBox,
+                entity -> entity != player && entity.isAlive())
             .forEach(entity -> {
-                // 计算引力方向（指向中心点）
-                Vec3 attraction = center.subtract(entity.position()).normalize().scale(0.3);
+                // 计算目标相对于玩家的向量
+                Vec3 targetRelative = entity.position().subtract(start);
                 
-                // 应用引力效果
-                entity.setDeltaMovement(entity.getDeltaMovement().add(attraction));
-                
-                // 造成伤害
-                entity.hurt(level.damageSources().playerAttack(player), damage);
-                
-                // 给予缓慢效果
-                entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 100, 2));
+                // 使用点积检查目标是否在玩家面前的角度范围内
+                if (targetRelative.normalize().dot(direction.normalize()) > 0.7) { // 约45度范围
+                    // 计算引力方向（指向中心点）
+                    Vec3 attraction = center.subtract(entity.position()).normalize().scale(0.3);
+                    
+                    // 应用引力效果
+                    entity.setDeltaMovement(entity.getDeltaMovement().add(attraction));
+                    
+                    // 造成伤害
+                    entity.hurt(level.damageSources().playerAttack(player), damage);
+                    
+                    // 给予缓慢效果
+                    entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 100, 2));
+                }
             });
     }
     

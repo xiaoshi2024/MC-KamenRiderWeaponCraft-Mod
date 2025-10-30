@@ -12,6 +12,8 @@ import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.den_o.DenOTrainRend
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.wizard.WizardRiderEntityRenderer;
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.kiva.KivaBatRenderer;
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.hibiki.HibikiDrumEffectRenderer;
+import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.kuuga.KuugaRenderer;
+import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.Faiz.FaizEmptySetRenderer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -75,6 +77,12 @@ public class RiderEffectEntityRegistry {
         
         // 注册响鬼鼓锁定特效实体渲染器
         registerHibikiRiderRenderers(event);
+        
+        // 注册Kuuga骑士特效实体渲染器
+        registerKuugaRiderRenderers(event);
+        
+        // 注册Faiz骑士特效实体渲染器
+        registerFaizRiderRenderers(event);
         
         // 这里可以添加更多骑士特效实体的注册方法
     }
@@ -176,5 +184,23 @@ public class RiderEffectEntityRegistry {
     private static void registerHibikiRiderRenderers(EntityRenderersEvent.RegisterRenderers event) {
         // 使用与项目中其他实体一致的注册方式，保持代码风格统一
         event.registerEntityRenderer(ModEntityTypes.HIBIKI_DRUM_EFFECT.get(), HibikiDrumEffectRenderer::new);
+    }
+    
+    /**
+     * 注册Kuuga骑士相关的特效实体渲染器
+     * @param event 实体渲染器注册事件
+     */
+    private static void registerKuugaRiderRenderers(EntityRenderersEvent.RegisterRenderers event) {
+        // 使用与项目中其他实体一致的注册方式，保持代码风格统一
+        event.registerEntityRenderer(ModEntityTypes.KUUGA_RIDER.get(), KuugaRenderer::new);
+    }
+    
+    /**
+     * 注册Faiz骑士相关的特效实体渲染器
+     * @param event 实体渲染器注册事件
+     */
+    private static void registerFaizRiderRenderers(EntityRenderersEvent.RegisterRenderers event) {
+        // 使用与项目中其他实体一致的注册方式，保持代码风格统一
+        event.registerEntityRenderer(ModEntityTypes.FAIZ_EMPTY_SET.get(), FaizEmptySetRenderer::new);
     }
 }

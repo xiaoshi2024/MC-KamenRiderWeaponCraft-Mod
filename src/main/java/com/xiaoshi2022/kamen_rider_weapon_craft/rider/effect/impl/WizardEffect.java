@@ -44,22 +44,26 @@ public class WizardEffect extends AbstractHeiseiRiderEffect {
     
     private void executeFlameMagic(Level level, Player player, Vec3 direction) {
         // 火焰魔龙之力：强化火焰攻击
-        Vec3 start = player.getEyePosition(1.0f);
-        Vec3 end = start.add(direction.scale(20.0)); // 增加射程
+        Vec3 normalizedDirection = direction.normalize();
+        double range = 20.0;
         
         // 使用正确的射线检测方法
-        net.minecraft.world.phys.HitResult result = player.pick(20.0, 0.0f, false);
+        net.minecraft.world.phys.HitResult result = player.pick(range, 0.0f, false);
         
         if (result instanceof net.minecraft.world.phys.EntityHitResult entityHitResult) {
             Entity entity = entityHitResult.getEntity();
             if (entity instanceof net.minecraft.world.entity.LivingEntity && entity != player) {
-                ((net.minecraft.world.entity.LivingEntity) entity).hurt(
-                    level.damageSources().playerAttack(player), getAttackDamage() * 1.2f);
-                ((net.minecraft.world.entity.LivingEntity) entity).setSecondsOnFire(10);
-                
-                // 强大的爆炸效果
-                level.explode(player, entity.getX(), entity.getY(), entity.getZ(), 
-                    getEffectRange(), Level.ExplosionInteraction.MOB);
+                // 确保目标在玩家面前
+                Vec3 toEntity = entity.position().subtract(player.position()).normalize();
+                if (toEntity.dot(normalizedDirection) > 0.5) { // 约60度角限制
+                    entity.hurt(
+                        level.damageSources().playerAttack(player), getAttackDamage() * 1.2f);
+                    ((net.minecraft.world.entity.LivingEntity) entity).setSecondsOnFire(10);
+                    
+                    // 强大的爆炸效果
+                    level.explode(player, entity.getX(), entity.getY(), entity.getZ(), 
+                        getEffectRange(), Level.ExplosionInteraction.MOB);
+                }
             }
         }
         
@@ -69,25 +73,31 @@ public class WizardEffect extends AbstractHeiseiRiderEffect {
     
     private void executeWaterMagic(Level level, Player player, Vec3 direction) {
         // 水魔龙之力：强化水流攻击
+        Vec3 normalizedDirection = direction.normalize();
+        double range = 12.0;
+        
+        // 创建基于玩家前方的锥形AABB区域
+        Vec3 start = player.getEyePosition(1.0f);
+        Vec3 end = start.add(normalizedDirection.scale(range));
+        net.minecraft.world.phys.AABB attackBox = new net.minecraft.world.phys.AABB(start, end).inflate(range / 3, 3.0, range / 3);
+        
         // 对前方敌人造成伤害和减速效果
-        for (int i = 0; i < 12; i++) { // 增加范围
-            Vec3 waterPos = player.getEyePosition(1.0f).add(direction.scale(i + 1));
+        level.getEntitiesOfClass(net.minecraft.world.entity.LivingEntity.class, attackBox, entity -> {
+            if (entity == player) return false;
             
-            // 对敌人造成伤害和减速效果
-            level.getEntities(player, new net.minecraft.world.phys.AABB(waterPos, waterPos).inflate(2.0))
-                .forEach(entity -> {
-                    if (entity instanceof net.minecraft.world.entity.LivingEntity && entity != player) {
-                        ((net.minecraft.world.entity.LivingEntity) entity).hurt(
-                            level.damageSources().playerAttack(player), getAttackDamage() * 0.4f);
-                        ((net.minecraft.world.entity.LivingEntity) entity).addEffect(new MobEffectInstance(
-                            MobEffects.MOVEMENT_SLOWDOWN, 150, 3)); // 提升减速效果
-                        // 灭火效果
-                        if (((net.minecraft.world.entity.LivingEntity) entity).isOnFire()) {
-                            ((net.minecraft.world.entity.LivingEntity) entity).clearFire();
-                        }
-                    }
-                });
-        }
+            // 确保目标在玩家面前的角度范围内（约60度）
+            Vec3 toEntity = entity.position().subtract(player.position()).normalize();
+            return toEntity.dot(normalizedDirection) > 0.5;
+        }).forEach(entity -> {
+            entity.hurt(
+                level.damageSources().playerAttack(player), getAttackDamage() * 0.4f);
+            entity.addEffect(new MobEffectInstance(
+                MobEffects.MOVEMENT_SLOWDOWN, 150, 3)); // 提升减速效果
+            // 灭火效果
+            if (entity.isOnFire()) {
+                entity.clearFire();
+            }
+        });
         
         // 给予玩家水下呼吸和抗性提升
         player.addEffect(new MobEffectInstance(MobEffects.WATER_BREATHING, 300, 0));
@@ -111,23 +121,33 @@ public class WizardEffect extends AbstractHeiseiRiderEffect {
     private void executeHurricaneMagic(Level level, Player player, Vec3 direction) {
         // 飓风魔龙之力：制造强大风暴
         // 移除了爆炸效果，避免地形破坏
+        Vec3 normalizedDirection = direction.normalize();
+        double range = getEffectRange() * 2.0;
         
-        // 对周围敌人造成伤害和强力击退效果
-        level.getEntities(player, player.getBoundingBox().inflate(getEffectRange() * 2.0))
-            .forEach(entity -> {
-                if (entity instanceof net.minecraft.world.entity.LivingEntity && entity != player) {
-                    ((net.minecraft.world.entity.LivingEntity) entity).hurt(
-                        level.damageSources().playerAttack(player), getAttackDamage() * 0.7f);
-                    
-                    // 超强力的击退效果
-                    Vec3 knockback = entity.position().subtract(player.position()).normalize().scale(4.0);
-                    entity.setDeltaMovement(entity.getDeltaMovement().add(knockback));
-                    
-                    // 给予悬浮效果
-                    ((net.minecraft.world.entity.LivingEntity) entity).addEffect(new MobEffectInstance(
-                        MobEffects.LEVITATION, 100, 2));
-                }
-            });
+        // 创建基于玩家前方的锥形AABB区域
+        Vec3 start = player.position();
+        Vec3 end = start.add(normalizedDirection.scale(range));
+        net.minecraft.world.phys.AABB attackBox = new net.minecraft.world.phys.AABB(start, end).inflate(range / 2, 4.0, range / 2);
+        
+        // 对前方敌人造成伤害和强力击退效果
+        level.getEntitiesOfClass(net.minecraft.world.entity.LivingEntity.class, attackBox, entity -> {
+            if (entity == player) return false;
+            
+            // 确保目标在玩家面前的角度范围内（约60度）
+            Vec3 toEntity = entity.position().subtract(player.position()).normalize();
+            return toEntity.dot(normalizedDirection) > 0.5;
+        }).forEach(entity -> {
+            entity.hurt(
+                level.damageSources().playerAttack(player), getAttackDamage() * 0.7f);
+            
+            // 超强力的击退效果
+            Vec3 knockback = entity.position().subtract(player.position()).normalize().scale(4.0);
+            entity.setDeltaMovement(entity.getDeltaMovement().add(knockback));
+            
+            // 给予悬浮效果
+            entity.addEffect(new MobEffectInstance(
+                MobEffects.LEVITATION, 100, 2));
+        });
         
         // 给予玩家飞行能力和速度提升
         player.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 300, 0));
@@ -136,9 +156,11 @@ public class WizardEffect extends AbstractHeiseiRiderEffect {
     
     private void executeLandMagic(Level level, Player player, Vec3 direction) {
         // 土地魔龙之力：强化土地控制能力
+        Vec3 normalizedDirection = direction.normalize();
+        
         // 在玩家前方生成更多方块障碍
         for (int i = 0; i < 5; i++) { // 生成多个方块
-            Vec3 pos = player.getEyePosition(1.0f).add(direction.scale(2.0 + i));
+            Vec3 pos = player.getEyePosition(1.0f).add(normalizedDirection.scale(2.0 + i));
             net.minecraft.core.BlockPos blockPos = new net.minecraft.core.BlockPos((int)pos.x, (int)pos.y, (int)pos.z);
             
             // 尝试放置方块作为障碍物
@@ -152,19 +174,28 @@ public class WizardEffect extends AbstractHeiseiRiderEffect {
             }
         }
         
-        // 对周围敌人造成伤害和强力减速效果
-        level.getEntities(player, player.getBoundingBox().inflate(getEffectRange() * 1.5))
-            .forEach(entity -> {
-                if (entity instanceof net.minecraft.world.entity.LivingEntity && entity != player) {
-                    ((net.minecraft.world.entity.LivingEntity) entity).hurt(
-                        level.damageSources().playerAttack(player), getAttackDamage() * 0.8f);
-                    ((net.minecraft.world.entity.LivingEntity) entity).addEffect(new MobEffectInstance(
-                        MobEffects.MOVEMENT_SLOWDOWN, 240, 4)); // 极高的减速效果
-                    // 额外添加虚弱效果
-                    ((net.minecraft.world.entity.LivingEntity) entity).addEffect(new MobEffectInstance(
-                        MobEffects.WEAKNESS, 200, 2));
-                }
-            });
+        // 创建基于玩家前方的锥形AABB区域
+        double range = getEffectRange() * 1.5;
+        Vec3 start = player.position();
+        Vec3 end = start.add(normalizedDirection.scale(range));
+        net.minecraft.world.phys.AABB attackBox = new net.minecraft.world.phys.AABB(start, end).inflate(range / 2, 3.0, range / 2);
+        
+        // 对前方敌人造成伤害和强力减速效果
+        level.getEntitiesOfClass(net.minecraft.world.entity.LivingEntity.class, attackBox, entity -> {
+            if (entity == player) return false;
+            
+            // 确保目标在玩家面前的角度范围内（约60度）
+            Vec3 toEntity = entity.position().subtract(player.position()).normalize();
+            return toEntity.dot(normalizedDirection) > 0.5;
+        }).forEach(entity -> {
+            entity.hurt(
+                level.damageSources().playerAttack(player), getAttackDamage() * 0.8f);
+            entity.addEffect(new MobEffectInstance(
+                MobEffects.MOVEMENT_SLOWDOWN, 240, 4)); // 极高的减速效果
+            // 额外添加虚弱效果
+            entity.addEffect(new MobEffectInstance(
+                MobEffects.WEAKNESS, 200, 2));
+        });
         
         // 给予玩家强大的生命恢复和防御增强
         player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 300, 2));
@@ -199,15 +230,57 @@ public class WizardEffect extends AbstractHeiseiRiderEffect {
     @Override
     public void executeNonPlayerSpecialAttack(Level level, LivingEntity shooter, Vec3 direction) {
         if (!level.isClientSide) {
+            // 获取标准化的攻击方向
+            Vec3 normalizedDirection = (direction != null && direction.lengthSqr() > 0) ? 
+                                      direction.normalize() : shooter.getLookAngle().normalize();
+            
             // 为非玩家实体（如僵尸）生成Wizard特效实体
             // 随机选择一个元素魔龙力量
             WizardRiderEntity.DragonMagicType selectedDragon = WizardRiderEntity.DragonMagicType.values()[level.random.nextInt(WizardRiderEntity.DragonMagicType.values().length)];
             
             // 生成对应的元素魔龙特效实体
-            WizardRiderEntity.trySpawnEffect(level, shooter, direction, getAttackDamage(), selectedDragon);
+            WizardRiderEntity.trySpawnEffect(level, shooter, normalizedDirection, getAttackDamage(), selectedDragon);
             
             // 给予实体增益效果
             shooter.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 200, 1));
+            
+            // 立即对前方敌人造成伤害，添加方向限制
+            double range = getEffectRange();
+            
+            // 创建基于射手前方的锥形AABB区域
+            Vec3 start = shooter.position().add(0, shooter.getEyeHeight() * 0.5, 0);
+            Vec3 end = start.add(normalizedDirection.scale(range));
+            net.minecraft.world.phys.AABB attackBox = new net.minecraft.world.phys.AABB(start, end).inflate(range / 2, 3.0, range / 2);
+            
+            // 对范围内的敌人造成伤害
+            level.getEntitiesOfClass(net.minecraft.world.entity.LivingEntity.class, attackBox, entity -> {
+                if (entity == shooter) return false;
+                
+                // 确保目标在射手面前的角度范围内（约60度）
+                Vec3 toEntity = entity.position().subtract(shooter.position()).normalize();
+                return toEntity.dot(normalizedDirection) > 0.5;
+            }).forEach(entity -> {
+                // 根据不同的元素类型造成不同的效果
+                entity.hurt(
+                    level.damageSources().mobAttack(shooter), getAttackDamage() * 0.5f);
+                
+                // 随机添加一个元素效果
+                switch (selectedDragon) {
+                    case FlameDragon:
+                        entity.setSecondsOnFire(8);
+                        break;
+                    case WaterDragon:
+                        entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 100, 2));
+                        break;
+                    case HurricaneDragon:
+                        Vec3 knockback = entity.position().subtract(shooter.position()).normalize().scale(2.0);
+                        entity.setDeltaMovement(entity.getDeltaMovement().add(knockback));
+                        break;
+                    case LandDragon:
+                        entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 150, 3));
+                        break;
+                }
+            });
         }
     }
 }

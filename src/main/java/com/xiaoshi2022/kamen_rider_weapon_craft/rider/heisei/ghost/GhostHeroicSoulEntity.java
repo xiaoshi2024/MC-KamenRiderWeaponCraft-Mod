@@ -13,6 +13,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.level.Level;
@@ -531,15 +532,24 @@ public class GhostHeroicSoulEntity extends Projectile implements GeoEntity {
             return false;
         }
         
-        // 基础敌对生物判断
-        if (target.getType().is(EntityTypeTags.RAIDERS) || target instanceof Monster) {
-            return true;
-        }
-        
-        // 如果owner是玩家，检查玩家之间的敌对关系
-        if (owner instanceof Player playerOwner && target instanceof Player) {
-            return !target.getUUID().equals(playerOwner.getUUID()) && 
-                   playerOwner.getTeam() != null && !playerOwner.getTeam().isAlliedTo(target.getTeam());
+        // 如果owner是敌对生物（如僵尸），攻击玩家和村民等友好生物
+        if (owner instanceof Monster) {
+            // 僵尸等敌对生物的目标应该是玩家和村民等
+            if (target instanceof Player || target instanceof Villager) {
+                return true;
+            }
+        } else if (owner instanceof Player) {
+            // 基础敌对生物判断 - 当owner是玩家时
+            if (target.getType().is(EntityTypeTags.RAIDERS) || target instanceof Monster) {
+                return true;
+            }
+            
+            // 检查玩家之间的敌对关系
+            Player playerOwner = (Player) owner;
+            if (target instanceof Player) {
+                return !target.getUUID().equals(playerOwner.getUUID()) && 
+                       playerOwner.getTeam() != null && !playerOwner.getTeam().isAlliedTo(target.getTeam());
+            }
         }
         
         return false;

@@ -2,6 +2,7 @@ package com.xiaoshi2022.kamen_rider_weapon_craft.registry;
 
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.client.daidaimaru.entity.ThrownDaidaimaru;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.prop.client.entity.LaserBeamEntity;
+import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.Faiz.FaizEmptySetEntity;
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.build.BuildRiderEntity;
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.den_o.DenOTrainEntity;
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.drive.DriveRiderEntity;
@@ -9,6 +10,7 @@ import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.exaid.ExAidSlashEff
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.hibiki.HibikiDrumEffectEntity;
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.gaim.GaimLockSeedEntity;
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.ghost.GhostHeroicSoulEntity;
+import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.kuuga.KuugaRiderEntity;
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.w.WTornadoEntity;
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.wizard.WizardRiderEntity;
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.fourze.FourzeRocketEntity;
@@ -166,6 +168,29 @@ public class ModEntityTypes {
                             .setUpdateInterval(1)
                             .setShouldReceiveVelocityUpdates(false)
                             .build("hibiki_drum_effect"));
+
+    // 注册Kuuga特效实体
+    public static final RegistryObject<EntityType<KuugaRiderEntity>> KUUGA_RIDER =
+            ENTITIES.register("kuuga_rider",
+                    () -> EntityType.Builder.<KuugaRiderEntity>
+                                    of(KuugaRiderEntity::new, MobCategory.MISC)
+                            .sized(0.5F, 0.5F) // 实体大小
+                            .setTrackingRange(64) // 跟踪范围
+                            .setUpdateInterval(1) // 更新间隔
+                            .setShouldReceiveVelocityUpdates(true)
+                            .build(new ResourceLocation("kamen_rider_weapon_craft", "kuuga_rider").toString())
+            );
+
+    // 注册Faiz空集符号实体
+    public static final RegistryObject<EntityType<FaizEmptySetEntity>> FAIZ_EMPTY_SET =
+            ENTITIES.register("faiz_empty_set",
+                    () -> EntityType.Builder.<FaizEmptySetEntity>
+                                    of(FaizEmptySetEntity::new, MobCategory.MISC)
+                            .setTrackingRange(64)
+                            .setUpdateInterval(1)
+                            .setShouldReceiveVelocityUpdates(false)
+                            .build("faiz_empty_set")
+            );
 
     public static void register(IEventBus modEventBus) {
         ENTITIES.register(modEventBus);
