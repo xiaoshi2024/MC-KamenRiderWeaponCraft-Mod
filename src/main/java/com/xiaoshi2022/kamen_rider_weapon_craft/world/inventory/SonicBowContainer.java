@@ -78,6 +78,20 @@ public class SonicBowContainer extends AbstractContainerMenu implements Supplier
                     
                     // 检查是否是boss模组的物品
                     isModItem = isModItem || stack.getItem() == lemonEnergyItem || stack.getItem() == peachEnergyItem;
+                    
+                    // 检查DRAGONFRUIT
+                    try {
+                        java.lang.reflect.Field dragonFruitField = bossModItemsClass.getDeclaredField("DRAGONFRUIT");
+                        dragonFruitField.setAccessible(true);
+                        Object dragonFruitRegistry = dragonFruitField.get(null);
+                        java.lang.reflect.Method getMethod3 = dragonFruitRegistry.getClass().getMethod("get");
+                        Object dragonFruitItem = getMethod3.invoke(dragonFruitRegistry);
+                        
+                        isModItem = isModItem || stack.getItem() == dragonFruitItem;
+                    } catch (NoSuchFieldException e) {
+                        // 如果没有DRAGONFRUIT字段，忽略错误
+                        System.out.println("No DRAGONFRUIT field found in boss mod");
+                    }
                 } catch (ClassNotFoundException e) {
                     // boss模组不存在，只检查自己的物品
                     System.out.println("Boss mod not available, skipping boss items check in SonicBowContainer");
@@ -191,6 +205,20 @@ public class SonicBowContainer extends AbstractContainerMenu implements Supplier
             Object peachEnergyItem = getMethod2.invoke(peachEnergyRegistry);
             
             if (lastInput.getItem() == peachEnergyItem) return sonicarrow.Mode.PEACH;
+            
+            // 检查DRAGONFRUIT
+            try {
+                java.lang.reflect.Field dragonFruitField = bossModItemsClass.getDeclaredField("DRAGONFRUIT");
+                dragonFruitField.setAccessible(true);
+                Object dragonFruitRegistry = dragonFruitField.get(null);
+                java.lang.reflect.Method getMethod3 = dragonFruitRegistry.getClass().getMethod("get");
+                Object dragonFruitItem = getMethod3.invoke(dragonFruitRegistry);
+                
+                if (lastInput.getItem() == dragonFruitItem) return sonicarrow.Mode.DRAGON;
+            } catch (NoSuchFieldException e) {
+                // 如果没有DRAGONFRUIT字段，忽略错误
+                System.out.println("No DRAGONFRUIT field found in boss mod");
+            }
         } catch (ClassNotFoundException e) {
             // boss模组不存在，跳过boss物品检查
             System.out.println("Boss mod not available, skipping boss items check in decideMode");

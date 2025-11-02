@@ -21,6 +21,11 @@ public class ModSounds {
                 () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_weapon_craft", "cheryyenergy")));
 
 
+         public static final RegistryObject<SoundEvent> DEN_O_LINES = REGISTRY.register("den_o_lines",
+                () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_weapon_craft", "den_o_lines")));
+
+
+
         public static final RegistryObject<SoundEvent> OPENDLOCK = REGISTRY.register("opendlock",
                 () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_weapon_craft", "opendlock")));
         public static final RegistryObject<SoundEvent> SONICARROW_SHOOT = REGISTRY.register("sonicarrow_shoot",

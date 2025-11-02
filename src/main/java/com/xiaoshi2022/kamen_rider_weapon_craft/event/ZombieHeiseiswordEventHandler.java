@@ -59,8 +59,8 @@ public class ZombieHeiseiswordEventHandler {
                 // 添加标记，表明这是一个平成剑僵尸
                 nbt.putBoolean(TAG_HEISEISWORD_ZOMBIE, true);
             } 
-            // 5%的几率让自然生成的僵尸持有平成剑
-            else if (zombie.level().random.nextFloat() <= 0.05f && !zombie.isBaby()) {
+            // 3%的几率让自然生成的僵尸持有平成剑
+            else if (zombie.level().random.nextFloat() <= 0.03f && !zombie.isBaby()) {
                 // 检查是否已经处理过这个僵尸或是否是自定义生成的
                 if (!nbt.contains(TAG_HEISEISWORD_ZOMBIE) && !nbt.contains("IsCustomSpawned")) {
                     // 给僵尸装备平成剑

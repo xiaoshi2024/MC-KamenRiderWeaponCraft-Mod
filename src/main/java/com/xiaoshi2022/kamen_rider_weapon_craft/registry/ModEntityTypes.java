@@ -2,6 +2,7 @@ package com.xiaoshi2022.kamen_rider_weapon_craft.registry;
 
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.client.daidaimaru.entity.ThrownDaidaimaru;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.prop.client.entity.LaserBeamEntity;
+import com.xiaoshi2022.kamen_rider_weapon_craft.entity.line.denliner;
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.Faiz.FaizEmptySetEntity;
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.build.BuildRiderEntity;
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.den_o.DenOTrainEntity;
@@ -191,6 +192,17 @@ public class ModEntityTypes {
                             .setShouldReceiveVelocityUpdates(false)
                             .build("faiz_empty_set")
             );
+    
+    // 电王电车实体
+    public static final RegistryObject<EntityType<denliner>> DENLINER = ENTITIES.register(
+            "denliner",
+            () -> EntityType.Builder.<denliner>
+                            of(denliner::new, MobCategory.MISC)
+                    .sized(2.0F, 1.0F)
+                    .clientTrackingRange(10)
+                    .updateInterval(1)
+                    .build("denliner")
+    );
 
     public static void register(IEventBus modEventBus) {
         ENTITIES.register(modEventBus);

@@ -7,6 +7,7 @@ import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.client.RiderFusionMachine
 import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.client.Time_traveler_studio_block.Time_traveler_studio_blockRenderer;
 import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.client.helheim_crack.helheim_crackBlockRenderer;
 import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.renderer.lockseedIronBarsEntityRenderer;
+import com.xiaoshi2022.kamen_rider_weapon_craft.entity.line.denliner;
 import com.xiaoshi2022.kamen_rider_weapon_craft.kamen_rider_weapon_craft;
 import com.xiaoshi2022.kamen_rider_weapon_craft.network.CloseMapPacket;
 import com.xiaoshi2022.kamen_rider_weapon_craft.network.FruitConversionPacket;
@@ -32,6 +33,7 @@ import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
+import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -133,6 +135,11 @@ public class ClientEvents {
             event.enqueueWork(() -> {
                 ItemBlockRenderTypes.setRenderLayer(HELHEIMVINE.get(), RenderType.cutout());
             });
+        }
+
+        @SubscribeEvent
+        public static void registerEntityAttributes(EntityAttributeCreationEvent event) {
+            event.put(ModEntityTypes.DENLINER.get(), denliner.createAttributes());
         }
     }
 }

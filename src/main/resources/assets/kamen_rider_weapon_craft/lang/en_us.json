@@ -156,8 +156,6 @@
   "item.kamen_rider_weapon_craft.helheim_pulp": "Helheim Pulp",
   "item.kamen_rider_weapon_craft.heiseisword": "Hei sei Sword",
 
-  "item.sonicarrow.mode.lemon": "柠檬模式",
-
   "item.kamen_rider_weapon_craft.bana_spear": "Bana Spear",
 
   "item.kamen_rider_weapon_craft.sonicarrow.mode.default": "lockMode：null",
@@ -165,8 +163,7 @@
   "item.kamen_rider_weapon_craft.sonicarrow.mode.lemon":   "lockMode：lemon",
   "item.kamen_rider_weapon_craft.sonicarrow.mode.peach":   "lockMode：peach",
   "item.kamen_rider_weapon_craft.sonicarrow.mode.cherry":  "lockMode：cherry",
-
-
+  "item.kamen_rider_weapon_craft.sonicarrow.mode.dragon": "lockMode：dragon",
 
 
   "fluid.kamen_rider_weapon_craft.helheim_juice": "Helheim Juice",

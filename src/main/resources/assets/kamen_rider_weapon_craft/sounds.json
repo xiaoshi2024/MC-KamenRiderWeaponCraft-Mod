@@ -394,5 +394,14 @@
         "stream": false
       }
     ]
+  },
+  "den_o_lines": {
+    "subtitle": "den-o lines~~~",
+    "sounds": [
+      {
+        "name": "kamen_rider_weapon_craft:den_o_lines",
+        "stream": false
+      }
+    ]
   }
 }

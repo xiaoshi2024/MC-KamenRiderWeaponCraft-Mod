@@ -2,6 +2,7 @@ package com.xiaoshi2022.kamen_rider_weapon_craft.Item.client.sonicarrow;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.combineds.client.combineds.sonicarrow_melon.sonicarrowCherryModel;
+import com.xiaoshi2022.kamen_rider_weapon_craft.Item.combineds.client.combineds.sonicarrow_melon.sonicarrowDragonModel;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.combineds.client.combineds.sonicarrow_melon.sonicarrowLemonModel;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.combineds.client.combineds.sonicarrow_melon.sonicarrowMelonModel;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.combineds.client.combineds.sonicarrow_melon.sonicarrowPeachModel;
@@ -18,6 +19,7 @@ public class sonicarrowRenderer extends GeoItemRenderer<sonicarrow> {
     private final GeoModel<sonicarrow> lemonModel;
     private final GeoModel<sonicarrow> cherryModel;
     private final GeoModel<sonicarrow> peachModel;
+    private final GeoModel<sonicarrow> dragonModel;
 
     public sonicarrowRenderer() {
         super(new sonicarrowModel());
@@ -26,6 +28,7 @@ public class sonicarrowRenderer extends GeoItemRenderer<sonicarrow> {
         this.lemonModel = new sonicarrowLemonModel();
         this.cherryModel = new sonicarrowCherryModel();
         this.peachModel = new sonicarrowPeachModel();
+        this.dragonModel = new sonicarrowDragonModel();
     }
 
     @Override
@@ -45,6 +48,7 @@ public class sonicarrowRenderer extends GeoItemRenderer<sonicarrow> {
             case LEMON -> lemonModel;
             case CHERRY -> cherryModel;
             case PEACH -> peachModel;
+            case DRAGON -> dragonModel;
             default -> defaultModel;
         };
 

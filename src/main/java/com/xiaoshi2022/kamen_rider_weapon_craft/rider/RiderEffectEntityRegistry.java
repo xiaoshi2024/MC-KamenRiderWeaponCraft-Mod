@@ -1,5 +1,6 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.rider;
 
+import com.xiaoshi2022.kamen_rider_weapon_craft.client.renderer.entity.line.DenlinerRenderer;
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModEntityTypes;
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.build.BuildRiderEntityRenderer;
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.decade.DecadeRiderEntityRenderer;
@@ -175,6 +176,7 @@ public class RiderEffectEntityRegistry {
     private static void registerDenORiderRenderers(EntityRenderersEvent.RegisterRenderers event) {
         // 使用与项目中其他实体一致的注册方式，保持代码风格统一
         event.registerEntityRenderer(ModEntityTypes.DEN_O_TRAIN.get(), DenOTrainRenderer::new);
+        event.registerEntityRenderer(ModEntityTypes.DENLINER.get(), DenlinerRenderer::new);
     }
     
     /**

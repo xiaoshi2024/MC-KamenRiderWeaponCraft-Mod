@@ -69,7 +69,8 @@ public class sonicarrow extends SwordItem implements GeoItem {
         MELON,
         LEMON,
         CHERRY,
-        PEACH
+        PEACH,
+        DRAGON
     }
 
     public sonicarrow(float meleeDamage, float attackSpeed, Properties properties) {
@@ -207,9 +208,7 @@ public class sonicarrow extends SwordItem implements GeoItem {
             SoundEvent shootSound
     ) {}
 
-    ModeConfig getConfig(Mode mode){
-        return switch(mode){
-            case MELON -> new ModeConfig(
+    ModeConfig getConfig(Mode mode){        return switch(mode){            case MELON -> new ModeConfig(
                     12.0, 1.6f, 1, 30,
                     ModParticles.MELON_PARTICLE.get(),
                     ModSounds.SONICARROW_SHOOT.get()
@@ -229,6 +228,11 @@ public class sonicarrow extends SwordItem implements GeoItem {
                     ModParticles.PEACH_PARTICLE.get(),
                     ModSounds.SONICARROW_SHOOT.get()
             );
+            case DRAGON -> new ModeConfig(
+                    15.0, 2.2f, 1, 40,
+                    ModParticles.AONICX_PARTICLE.get(),
+                    ModSounds.SONICARROW_SHOOT.get()
+            );
             default -> new ModeConfig(
                     9.0, 2.0f, 1, 20,
                     ModParticles.AONICX_PARTICLE.get(),
@@ -243,9 +247,7 @@ public class sonicarrow extends SwordItem implements GeoItem {
             Consumer<LivingEntity> onHitEffect // 命中特效
     ) {}
 
-    private ModeConfigMelee getMeleeConfig(Mode mode){
-        return switch(mode){
-            case MELON  -> new ModeConfigMelee(
+    private ModeConfigMelee getMeleeConfig(Mode mode){        return switch(mode){            case MELON  -> new ModeConfigMelee(
                     8.0, 0.0F,        // +2❤️
                     target -> {       // 小范围击飞
                         target.knockback(1.2F,
@@ -299,6 +301,11 @@ public class sonicarrow extends SwordItem implements GeoItem {
                         if (attacker != null && attacker.isAlive()) {
                             attacker.heal(2.0F);
                         }
+                    });
+            case DRAGON -> new ModeConfigMelee(
+                    12.0, 0.0f,      // +6❤️
+                    target -> {       // 燃烧效果：使目标燃烧10秒
+                        target.setSecondsOnFire(10);
                     });
             default     -> new ModeConfigMelee(0, 0, t -> {});
         };
