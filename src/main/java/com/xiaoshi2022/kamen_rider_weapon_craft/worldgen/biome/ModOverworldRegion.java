@@ -19,8 +19,7 @@ public class ModOverworldRegion extends Region {
 
     @Override
     public void addBiomes(Registry<Biome> registry, Consumer<Pair<Climate.ParameterPoint, ResourceKey<Biome>>> mapper) {
-        this.addModifiedVanillaOverworldBiomes(mapper, modifiedVanillaOverworldBuilder -> {
-            modifiedVanillaOverworldBuilder.replaceBiome(Biomes.FOREST, ModBiomes.HELHEIM_BIOME);
-        });
+        // 完全清空这个方法，不进行任何生物群系替换
+        // 这样TerraBlender注册了但不会影响世界生成
     }
 }

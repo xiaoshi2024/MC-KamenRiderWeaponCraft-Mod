@@ -1,7 +1,10 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.network;
 
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
 import net.minecraftforge.network.NetworkRegistry;
+import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.simple.SimpleChannel;
 
 /**
@@ -82,5 +85,34 @@ public class NetworkHandler {
                 HeiseiswordEnergySyncPacket::decode,
                 HeiseiswordEnergySyncPacket::handle
         );
+        
+        // 注册SoundStopPacket
+        INSTANCE.registerMessage(
+                packetId++,
+                SoundStopPacket.class,
+                SoundStopPacket::encode,
+                SoundStopPacket::decode,
+                SoundStopPacket.ClientHandler::handle
+        );
+    }
+    
+    // 发送到所有跟踪实体的客户端，包括实体本身
+    public static <MSG> void sendToAllTracking(MSG message, Entity entity) {
+        INSTANCE.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entity), message);
+    }
+
+    // 发送到服务器
+    public static <MSG> void sendToServer(MSG message) {
+        INSTANCE.sendToServer(message);
+    }
+
+    // 发送到特定玩家
+    public static <MSG> void sendToPlayer(MSG message, ServerPlayer player) {
+        INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), message);
+    }
+    
+    // 获取实例（兼容原有的PacketHandler调用方式）
+    public static SimpleChannel getINSTANCE() {
+        return INSTANCE;
     }
 }

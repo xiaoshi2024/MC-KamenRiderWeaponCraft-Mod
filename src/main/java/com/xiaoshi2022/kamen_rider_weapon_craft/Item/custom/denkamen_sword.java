@@ -1,25 +1,22 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom;
 
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.client.denkamen_sword.denkamen_swordRenderer;
 import com.xiaoshi2022.kamen_rider_weapon_craft.entity.line.denliner;
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModSounds;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
-import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;

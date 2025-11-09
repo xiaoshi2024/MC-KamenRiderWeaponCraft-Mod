@@ -195,8 +195,8 @@ public class WizardRiderEntity extends Projectile implements GeoEntity {
         List<Entity> nearbyEntities = this.level().getEntities(this, area);
         for (Entity entity : nearbyEntities) {
             if (entity instanceof LivingEntity nearbyLiving &&
-                    entity != this.getOwner() &&
-                    !entity.isAlliedTo(this.getOwner()) &&
+                    entity != ownerEntity &&
+                    (ownerEntity == null || !entity.isAlliedTo(ownerEntity)) &&
                     entity != target) {
                 if (owner != null) {
                         nearbyLiving.hurt(this.level().damageSources().indirectMagic(this, owner), this.getDamage() * 0.5f);

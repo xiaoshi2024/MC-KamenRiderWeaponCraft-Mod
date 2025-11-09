@@ -5,7 +5,10 @@ import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModSounds;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import com.xiaoshi2022.kamen_rider_weapon_craft.network.NetworkHandler;
+import com.xiaoshi2022.kamen_rider_weapon_craft.network.SoundStopPacket;
 import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -201,24 +204,39 @@ public class denliner extends LivingEntity implements GeoEntity {
     private void cleanupBeforeRemoval() {
         this.stopStandbySound();
 
-        // 停止声音
-        if (!this.level().isClientSide && this.level() instanceof ServerLevel serverLevel && this.rider != null) {
-            CommandSourceStack source = serverLevel.getServer().createCommandSourceStack()
-                    .withEntity(this.rider)
+        // 使用网络数据包停止声音
+        if (!this.level().isClientSide && this.rider != null) {
+            // 创建音效资源位置
+            ResourceLocation soundLoc = new ResourceLocation(
+                    "kamen_rider_weapon_craft",
+                    "den_o_lines"
+            );
+            
+            // 发送到所有跟踪该玩家的客户端
+            com.xiaoshi2022.kamen_rider_weapon_craft.network.NetworkHandler.sendToAllTracking(
+                    new com.xiaoshi2022.kamen_rider_weapon_craft.network.SoundStopPacket(rider.getId(), soundLoc),
+                    rider
+            );
+            
+            // 同时在服务器端执行停止音效命令作为备份
+            CommandSourceStack source = ((ServerLevel)this.level()).getServer().createCommandSourceStack()
                     .withSuppressedOutput()
                     .withPermission(2);
 
             try {
-                serverLevel.getServer().getCommands().getDispatcher().execute(
-                        "stopsound @s * kamen_rider_weapon_craft:den_o_lines",
-                        source
+                // 使用@a选择器确保在多人服务器中向所有玩家发送停止音效命令
+                // 移除distance限制以确保在大型服务器中所有玩家都能听到音效停止
+                String command = String.format(
+                        "/stopsound @a players %s",
+                        soundLoc.toString()
                 );
+                ((ServerLevel)this.level()).getServer().getCommands().performPrefixedCommand(source, command);
             } catch (Exception e) {
-                // 命令执行出错，继续执行
+                // 命令执行出错，继续执行，不影响其他清理操作
             }
         }
 
-        // 释放骑手
+        // 释放骑士
         if (this.rider != null) {
             this.rider.stopRiding();
             this.rider = null;

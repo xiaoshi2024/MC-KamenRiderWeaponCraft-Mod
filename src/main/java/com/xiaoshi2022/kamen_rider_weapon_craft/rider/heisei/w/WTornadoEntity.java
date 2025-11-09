@@ -20,6 +20,7 @@ public class WTornadoEntity extends net.minecraft.world.entity.Entity implements
     private Vec3 targetDirection = Vec3.ZERO; // 初始化默认值，避免null
     private int lifetime = 0;
     private static final int MAX_LIFETIME = 60; // 3秒（60tick）
+    private LivingEntity owner = null; // 记录龙卷风的所有者，用于区分发起者和其他玩家
 
     public WTornadoEntity(EntityType<?> entityType, Level level) {
         super(entityType, level);
@@ -31,6 +32,10 @@ public class WTornadoEntity extends net.minecraft.world.entity.Entity implements
 
     public void setDirection(Vec3 direction) {
         this.targetDirection = direction != null ? direction.normalize() : Vec3.ZERO;
+    }
+    
+    public void setOwner(LivingEntity owner) {
+        this.owner = owner;
     }
 
     @Override
@@ -57,7 +62,7 @@ public class WTornadoEntity extends net.minecraft.world.entity.Entity implements
             double range = 2.0;
             level().getEntitiesOfClass(LivingEntity.class, 
                     getBoundingBox().inflate(range),
-                    entity -> !(entity instanceof Player))
+                    entity -> entity != owner) // 只排除所有者，不排除其他玩家
                 .forEach(entity -> {
                     // 造成伤害并给予缓速效果
                     entity.hurt(level().damageSources().generic(), 5.0f);
@@ -86,7 +91,7 @@ public class WTornadoEntity extends net.minecraft.world.entity.Entity implements
             // 客户端：为被卷起的实体添加视觉效果
             level().getEntitiesOfClass(LivingEntity.class, 
                     getBoundingBox().inflate(2.0),
-                    entity -> !(entity instanceof Player))
+                    entity -> entity != owner) // 只排除所有者，不排除其他玩家
                 .forEach(entity -> {
                     // 粒子效果等视觉反馈可以在这里添加
                     // 添加一些风元素粒子效果
@@ -137,6 +142,7 @@ public class WTornadoEntity extends net.minecraft.world.entity.Entity implements
         if (!level.isClientSide) { // 只在服务器端生成实体
             WTornadoEntity tornado = new WTornadoEntity(level);
             tornado.setDirection(direction);
+            tornado.setOwner(shooter); // 设置所有者
             // 使用getEyePosition方法，适用于所有LivingEntity
             tornado.setPos(shooter.getEyePosition().add(direction.scale(1.0)));
             level.addFreshEntity(tornado);
@@ -156,7 +162,7 @@ public class WTornadoEntity extends net.minecraft.world.entity.Entity implements
         double searchRange = range * 3.0; // 更大的搜索范围
         level().getEntitiesOfClass(LivingEntity.class, 
                 getBoundingBox().inflate(searchRange),
-                entity -> !(entity instanceof Player) && entity.isNoGravity() && 
+                entity -> entity != owner && entity.isNoGravity() && 
                 !getBoundingBox().inflate(range).contains(entity.position()))
             .forEach(entity -> {
                 // 检查是否是最近被龙卷风卷起的实体（通过空气值标记）
@@ -177,7 +183,7 @@ public class WTornadoEntity extends net.minecraft.world.entity.Entity implements
         double searchRange = 5.0;
         level().getEntitiesOfClass(LivingEntity.class, 
                 getBoundingBox().inflate(searchRange),
-                entity -> !(entity instanceof Player) && entity.isNoGravity())
+                entity -> entity != owner && entity.isNoGravity())
             .forEach(entity -> {
                 entity.setNoGravity(false);
                 // 给予一个小小的上浮力，让下落更自然

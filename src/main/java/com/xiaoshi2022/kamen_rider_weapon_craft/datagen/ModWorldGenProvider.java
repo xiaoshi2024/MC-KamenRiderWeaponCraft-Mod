@@ -22,6 +22,8 @@ public class ModWorldGenProvider extends DatapackBuiltinEntriesProvider {
             .add(Registries.CONFIGURED_FEATURE, ModConfiguredFeatures::bootstrap)
             .add(Registries.PLACED_FEATURE, ModPlacedFeatures::bootstrap)
             .add(ForgeRegistries.Keys.BIOME_MODIFIERS, ModBiomeModifiers::bootstrap)
+            // 保留生物群系注册，确保维度可以正常使用赫尔海姆生物群系
+            // 但移除了主世界的生物群系生成（在ModTerrablender.java中）以避免与Biomes O' Plenty冲突
             .add(Registries.BIOME, ModBiomes::boostrap)
             .add(Registries.LEVEL_STEM, ModDimensions::bootstrapStem);
 

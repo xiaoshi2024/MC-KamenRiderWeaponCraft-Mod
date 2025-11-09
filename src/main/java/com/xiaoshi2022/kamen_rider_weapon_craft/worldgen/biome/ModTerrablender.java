@@ -16,7 +16,7 @@ public class ModTerrablender {
         public static void onCommonSetup(FMLCommonSetupEvent event) {
             event.enqueueWork(() -> {
                 // 在这里注册生物群系
-                Regions.register(new ModOverworldRegion(new ResourceLocation(kamen_rider_weapon_craft.MOD_ID, "overworld"), 5));
+//                Regions.register(new ModOverworldRegion(new ResourceLocation(kamen_rider_weapon_craft.MOD_ID, "overworld"), 5));
             });
         }
     }
