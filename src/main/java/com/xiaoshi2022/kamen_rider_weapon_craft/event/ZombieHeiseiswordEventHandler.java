@@ -3,8 +3,11 @@ package com.xiaoshi2022.kamen_rider_weapon_craft.event;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.Heiseisword;
 import com.xiaoshi2022.kamen_rider_weapon_craft.entity.ai.zombie.ZombieHeiseiswordController;
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModItems;
+import com.xiaoshi2022.kamen_rider_boss_you_and_me.Items.custom.property.aiziowc;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Zombie;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
@@ -221,6 +224,27 @@ public class ZombieHeiseiswordEventHandler {
                         zombie.getZ(), 
                         heiseiswordDrop
                     ));
+                }
+                
+                // 添加掉落异类表盘的几率（20%几率）
+                if (zombie.level().random.nextFloat() <= 0.2f) {
+                    try {
+                        // 直接创建aiziowc实例
+                        // Directly use the registered AIZIOWC item from the mod's registry
+                        ItemStack ai_wc = new ItemStack(com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems.AIZIOWC.get());
+                        
+                        // 添加异类表盘到掉落物中
+                        event.getDrops().add(new ItemEntity(
+                            zombie.level(), 
+                            zombie.getX(), 
+                            zombie.getY(), 
+                            zombie.getZ(),
+                            ai_wc
+                        ));
+                    } catch (Exception e) {
+                        // 如果出现异常，记录警告但不崩溃
+                        org.apache.logging.log4j.LogManager.getLogger().warn("Failed to create aiziowc item, skipping drop");
+                    }
                 }
             }
         }
