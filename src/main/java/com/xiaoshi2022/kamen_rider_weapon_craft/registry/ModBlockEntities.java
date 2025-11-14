@@ -1,9 +1,11 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.registry;
 
 
+import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.KachidokiBataBlockItem;
 import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.client.RiderFusionMachineBlockEntity;
 import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.client.Time_traveler_studio_blockEntity;
 import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.client.helheim_crackBlockEntity;
+import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.custom.KachidokiBataBlock;
 import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.entity.lockseedIronBarsEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.registries.DeferredRegister;
@@ -24,9 +26,18 @@ public class ModBlockEntities {
   public static final RegistryObject<BlockEntityType<lockseedIronBarsEntity>> LOCKSEEDIRONBARS_ENTITY = BLOCK_ENTITIES.register("lockseed_iron_bars_entity",
             () -> BlockEntityType.Builder.of(lockseedIronBarsEntity::new, ModBlocks.LOCKSEEDIRONBARS.get()).build(null));
 
+
 //    public static final RegistryObject<BlockEntityType<ModHangingSignBlockEntity>> MOD_HANGING_SIGN =
 //            BLOCK_ENTITIES.register("mod_hanging_sign", () ->
 //                    BlockEntityType.Builder.of(ModHangingSignBlockEntity::new,
 //                            ModBlocks.PINE_HANGING_SIGN.get(), ModBlocks.PINE_WALL_HANGING_SIGN.get()).build(null));
+    
+    // 胜哄旗方块实体
+    public static final RegistryObject<BlockEntityType<KachidokiBataBlock.KachidokiBataBlockEntity>> KACHIDOKI_BATA_BLOCK_ENTITY = 
+            BLOCK_ENTITIES.register("kachidoki_bata_block_entity", 
+                    () -> BlockEntityType.Builder.of(
+                            KachidokiBataBlock.KachidokiBataBlockEntity::new, 
+                            ModBlocks.KACHIDOKI_BATA_BLOCK.get())
+                    .build(null));
 
 }

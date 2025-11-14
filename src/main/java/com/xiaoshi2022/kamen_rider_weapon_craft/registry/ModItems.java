@@ -1,7 +1,9 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.registry;
 
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.ModTires;
+import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.KachidokiBataBlockItem;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.*;
+import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.KachidokiBata;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.food.HelheimFruit;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.food.helheimfoods.HelheimBowlFood;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.food.helheimfoods.HelheimJuiceBottle;
@@ -9,9 +11,11 @@ import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.food.helheimfoods.He
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.prop.RiderPass;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.prop.custom.Melon;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.prop.custom.cheryy;
+import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.custom.KachidokiBataBlock;
 import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.display.rider_fusion_machine_item;
 import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.display.time_traveler_studio_item;
 import com.xiaoshi2022.kamen_rider_weapon_craft.kamen_rider_weapon_craft;
+import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModBlocks;
 import com.xiaoshi2022.kamen_rider_weapon_craft.weapon_mapBOOK.weapon_map;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
@@ -61,6 +65,15 @@ public class ModItems {
             () -> new HinawaDaidai_DJ_Ju(new Item.Properties().stacksTo(1)));
     public static final RegistryObject<musouhinawadj> MUSOUHINAWADJ = ITEMS.register("musouhinawadj",
             () -> new musouhinawadj(ModTires.DAIMARU, 23, 2.7F, new Item.Properties()));
+    
+    // 胜哄旗 - 武器物品
+    public static final RegistryObject<KachidokiBata> KACHIDOKI_BATA = ITEMS.register("kachidoki_bata",
+            () -> new KachidokiBata());
+    
+    // 胜哄旗 - 方块物品
+    public static final RegistryObject<KachidokiBataBlockItem> KACHIDOKI_BATA_BLOCK_ITEM = ITEMS.register("kachidoki_bata_block",
+            () -> new KachidokiBataBlockItem(ModBlocks.KACHIDOKI_BATA_BLOCK.get(), new Item.Properties()));
+
 
     //方块物品
     public static final RegistryObject<Item> TIMESAND_ITEM = ITEMS.register("timesand_item",

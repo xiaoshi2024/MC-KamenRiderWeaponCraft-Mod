@@ -23,6 +23,7 @@
   "block.kamen_rider_weapon_craft.pine_planks": "赫尔海姆木板",
   "block.kamen_rider_weapon_craft.lockseed_iron_bars": "锁种放置钢架",
   "block.kamen_rider_weapon_craft.timesand": "时间沙子",
+  "block.kamen_rider_weapon_craft.kachidoki_bata": "胜吼旗",
   "entity.minecraft.villager.kamen_rider_weapon_craft.time_traveler_profession": "时空旅行意志者",
   "entity.minecraft.villager.kamen_rider_weapon_craft.lockseed_merchant": "定锁种子商人",
   "dialogue.just_passing_by/1": "我要成为世界的破坏者(DCD)",
@@ -49,6 +50,7 @@
   "item.kamen_rider_weapon_craft.sonicarrow": "音速弓~",
   "item.kamen_rider_weapon_craft.gavvwhipir": "加布掼奶油枪",
   "item.kamen_rider_weapon_craft.zanvat_sword": "魔皇剑",
+  "item.kamen_rider_weapon_craft.kachidoki_bata": "胜吼旗",
 
   "curios.identifier.waist_left": "武器腰带槽",
 

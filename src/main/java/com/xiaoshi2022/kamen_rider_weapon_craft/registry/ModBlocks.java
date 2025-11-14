@@ -1,5 +1,6 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.registry;
 
+import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.custom.KachidokiBataBlock;
 import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.custom.ModFlammableRotatedPillarBlock;
 import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.food.HelheimJellyBlock;
 import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.portals.*;
@@ -139,4 +140,13 @@ public class ModBlocks {
                             .friction(0.8f)                 // 摩擦系数
                             .noOcclusion()                  // 不遮挡视线
                             .instabreak()));                // 瞬间破坏
+
+    // 胜哄旗方块
+    public static final RegistryObject<KachidokiBataBlock> KACHIDOKI_BATA_BLOCK =
+            BLOCKS.register(
+                    "kachidoki_bata",
+                    () -> new KachidokiBataBlock(BlockBehaviour.Properties.of()
+                            .strength(1.0f, 1.0f)
+                            .noOcclusion()
+                            .dynamicShape()));
 }

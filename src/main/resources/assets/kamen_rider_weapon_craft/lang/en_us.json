@@ -26,6 +26,7 @@
   "block.kamen_rider_weapon_craft.pine_planks": "helheim Planks",
   "block.kamen_rider_weapon_craft.lockseed_iron_bars": "Lock seed IronBars",
   "block.kamen_rider_weapon_craft.timesand": "Time Sand",
+  "block.kamen_rider_weapon_craft.kachidoki_bata": "Kachidoki Bata",
 
   "entity.minecraft.villager.kamen_rider_weapon_craft.time_traveler_profession": "theWillOfTimeTravel",
   "entity.minecraft.villager.kamen_rider_weapon_craft.lockseed_merchant": "LockSeed Merchant",
@@ -56,6 +57,7 @@
   "item.kamen_rider_weapon_craft.sonicarrow": "Sonic Arrow",
   "item.kamen_rider_weapon_craft.gavvwhipir": "Gavv Whipir",
   "item.kamen_rider_weapon_craft.zanvat_sword": "Zanvat Sword",
+  "item.kamen_rider_weapon_craft.kachidoki_bata": "Kachidoki Bata",
 
   "curios.identifier.waist_left": "weaponBeltSlot",
 

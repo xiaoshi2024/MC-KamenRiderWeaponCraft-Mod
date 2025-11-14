@@ -1,8 +1,10 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.event;
 
+import com.xiaoshi2022.kamen_rider_weapon_craft.Item.client.KachidokiBata.KachidokiBataRenderer;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.client.daidaimaru.ThrownDaidaimaruRenderer;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.client.musousaberd.musousaberdRenderer;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.prop.client.arrowx.LaserBeamEntityRenderer;
+import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.client.KachidokiBataBlock.KachidokiBataBlockRenderer;
 import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.client.RiderFusionMachine.RiderFusionMachineBlockRenderer;
 import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.client.Time_traveler_studio_block.Time_traveler_studio_blockRenderer;
 import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.client.helheim_crack.helheim_crackBlockRenderer;
@@ -117,6 +119,7 @@ public class ClientEvents {
             event.registerBlockEntityRenderer(ModBlockEntities.HELHEIM_CRACK_BLOCK_ENTITY.get(), helheim_crackBlockRenderer::new);
             event.registerBlockEntityRenderer(ModBlockEntities.TIME_TRAVELER_STUDIO_BLOCK_ENTITY.get(), Time_traveler_studio_blockRenderer::new);
             event.registerBlockEntityRenderer(ModBlockEntities.RIDER_FUSION_MACHINE_BLOCK_ENTITY.get(), context -> new RiderFusionMachineBlockRenderer());
+            event.registerBlockEntityRenderer(ModBlockEntities.KACHIDOKI_BATA_BLOCK_ENTITY.get(), KachidokiBataBlockRenderer::new);
     }
         @SubscribeEvent
         public static void onEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
@@ -131,6 +134,7 @@ public class ClientEvents {
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
             CuriosRendererRegistry.register(ModItems.MUSOUSABERD.get(), musousaberdRenderer::new);
+            CuriosRendererRegistry.register(ModItems.KACHIDOKI_BATA.get(), KachidokiBataRenderer::new);
 
             event.enqueueWork(() -> {
                 ItemBlockRenderTypes.setRenderLayer(HELHEIMVINE.get(), RenderType.cutout());
