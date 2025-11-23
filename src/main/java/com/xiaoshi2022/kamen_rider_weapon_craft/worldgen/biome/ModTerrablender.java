@@ -1,11 +1,9 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.worldgen.biome;
 
 import com.xiaoshi2022.kamen_rider_weapon_craft.kamen_rider_weapon_craft;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import terrablender.api.Regions;
 
 @Mod.EventBusSubscriber(modid = kamen_rider_weapon_craft.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ModTerrablender {

@@ -38,7 +38,7 @@ public class KachidokiBataRenderer extends GeoItemRenderer<KachidokiBata> implem
             poseStack.mulPose(com.mojang.math.Axis.ZP.rotationDegrees(-60F));
 
             // 缩放
-            poseStack.scale(0.8F, 0.8F, 0.8F);
+            poseStack.scale(1.5F, 1.2F, 1.3F);
 
             // 渲染物品
             ItemInHandRenderer renderer = new ItemInHandRenderer(

@@ -1,8 +1,8 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.entity.ai.zombie;
 
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.sonicarrow;
-import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;

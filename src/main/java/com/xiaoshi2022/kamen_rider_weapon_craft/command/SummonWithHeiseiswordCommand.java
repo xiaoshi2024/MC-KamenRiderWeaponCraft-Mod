@@ -1,11 +1,12 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.command;
 
-import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModItems;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
+import com.xiaoshi2022.kamen_rider_weapon_craft.entity.ai.HeiseiswordController;
+import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModItems;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
@@ -17,12 +18,8 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
-
-// 导入通用AI控制器而非仅僵尸专用控制器
-import com.xiaoshi2022.kamen_rider_weapon_craft.entity.ai.HeiseiswordController;
 
 public class SummonWithHeiseiswordCommand {
     private static final SimpleCommandExceptionType ENTITY_TYPE_ERROR = new SimpleCommandExceptionType(

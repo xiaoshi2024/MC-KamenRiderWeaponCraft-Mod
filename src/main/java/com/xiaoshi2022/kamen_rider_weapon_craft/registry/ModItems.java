@@ -1,9 +1,7 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.registry;
 
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.ModTires;
-import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.KachidokiBataBlockItem;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.*;
-import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.KachidokiBata;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.food.HelheimFruit;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.food.helheimfoods.HelheimBowlFood;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.food.helheimfoods.HelheimJuiceBottle;
@@ -11,11 +9,9 @@ import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.food.helheimfoods.He
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.prop.RiderPass;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.prop.custom.Melon;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.prop.custom.cheryy;
-import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.custom.KachidokiBataBlock;
 import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.display.rider_fusion_machine_item;
 import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.display.time_traveler_studio_item;
 import com.xiaoshi2022.kamen_rider_weapon_craft.kamen_rider_weapon_craft;
-import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModBlocks;
 import com.xiaoshi2022.kamen_rider_weapon_craft.weapon_mapBOOK.weapon_map;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;

@@ -1,12 +1,10 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.entity.ai.zombie;
 
-import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.ai.goal.GoalSelector;
 import net.minecraft.world.entity.ai.goal.WrappedGoal;
+import net.minecraft.world.entity.monster.Zombie;
 
-import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class ZombieHeiseiswordController {
     

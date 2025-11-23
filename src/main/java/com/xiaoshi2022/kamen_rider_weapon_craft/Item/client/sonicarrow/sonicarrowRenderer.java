@@ -1,11 +1,7 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.Item.client.sonicarrow;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.xiaoshi2022.kamen_rider_weapon_craft.Item.combineds.client.combineds.sonicarrow_melon.sonicarrowCherryModel;
-import com.xiaoshi2022.kamen_rider_weapon_craft.Item.combineds.client.combineds.sonicarrow_melon.sonicarrowDragonModel;
-import com.xiaoshi2022.kamen_rider_weapon_craft.Item.combineds.client.combineds.sonicarrow_melon.sonicarrowLemonModel;
-import com.xiaoshi2022.kamen_rider_weapon_craft.Item.combineds.client.combineds.sonicarrow_melon.sonicarrowMelonModel;
-import com.xiaoshi2022.kamen_rider_weapon_craft.Item.combineds.client.combineds.sonicarrow_melon.sonicarrowPeachModel;
+import com.xiaoshi2022.kamen_rider_weapon_craft.Item.combineds.client.combineds.sonicarrow_melon.*;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.sonicarrow;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.world.item.ItemDisplayContext;

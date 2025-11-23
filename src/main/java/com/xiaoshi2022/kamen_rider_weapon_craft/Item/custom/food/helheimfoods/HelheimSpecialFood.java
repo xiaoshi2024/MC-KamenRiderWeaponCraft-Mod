@@ -1,5 +1,6 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.food.helheimfoods;
 // 移除直接导入boss模组类，改用反射安全检查
+
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.food.helheimfoods.foodeffects.HelheimEffects;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -11,7 +12,6 @@ import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import tocraft.walkers.api.PlayerShape;
 
 public class HelheimSpecialFood extends Item {
 

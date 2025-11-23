@@ -1,5 +1,8 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft;
 
+import com.xiaoshi2022.kamen_rider_weapon_craft.command.SummonRiderZombieCommand;
+import com.xiaoshi2022.kamen_rider_weapon_craft.command.SummonWithHeiseiswordCommand;
+import com.xiaoshi2022.kamen_rider_weapon_craft.command.TestHeiseiswordZombieCommand;
 import com.xiaoshi2022.kamen_rider_weapon_craft.event.ItemTooltipHandler;
 import com.xiaoshi2022.kamen_rider_weapon_craft.event.LivingHurtHandler;
 import com.xiaoshi2022.kamen_rider_weapon_craft.event.WitherSpawnHandler;
@@ -13,18 +16,15 @@ import com.xiaoshi2022.kamen_rider_weapon_craft.registry.*;
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.RiderEffectEntityRegistry;
 import com.xiaoshi2022.kamen_rider_weapon_craft.tab.ModTab;
 import com.xiaoshi2022.kamen_rider_weapon_craft.util.FruitConversionRegistry;
-import com.xiaoshi2022.kamen_rider_weapon_craft.command.SummonWithHeiseiswordCommand;
-import com.xiaoshi2022.kamen_rider_weapon_craft.command.TestHeiseiswordZombieCommand;
-import com.xiaoshi2022.kamen_rider_weapon_craft.command.SummonRiderZombieCommand;
 import com.xiaoshi2022.kamen_rider_weapon_craft.villagers.LockSeedMerchantProfession;
 import com.xiaoshi2022.kamen_rider_weapon_craft.villagers.TimeTravelerProfession;
 import com.xiaoshi2022.kamen_rider_weapon_craft.worldgen.tree.ModFoliagePlacers;
 import com.xiaoshi2022.kamen_rider_weapon_craft.worldgen.tree.ModTrunkPlacerTypes;
-import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.ComposterBlock;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;

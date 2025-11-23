@@ -1,6 +1,5 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.event;
 
-import com.xiaoshi2022.kamen_rider_weapon_craft.rider.effect.impl.KabutoEffect;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.projectile.Projectile;

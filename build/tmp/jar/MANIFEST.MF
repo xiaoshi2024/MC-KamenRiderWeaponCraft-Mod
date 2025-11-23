@@ -7,6 +7,6 @@ Implementation-Title: MC-KamenRiderWeaponCraft-Mod
 Implementation-Version: 0.2.4
 Implementation-Vendor: xiaoshi2022,emm_114514(json develop),xiaohaoxiaoh
  ao(Partial models),cjiangqiu
-Implementation-Timestamp: 2025-11-14T11:07:17+0800
+Implementation-Timestamp: 2025-11-15T20:53:54+0800
 MixinConfigs: kamen_rider_weapon_craft.mixins.json
 

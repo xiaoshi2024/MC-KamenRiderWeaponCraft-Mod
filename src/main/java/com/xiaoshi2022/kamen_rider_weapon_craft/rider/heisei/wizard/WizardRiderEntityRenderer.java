@@ -1,7 +1,7 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.wizard;
 
-import software.bernie.geckolib.renderer.GeoEntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import software.bernie.geckolib.renderer.GeoEntityRenderer;
 
 public class WizardRiderEntityRenderer extends GeoEntityRenderer<WizardRiderEntity> {
     

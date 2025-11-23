@@ -1,7 +1,6 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.ooo;
 
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModEntityTypes;
-// 移除粒子相关导入
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -10,6 +9,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractHurtingProjectile;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
@@ -26,7 +26,6 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.List;
 import java.util.UUID;
-import net.minecraft.world.entity.player.Player;
 
 /**
  * Kamen Rider OOO Geo实体类

@@ -1,7 +1,6 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.fourze;
 
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModEntityTypes;
-import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;

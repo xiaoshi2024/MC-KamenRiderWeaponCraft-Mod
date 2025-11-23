@@ -25,8 +25,6 @@ import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
-import java.util.UUID;
-
 import static software.bernie.geckolib.core.animation.Animation.LoopType.LOOP;
 import static software.bernie.geckolib.core.animation.Animation.LoopType.PLAY_ONCE;
 

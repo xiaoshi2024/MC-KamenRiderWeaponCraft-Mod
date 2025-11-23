@@ -1,10 +1,10 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.rider.energy;
 
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.entity.player.Player;
 import com.xiaoshi2022.kamen_rider_weapon_craft.network.HeiseiswordEnergySyncPacket;
 import com.xiaoshi2022.kamen_rider_weapon_craft.network.NetworkHandler;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
 
 /**
  * 平成嘿嘿剑自定义能量管理器

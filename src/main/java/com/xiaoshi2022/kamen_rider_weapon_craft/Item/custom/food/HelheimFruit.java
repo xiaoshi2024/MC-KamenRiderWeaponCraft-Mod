@@ -1,6 +1,7 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.food;
 
 // 移除直接导入boss模组类，改用反射安全检查
+
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.food.HelheimFruit.HelheimFruitRenderer;
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.EffectInit;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
@@ -30,7 +31,6 @@ import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
-import tocraft.walkers.api.PlayerShape;
 
 import java.util.function.Consumer;
 

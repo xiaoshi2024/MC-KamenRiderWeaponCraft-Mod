@@ -1,6 +1,5 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.hibiki;
 
-import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;

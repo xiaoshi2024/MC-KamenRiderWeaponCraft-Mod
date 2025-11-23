@@ -41,7 +41,7 @@ public class KachidokiBata extends SwordItem implements GeoItem, ICurioItem {
             }
 
             public float getAttackDamageBonus() {
-                return 35f; // 武器的额外攻击伤害
+                return 20f; // 武器的额外攻击伤害
             }
 
             public int getLevel() {

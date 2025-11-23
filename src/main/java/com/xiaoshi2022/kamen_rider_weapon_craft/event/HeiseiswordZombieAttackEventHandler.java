@@ -1,7 +1,6 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.event;
 
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.Heiseisword;
-import com.xiaoshi2022.kamen_rider_weapon_craft.command.SummonRiderZombieCommand;
 import com.xiaoshi2022.kamen_rider_weapon_craft.entity.ai.zombie.ZombieHeiseiswordController;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementProgress;
@@ -16,8 +15,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-
-import java.util.UUID;
 
 import static com.xiaoshi2022.kamen_rider_weapon_craft.kamen_rider_weapon_craft.MOD_ID;
 

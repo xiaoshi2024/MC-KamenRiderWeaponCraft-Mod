@@ -1,7 +1,6 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.registry;
 
 
-import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.KachidokiBataBlockItem;
 import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.client.RiderFusionMachineBlockEntity;
 import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.client.Time_traveler_studio_blockEntity;
 import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.client.helheim_crackBlockEntity;

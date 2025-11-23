@@ -1,6 +1,5 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.datagen;
 
-import com.xiaoshi2022.kamen_rider_weapon_craft.datagen.ModAdvancementProvider;
 import com.xiaoshi2022.kamen_rider_weapon_craft.kamen_rider_weapon_craft;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
