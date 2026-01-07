@@ -8,20 +8,21 @@ import net.minecraftforge.network.NetworkEvent;
 import java.util.function.Supplier;
 
 public class HeiseiswordRiderSelectionPacket {
-    // 不需要额外数据，因为服务端会根据玩家手持的物品来处理
+    private final boolean isXKeyDown;
 
-    public HeiseiswordRiderSelectionPacket() {}
+    public HeiseiswordRiderSelectionPacket(boolean isXKeyDown) {
+        this.isXKeyDown = isXKeyDown;
+    }
 
     // 编码方法
     public static void encode(HeiseiswordRiderSelectionPacket msg, FriendlyByteBuf buf) {
-        // 写入一个哑字节以避免Forge崩溃
-        buf.writeByte(0);
+        buf.writeBoolean(msg.isXKeyDown);
     }
 
     // 解码方法
     public static HeiseiswordRiderSelectionPacket decode(FriendlyByteBuf buf) {
-        buf.readByte(); // 读取哑字节
-        return new HeiseiswordRiderSelectionPacket();
+        boolean isXKeyDown = buf.readBoolean();
+        return new HeiseiswordRiderSelectionPacket(isXKeyDown);
     }
 
     // 处理方法
@@ -34,18 +35,22 @@ public class HeiseiswordRiderSelectionPacket {
             ItemStack stack = player.getMainHandItem();
             // 检查是否是Heiseisword
             if (stack.getItem().getClass().getSimpleName().equals("Heiseisword")) {
-                // 调用实际的处理方法（我们稍后会修改Heiseisword类添加这个方法）
+                // 调用实际的处理方法
                 try {
                     // 使用反射调用Heiseisword中的服务端处理方法
                     Class<?> heiseiswordClass = Class.forName("com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.Heiseisword");
-                    java.lang.reflect.Method handleSelectionMethod = heiseiswordClass.getDeclaredMethod("handleRiderSelectionOnServer", ServerPlayer.class, ItemStack.class);
+                    java.lang.reflect.Method handleSelectionMethod = heiseiswordClass.getDeclaredMethod("handleRiderSelectionOnServer", ServerPlayer.class, ItemStack.class, boolean.class);
                     handleSelectionMethod.setAccessible(true);
-                    handleSelectionMethod.invoke(null, player, stack);
+                    handleSelectionMethod.invoke(null, player, stack, msg.isXKeyDown);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
         });
         ctx.get().setPacketHandled(true);
+    }
+
+    public boolean isXKeyDown() {
+        return isXKeyDown;
     }
 }

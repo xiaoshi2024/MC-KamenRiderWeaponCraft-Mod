@@ -493,8 +493,10 @@ public class Heiseisword extends SwordItem implements GeoItem {
             if (KeyBinding.OPEN_LOCKSEED.isDown() && !isRiderSelectionOnCooldown(stack, level)) {
                 // 客户端只负责发送网络包到服务端
                 if (level.isClientSide) {
-                    // 发送骑士选择请求到服务端
-                    NetworkHandler.INSTANCE.sendToServer(new HeiseiswordRiderSelectionPacket());
+                    // 检测X键是否同时按下
+                    boolean isXKeyDown = KeyBinding.CHANGE_KEY.isDown();
+                    // 发送骑士选择请求到服务端，包含X键状态
+                    NetworkHandler.INSTANCE.sendToServer(new HeiseiswordRiderSelectionPacket(isXKeyDown));
                     
                     // 在客户端也设置冷却，避免快速连续发送多个包
                     setLastRiderSelectionTime(stack, level.getGameTime());
@@ -509,12 +511,12 @@ public class Heiseisword extends SwordItem implements GeoItem {
      * 服务端处理骑士选择的静态方法
      * 由HeiseiswordRiderSelectionPacket调用
      */
-    public static void handleRiderSelectionOnServer(ServerPlayer player, ItemStack stack) {
+    public static void handleRiderSelectionOnServer(ServerPlayer player, ItemStack stack, boolean isXKeyDown) {
         if (stack.getItem() instanceof Heiseisword heiseisword) {
             // 检查冷却
             if (!heiseisword.isRiderSelectionOnCooldown(stack, player.level())) {
                 // 实际处理骑士选择逻辑
-                heiseisword.handleRiderSelectionInternal(player, stack);
+                heiseisword.handleRiderSelectionInternal(player, stack, isXKeyDown);
                 // 设置冷却时间
                 heiseisword.setLastRiderSelectionTime(stack, player.level().getGameTime());
             }
@@ -527,10 +529,10 @@ public class Heiseisword extends SwordItem implements GeoItem {
     }
 
     // 内部处理骑士选择逻辑（在服务端执行）
-    private void handleRiderSelectionInternal(Player player, ItemStack stack) {
+    private void handleRiderSelectionInternal(Player player, ItemStack stack, boolean isXKeyDown) {
         if (isFinishTimeMode(stack)) {
             // 必杀时刻模式：处理Finish Time模式下的选择
-            handleFinishTimeModeSelection(player, stack);
+            handleFinishTimeModeSelection(player, stack, isXKeyDown);
         } else {
             // 普通模式：处理普通模式下的选择
             handleNormalModeSelection(player, stack);
@@ -566,11 +568,11 @@ public class Heiseisword extends SwordItem implements GeoItem {
     }
 
     // 处理Finish Time模式下的Y键选择
-    private void handleFinishTimeModeSelection(Player player, ItemStack stack) {
+    private void handleFinishTimeModeSelection(Player player, ItemStack stack, boolean isXKeyDown) {
         List<String> riderOrder = HeiseiRiderEffectManager.getRiderOrder();
 
         // 检测X键按下（用于触发超必杀）
-        if (KeyBinding.CHANGE_KEY.isDown() && !isUltimateMode(stack)) {
+        if (isXKeyDown && !isUltimateMode(stack)) {
             setUltimateMode(stack, true);
             // 播放超必杀启动音效（嘿嘿待机音）和动画
             HeiseiRiderEffectManager.playUltimateActivationSound(player.level(), player);
