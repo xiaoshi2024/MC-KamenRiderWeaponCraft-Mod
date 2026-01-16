@@ -33,6 +33,7 @@ public class ModTab {
                 output.accept(DESTROY_FIFTY_SWORDS.get());
                 output.accept(AUTHORIZE_BUSTER.get());
                 output.accept(PROGRISE_HOPPER_BLADE.get());
+                output.accept(BREAKAMNUSTER_GUN.get());
             })).build());
     public static final RegistryObject<CreativeModeTab> T_TAB = TABS.register("kamen_rider_weapon_craft_prop_tab", () -> CreativeModeTab.builder()
             .icon(() -> MELON.get().getDefaultInstance())

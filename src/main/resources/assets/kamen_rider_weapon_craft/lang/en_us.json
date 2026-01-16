@@ -160,9 +160,9 @@
 
   "item.kamen_rider_weapon_craft.bana_spear": "Bana Spear",
   "item.kamen_rider_weapon_craft.breakam_buster": "Breakam Buster",
-  "item.kamen_rider_weapon_craft.breakam_buster_i": "Breakam Buster - Detach Mode",
-  "item.kamen_rider_weapon_craft.breakam_buster_o": "Breakam Buster - Grip Mode",
-  "item.kamen_rider_weapon_craft.breakam_buster_s": "Breakam Buster - Sword Mode",
+  "item.kamen_rider_weapon_craft.breakam_buster_body": "Breakam Buster - Detach Mode",
+  "item.kamen_rider_weapon_craft.breakam_buster_grip": "Breakam Buster - Grip Mode",
+  "item.kamen_rider_weapon_craft.breakam_buster_sword": "Breakam Buster - Sword Mode",
 
   "item.kamen_rider_weapon_craft.breakam_buster.mode.default": "Mode: Gun",
   "item.kamen_rider_weapon_craft.breakam_buster.mode.o": "Mode: Grip",

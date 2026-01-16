@@ -146,9 +146,9 @@
   "item.kamen_rider_weapon_craft.heiseisword": "平成驾驭剑",
   "item.kamen_rider_weapon_craft.bana_spear": "香蕉矛枪",
   "item.kamen_rider_weapon_craft.breakam_buster": "噬梦破坏器",
-  "item.kamen_rider_weapon_craft.breakam_buster_i": "噬梦破坏器-拆离模式",
-  "item.kamen_rider_weapon_craft.breakam_buster_o": "噬梦破坏器-握把模式",
-  "item.kamen_rider_weapon_craft.breakam_buster_s": "噬梦破坏器-圣剑模式",
+  "item.kamen_rider_weapon_craft.breakam_buster_body": "噬梦破坏器-拆离模式",
+  "item.kamen_rider_weapon_craft.breakam_buster_grip": "噬梦破坏器-握把模式",
+  "item.kamen_rider_weapon_craft.breakam_buster_sword": "噬梦破坏器-圣剑模式",
 
   "item.kamen_rider_weapon_craft.breakam_buster.mode.default": "模式：枪",
   "item.kamen_rider_weapon_craft.breakam_buster.mode.o": "模式：握把",

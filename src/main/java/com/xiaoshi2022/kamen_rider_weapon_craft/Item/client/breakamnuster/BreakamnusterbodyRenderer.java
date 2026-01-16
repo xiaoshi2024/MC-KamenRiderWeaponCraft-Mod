@@ -7,6 +7,6 @@ import software.bernie.geckolib.renderer.GeoItemRenderer;
 
 public class BreakamnusterbodyRenderer extends GeoItemRenderer<Breakamnusterbody> {
     public BreakamnusterbodyRenderer() {
-        super(new BreakamnusterbodyModel<>(new ResourceLocation(kamen_rider_weapon_craft.MOD_ID,"item/breakam_buster_i")));
+        super(new BreakamnusterbodyModel<>(new ResourceLocation(kamen_rider_weapon_craft.MOD_ID,"breakam_buster_i")));
     }
 }

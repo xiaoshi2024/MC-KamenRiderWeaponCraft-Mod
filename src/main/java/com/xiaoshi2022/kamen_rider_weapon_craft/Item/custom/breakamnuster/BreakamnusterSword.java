@@ -36,17 +36,17 @@ public class BreakamnusterSword extends SwordItem implements GeoItem {
         super(new Tier() {
             @Override
             public int getUses() {
-                return 1000; // 武器耐久度
+                return 1500; // 武器耐久度
             }
 
             @Override
             public float getSpeed() {
-                return 1.5f; // 攻击速度
+                return 1.8f; // 攻击速度 - 剑的攻击速度较快
             }
 
             @Override
             public float getAttackDamageBonus() {
-                return 10.0f; // 额外攻击伤害
+                return 18.0f; // 额外攻击伤害 - 剑的伤害较高
             }
 
             @Override
@@ -56,7 +56,7 @@ public class BreakamnusterSword extends SwordItem implements GeoItem {
 
             @Override
             public int getEnchantmentValue() {
-                return 10; // 附魔值
+                return 15; // 附魔值
             }
 
             @Override

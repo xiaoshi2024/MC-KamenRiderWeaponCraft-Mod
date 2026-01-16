@@ -7,6 +7,6 @@ import software.bernie.geckolib.renderer.GeoItemRenderer;
 
 public class BreakamnusterGripRenderer extends GeoItemRenderer<BreakamnusterGrip> {
     public BreakamnusterGripRenderer() {
-        super(new BreakamnusterGripModel<>(new ResourceLocation(kamen_rider_weapon_craft.MOD_ID,"item/breakam_buster_o")));
+        super(new BreakamnusterGripModel<>(new ResourceLocation(kamen_rider_weapon_craft.MOD_ID,"breakam_buster_o")));
     }
 }
