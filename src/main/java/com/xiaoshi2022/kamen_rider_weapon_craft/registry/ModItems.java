@@ -2,6 +2,10 @@ package com.xiaoshi2022.kamen_rider_weapon_craft.registry;
 
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.ModTires;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.*;
+import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.breakamnuster.Breakamnusterbody;
+import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.breakamnuster.BreakamnusterGun;
+import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.breakamnuster.BreakamnusterGrip;
+import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.breakamnuster.BreakamnusterSword;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.food.HelheimFruit;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.food.helheimfoods.HelheimBowlFood;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.food.helheimfoods.HelheimJuiceBottle;
@@ -57,6 +61,14 @@ public class ModItems {
             () -> new gavvwhipir());
     public static final RegistryObject<destroy_fifty_swords> DESTROY_FIFTY_SWORDS = ITEMS.register("destroy_fifty_swords",
             () -> new destroy_fifty_swords());
+    public static final RegistryObject<BreakamnusterGun> BREAKAMNUSTER_GUN = ITEMS.register("breakam_buster",
+            () -> new BreakamnusterGun(new Item.Properties()));
+    public static final RegistryObject<BreakamnusterSword> BREAKAMNUSTER_SWORD = ITEMS.register("breakam_buster_sword",
+            () -> new BreakamnusterSword(new Item.Properties()));
+    public static final RegistryObject<BreakamnusterGrip> BREAKAMNUSTER_GRIP = ITEMS.register("breakam_buster_grip",
+            () -> new BreakamnusterGrip(new Item.Properties()));
+    public static final RegistryObject<Breakamnusterbody> BREAKAMNUSTER_BODY = ITEMS.register("breakam_buster_body",
+            () -> new Breakamnusterbody(new Item.Properties()));
     public static final RegistryObject<HinawaDaidai_DJ_Ju> HINAWA_DAIDAI_DJ_JU = ITEMS.register("hinawadai_dai_dj_ju",
             () -> new HinawaDaidai_DJ_Ju(new Item.Properties().stacksTo(1)));
     public static final RegistryObject<musouhinawadj> MUSOUHINAWADJ = ITEMS.register("musouhinawadj",

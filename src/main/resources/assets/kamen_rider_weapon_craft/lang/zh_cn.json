@@ -1,7 +1,7 @@
 {
   "gui.cs.ssonic.button_increase_juice": "榨汁",
-  "key.cs.y": "音速弓按键Y",
-  "key.cs.x": "音速弓按键X",
+  "key.cs.y": "武器通用键Y",
+  "key.cs.x": "武器通用键X",
   "item group.kamen_rider_weapon_craft_prop_tab": "假面骑士里武器的联动道具",
   "item group.kamen_rider_weapon_craft_tab": "假面骑士武器集合模组",
   "item group.kamen_rider_weapon_craft_misc_tab": "假面骑士武器集的杂物",
@@ -145,6 +145,21 @@
   "block.kamen_rider_weapon_craft.helheim_juice_block": "赫尔海姆果汁流体",
   "item.kamen_rider_weapon_craft.heiseisword": "平成驾驭剑",
   "item.kamen_rider_weapon_craft.bana_spear": "香蕉矛枪",
+  "item.kamen_rider_weapon_craft.breakam_buster": "噬梦破坏器",
+  "item.kamen_rider_weapon_craft.breakam_buster_i": "噬梦破坏器-拆离模式",
+  "item.kamen_rider_weapon_craft.breakam_buster_o": "噬梦破坏器-握把模式",
+  "item.kamen_rider_weapon_craft.breakam_buster_s": "噬梦破坏器-圣剑模式",
+
+  "item.kamen_rider_weapon_craft.breakam_buster.mode.default": "模式：枪",
+  "item.kamen_rider_weapon_craft.breakam_buster.mode.o": "模式：握把",
+  "item.kamen_rider_weapon_craft.breakam_buster.mode.s": "模式：圣剑",
+  "item.kamen_rider_weapon_craft.breakam_buster.mode.i": "模式：拆离",
+
+  "tooltip.kamen_rider_weapon_craft.press_y_for_o_mode": "按Y键：切换为握把模式（需要副手为空）",
+  "tooltip.kamen_rider_weapon_craft.press_x_for_s_mode": "按X键：切换为圣剑模式",
+  "tooltip.kamen_rider_weapon_craft.press_y_for_gun_mode": "按Y键：切换为枪模式",
+
+  "item.kamen_rider_weapon_craft.breakam_buster.usage": "按下武器通用键切换为握把模式并获得拆离模式，右键切换为圣剑模式并移除拆离模式",
 
   "item.kamen_rider_weapon_craft.sonicarrow.mode.default": "锁种模式：无",
   "item.kamen_rider_weapon_craft.sonicarrow.mode.melon":   "锁种模式：蜜瓜",
