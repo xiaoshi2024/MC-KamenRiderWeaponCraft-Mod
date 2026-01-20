@@ -89,7 +89,6 @@ public class kamen_rider_weapon_craft {
 
         MinecraftForge.EVENT_BUS.register(PullSounds.class);
         MinecraftForge.EVENT_BUS.register(KRWBoot.class);
-        MinecraftForge.EVENT_BUS.register(PullSoundsClient.class);
 
         //树苗的注册
         ModFoliagePlacers.register(modEventBus);
@@ -110,11 +109,6 @@ public class kamen_rider_weapon_craft {
         
         // 注册骑士效果实体
         RiderEffectEntityRegistry.register(modEventBus);
-        
-        // 初始化 Mixin 系统
-        MixinBootstrap.init();
-        MixinEnvironment.getDefaultEnvironment().setSide(MixinEnvironment.Side.CLIENT);
-        MixinEnvironment.getEnvironment(MixinEnvironment.Phase.DEFAULT);
 
         // 注册网络包
         registerNetworkMessages();

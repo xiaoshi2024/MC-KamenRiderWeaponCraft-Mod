@@ -2,9 +2,12 @@ package com.xiaoshi2022.kamen_rider_weapon_craft.util;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.KeyMapping;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.settings.KeyConflictContext;
 import org.lwjgl.glfw.GLFW;
 
+@OnlyIn(Dist.CLIENT)
 public class KeyBinding {
     public static final String KEY_CATEGORY_kamen_rider_weapon_craft = "KEY.kamen_rider_weapon_craft.kamen_rider_weapon_craft";
     public static final String KEY_CHANGE_OVER = "KEY.kamen_rider_weapon_craft.change_over";

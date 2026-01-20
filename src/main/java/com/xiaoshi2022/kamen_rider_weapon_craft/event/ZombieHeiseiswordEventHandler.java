@@ -227,9 +227,15 @@ public class ZombieHeiseiswordEventHandler {
                 // 添加掉落异类表盘的几率（20%几率）
                 if (zombie.level().random.nextFloat() <= 0.2f) {
                     try {
-                        // 直接创建aiziowc实例
-                        // Directly use the registered AIZIOWC item from the mod's registry
-                        ItemStack ai_wc = new ItemStack(com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems.AIZIOWC.get());
+                        // 使用反射安全地获取AIZIOWC物品
+                        Class<?> modItemsClass = Class.forName("com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems");
+                        java.lang.reflect.Field field = modItemsClass.getDeclaredField("AIZIOWC");
+                        field.setAccessible(true);
+                        Object registryObject = field.get(null);
+                        java.lang.reflect.Method getMethod = registryObject.getClass().getMethod("get");
+                        Object aiWcItem = getMethod.invoke(registryObject);
+                        
+                        ItemStack ai_wc = new ItemStack((net.minecraft.world.item.Item) aiWcItem);
                         
                         // 添加异类表盘到掉落物中
                         event.getDrops().add(new ItemEntity(
@@ -239,9 +245,12 @@ public class ZombieHeiseiswordEventHandler {
                             zombie.getZ(),
                             ai_wc
                         ));
+                    } catch (ClassNotFoundException e) {
+                        // boss模组不存在，跳过掉落
+                        org.apache.logging.log4j.LogManager.getLogger().debug("Boss mod not available, skipping aiziowc drop");
                     } catch (Exception e) {
-                        // 如果出现异常，记录警告但不崩溃
-                        org.apache.logging.log4j.LogManager.getLogger().warn("Failed to create aiziowc item, skipping drop");
+                        // 如果出现其他异常，记录警告但不崩溃
+                        org.apache.logging.log4j.LogManager.getLogger().warn("Failed to create aiziowc item, skipping drop: {}", e.getMessage());
                     }
                 }
             }

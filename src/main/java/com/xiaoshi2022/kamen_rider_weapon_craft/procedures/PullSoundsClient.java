@@ -8,11 +8,12 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-@Mod.EventBusSubscriber
+@Mod.EventBusSubscriber(modid = "kamen_rider_weapon_craft", value = Dist.CLIENT)
 public class PullSoundsClient {
     private static final int SOUND_INTERVAL = 20; // 1秒 = 20 ticks
     private static long lastPlayedTime = 0;

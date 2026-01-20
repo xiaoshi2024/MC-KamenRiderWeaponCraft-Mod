@@ -92,7 +92,7 @@ public class NetworkHandler {
                 SoundStopPacket.class,
                 SoundStopPacket::encode,
                 SoundStopPacket::decode,
-                SoundStopPacket.ClientHandler::handle
+                SoundStopPacket::handle
         );
     }
     

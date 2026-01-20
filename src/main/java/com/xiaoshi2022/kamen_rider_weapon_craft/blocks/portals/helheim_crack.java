@@ -1,6 +1,6 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.blocks.portals;
 
-import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.client.helheim_crackBlockEntity;
+import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.entity.helheim_crackBlockEntity;
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModBlockEntities;
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModSounds;
 import com.xiaoshi2022.kamen_rider_weapon_craft.worldgen.dimension.ModDimensions;

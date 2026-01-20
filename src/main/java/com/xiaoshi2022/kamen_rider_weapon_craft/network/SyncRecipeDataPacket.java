@@ -1,6 +1,6 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.network;
 
-import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.client.RiderFusionMachineBlockEntity;
+import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.entity.RiderFusionMachineBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.level.Level;
@@ -60,35 +60,51 @@ public class SyncRecipeDataPacket {
     }
 
     private static void handleClient(SyncRecipeDataPacket packet) {
-        net.minecraft.client.Minecraft client = net.minecraft.client.Minecraft.getInstance();
-        if (client == null) return;
-
-        Level level = client.level;
-        if (level == null || !level.isLoaded(packet.pos)) {
-            LOGGER.debug("Received recipe data for unloaded position: {}", packet.pos);
-            return;
-        }
-
-        client.execute(() -> {
+        net.minecraftforge.fml.DistExecutor.runWhenOn(net.minecraftforge.api.distmarker.Dist.CLIENT, () -> () -> {
             try {
-                BlockEntity be = level.getBlockEntity(packet.pos);
-                if (be instanceof RiderFusionMachineBlockEntity fusionMachine) {
-                    // 验证数据合理性
-                    if (packet.craftingProgress < 0 || packet.craftingProgress > packet.maxCraftingProgress) {
-                        LOGGER.error("Invalid crafting progress values for {}: progress={}, max={}", packet.pos,
-                                packet.craftingProgress, packet.maxCraftingProgress);
-                        return;
-                    }
-                    fusionMachine.handleRecipeSync(
-                            packet.craftingProgress,
-                            packet.maxCraftingProgress,
-                            packet.isCrafting
-                    );
-                } else {
-                    LOGGER.error("Block entity at position {} is not a RiderFusionMachineBlockEntity", packet.pos);
+                // 使用反射获取Minecraft实例，避免直接引用客户端类
+                Class<?> minecraftClass = Class.forName("net.minecraft.client.Minecraft");
+                Object minecraftInstance = minecraftClass.getMethod("getInstance").invoke(null);
+                if (minecraftInstance == null) return;
+
+                // 获取客户端世界
+                Object levelObj = minecraftClass.getMethod("level").invoke(minecraftInstance);
+                if (levelObj == null) {
+                    LOGGER.debug("Received recipe data but client level is null");
+                    return;
                 }
+                Level level = (Level) levelObj;
+
+                if (!level.isLoaded(packet.pos)) {
+                    LOGGER.debug("Received recipe data for unloaded position: {}", packet.pos);
+                    return;
+                }
+
+                // 使用客户端线程执行
+                minecraftClass.getMethod("execute", Runnable.class).invoke(minecraftInstance, (Runnable) () -> {
+                    try {
+                        BlockEntity be = level.getBlockEntity(packet.pos);
+                        if (be instanceof RiderFusionMachineBlockEntity fusionMachine) {
+                            // 验证数据合理性
+                            if (packet.craftingProgress < 0 || packet.craftingProgress > packet.maxCraftingProgress) {
+                                LOGGER.error("Invalid crafting progress values for {}: progress={}, max={}", packet.pos,
+                                        packet.craftingProgress, packet.maxCraftingProgress);
+                                return;
+                            }
+                            fusionMachine.handleRecipeSync(
+                                    packet.craftingProgress,
+                                    packet.maxCraftingProgress,
+                                    packet.isCrafting
+                            );
+                        } else {
+                            LOGGER.error("Block entity at position {} is not a RiderFusionMachineBlockEntity", packet.pos);
+                        }
+                    } catch (Exception e) {
+                        LOGGER.error("Error syncing recipe data at {}: {}", packet.pos, e.toString());
+                    }
+                });
             } catch (Exception e) {
-                LOGGER.error("Error syncing recipe data at {}: {}", packet.pos, e.toString());
+                LOGGER.error("Failed to handle SyncRecipeDataPacket client-side: {}", e.getMessage());
             }
         });
     }

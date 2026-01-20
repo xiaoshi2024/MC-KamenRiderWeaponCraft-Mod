@@ -70,8 +70,8 @@ public class DenOEffect extends AbstractHeiseiRiderEffect {
             DenOTrainEntity.spawn(serverLevel, player, direction, getAttackDamage(), "Sword");
         }
         
-        // 检查玩家手持的是否是Heiseisword武器并附加电王实体到武器尖端
-        if (player.getMainHandItem().getItem() instanceof com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.Heiseisword) {
+        // 检查玩家手持的是否是Heiseisword武器并附加电王实体到武器尖端 - 仅在客户端执行
+        if (level.isClientSide && player.getMainHandItem().getItem() instanceof com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.Heiseisword) {
             com.xiaoshi2022.kamen_rider_weapon_craft.Item.client.Heiseisword.HeiseiswordRenderer.attachDenOEntityToWeapon(player, player.getMainHandItem(), "Sword");
         }
     }
@@ -86,8 +86,8 @@ public class DenOEffect extends AbstractHeiseiRiderEffect {
             applyFishingRodEffect(level, player, direction);
         }
         
-        // 检查玩家手持的是否是Heiseisword武器并附加电王实体到武器尖端
-        if (player.getMainHandItem().getItem() instanceof com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.Heiseisword) {
+        // 检查玩家手持的是否是Heiseisword武器并附加电王实体到武器尖端 - 仅在客户端执行
+        if (level.isClientSide && player.getMainHandItem().getItem() instanceof com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.Heiseisword) {
             com.xiaoshi2022.kamen_rider_weapon_craft.Item.client.Heiseisword.HeiseiswordRenderer.attachDenOEntityToWeapon(player, player.getMainHandItem(), "FishingRod");
         }
     }
@@ -142,8 +142,8 @@ public class DenOEffect extends AbstractHeiseiRiderEffect {
             DenOTrainEntity.spawn(serverLevel, player, direction, getAttackDamage(), "Ax");
         }
         
-        // 检查玩家手持的是否是Heiseisword武器并附加电王实体到武器尖端
-        if (player.getMainHandItem().getItem() instanceof com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.Heiseisword) {
+        // 检查玩家手持的是否是Heiseisword武器并附加电王实体到武器尖端 - 仅在客户端执行
+        if (level.isClientSide && player.getMainHandItem().getItem() instanceof com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.Heiseisword) {
             com.xiaoshi2022.kamen_rider_weapon_craft.Item.client.Heiseisword.HeiseiswordRenderer.attachDenOEntityToWeapon(player, player.getMainHandItem(), "Ax");
         }
     }
@@ -166,8 +166,8 @@ public class DenOEffect extends AbstractHeiseiRiderEffect {
             }
         }
         
-        // 检查玩家手持的是否是Heiseisword武器并附加电王实体到武器尖端
-        if (player.getMainHandItem().getItem() instanceof com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.Heiseisword) {
+        // 检查玩家手持的是否是Heiseisword武器并附加电王实体到武器尖端 - 仅在客户端执行
+        if (level.isClientSide && player.getMainHandItem().getItem() instanceof com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.Heiseisword) {
             com.xiaoshi2022.kamen_rider_weapon_craft.Item.client.Heiseisword.HeiseiswordRenderer.attachDenOEntityToWeapon(player, player.getMainHandItem(), "Gun");
         }
     }

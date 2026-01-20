@@ -9,11 +9,14 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-@Mod.EventBusSubscriber
+@OnlyIn(Dist.CLIENT)
+@Mod.EventBusSubscriber(modid = "kamen_rider_weapon_craft", value = Dist.CLIENT)
 public class KRWBootClient {
     static final int INTERVAL = 12 * 20; // Minecraft中1秒等于20个tick
 

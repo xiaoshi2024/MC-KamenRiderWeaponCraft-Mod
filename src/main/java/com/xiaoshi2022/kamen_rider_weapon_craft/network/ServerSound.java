@@ -19,7 +19,7 @@ public class ServerSound {
         BOOT
     }
 
-    private static boolean isPlayingStandbySound = false; // 标识符，控制 pull_standby 音效播放
+    private static volatile boolean isPlayingStandbySound = false; // 标识符，控制 pull_standby 音效播放，使用volatile确保线程安全
 
     private final SoundType soundType;
 
@@ -73,6 +73,6 @@ public class ServerSound {
     }
 
     public static void sendToServer(ServerSound message) {
-        NetworkHandler.INSTANCE.sendToServer(message);
+        NetworkHandler.sendToServer(message); // 使用NetworkHandler的静态方法，而不是直接访问INSTANCE
     }
 }

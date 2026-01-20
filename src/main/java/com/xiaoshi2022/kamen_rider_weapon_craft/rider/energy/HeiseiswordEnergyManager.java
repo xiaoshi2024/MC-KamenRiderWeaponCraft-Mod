@@ -47,6 +47,16 @@ public class HeiseiswordEnergyManager {
      * 设置玩家的当前能量值
      */
     public static void setCurrentEnergy(Player player, double energy) {
+        setCurrentEnergy(player, energy, true);
+    }
+    
+    /**
+     * 设置玩家的当前能量值，可选择是否发送同步包
+     * @param player 玩家
+     * @param energy 能量值
+     * @param syncToClient 是否发送同步包到客户端
+     */
+    public static void setCurrentEnergy(Player player, double energy, boolean syncToClient) {
         if (player == null) return;
         
         double maxEnergy = getMaxEnergy(player);
@@ -60,14 +70,26 @@ public class HeiseiswordEnergyManager {
         persistedData.put("kamen_rider_craft_heiseisword_energy", energyData);
         player.getPersistentData().put(Player.PERSISTED_NBT_TAG, persistedData);
         
-        // 发送能量同步包到客户端
-        syncEnergyToClient(player);
+        // 发送能量同步包到客户端（仅在服务器端且需要同步时）
+        if (syncToClient) {
+            syncEnergyToClient(player);
+        }
     }
     
     /**
      * 设置玩家的最大能量值
      */
     public static void setMaxEnergy(Player player, double maxEnergy) {
+        setMaxEnergy(player, maxEnergy, true);
+    }
+    
+    /**
+     * 设置玩家的最大能量值，可选择是否发送同步包
+     * @param player 玩家
+     * @param maxEnergy 最大能量值
+     * @param syncToClient 是否发送同步包到客户端
+     */
+    public static void setMaxEnergy(Player player, double maxEnergy, boolean syncToClient) {
         if (player == null) return;
         
         maxEnergy = Math.max(1.0, maxEnergy); // 确保最大能量至少为1
@@ -80,9 +102,13 @@ public class HeiseiswordEnergyManager {
         persistedData.put("kamen_rider_craft_heiseisword_energy", energyData);
         player.getPersistentData().put(Player.PERSISTED_NBT_TAG, persistedData);
         
-        // 发送能量同步包到客户端
-        syncEnergyToClient(player);
+        // 发送能量同步包到客户端（仅在服务器端且需要同步时）
+        if (syncToClient) {
+            syncEnergyToClient(player);
+        }
     }
+    
+
     
     /**
      * 检查玩家是否有足够的能量使用

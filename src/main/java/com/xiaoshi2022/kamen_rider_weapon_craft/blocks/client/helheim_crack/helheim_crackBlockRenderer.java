@@ -1,6 +1,6 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.blocks.client.helheim_crack;
 
-import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.client.helheim_crackBlockEntity;
+import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.entity.helheim_crackBlockEntity;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import software.bernie.geckolib.renderer.GeoBlockRenderer;
 

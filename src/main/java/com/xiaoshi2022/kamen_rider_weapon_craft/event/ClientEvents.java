@@ -14,7 +14,7 @@ import com.xiaoshi2022.kamen_rider_weapon_craft.kamen_rider_weapon_craft;
 import com.xiaoshi2022.kamen_rider_weapon_craft.network.CloseMapPacket;
 import com.xiaoshi2022.kamen_rider_weapon_craft.network.FruitConversionPacket;
 import com.xiaoshi2022.kamen_rider_weapon_craft.particle.ModParticles;
-import com.xiaoshi2022.kamen_rider_weapon_craft.particle.custom.LaserParticles;
+import com.xiaoshi2022.kamen_rider_weapon_craft.particle.client.LaserParticles;
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModBlockEntities;
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModEntityTypes;
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModItems;
@@ -47,8 +47,13 @@ import static com.xiaoshi2022.kamen_rider_weapon_craft.util.KeyBinding.CHANGE_KE
 import static com.xiaoshi2022.kamen_rider_weapon_craft.util.KeyBinding.OPEN_LOCKSEED;
 
 
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
+// 移除了类级别的@OnlyIn注解，改为使用内部类的@Mod.EventBusSubscriber注解来控制客户端执行
 public class ClientEvents {
-    @Mod.EventBusSubscriber(modid = kamen_rider_weapon_craft.MOD_ID,value = Dist.CLIENT)
+    // 这个内部类只在客户端执行，因为@Mod.EventBusSubscriber指定了value = Dist.CLIENT
+    @Mod.EventBusSubscriber(modid = kamen_rider_weapon_craft.MOD_ID, value = Dist.CLIENT)
     public static class ClientForgeEvents {
         @SubscribeEvent
         public static void onKeyInput(InputEvent.Key event) {
@@ -124,21 +129,24 @@ public class ClientEvents {
         }
     }
 
-    @Mod.EventBusSubscriber(modid = kamen_rider_weapon_craft.MOD_ID, value = Dist.CLIENT,bus = Mod.EventBusSubscriber.Bus.MOD)
-    public static class ClientModBusEvents{
+    // 这个内部类只在客户端执行，因为@Mod.EventBusSubscriber指定了value = Dist.CLIENT
+    @Mod.EventBusSubscriber(modid = kamen_rider_weapon_craft.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
+    public static class ClientModBusEvents {
         @SubscribeEvent
         public static void registerParticles(RegisterParticleProvidersEvent event) {
+            // 粒子注册只在客户端执行，且内部类已经有@Mod.EventBusSubscriber(value = Dist.CLIENT)注解
+            // 直接使用方法引用是安全的，因为这个方法只会在客户端被调用
             event.registerSpriteSet(ModParticles.AONICX_PARTICLE.get(), LaserParticles.Provider::new);
-            event.registerSpriteSet(ModParticles.LEMON_PARTICLE.get(),  LaserParticles.Provider::new);
-            event.registerSpriteSet(ModParticles.MELON_PARTICLE.get(),   LaserParticles.Provider::new);
-            event.registerSpriteSet(ModParticles.CHERRY_PARTICLE.get(),  LaserParticles.Provider::new);
-            event.registerSpriteSet(ModParticles.PEACH_PARTICLE.get(),  LaserParticles.Provider::new);
+            event.registerSpriteSet(ModParticles.LEMON_PARTICLE.get(), LaserParticles.Provider::new);
+            event.registerSpriteSet(ModParticles.MELON_PARTICLE.get(), LaserParticles.Provider::new);
+            event.registerSpriteSet(ModParticles.CHERRY_PARTICLE.get(), LaserParticles.Provider::new);
+            event.registerSpriteSet(ModParticles.PEACH_PARTICLE.get(), LaserParticles.Provider::new);
         }
 
-       @SubscribeEvent
-        public static void onKeyRegister(RegisterKeyMappingsEvent event){
-        event.register(CHANGE_KEY);
-        event.register(OPEN_LOCKSEED);
+        @SubscribeEvent
+        public static void onKeyRegister(RegisterKeyMappingsEvent event) {
+            event.register(CHANGE_KEY);
+            event.register(OPEN_LOCKSEED);
         }
 
         @SubscribeEvent
@@ -147,7 +155,8 @@ public class ClientEvents {
             event.registerBlockEntityRenderer(ModBlockEntities.TIME_TRAVELER_STUDIO_BLOCK_ENTITY.get(), Time_traveler_studio_blockRenderer::new);
             event.registerBlockEntityRenderer(ModBlockEntities.RIDER_FUSION_MACHINE_BLOCK_ENTITY.get(), context -> new RiderFusionMachineBlockRenderer());
             event.registerBlockEntityRenderer(ModBlockEntities.KACHIDOKI_BATA_BLOCK_ENTITY.get(), KachidokiBataBlockRenderer::new);
-    }
+        }
+
         @SubscribeEvent
         public static void onEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
             EntityRenderers.register(ModEntityTypes.THROWN_DAIDAIMARU.get(), ThrownDaidaimaruRenderer::new);
@@ -158,6 +167,7 @@ public class ClientEvents {
             // 移除了玩家分身NPC渲染器注册
             event.registerBlockEntityRenderer(ModBlockEntities.LOCKSEEDIRONBARS_ENTITY.get(), lockseedIronBarsEntityRenderer::new);
         }
+
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
             CuriosRendererRegistry.register(ModItems.MUSOUSABERD.get(), musousaberdRenderer::new);

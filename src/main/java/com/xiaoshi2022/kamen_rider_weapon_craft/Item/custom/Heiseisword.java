@@ -489,10 +489,10 @@ public class Heiseisword extends SwordItem implements GeoItem {
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
         // 只有当物品在主手且实体是玩家时才处理
         if (isSelected && entity instanceof Player player) {
-            // 检测Y键按下且不在冷却期
-            if (KeyBinding.OPEN_LOCKSEED.isDown() && !isRiderSelectionOnCooldown(stack, level)) {
-                // 客户端只负责发送网络包到服务端
-                if (level.isClientSide) {
+            // 只有客户端才处理按键检测
+            if (level.isClientSide) {
+                // 检测Y键按下且不在冷却期
+                if (KeyBinding.OPEN_LOCKSEED.isDown() && !isRiderSelectionOnCooldown(stack, level)) {
                     // 检测X键是否同时按下
                     boolean isXKeyDown = KeyBinding.CHANGE_KEY.isDown();
                     // 发送骑士选择请求到服务端，包含X键状态
@@ -722,8 +722,8 @@ public class Heiseisword extends SwordItem implements GeoItem {
     private InteractionResultHolder<ItemStack> handleFinishTimeMode(Level level, Player player, InteractionHand hand, ItemStack stack) {
         List<String> riderOrder = HeiseiRiderEffectManager.getRiderOrder();
 
-        // 检测X键按下（用于触发超必杀）
-        if (KeyBinding.CHANGE_KEY.isDown() && !isUltimateMode(stack)) {
+        // 检测X键按下（用于触发超必杀）- 仅在客户端检测
+        if (level.isClientSide && KeyBinding.CHANGE_KEY.isDown() && !isUltimateMode(stack)) {
             setUltimateMode(stack, true);
             // 播放超必杀启动音效（嘿嘿待机音）和动画
             HeiseiRiderEffectManager.playUltimateActivationSound(level, player);

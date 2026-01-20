@@ -1,6 +1,6 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.blocks.client.Time_traveler_studio_block;
 
-import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.client.Time_traveler_studio_blockEntity;
+import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.entity.Time_traveler_studio_blockEntity;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib.model.GeoModel;

@@ -1,6 +1,6 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.blocks.portals;
 
-import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.client.RiderFusionMachineBlockEntity;
+import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.entity.RiderFusionMachineBlockEntity;
 import com.xiaoshi2022.kamen_rider_weapon_craft.network.NetworkHandler;
 import com.xiaoshi2022.kamen_rider_weapon_craft.network.StartCraftingPacket;
 import com.xiaoshi2022.kamen_rider_weapon_craft.procedures.RiderFusionMachineDangYouJiFangKuaiShiProcedure;

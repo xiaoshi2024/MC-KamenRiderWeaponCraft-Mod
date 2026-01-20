@@ -91,16 +91,16 @@ public class SonicBowGuiScreen extends AbstractContainerScreen<SonicBowContainer
 
                         // 根据 lastInput 决定切换哪个模式
                             ItemStack input = this.menu.lastInput;
-                            if (input.getItem() == com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems.LEMON_ENERGY.get()) {
+                            if (isItemEqual(input.getItem(), "com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems", "LEMON_ENERGY")) {
                                 weapon.switchMode(offhandStack, sonicarrow.Mode.LEMON);
                                 entity.displayClientMessage(Component.literal("Switched to Lemon Mode"), true);
                             } else if (input.getItem() == ModItems.CHERYY.get()) {
                                 weapon.switchMode(offhandStack, sonicarrow.Mode.CHERRY);
                                 entity.displayClientMessage(Component.literal("Switched to Cherry Mode"), true);
-                            } else if (input.getItem() == com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems.PEACH_ENERGY.get()) {
+                            } else if (isItemEqual(input.getItem(), "com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems", "PEACH_ENERGY")) {
                                 weapon.switchMode(offhandStack, sonicarrow.Mode.PEACH);
                                 entity.displayClientMessage(Component.literal("Switched to Peach Mode"), true);
-                            } else if (input.getItem() == com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems.DRAGONFRUIT.get()) {
+                            } else if (isItemEqual(input.getItem(), "com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems", "DRAGONFRUIT")) {
                                 weapon.switchMode(offhandStack, sonicarrow.Mode.DRAGON);
                                 entity.displayClientMessage(Component.literal("Switched to Dragon Mode"), true);
                             } else {

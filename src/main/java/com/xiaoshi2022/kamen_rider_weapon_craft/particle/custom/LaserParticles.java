@@ -1,9 +1,12 @@
-package com.xiaoshi2022.kamen_rider_weapon_craft.particle.custom;
+package com.xiaoshi2022.kamen_rider_weapon_craft.particle.client;
 
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
 import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
+@OnlyIn(Dist.CLIENT)
 public final class LaserParticles {
 
     public static final class Provider implements ParticleProvider<SimpleParticleType> {
