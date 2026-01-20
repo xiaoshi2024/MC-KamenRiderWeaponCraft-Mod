@@ -6,6 +6,10 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
 /**
  * 平成嘿嘿剑自定义能量管理器
  * 用于替代外部boss模组的蓝条系统，避免与其他模组冲突
@@ -21,26 +25,96 @@ public class HeiseiswordEnergyManager {
     // 能量恢复速率（每秒恢复的能量）- 降低恢复速率以提高平衡性
     private static final double ENERGY_REGEN_RATE = 2.0;
     
+    // 客户端专用的能量数据存储，用于存储从服务器同步过来的能量数据
+    public static final Map<UUID, EnergyData> CLIENT_ENERGY_DATA = new HashMap<>();
+    
+    // 内部类，用于存储单个玩家的能量数据
+    public static class EnergyData {
+        double currentEnergy;
+        double maxEnergy;
+        
+        public EnergyData(double currentEnergy, double maxEnergy) {
+            this.currentEnergy = currentEnergy;
+            this.maxEnergy = maxEnergy;
+        }
+    }
+    
     /**
      * 获取玩家的当前能量值
      */
     public static double getCurrentEnergy(Player player) {
-        if (player == null || player.getPersistentData().getCompound(Player.PERSISTED_NBT_TAG).getCompound("kamen_rider_craft_heiseisword_energy").isEmpty()) {
-            // 初始化能量
-            setCurrentEnergy(player, DEFAULT_MAX_ENERGY);
+        if (player == null) {
             return DEFAULT_MAX_ENERGY;
         }
-        return player.getPersistentData().getCompound(Player.PERSISTED_NBT_TAG).getCompound("kamen_rider_craft_heiseisword_energy").getDouble(TAG_CURRENT_ENERGY);
+        
+        // 检查是否在客户端
+        if (player.level().isClientSide) {
+            // 客户端使用专用存储
+            EnergyData energyData = CLIENT_ENERGY_DATA.get(player.getUUID());
+            if (energyData != null) {
+                return energyData.currentEnergy;
+            } else {
+                // 如果客户端没有数据，初始化一个默认的能量数据
+                CLIENT_ENERGY_DATA.put(player.getUUID(), new EnergyData(DEFAULT_MAX_ENERGY, DEFAULT_MAX_ENERGY));
+                return DEFAULT_MAX_ENERGY;
+            }
+        } else {
+            // 服务器端正常处理
+            CompoundTag persistedData = player.getPersistentData().getCompound(Player.PERSISTED_NBT_TAG);
+            CompoundTag energyData = persistedData.getCompound("kamen_rider_craft_heiseisword_energy");
+            if (energyData.isEmpty()) {
+                // 初始化能量数据
+                energyData.putDouble(TAG_CURRENT_ENERGY, DEFAULT_MAX_ENERGY);
+                energyData.putDouble(TAG_MAX_ENERGY, DEFAULT_MAX_ENERGY);
+                persistedData.put("kamen_rider_craft_heiseisword_energy", energyData);
+                player.getPersistentData().put(Player.PERSISTED_NBT_TAG, persistedData);
+                
+                // 服务器端初始化能量数据后，立即发送同步包到客户端
+                if (player instanceof ServerPlayer) {
+                    syncEnergyToClient(player);
+                }
+            }
+            return energyData.getDouble(TAG_CURRENT_ENERGY);
+        }
     }
     
     /**
      * 获取玩家的最大能量值
      */
     public static double getMaxEnergy(Player player) {
-        if (player == null || player.getPersistentData().getCompound(Player.PERSISTED_NBT_TAG).getCompound("kamen_rider_craft_heiseisword_energy").isEmpty()) {
+        if (player == null) {
             return DEFAULT_MAX_ENERGY;
         }
-        return player.getPersistentData().getCompound(Player.PERSISTED_NBT_TAG).getCompound("kamen_rider_craft_heiseisword_energy").getDouble(TAG_MAX_ENERGY);
+        
+        // 检查是否在客户端
+        if (player.level().isClientSide) {
+            // 客户端使用专用存储
+            EnergyData energyData = CLIENT_ENERGY_DATA.get(player.getUUID());
+            if (energyData != null) {
+                return energyData.maxEnergy;
+            } else {
+                // 如果客户端没有数据，初始化一个默认的能量数据
+                CLIENT_ENERGY_DATA.put(player.getUUID(), new EnergyData(DEFAULT_MAX_ENERGY, DEFAULT_MAX_ENERGY));
+                return DEFAULT_MAX_ENERGY;
+            }
+        } else {
+            // 服务器端正常处理
+            CompoundTag persistedData = player.getPersistentData().getCompound(Player.PERSISTED_NBT_TAG);
+            CompoundTag energyData = persistedData.getCompound("kamen_rider_craft_heiseisword_energy");
+            if (energyData.isEmpty()) {
+                // 初始化能量数据
+                energyData.putDouble(TAG_CURRENT_ENERGY, DEFAULT_MAX_ENERGY);
+                energyData.putDouble(TAG_MAX_ENERGY, DEFAULT_MAX_ENERGY);
+                persistedData.put("kamen_rider_craft_heiseisword_energy", energyData);
+                player.getPersistentData().put(Player.PERSISTED_NBT_TAG, persistedData);
+                
+                // 服务器端初始化能量数据后，立即发送同步包到客户端
+                if (player instanceof ServerPlayer) {
+                    syncEnergyToClient(player);
+                }
+            }
+            return energyData.getDouble(TAG_MAX_ENERGY);
+        }
     }
     
     /**
@@ -59,20 +133,37 @@ public class HeiseiswordEnergyManager {
     public static void setCurrentEnergy(Player player, double energy, boolean syncToClient) {
         if (player == null) return;
         
-        double maxEnergy = getMaxEnergy(player);
-        // 确保能量值在合理范围内
-        energy = Math.max(0.0, Math.min(energy, maxEnergy));
-        
-        CompoundTag persistedData = player.getPersistentData().getCompound(Player.PERSISTED_NBT_TAG);
-        CompoundTag energyData = persistedData.getCompound("kamen_rider_craft_heiseisword_energy");
-        energyData.putDouble(TAG_CURRENT_ENERGY, energy);
-        energyData.putDouble(TAG_MAX_ENERGY, maxEnergy); // 确保最大能量也被保存
-        persistedData.put("kamen_rider_craft_heiseisword_energy", energyData);
-        player.getPersistentData().put(Player.PERSISTED_NBT_TAG, persistedData);
-        
-        // 发送能量同步包到客户端（仅在服务器端且需要同步时）
-        if (syncToClient) {
-            syncEnergyToClient(player);
+        // 检查是否在客户端
+        if (player.level().isClientSide) {
+            // 客户端使用专用存储
+            double maxEnergy = getMaxEnergy(player);
+            // 确保能量值在合理范围内
+            energy = Math.max(0.0, Math.min(energy, maxEnergy));
+            
+            // 更新客户端专用存储
+            EnergyData energyData = CLIENT_ENERGY_DATA.get(player.getUUID());
+            if (energyData != null) {
+                energyData.currentEnergy = energy;
+            } else {
+                CLIENT_ENERGY_DATA.put(player.getUUID(), new EnergyData(energy, maxEnergy));
+            }
+        } else {
+            // 服务器端正常处理
+            double maxEnergy = getMaxEnergy(player);
+            // 确保能量值在合理范围内
+            energy = Math.max(0.0, Math.min(energy, maxEnergy));
+            
+            CompoundTag persistedData = player.getPersistentData().getCompound(Player.PERSISTED_NBT_TAG);
+            CompoundTag energyData = persistedData.getCompound("kamen_rider_craft_heiseisword_energy");
+            energyData.putDouble(TAG_CURRENT_ENERGY, energy);
+            energyData.putDouble(TAG_MAX_ENERGY, maxEnergy); // 确保最大能量也被保存
+            persistedData.put("kamen_rider_craft_heiseisword_energy", energyData);
+            player.getPersistentData().put(Player.PERSISTED_NBT_TAG, persistedData);
+            
+            // 发送能量同步包到客户端（仅在服务器端且需要同步时）
+            if (syncToClient) {
+                syncEnergyToClient(player);
+            }
         }
     }
     
@@ -94,17 +185,34 @@ public class HeiseiswordEnergyManager {
         
         maxEnergy = Math.max(1.0, maxEnergy); // 确保最大能量至少为1
         
-        CompoundTag persistedData = player.getPersistentData().getCompound(Player.PERSISTED_NBT_TAG);
-        CompoundTag energyData = persistedData.getCompound("kamen_rider_craft_heiseisword_energy");
-        double currentEnergy = Math.min(energyData.getDouble(TAG_CURRENT_ENERGY), maxEnergy); // 确保当前能量不超过新的最大能量
-        energyData.putDouble(TAG_CURRENT_ENERGY, currentEnergy);
-        energyData.putDouble(TAG_MAX_ENERGY, maxEnergy);
-        persistedData.put("kamen_rider_craft_heiseisword_energy", energyData);
-        player.getPersistentData().put(Player.PERSISTED_NBT_TAG, persistedData);
-        
-        // 发送能量同步包到客户端（仅在服务器端且需要同步时）
-        if (syncToClient) {
-            syncEnergyToClient(player);
+        // 检查是否在客户端
+        if (player.level().isClientSide) {
+            // 客户端使用专用存储
+            // 获取当前能量值，并确保不超过新的最大能量
+            double currentEnergy = Math.min(getCurrentEnergy(player), maxEnergy);
+            
+            // 更新客户端专用存储
+            EnergyData energyData = CLIENT_ENERGY_DATA.get(player.getUUID());
+            if (energyData != null) {
+                energyData.maxEnergy = maxEnergy;
+                energyData.currentEnergy = currentEnergy;
+            } else {
+                CLIENT_ENERGY_DATA.put(player.getUUID(), new EnergyData(currentEnergy, maxEnergy));
+            }
+        } else {
+            // 服务器端正常处理
+            CompoundTag persistedData = player.getPersistentData().getCompound(Player.PERSISTED_NBT_TAG);
+            CompoundTag energyData = persistedData.getCompound("kamen_rider_craft_heiseisword_energy");
+            double currentEnergy = Math.min(energyData.getDouble(TAG_CURRENT_ENERGY), maxEnergy); // 确保当前能量不超过新的最大能量
+            energyData.putDouble(TAG_CURRENT_ENERGY, currentEnergy);
+            energyData.putDouble(TAG_MAX_ENERGY, maxEnergy);
+            persistedData.put("kamen_rider_craft_heiseisword_energy", energyData);
+            player.getPersistentData().put(Player.PERSISTED_NBT_TAG, persistedData);
+            
+            // 发送能量同步包到客户端（仅在服务器端且需要同步时）
+            if (syncToClient) {
+                syncEnergyToClient(player);
+            }
         }
     }
     

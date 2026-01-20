@@ -56,30 +56,18 @@ public class HeiseiswordEnergySyncPacket {
 
     // 更新客户端能量值的方法
     private static void updateClientEnergy(UUID playerUUID, double currentEnergy, double maxEnergy) {
+        // 使用DistExecutor确保只在客户端执行
         net.minecraftforge.fml.DistExecutor.runWhenOn(net.minecraftforge.api.distmarker.Dist.CLIENT, () -> () -> {
             try {
-                // 使用反射获取Minecraft实例，避免直接引用客户端类
-                Class<?> minecraftClass = Class.forName("net.minecraft.client.Minecraft");
-                Object minecraftInstance = minecraftClass.getMethod("getInstance").invoke(null);
-                if (minecraftInstance == null) return;
-
-                // 获取客户端世界
-                Object levelObj = minecraftClass.getMethod("level").invoke(minecraftInstance);
-                if (levelObj == null) return;
-
-                // 获取玩家
-                Class<?> levelClass = Class.forName("net.minecraft.world.level.Level");
-                Method getPlayerByUUIDMethod = levelClass.getMethod("getPlayerByUUID", UUID.class);
-                Player player = (Player) getPlayerByUUIDMethod.invoke(levelObj, playerUUID);
-                
-                if (player != null) {
-                    // 直接使用HeiseiswordEnergyManager的setCurrentEnergy方法更新客户端能量值
-                    // 使用syncToClient=false避免循环发送同步包
-                    com.xiaoshi2022.kamen_rider_weapon_craft.rider.energy.HeiseiswordEnergyManager.setCurrentEnergy(player, currentEnergy, false);
-                    com.xiaoshi2022.kamen_rider_weapon_craft.rider.energy.HeiseiswordEnergyManager.setMaxEnergy(player, maxEnergy, false);
-                }
+                // 直接更新客户端专用存储，使用同步包中的UUID，避免检查是否是当前客户端玩家
+                // 这样可以确保所有玩家的能量数据都被正确更新，包括当前客户端玩家
+                com.xiaoshi2022.kamen_rider_weapon_craft.rider.energy.HeiseiswordEnergyManager.CLIENT_ENERGY_DATA.put(
+                    playerUUID, 
+                    new com.xiaoshi2022.kamen_rider_weapon_craft.rider.energy.HeiseiswordEnergyManager.EnergyData(currentEnergy, maxEnergy)
+                );
             } catch (Exception e) {
-                // 忽略客户端相关错误，在服务器端不会执行
+                // 打印错误信息，便于调试
+                e.printStackTrace();
             }
         });
     }
