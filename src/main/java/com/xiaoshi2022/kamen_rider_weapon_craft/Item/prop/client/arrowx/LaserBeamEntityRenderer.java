@@ -1,6 +1,6 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.Item.prop.client.arrowx;
 
-import com.xiaoshi2022.kamen_rider_weapon_craft.Item.prop.client.entity.LaserBeamEntity;
+import com.xiaoshi2022.kamen_rider_weapon_craft.Item.prop.server.entity.LaserBeamEntity;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;

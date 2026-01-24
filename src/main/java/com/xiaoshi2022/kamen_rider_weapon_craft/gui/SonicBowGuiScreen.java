@@ -86,9 +86,7 @@ public class SonicBowGuiScreen extends AbstractContainerScreen<SonicBowContainer
 
                     // 检查左手武器的存储槽位数据是否为空
                     // 进度条完成后
-                    if (this.menu.internal.getStackInSlot(0).isEmpty()) {
-                        sonicarrow weapon = (sonicarrow) offhandStack.getItem();
-
+                    if (this.menu.internal.getStackInSlot(0).isEmpty() && offhandStack.getItem() instanceof sonicarrow weapon) {
                         // 根据 lastInput 决定切换哪个模式
                             ItemStack input = this.menu.lastInput;
                             if (isItemEqual(input.getItem(), "com.xiaoshi2022.kamen_rider_boss_you_and_me.registry.ModItems", "LEMON_ENERGY")) {
@@ -199,12 +197,16 @@ public class SonicBowGuiScreen extends AbstractContainerScreen<SonicBowContainer
 
                         // 3. 立即把模式写进左手弓并同步
                         ItemStack bow = minecraft.player.getOffhandItem();
-                        ((sonicarrow) bow.getItem()).switchMode(bow, newMode);
+                        if (bow.getItem() instanceof sonicarrow) {
+                            ((sonicarrow) bow.getItem()).switchMode(bow, newMode);
+                        }
 
                         // 4. 把空槽位同步到 NBT，防止无限刷
-                        CompoundTag tag = bow.getOrCreateTag();
-                        tag.put("Inventory", menu.internal.serializeNBT());
-                        bow.setTag(tag);
+                        if (bow.getItem() instanceof sonicarrow) {
+                            CompoundTag tag = bow.getOrCreateTag();
+                            tag.put("Inventory", menu.internal.serializeNBT());
+                            bow.setTag(tag);
+                        }
 
                         // 5. 音效 + 关闭
                         minecraft.player.playSound(ModSounds.LOCK_ON.get(), 1.0F, 1.0F);

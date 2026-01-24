@@ -72,6 +72,10 @@ public class ServerSound {
         return isPlayingStandbySound;
     }
 
+    public static void setIsPlayingStandbySound(boolean value) {
+        isPlayingStandbySound = value;
+    }
+
     public static void sendToServer(ServerSound message) {
         NetworkHandler.sendToServer(message); // 使用NetworkHandler的静态方法，而不是直接访问INSTANCE
     }

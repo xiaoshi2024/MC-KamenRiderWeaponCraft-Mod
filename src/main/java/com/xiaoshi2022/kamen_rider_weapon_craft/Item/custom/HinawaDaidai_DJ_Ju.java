@@ -1,7 +1,7 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom;
 
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.client.HinawaDaidai_DJ_Ju.HinawaDaidai_DJ_JuRenderer;
-import com.xiaoshi2022.kamen_rider_weapon_craft.Item.prop.client.entity.LaserBeamEntity;
+import com.xiaoshi2022.kamen_rider_weapon_craft.Item.prop.server.entity.LaserBeamEntity;
 import com.xiaoshi2022.kamen_rider_weapon_craft.network.ServerSound;
 import com.xiaoshi2022.kamen_rider_weapon_craft.particle.ModParticles;
 import com.xiaoshi2022.kamen_rider_weapon_craft.procedures.PullSounds;
@@ -112,7 +112,8 @@ public class HinawaDaidai_DJ_Ju extends Item implements GeoItem {
             isUsing = true;
             if (level instanceof ServerLevel serverLevel) {
                 triggerAnim(player, GeoItem.getOrAssignId(stack, serverLevel), "disc", "disc");
-                ServerSound.sendToServer(new ServerSound(ServerSound.SoundType.START_STANDBY));
+                // 直接在服务端设置标志，不需要发送网络包
+                ServerSound.setIsPlayingStandbySound(true);
             }
         }
         return InteractionResultHolder.success(stack);
@@ -125,7 +126,10 @@ public class HinawaDaidai_DJ_Ju extends Item implements GeoItem {
             if (level instanceof ServerLevel serverLevel) {
                 triggerAnim(player, GeoItem.getOrAssignId(stack, serverLevel), "disc", "disc");
             }
-            ServerSound.sendToServer(new ServerSound(ServerSound.SoundType.STOP_STANDBY));
+            // 直接在服务端设置标志，不需要发送网络包
+            if (!level.isClientSide) {
+                ServerSound.setIsPlayingStandbySound(false);
+            }
 
             if (!level.isClientSide && player.getServer() != null) {
                 float yaw = player.getYRot();

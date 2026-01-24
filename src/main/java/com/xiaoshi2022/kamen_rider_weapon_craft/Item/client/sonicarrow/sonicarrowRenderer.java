@@ -36,7 +36,10 @@ public class sonicarrowRenderer extends GeoItemRenderer<sonicarrow> {
                              int packedOverlay) {
 
         // 获取当前模式
-        sonicarrow.Mode mode = ((sonicarrow)stack.getItem()).getCurrentMode(stack);
+        sonicarrow.Mode mode = sonicarrow.Mode.DEFAULT; // 默认模式
+        if (stack.getItem() instanceof sonicarrow) {
+            mode = ((sonicarrow)stack.getItem()).getCurrentMode(stack);
+        }
 
         // 根据模式选择模型
         GeoModel<sonicarrow> currentModel = switch(mode) {

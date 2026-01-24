@@ -3,7 +3,7 @@ package com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.client.sonicarrow.sonicarrowRenderer;
-import com.xiaoshi2022.kamen_rider_weapon_craft.Item.prop.client.entity.LaserBeamEntity;
+import com.xiaoshi2022.kamen_rider_weapon_craft.Item.prop.server.entity.LaserBeamEntity;
 import com.xiaoshi2022.kamen_rider_weapon_craft.network.ServerSound;
 import com.xiaoshi2022.kamen_rider_weapon_craft.particle.ModParticles;
 import com.xiaoshi2022.kamen_rider_weapon_craft.procedures.PullSounds;
@@ -158,7 +158,7 @@ public class sonicarrow extends SwordItem implements GeoItem {
         if (!player.level().isClientSide && player.level() instanceof ServerLevel serverLevel) {
             if (player.getRandom().nextInt(10) == 0) {
                 triggerAnim(player, GeoItem.getOrAssignId(stack, serverLevel), "bowblade", "bowblade");
-                serverLevel.playSound(null, player.blockPosition(), ModSounds.SLASH.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
+//                serverLevel.playSound(null, player.blockPosition(), ModSounds.SLASH.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
             }
         }
         return super.onLeftClickEntity(stack, player, entity);
@@ -192,8 +192,8 @@ public class sonicarrow extends SwordItem implements GeoItem {
             player.startUsingItem(hand);
             if (level instanceof ServerLevel serverLevel) {
                 triggerAnim(player, GeoItem.getOrAssignId(stack, serverLevel), "draw", "draw");
-                // 发送网络包，开始播放 pull_standby 音效
-                ServerSound.sendToServer(new ServerSound(ServerSound.SoundType.START_STANDBY));
+                // 直接在服务端设置标志，不需要发送网络包
+                ServerSound.setIsPlayingStandbySound(true);
             }
         }
         return InteractionResultHolder.success(stack);
@@ -314,6 +314,9 @@ public class sonicarrow extends SwordItem implements GeoItem {
     @Override
     public void releaseUsing(ItemStack stack, Level level, LivingEntity shooter, int ticksRemaining) {
         if (level.isClientSide) return;
+
+        // 停止待机音效
+        ServerSound.setIsPlayingStandbySound(false);
 
         ServerLevel serverLevel = (ServerLevel) level;
         Mode mode = getCurrentMode(stack);
