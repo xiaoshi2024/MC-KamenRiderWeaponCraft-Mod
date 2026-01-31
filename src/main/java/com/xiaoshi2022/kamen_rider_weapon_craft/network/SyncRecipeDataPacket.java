@@ -17,34 +17,38 @@ public class SyncRecipeDataPacket {
     private final int craftingProgress;
     private final int maxCraftingProgress;
     private final boolean isCrafting;
+    private final boolean isCraftingComplete;
     private final BlockPos pos;
 
-    public SyncRecipeDataPacket(int craftingProgress, int maxCraftingProgress, boolean isCrafting, BlockPos pos) {
+    public SyncRecipeDataPacket(int craftingProgress, int maxCraftingProgress, boolean isCrafting, boolean isCraftingComplete, BlockPos pos) {
         this.craftingProgress = craftingProgress;
         this.maxCraftingProgress = maxCraftingProgress;
         this.isCrafting = isCrafting;
+        this.isCraftingComplete = isCraftingComplete;
         this.pos = pos;
-        LOGGER.debug("[Network] Created SyncRecipeDataPacket for position: {}, craftingProgress: {}, maxCraftingProgress: {}, isCrafting: {}",
-                pos, craftingProgress, maxCraftingProgress, isCrafting);
+        LOGGER.debug("[Network] Created SyncRecipeDataPacket for position: {}, craftingProgress: {}, maxCraftingProgress: {}, isCrafting: {}, isCraftingComplete: {}",
+                pos, craftingProgress, maxCraftingProgress, isCrafting, isCraftingComplete);
     }
 
     public void encode(FriendlyByteBuf buf) {
         buf.writeInt(craftingProgress);
         buf.writeInt(maxCraftingProgress);
         buf.writeBoolean(isCrafting);
+        buf.writeBoolean(isCraftingComplete);
         buf.writeBlockPos(pos);
-        LOGGER.debug("[Network] Wrote SyncRecipeDataPacket to buffer for position: {}, craftingProgress: {}, maxCraftingProgress: {}, isCrafting: {}",
-                pos, craftingProgress, maxCraftingProgress, isCrafting);
+        LOGGER.debug("[Network] Wrote SyncRecipeDataPacket to buffer for position: {}, craftingProgress: {}, maxCraftingProgress: {}, isCrafting: {}, isCraftingComplete: {}",
+                pos, craftingProgress, maxCraftingProgress, isCrafting, isCraftingComplete);
     }
 
     public static SyncRecipeDataPacket decode(FriendlyByteBuf buf) {
         int craftingProgress = buf.readInt();
         int maxCraftingProgress = buf.readInt();
         boolean isCrafting = buf.readBoolean();
+        boolean isCraftingComplete = buf.readBoolean();
         BlockPos pos = buf.readBlockPos();
-        LOGGER.debug("[Network] Read SyncRecipeDataPacket from buffer for position: {}, craftingProgress: {}, maxCraftingProgress: {}, isCrafting: {}",
-                pos, craftingProgress, maxCraftingProgress, isCrafting);
-        return new SyncRecipeDataPacket(craftingProgress, maxCraftingProgress, isCrafting, pos);
+        LOGGER.debug("[Network] Read SyncRecipeDataPacket from buffer for position: {}, craftingProgress: {}, maxCraftingProgress: {}, isCrafting: {}, isCraftingComplete: {}",
+                pos, craftingProgress, maxCraftingProgress, isCrafting, isCraftingComplete);
+        return new SyncRecipeDataPacket(craftingProgress, maxCraftingProgress, isCrafting, isCraftingComplete, pos);
     }
 
     public static void handle(SyncRecipeDataPacket packet, Supplier<NetworkEvent.Context> ctx) {
@@ -94,7 +98,8 @@ public class SyncRecipeDataPacket {
                             fusionMachine.handleRecipeSync(
                                     packet.craftingProgress,
                                     packet.maxCraftingProgress,
-                                    packet.isCrafting
+                                    packet.isCrafting,
+                                    packet.isCraftingComplete
                             );
                         } else {
                             LOGGER.error("Block entity at position {} is not a RiderFusionMachineBlockEntity", packet.pos);

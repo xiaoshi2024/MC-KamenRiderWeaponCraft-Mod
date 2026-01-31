@@ -158,6 +158,8 @@ public class RiderFusionMachineBlockEntity extends BlockEntity implements GeoBlo
                 }
                 itemHandler.insertItem(4, result, false);
                 isCraftingComplete = true;
+                shouldPlayEndAnimation = true;
+                syncAnimationStateToClient();
             } else {
                 isCrafting = false;
                 craftingProgress = 0;
@@ -183,7 +185,7 @@ public class RiderFusionMachineBlockEntity extends BlockEntity implements GeoBlo
     private void syncToClient() {
         if (level != null && !level.isClientSide) {
             NetworkHandler.INSTANCE.send(PacketDistributor.TRACKING_CHUNK.with(() -> level.getChunkAt(worldPosition)),
-                    new SyncRecipeDataPacket(craftingProgress, maxCraftingProgress, isCrafting, worldPosition));
+                    new SyncRecipeDataPacket(craftingProgress, maxCraftingProgress, isCrafting, isCraftingComplete, worldPosition));
         }
     }
 
@@ -194,13 +196,13 @@ public class RiderFusionMachineBlockEntity extends BlockEntity implements GeoBlo
     private PlayState predicate(AnimationState event) {
         if (isGuiOpen) {
             isGuiOpen = false;
-            return event.setAndContinue(RawAnimation.begin().thenPlay("1").thenPlay("0"));
+            return event.setAndContinue(RawAnimation.begin().thenPlay("1").thenPlayAndHold("0"));
         }
 
         if (shouldPlayEndAnimation) {
             isCraftingComplete = false;
             shouldPlayEndAnimation = false;
-            return event.setAndContinue(RawAnimation.begin().thenPlayAndHold("end").thenPlay("0"));
+            return event.setAndContinue(RawAnimation.begin().thenPlay("end").thenPlayAndHold("0"));
         }
 
         if (isCraftingComplete) {
@@ -211,7 +213,7 @@ public class RiderFusionMachineBlockEntity extends BlockEntity implements GeoBlo
             return event.setAndContinue(RawAnimation.begin().thenLoop("rotate"));
         }
 
-        return PlayState.CONTINUE;
+        return event.setAndContinue(RawAnimation.begin().thenPlayAndHold("0"));
     }
 
     @Override
@@ -271,6 +273,14 @@ public class RiderFusionMachineBlockEntity extends BlockEntity implements GeoBlo
         setChanged();
     }
 
+    public void setCraftingProgress(int craftingProgress, int maxCraftingProgress, boolean isCrafting, boolean isCraftingComplete) {
+        this.craftingProgress = craftingProgress;
+        this.maxCraftingProgress = maxCraftingProgress;
+        this.isCrafting = isCrafting;
+        this.isCraftingComplete = isCraftingComplete;
+        setChanged();
+    }
+
     @Override
     public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
         CompoundTag tag = pkt.getTag();
@@ -291,10 +301,11 @@ public class RiderFusionMachineBlockEntity extends BlockEntity implements GeoBlo
         return maxCraftingProgress;
     }
 
-    public void handleRecipeSync(int craftingProgress, int maxCraftingProgress, boolean isCrafting) {
+    public void handleRecipeSync(int craftingProgress, int maxCraftingProgress, boolean isCrafting, boolean isCraftingComplete) {
         this.craftingProgress = craftingProgress;
         this.maxCraftingProgress = maxCraftingProgress;
         this.isCrafting = isCrafting;
+        this.isCraftingComplete = isCraftingComplete;
         setChanged();
     }
 }

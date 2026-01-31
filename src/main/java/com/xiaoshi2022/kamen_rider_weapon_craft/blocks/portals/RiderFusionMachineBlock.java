@@ -131,7 +131,10 @@ public class RiderFusionMachineBlock extends BaseEntityBlock implements EntityBl
         RiderFusionMachineDangYouJiFangKuaiShiProcedure.execute(world, pos.getX(), pos.getY(), pos.getZ(), player);
 
         if (!world.isClientSide) {
-            NetworkHandler.INSTANCE.sendToServer(new StartCraftingPacket(pos));
+            BlockEntity blockEntity = world.getBlockEntity(pos);
+            if (blockEntity instanceof RiderFusionMachineBlockEntity fusionMachine) {
+                fusionMachine.startCrafting();
+            }
         }
 
         return InteractionResult.SUCCESS;
