@@ -21,6 +21,7 @@ public class ModTab {
                 output.accept(HINAWA_DAIDAI_DJ_JU.get());
                 output.accept(MUSOUHINAWADJ.get());
                 output.accept(KACHIDOKI_BATA.get());
+                output.accept(NEEDLE_KUNAI.get());
                 output.accept(MUSOUSABERD.get());
                 output.accept(GANGUNSABER.get());
                 output.accept(RIDEBOOKER.get());

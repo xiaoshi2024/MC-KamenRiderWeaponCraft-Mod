@@ -3,6 +3,7 @@ package com.xiaoshi2022.kamen_rider_weapon_craft.event;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.client.KachidokiBata.KachidokiBataRenderer;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.client.daidaimaru.ThrownDaidaimaruRenderer;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.client.musousaberd.musousaberdRenderer;
+import com.xiaoshi2022.kamen_rider_weapon_craft.Item.client.needlekunai.ThrownNeedleKunaiRenderer;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.prop.client.arrowx.LaserBeamEntityRenderer;
 import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.client.KachidokiBataBlock.KachidokiBataBlockRenderer;
 import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.client.RiderFusionMachine.RiderFusionMachineBlockRenderer;
@@ -160,6 +161,7 @@ public class ClientEvents {
         @SubscribeEvent
         public static void onEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
             EntityRenderers.register(ModEntityTypes.THROWN_DAIDAIMARU.get(), ThrownDaidaimaruRenderer::new);
+            EntityRenderers.register(ModEntityTypes.THROWN_NEEDLE_KUNAI.get(), ThrownNeedleKunaiRenderer::new);
             EntityRenderers.register(ModEntityTypes.LASER_BEAM.get(), LaserBeamEntityRenderer::new);
             EntityRenderers.register(ModEntityTypes.EXAID_SLASH_EFFECT.get(), ExAidSlashEffectRenderer::new);
             // 注册Ghost伟人魂实体渲染器

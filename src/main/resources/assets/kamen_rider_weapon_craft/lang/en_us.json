@@ -211,5 +211,7 @@
   "tooltip.kamen_rider_weapon_craft.destroy_fifty_swords.usage": "Revi's blade",
   "tooltip.kamen_rider_weapon_craft.authorize_buster.usage": "With high-tech capabilities",
   "tooltip.kamen_rider_weapon_craft.progrise_hopper_blade.usage": "Zero-One's hopper blade that enhances jumping and cutting abilities",
-  "tooltip.kamen_rider_weapon_craft.bana_spear.usage": "Baron's banana spear with extending animation"
+  "tooltip.kamen_rider_weapon_craft.bana_spear.usage": "Baron's banana spear with extending animation",
+  "item.kamen_rider_weapon_craft.needle_kunai": "Needle Kunai",
+  "tooltip.kamen_rider_weapon_craft.needle_kunai.usage": "Exclusive weapon of Kamen Rider Aguilera, can be used as a handheld blade or a tracking throwing weapon"
 }

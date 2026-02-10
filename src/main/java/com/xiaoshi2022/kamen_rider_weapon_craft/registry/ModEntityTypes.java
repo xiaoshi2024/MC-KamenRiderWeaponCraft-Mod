@@ -1,6 +1,7 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.registry;
 
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.client.daidaimaru.entity.ThrownDaidaimaru;
+import com.xiaoshi2022.kamen_rider_weapon_craft.Item.client.needlekunai.entity.ThrownNeedleKunai;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.prop.server.entity.LaserBeamEntity;
 import com.xiaoshi2022.kamen_rider_weapon_craft.entity.line.denliner;
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.Faiz.FaizEmptySetEntity;
@@ -37,6 +38,13 @@ public class ModEntityTypes {
                     .clientTrackingRange(4)
                     .updateInterval(20)
                     .build("thrown_daidaimaru"));
+
+    public static final RegistryObject<EntityType<ThrownNeedleKunai>> THROWN_NEEDLE_KUNAI = ENTITIES.register("thrown_needle_kunai", () ->
+            EntityType.Builder.<ThrownNeedleKunai>of(ThrownNeedleKunai::new, MobCategory.MISC)
+                    .sized(0.3f, 0.3f)
+                    .clientTrackingRange(4)
+                    .updateInterval(20)
+                    .build("thrown_needle_kunai"));
 
     public static final RegistryObject<EntityType<LaserBeamEntity>> LASER_BEAM =
             ENTITIES.register("laser_beam",

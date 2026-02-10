@@ -74,6 +74,9 @@ public class ModItems {
     public static final RegistryObject<musouhinawadj> MUSOUHINAWADJ = ITEMS.register("musouhinawadj",
             () -> new musouhinawadj(ModTires.DAIMARU, 23, 2.7F, new Item.Properties()));
     
+    public static final RegistryObject<NeedleKunai> NEEDLE_KUNAI = ITEMS.register("needle_kunai",
+            () -> new NeedleKunai());
+    
     // 胜哄旗 - 武器物品
     public static final RegistryObject<KachidokiBata> KACHIDOKI_BATA = ITEMS.register("kachidoki_bata",
             () -> new KachidokiBata());
