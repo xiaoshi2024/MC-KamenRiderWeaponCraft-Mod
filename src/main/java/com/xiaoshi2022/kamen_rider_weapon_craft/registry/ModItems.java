@@ -47,6 +47,8 @@ public class ModItems {
             () -> new authorize_buster());
     public static final RegistryObject<sonicarrow> SONICARROW = ITEMS.register("sonicarrow",
             () -> new sonicarrow());
+    public static final RegistryObject<KaizokuHassyar> KAIZOKU_HASSYAR = ITEMS.register("kaizoku_hassyar",
+            () -> new KaizokuHassyar());
     public static final RegistryObject<progrise_hopper_blade> PROGRISE_HOPPER_BLADE = ITEMS.register("progrise_hopper_blade",
             () -> new progrise_hopper_blade());
     public static final RegistryObject<daidaimaru> DAIDAIMARU = ITEMS.register("daidaimaru",

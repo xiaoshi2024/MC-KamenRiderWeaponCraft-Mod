@@ -199,5 +199,12 @@
   "tooltip.kamen_rider_weapon_craft.progrise_hopper_blade.usage": "零一的蝗虫砍击者，增强跳跃和切割能力",
   "tooltip.kamen_rider_weapon_craft.bana_spear.usage": "巴隆的香蕉矛枪，伸缩动画",
   "item.kamen_rider_weapon_craft.needle_kunai": "针刺苦无",
-  "tooltip.kamen_rider_weapon_craft.needle_kunai.usage": "假面骑士Aguilera的专属武器，可作为手持刃器或具备跟踪机能的投掷武器"
+  "tooltip.kamen_rider_weapon_craft.needle_kunai.usage": "假面骑士Aguilera的专属武器，可作为手持刃器或具备跟踪机能的投掷武器",
+
+  "item.kamen_rider_weapon_craft.kaizoku_hassyar": "海贼发车",
+  "item.kamen_rider_weapon_craft.kaizoku_hassyar.mode.local_train": "模式：各站电车",
+  "item.kamen_rider_weapon_craft.kaizoku_hassyar.mode.express_train": "模式：急行电车",
+  "item.kamen_rider_weapon_craft.kaizoku_hassyar.mode.rapid_train": "模式：快速电车",
+  "item.kamen_rider_weapon_craft.kaizoku_hassyar.mode.pirate_train": "模式：海贼电车",
+  "tooltip.kamen_rider_weapon_craft.kaizoku_hassyar.usage": "假面骑士Build的海贼和列车主题武器，结合了剑和弓的功能，按Y键切换不同的电车模式"
 }

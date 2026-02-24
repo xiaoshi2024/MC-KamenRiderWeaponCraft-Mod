@@ -4,6 +4,7 @@ import com.xiaoshi2022.kamen_rider_weapon_craft.Item.client.denkamen_sword.denka
 import com.xiaoshi2022.kamen_rider_weapon_craft.entity.line.denliner;
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModSounds;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -32,6 +33,9 @@ import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.function.Consumer;
+import com.xiaoshi2022.kamen_rider_weapon_craft.network.SoundStopPacket;
+import com.xiaoshi2022.kamen_rider_weapon_craft.network.NetworkHandler;
+import net.minecraftforge.network.PacketDistributor;
 
 // 注册事件监听器
 @Mod.EventBusSubscriber(modid = "kamen_rider_weapon_craft")
@@ -382,8 +386,17 @@ public class denkamen_sword extends SwordItem implements GeoItem {
     
     // 辅助方法：清除玩家的待机音状态
     private void clearPlayerStandby(Player player) {
-        // 直接清除待机状态标记即可，不使用stopsound命令避免显示系统消息
-        // 声音会自然播放完毕，或者通过游戏机制自动处理
+        // 发送停止音效的网络包
+        if (!player.level().isClientSide) {
+            ResourceLocation soundLocation = new ResourceLocation("kamen_rider_weapon_craft", "den_o_lines");
+            SoundStopPacket packet = new SoundStopPacket(player.getId(), soundLocation);
+            NetworkHandler.INSTANCE.send(
+                    PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> player),
+                    packet
+            );
+        }
+        
+        // 清除待机状态标记
         player.getPersistentData().remove(STANDBY_START_TIME_TAG);
         player.getPersistentData().remove(STANDBY_END_TIME_TAG);
     }

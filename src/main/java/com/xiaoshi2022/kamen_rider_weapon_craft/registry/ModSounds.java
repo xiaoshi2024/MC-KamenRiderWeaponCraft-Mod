@@ -24,6 +24,18 @@ public class ModSounds {
          public static final RegistryObject<SoundEvent> DEN_O_LINES = REGISTRY.register("den_o_lines",
                 () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_weapon_craft", "den_o_lines")));
 
+         //海贼列车弓音效
+         public static final RegistryObject<SoundEvent> TRAIN_A = REGISTRY.register("train_a",
+                 () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_weapon_craft", "train_a")));
+         public static final RegistryObject<SoundEvent> TRAIN_B = REGISTRY.register("train_b",
+                 () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_weapon_craft", "train_b")));
+         public static final RegistryObject<SoundEvent> TRAIN_C = REGISTRY.register("train_c",
+                 () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_weapon_craft", "train_c")));
+         public static final RegistryObject<SoundEvent> TRAIN_D = REGISTRY.register("train_d",
+                 () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_weapon_craft", "train_d")));
+         public static final RegistryObject<SoundEvent> SHOOTKR = REGISTRY.register("shootkr",
+                 () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("kamen_rider_weapon_craft", "shootkr")));
+
 
 
         public static final RegistryObject<SoundEvent> OPENDLOCK = REGISTRY.register("opendlock",

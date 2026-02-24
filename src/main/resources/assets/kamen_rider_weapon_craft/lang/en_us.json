@@ -213,5 +213,12 @@
   "tooltip.kamen_rider_weapon_craft.progrise_hopper_blade.usage": "Zero-One's hopper blade that enhances jumping and cutting abilities",
   "tooltip.kamen_rider_weapon_craft.bana_spear.usage": "Baron's banana spear with extending animation",
   "item.kamen_rider_weapon_craft.needle_kunai": "Needle Kunai",
-  "tooltip.kamen_rider_weapon_craft.needle_kunai.usage": "Exclusive weapon of Kamen Rider Aguilera, can be used as a handheld blade or a tracking throwing weapon"
+  "tooltip.kamen_rider_weapon_craft.needle_kunai.usage": "Exclusive weapon of Kamen Rider Aguilera, can be used as a handheld blade or a tracking throwing weapon",
+
+  "item.kamen_rider_weapon_craft.kaizoku_hassyar": "Kaizoku Hassyar",
+  "item.kamen_rider_weapon_craft.kaizoku_hassyar.mode.local_train": "Mode: Local Train",
+  "item.kamen_rider_weapon_craft.kaizoku_hassyar.mode.express_train": "Mode: Express Train",
+  "item.kamen_rider_weapon_craft.kaizoku_hassyar.mode.rapid_train": "Mode: Rapid Train",
+  "item.kamen_rider_weapon_craft.kaizoku_hassyar.mode.pirate_train": "Mode: Pirate Train",
+  "tooltip.kamen_rider_weapon_craft.kaizoku_hassyar.usage": "Kamen Rider Build's pirate-themed weapon that combines sword and bow functions, press Y to switch between different train modes"
 }

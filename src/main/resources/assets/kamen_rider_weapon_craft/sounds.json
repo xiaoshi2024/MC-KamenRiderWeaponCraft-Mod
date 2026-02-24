@@ -403,5 +403,50 @@
         "stream": false
       }
     ]
+  },
+  "train_a": {
+    "subtitle": "train_a~~~",
+    "sounds": [
+      {
+        "name": "kamen_rider_weapon_craft:train_a",
+        "stream": false
+      }
+    ]
+  },
+  "train_b": {
+    "subtitle": "train_b~~~",
+    "sounds": [
+      {
+        "name": "kamen_rider_weapon_craft:train_b",
+        "stream": false
+      }
+    ]
+  },
+  "train_c": {
+    "subtitle": "train_c~~~",
+    "sounds": [
+      {
+        "name": "kamen_rider_weapon_craft:train_c",
+        "stream": false
+      }
+    ]
+  },
+  "train_d": {
+    "subtitle": "train_d~~~",
+    "sounds": [
+      {
+        "name": "kamen_rider_weapon_craft:train_d",
+        "stream": false
+      }
+    ]
+  },
+  "shootkr": {
+    "subtitle": "shootkr~~~",
+    "sounds": [
+      {
+        "name": "kamen_rider_weapon_craft:shootkr",
+        "stream": false
+      }
+    ]
   }
 }
