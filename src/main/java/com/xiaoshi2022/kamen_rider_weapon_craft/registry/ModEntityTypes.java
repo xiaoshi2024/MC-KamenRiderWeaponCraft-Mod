@@ -4,6 +4,8 @@ import com.xiaoshi2022.kamen_rider_weapon_craft.Item.client.daidaimaru.entity.Th
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.client.needlekunai.entity.ThrownNeedleKunai;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.prop.server.entity.LaserBeamEntity;
 import com.xiaoshi2022.kamen_rider_weapon_craft.entity.line.denliner;
+import com.xiaoshi2022.kamen_rider_weapon_craft.entity.projectile.HassyarsEntity;
+import com.xiaoshi2022.kamen_rider_weapon_craft.entity.projectile.PhotonicEntity;
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.Faiz.FaizEmptySetEntity;
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.build.BuildRiderEntity;
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.decade.DecadeRiderEntity;
@@ -210,6 +212,28 @@ public class ModEntityTypes {
                     .clientTrackingRange(10)
                     .updateInterval(1)
                     .build("denliner")
+    );
+    
+    // Hassyars子弹实体
+    public static final RegistryObject<EntityType<HassyarsEntity>> HASSYARS = ENTITIES.register(
+            "hassyars",
+            () -> EntityType.Builder.<HassyarsEntity>
+                            of(HassyarsEntity::new, MobCategory.MISC)
+                    .sized(0.4f, 0.4f)  // 子弹大小
+                    .clientTrackingRange(16)  // 客户端追踪距离
+                    .updateInterval(1)  // 更新频率
+                    .build("hassyars")
+    );
+    
+    // Photonic子弹实体
+    public static final RegistryObject<EntityType<PhotonicEntity>> PHOTONIC = ENTITIES.register(
+            "photonic",
+            () -> EntityType.Builder.<PhotonicEntity>
+                            of(PhotonicEntity::new, MobCategory.MISC)
+                    .sized(0.4f, 0.4f)  // 子弹大小
+                    .clientTrackingRange(16)  // 客户端追踪距离
+                    .updateInterval(1)  // 更新频率
+                    .build("photonic")
     );
 
     public static void register(IEventBus modEventBus) {

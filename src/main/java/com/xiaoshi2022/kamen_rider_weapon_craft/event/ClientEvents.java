@@ -166,6 +166,10 @@ public class ClientEvents {
             EntityRenderers.register(ModEntityTypes.EXAID_SLASH_EFFECT.get(), ExAidSlashEffectRenderer::new);
             // 注册Ghost伟人魂实体渲染器
             EntityRenderers.register(ModEntityTypes.GHOST_HEROIC_SOUL.get(), com.xiaoshi2022.kamen_rider_weapon_craft.rider.heisei.ghost.GhostHeroicSoulRenderer::new);
+            // 注册Hassyars子弹实体渲染器
+            EntityRenderers.register(ModEntityTypes.HASSYARS.get(), com.xiaoshi2022.kamen_rider_weapon_craft.entity.projectile.HassyarsRenderer::new);
+            // 注册Photonic子弹实体渲染器
+            EntityRenderers.register(ModEntityTypes.PHOTONIC.get(), com.xiaoshi2022.kamen_rider_weapon_craft.entity.projectile.PhotonicRenderer::new);
             // 移除了玩家分身NPC渲染器注册
             event.registerBlockEntityRenderer(ModBlockEntities.LOCKSEEDIRONBARS_ENTITY.get(), lockseedIronBarsEntityRenderer::new);
         }

@@ -3,6 +3,8 @@ package com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.prop.server.entity.LaserBeamEntity;
+import com.xiaoshi2022.kamen_rider_weapon_craft.entity.projectile.HassyarsEntity;
+import com.xiaoshi2022.kamen_rider_weapon_craft.entity.projectile.PhotonicEntity;
 
 import com.xiaoshi2022.kamen_rider_weapon_craft.network.KaizokuHassyarModeSwitchPacket;
 import com.xiaoshi2022.kamen_rider_weapon_craft.network.NetworkHandler;
@@ -68,6 +70,8 @@ public class KaizokuHassyar extends SwordItem implements GeoItem {
     private static final RawAnimation SHOOT = RawAnimation.begin().thenPlay("shoot");
     private static final RawAnimation IDLE = RawAnimation.begin().thenPlay("idle");
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
+    
+    // 移除静态Map，避免可能的注册表问题
 
     public static final String MODE_KEY = "Mode";
 
@@ -273,10 +277,9 @@ public class KaizokuHassyar extends SwordItem implements GeoItem {
 
     record ModeConfig(
             double damage,        // 单发伤害
-            float  shootSpeed,    // 激光飞行速度
+            float  shootSpeed,    // 子弹飞行速度
             int    burstCount,    // 连发数量
             int    coolDown,      // 射击冷却 tick
-            ParticleOptions particle,
             SoundEvent shootSound,
             String animationName
     ) {}
@@ -285,27 +288,23 @@ public class KaizokuHassyar extends SwordItem implements GeoItem {
     ModeConfig getConfig(Mode mode) {
         return switch(mode) {
             case LOCAL_TRAIN -> new ModeConfig(
-                    8.0, 1.8f, 3, 20,
-                    ModParticles.AONICX_PARTICLE.get(),
-                    ModSounds.SONICARROW_SHOOT.get(),
+                    12.0, 1.8f, 3, 20,
+                    null, // 移除SONICARROW_SHOOT音效
                     "train_a"
             );
             case EXPRESS_TRAIN -> new ModeConfig(
-                    10.0, 2.0f, 6, 15,
-                    ModParticles.AONICX_PARTICLE.get(),
-                    ModSounds.SONICARROW_SHOOT.get(),
+                    15.0, 2.0f, 6, 15,
+                    null, // 移除SONICARROW_SHOOT音效
                     "train_b"
             );
             case RAPID_TRAIN -> new ModeConfig(
-                    12.0, 2.2f, 5, 10,
-                    ModParticles.AONICX_PARTICLE.get(),
-                    ModSounds.SONICARROW_SHOOT.get(),
+                    18.0, 2.2f, 5, 10,
+                    null, // 移除SONICARROW_SHOOT音效
                     "train_c"
             );
             case PIRATE_TRAIN -> new ModeConfig(
-                    15.0, 2.5f, 1, 5,
-                    ModParticles.AONICX_PARTICLE.get(),
-                    ModSounds.SONICARROW_SHOOT.get(),
+                    25.0, 2.5f, 1, 5,
+                    null, // 移除SONICARROW_SHOOT音效
                     "train_d"
             );
         };
@@ -363,7 +362,9 @@ public class KaizokuHassyar extends SwordItem implements GeoItem {
         // 发射远程攻击
         shootProjectile(level, shooter, stack);
 
+        // 再次检测并停止train_A~b的音效，确保音效完全停止
         if (shooter instanceof Player player) {
+            stopTrainSounds(player);
             player.getCooldowns().addCooldown(this, cfg.coolDown());
         }
     }
@@ -387,73 +388,41 @@ public class KaizokuHassyar extends SwordItem implements GeoItem {
 
         // 检查是否为海盗列车模式
         if (mode == Mode.PIRATE_TRAIN) {
-            // 海盗列车模式：使用单独的建模实体弹药
-            // 这里需要根据实际的海盗列车弹药实体类进行修改
-            // 暂时使用LaserBeamEntity作为占位符
+            // 海盗列车模式：使用单独的建模实体弹药 - HassyarsEntity
             Vec3 look = getDirectionWithTargetChance(shooter, nearbyEntities, 0.2F, 0.4F);
-            look = look.scale(cfg.shootSpeed());
             
-            LaserBeamEntity laser = new LaserBeamEntity(
-                    level, shooter,
-                    cfg.particle(),
-                    cfg.damage(),
-                    cfg.shootSound(),
-                    chargeTime,
-                    stack
-            );
-            laser.setPos(
-                    shooter.getX(),
-                    shooter.getEyeY(),
-                    shooter.getZ()
-            );
-            laser.shoot(look.x, look.y, look.z);
-            level.addFreshEntity(laser);
-            
-            if (stack.getEnchantmentLevel(Enchantments.FLAMING_ARROWS) > 0)
-                laser.setSecondsOnFire(5);
-            if (stack.getEnchantmentLevel(Enchantments.POWER_ARROWS) > 0)
-                laser.damage += stack.getEnchantmentLevel(Enchantments.POWER_ARROWS);
+            // 使用HassyarsEntity作为海盗列车的单独建模实体弹药
+            HassyarsEntity.spawnHassyars(level, (LivingEntity) shooter, look, (float) cfg.damage());
         } else {
-            // 其他模式：使用普通弹药
+            // 其他模式：使用PhotonicEntity作为普通弹药
             for (int i = 0; i < cfg.burstCount(); i++) {
                 // 获取可能朝向目标实体的随机化射击方向
                 Vec3 look = getDirectionWithTargetChance(shooter, nearbyEntities, 0.3F, 0.5F);
-                look = look.scale(cfg.shootSpeed());
 
-                LaserBeamEntity laser = new LaserBeamEntity(
-                        level, shooter,
-                        cfg.particle(),
-                        cfg.damage(),
-                        cfg.shootSound(),
-                        chargeTime,
-                        stack
-                );
-                laser.setPos(
-                        shooter.getX(),
-                        shooter.getEyeY(),
-                        shooter.getZ()
-                );
-                laser.shoot(look.x, look.y, look.z);
-                level.addFreshEntity(laser);
-
-                if (stack.getEnchantmentLevel(Enchantments.FLAMING_ARROWS) > 0)
-                    laser.setSecondsOnFire(5);
-                if (stack.getEnchantmentLevel(Enchantments.POWER_ARROWS) > 0)
-                    laser.damage += stack.getEnchantmentLevel(Enchantments.POWER_ARROWS);
+                // 使用PhotonicEntity作为普通弹药
+                PhotonicEntity.spawnPhotonic(level, (LivingEntity) shooter, look, (float) cfg.damage());
             }
         }
 
-        serverLevel.playSound(
-                null,
-                shooter.blockPosition(),
-                cfg.shootSound(),
-                SoundSource.PLAYERS,
-                1F,
-                1F
-        );
+        // 只有当shootSound不为null时才播放音效
+        if (cfg.shootSound() != null) {
+            serverLevel.playSound(
+                    null,
+                    shooter.blockPosition(),
+                    cfg.shootSound(),
+                    SoundSource.PLAYERS,
+                    1F,
+                    1F
+            );
+        }
 
         stack.hurtAndBreak(cfg.burstCount(), shooter,
                 e -> e.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+        
+        // 射出弹药后停止TRAIN_A~D的音效
+        if (shooter instanceof Player player) {
+            stopTrainSounds(player);
+        }
     }
 
     /**
@@ -610,4 +579,6 @@ public class KaizokuHassyar extends SwordItem implements GeoItem {
         return player.getMainHandItem().getItem() instanceof KaizokuHassyar ||
                player.getOffhandItem().getItem() instanceof KaizokuHassyar;
     }
+    
+    // 移除事件监听器，避免注册表问题
 }
