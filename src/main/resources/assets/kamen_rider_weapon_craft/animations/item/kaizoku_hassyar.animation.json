@@ -14,11 +14,6 @@
 						}
 					}
 				}
-			},
-			"sound_effects": {
-				"0.0": {
-					"effect": "train_a"
-				}
 			}
 		},
 		"train_b": {
@@ -33,11 +28,6 @@
 							"vector": [0, 5.8, 0]
 						}
 					}
-				}
-			},
-			"sound_effects": {
-				"0.0": {
-					"effect": "train_b"
 				}
 			}
 		},
@@ -54,11 +44,6 @@
 						}
 					}
 				}
-			},
-			"sound_effects": {
-				"0.0": {
-					"effect": "train_c"
-				}
 			}
 		},
 		"train_d": {
@@ -73,11 +58,6 @@
 							"vector": [0, 6, 0]
 						}
 					}
-				}
-			},
-			"sound_effects": {
-				"0.0": {
-					"effect": "train_d"
 				}
 			}
 		},
@@ -107,11 +87,6 @@
 							"easing": "easeInBack"
 						}
 					}
-				}
-			},
-			"sound_effects": {
-				"0.0": {
-					"effect": "shootkr"
 				}
 			}
 		}

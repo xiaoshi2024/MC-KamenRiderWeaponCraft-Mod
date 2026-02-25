@@ -309,21 +309,26 @@ public class HassyarsEntity extends Projectile implements GeoEntity {
     private void spawnExhaustParticles() {
         // 获取子弹位置
         Vec3 position = this.position();
+        Vec3 motion = this.getDeltaMovement();
         
-        // 生成粒子
-        for (int i = 0; i < 3; i++) {
-            double offsetX = (this.random.nextDouble() - 0.5) * 0.3;
-            double offsetY = (this.random.nextDouble() - 0.5) * 0.3;
-            double offsetZ = (this.random.nextDouble() - 0.5) * 0.3;
+        // 计算尾部方向（与移动方向相反）
+        Vec3 tailDirection = motion.normalize().scale(-0.5);
+        Vec3 tailPosition = position.add(tailDirection);
+        
+        // 生成多个photonic粒子（电气火花粒子）
+        for (int i = 0; i < 8; i++) {
+            double offsetX = (this.random.nextDouble() - 0.5) * 0.4;
+            double offsetY = (this.random.nextDouble() - 0.5) * 0.4;
+            double offsetZ = (this.random.nextDouble() - 0.5) * 0.4;
             
             this.level().addParticle(
-                ParticleTypes.FLAME,
-                position.x + offsetX,
-                position.y + offsetY,
-                position.z + offsetZ,
-                0,
-                0,
-                0
+                ParticleTypes.ELECTRIC_SPARK,
+                tailPosition.x + offsetX,
+                tailPosition.y + offsetY,
+                tailPosition.z + offsetZ,
+                -motion.x * 0.2,
+                -motion.y * 0.2,
+                -motion.z * 0.2
             );
         }
     }
@@ -388,6 +393,17 @@ public class HassyarsEntity extends Projectile implements GeoEntity {
             hitEntity.hurt(this.damageSources().mobAttack(owner), this.getDamage());
         } else {
             hitEntity.hurt(this.damageSources().magic(), this.getDamage());
+        }
+        
+        // 在目标位置生成PhotonicEntity
+        if (owner != null) {
+            Vec3 targetPos = hitEntity.position().add(0, hitEntity.getBbHeight() / 2, 0);
+            Vec3 direction = new Vec3(
+                (this.random.nextDouble() - 0.5) * 0.5,
+                (this.random.nextDouble() - 0.5) * 0.5,
+                (this.random.nextDouble() - 0.5) * 0.5
+            );
+            PhotonicEntity.spawnPhotonic(this.level(), owner, direction, this.getDamage() * 0.8f);
         }
         
         // 检查是否达到最大反射次数

@@ -30,6 +30,13 @@ public class PhotonicRenderer extends GeoEntityRenderer<PhotonicEntity> {
     }
 
     @Override
+    protected void applyRotations(PhotonicEntity entityLiving, PoseStack matrixStackIn, float ageInTicks, float rotationYaw, float partialTicks) {
+        super.applyRotations(entityLiving, matrixStackIn, ageInTicks, rotationYaw, partialTicks);
+        // 缩放实体大小，1.5倍
+        matrixStackIn.scale(1.5f, 1.5f, 1.5f);
+    }
+
+    @Override
     public void renderFinal(PoseStack poseStack, PhotonicEntity animatable, BakedGeoModel model, MultiBufferSource bufferSource, VertexConsumer buffer,
                             float partialTick, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
 

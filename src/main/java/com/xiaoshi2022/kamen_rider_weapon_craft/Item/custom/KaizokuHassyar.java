@@ -212,50 +212,15 @@ public class KaizokuHassyar extends SwordItem implements GeoItem {
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
         controllers.add(new AnimationController<>(this, "train_a", 20, state -> PlayState.STOP)
-                .triggerableAnim("train_a", TRAIN_A)  //定义音效
-                .setSoundKeyframeHandler(state -> {
-                    // 使用帮助程序方法避免在公共类中使用客户端代码
-                    Player player = ClientUtils.getClientPlayer();
-                    if (player != null) {
-                        player.playSound(ModSounds.TRAIN_A.get(), 1.0F, 1.0F);
-                    }
-                }));
+                .triggerableAnim("train_a", TRAIN_A));
         controllers.add(new AnimationController<>(this, "train_b", 20, state -> PlayState.STOP)
-                .triggerableAnim("train_b", TRAIN_B)  //定义音效
-                .setSoundKeyframeHandler(state -> {
-                    // 使用帮助程序方法避免在公共类中使用客户端代码
-                    Player player = ClientUtils.getClientPlayer();
-                    if (player != null) {
-                        player.playSound(ModSounds.TRAIN_B.get(), 1.0F, 1.0F);
-                    }
-                }));
+                .triggerableAnim("train_b", TRAIN_B));
         controllers.add(new AnimationController<>(this, "train_c", 20, state -> PlayState.STOP)
-                .triggerableAnim("train_c", TRAIN_C)  //定义音效
-                .setSoundKeyframeHandler(state -> {
-                    // 使用帮助程序方法避免在公共类中使用客户端代码
-                    Player player = ClientUtils.getClientPlayer();
-                    if (player != null) {
-                        player.playSound(ModSounds.TRAIN_C.get(), 1.0F, 1.0F);
-                    }
-                }));
+                .triggerableAnim("train_c", TRAIN_C));
         controllers.add(new AnimationController<>(this, "train_d", 20, state -> PlayState.STOP)
-                .triggerableAnim("train_d", TRAIN_D)
-                //定义音效
-                .setSoundKeyframeHandler(state -> {
-                    // 使用帮助程序方法避免在公共类中使用客户端代码
-                    Player player = ClientUtils.getClientPlayer();
-                    if (player != null) {
-                        player.playSound(ModSounds.TRAIN_D.get(), 1.0F, 1.0F);
-                    }
-                }));
+                .triggerableAnim("train_d", TRAIN_D));
         controllers.add(new AnimationController<>(this, "shoot", 20, state -> PlayState.STOP)
-                .triggerableAnim("shoot", SHOOT)
-                .setSoundKeyframeHandler(state -> {
-                    Player player = ClientUtils.getClientPlayer();
-                    if (player != null) {
-                        player.playSound(ModSounds.SHOOTKR.get(), 1.0F, 1.0F);
-                    }
-                }));
+                .triggerableAnim("shoot", SHOOT));
     }
 
     @Override
@@ -269,7 +234,26 @@ public class KaizokuHassyar extends SwordItem implements GeoItem {
             Mode mode = getCurrentMode(stack);
             ModeConfig cfg = getConfig(mode);
             if (level instanceof ServerLevel serverLevel) {
+                // 播放动画
                 triggerAnim(player, GeoItem.getOrAssignId(stack, serverLevel), cfg.animationName(), cfg.animationName());
+            }
+        } else {
+            // 客户端播放音效
+            Mode mode = getCurrentMode(stack);
+            // 播放对应的火车音效
+            switch (mode) {
+                case LOCAL_TRAIN:
+                    player.playSound(ModSounds.TRAIN_A.get(), 1.0F, 1.0F);
+                    break;
+                case EXPRESS_TRAIN:
+                    player.playSound(ModSounds.TRAIN_B.get(), 1.0F, 1.0F);
+                    break;
+                case RAPID_TRAIN:
+                    player.playSound(ModSounds.TRAIN_C.get(), 1.0F, 1.0F);
+                    break;
+                case PIRATE_TRAIN:
+                    player.playSound(ModSounds.TRAIN_D.get(), 1.0F, 1.0F);
+                    break;
             }
         }
         return InteractionResultHolder.success(stack);
@@ -288,22 +272,22 @@ public class KaizokuHassyar extends SwordItem implements GeoItem {
     ModeConfig getConfig(Mode mode) {
         return switch(mode) {
             case LOCAL_TRAIN -> new ModeConfig(
-                    12.0, 1.8f, 3, 20,
+                    25.0, 1.8f, 3, 20,
                     null, // 移除SONICARROW_SHOOT音效
                     "train_a"
             );
-            case EXPRESS_TRAIN -> new ModeConfig(
-                    15.0, 2.0f, 6, 15,
-                    null, // 移除SONICARROW_SHOOT音效
-                    "train_b"
-            );
             case RAPID_TRAIN -> new ModeConfig(
-                    18.0, 2.2f, 5, 10,
+                    30.0, 2.0f, 5, 15,
                     null, // 移除SONICARROW_SHOOT音效
                     "train_c"
             );
+            case EXPRESS_TRAIN -> new ModeConfig(
+                    35.0, 2.2f, 6, 10,
+                    null, // 移除SONICARROW_SHOOT音效
+                    "train_b"
+            );
             case PIRATE_TRAIN -> new ModeConfig(
-                    25.0, 2.5f, 1, 5,
+                    50.0, 2.5f, 1, 120, // 增加冷却时间到120 tick（6秒），作为大招
                     null, // 移除SONICARROW_SHOOT音效
                     "train_d"
             );
@@ -319,25 +303,25 @@ public class KaizokuHassyar extends SwordItem implements GeoItem {
     private ModeConfigMelee getMeleeConfig(Mode mode) {
         return switch(mode) {
             case LOCAL_TRAIN -> new ModeConfigMelee(
-                    3.0, 1.0f,
+                    10.0, 1.0f,
                     target -> {
                         target.knockback(0.8F, target.getX() - target.level().getRandom().nextDouble(), target.getZ() - target.level().getRandom().nextDouble());
                     }
             );
-            case EXPRESS_TRAIN -> new ModeConfigMelee(
-                    4.0, 0.5f,
-                    target -> {
-                        target.hurt(target.level().damageSources().playerAttack((Player) target), 1.0F);
-                    }
-            );
             case RAPID_TRAIN -> new ModeConfigMelee(
-                    5.0, 0.0f,
+                    15.0, 0.5f,
                     target -> {
                         target.setSecondsOnFire(3);
                     }
             );
+            case EXPRESS_TRAIN -> new ModeConfigMelee(
+                    20.0, 0.0f,
+                    target -> {
+                        target.hurt(target.level().damageSources().playerAttack((Player) target), 5.0F);
+                    }
+            );
             case PIRATE_TRAIN -> new ModeConfigMelee(
-                    6.0, -0.5f,
+                    25.0, -0.5f,
                     target -> {
                         target.knockback(1.5F, target.getX() - target.level().getRandom().nextDouble(), target.getZ() - target.level().getRandom().nextDouble());
                         target.setSecondsOnFire(5);
@@ -348,24 +332,29 @@ public class KaizokuHassyar extends SwordItem implements GeoItem {
 
     @Override
     public void releaseUsing(ItemStack stack, Level level, LivingEntity shooter, int ticksRemaining) {
-        if (level.isClientSide) return;
+        if (!level.isClientSide) {
+            ServerLevel serverLevel = (ServerLevel) level;
+            Mode mode = getCurrentMode(stack);
+            ModeConfig cfg = getConfig(mode);
 
-        ServerLevel serverLevel = (ServerLevel) level;
-        Mode mode = getCurrentMode(stack);
-        ModeConfig cfg = getConfig(mode);
+            float chargeTime = (getUseDuration(stack) - ticksRemaining) / 20F;
 
-        float chargeTime = (getUseDuration(stack) - ticksRemaining) / 20F;
+            // 触发发射动画
+            triggerAnim(shooter, GeoItem.getOrAssignId(stack, serverLevel), "shoot", "shoot");
 
-        // 触发发射动画
-        triggerAnim(shooter, GeoItem.getOrAssignId(stack, serverLevel), "shoot", "shoot");
+            // 发射远程攻击
+            shootProjectile(level, shooter, stack);
 
-        // 发射远程攻击
-        shootProjectile(level, shooter, stack);
-
-        // 再次检测并停止train_A~b的音效，确保音效完全停止
-        if (shooter instanceof Player player) {
-            stopTrainSounds(player);
-            player.getCooldowns().addCooldown(this, cfg.coolDown());
+            // 再次检测并停止train_A~b的音效，确保音效完全停止
+            if (shooter instanceof Player player) {
+                stopTrainSounds(player);
+                player.getCooldowns().addCooldown(this, cfg.coolDown());
+            }
+        } else {
+            // 客户端播放射击音效
+            if (shooter instanceof Player player) {
+                player.playSound(ModSounds.SHOOTKR.get(), 1.0F, 1.0F);
+            }
         }
     }
 
