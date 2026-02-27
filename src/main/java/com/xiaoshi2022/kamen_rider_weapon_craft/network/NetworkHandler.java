@@ -103,6 +103,15 @@ public class NetworkHandler {
                 KaizokuHassyarModeSwitchPacket::decode,
                 KaizokuHassyarModeSwitchPacket::handle
         );
+        
+        // 注册KaizokuHassyarSoundPacket
+        INSTANCE.registerMessage(
+                packetId++,
+                KaizokuHassyarSoundPacket.class,
+                KaizokuHassyarSoundPacket::encode,
+                KaizokuHassyarSoundPacket::decode,
+                KaizokuHassyarSoundPacket::handle
+        );
     }
     
     // 发送到所有跟踪实体的客户端，包括实体本身

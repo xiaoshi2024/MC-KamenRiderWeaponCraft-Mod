@@ -32,6 +32,19 @@ public class BreakamnusterSword extends SwordItem implements GeoItem {
     
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
+    // 基础伤害值
+    private static float baseDamage = 18.0f;
+    
+    // 公开API - 设置基础伤害
+    public static void setBaseDamage(float damage) {
+        baseDamage = damage;
+    }
+    
+    // 公开API - 获取当前基础伤害
+    public static float getBaseDamage() {
+        return baseDamage;
+    }
+
     public BreakamnusterSword(Properties properties) {
         super(new Tier() {
             @Override
@@ -46,7 +59,7 @@ public class BreakamnusterSword extends SwordItem implements GeoItem {
 
             @Override
             public float getAttackDamageBonus() {
-                return 18.0f; // 额外攻击伤害 - 剑的伤害较高
+                return baseDamage; // 额外攻击伤害 - 使用基础伤害值
             }
 
             @Override
@@ -116,6 +129,37 @@ public class BreakamnusterSword extends SwordItem implements GeoItem {
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
+        
+        /* -------- Shift + 右键：切换到枪模式 -------- */
+        if (player.isShiftKeyDown() && !player.isUsingItem()) {
+            if (!level.isClientSide) {
+                // 创建新的枪形态武器
+                ItemStack gunStack = new ItemStack(com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModItems.BREAKAMNUSTER_GUN.get(), 1);
+                
+                // 复制耐久度等重要属性
+                if (stack.isDamageableItem()) {
+                    gunStack.setDamageValue(stack.getDamageValue());
+                }
+                
+                // 复制NBT数据
+                if (stack.hasTag()) {
+                    net.minecraft.nbt.CompoundTag tag = stack.getTag().copy();
+                    gunStack.setTag(tag);
+                }
+                
+                // 替换物品
+                player.setItemInHand(hand, gunStack);
+                
+                // 播放切换音效
+                level.playSound(null, player.blockPosition(),
+                        net.minecraft.sounds.SoundEvents.PISTON_EXTEND, net.minecraft.sounds.SoundSource.PLAYERS, 1.0F, 1.1F);
+                level.playSound(null, player.blockPosition(),
+                        net.minecraft.sounds.SoundEvents.IRON_DOOR_CLOSE, net.minecraft.sounds.SoundSource.PLAYERS, 0.7F, 0.8F);
+            }
+            return InteractionResultHolder.sidedSuccess(stack, level.isClientSide());
+        }
+        
+        // 正常使用：剑攻击
         player.startUsingItem(hand);
         return InteractionResultHolder.consume(stack);
     }

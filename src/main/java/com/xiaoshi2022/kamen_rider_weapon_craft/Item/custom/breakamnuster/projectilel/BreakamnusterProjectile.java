@@ -43,6 +43,13 @@ public class BreakamnusterProjectile extends ThrowableItemProjectile {
         super.onHitEntity(result);
         // 命中实体时的效果
         if (!this.level().isClientSide && result.getEntity() instanceof LivingEntity livingEntity) {
+            // 计算伤害：基础伤害 * 蓄力加成
+            float baseDamage = BreakamnusterGun.getBaseDamage();
+            float finalDamage = baseDamage * (1.0f + this.chargeRatio);
+            
+            // 造成伤害
+            livingEntity.hurt(this.damageSources().thrown(this, this.getOwner()), finalDamage);
+            
             // 应用BreakamnusterGun的击中效果
             // 静态方法调用，无需创建实例
             BreakamnusterGun.applyHitEffectsStatic(livingEntity, this.chargeRatio);

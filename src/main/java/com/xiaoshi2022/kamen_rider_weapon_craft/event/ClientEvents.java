@@ -66,36 +66,10 @@ public class ClientEvents {
                     stack = player.getMainHandItem();
                     if (stack.getItem() instanceof weapon_map) {
                         kamen_rider_weapon_craft.PACKET_HANDLER.sendToServer(new CloseMapPacket());
-                    } else if (stack.getItem() instanceof com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.breakamnuster.BreakamnusterGun || 
-                               stack.getItem() instanceof com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.breakamnuster.BreakamnusterSword) {
-                        // 处理 Breakamnuster 武器切换
-                        handleBreakamnusterWeaponSwitch(player, stack);
                     }
+                    // 移除了Breakamnuster武器切换的处理，因为已经在武器的use方法中实现了服务器端切换逻辑
                 }
             }
-        }
-        
-        /**
-         * 处理 Breakamnuster 武器切换逻辑
-         */
-        private static void handleBreakamnusterWeaponSwitch(LocalPlayer player, ItemStack oldStack) {
-            // 创建新的物品堆栈
-            ItemStack newStack;
-            
-            // 根据当前武器类型切换
-            if (oldStack.getItem() instanceof com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.breakamnuster.BreakamnusterGun) {
-                // 从枪切换到剑
-                newStack = new ItemStack(com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModItems.BREAKAMNUSTER_SWORD.get());
-            } else {
-                // 从剑切换到枪
-                newStack = new ItemStack(com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModItems.BREAKAMNUSTER_GUN.get());
-            }
-            
-            // 继承原武器的耐久度
-            newStack.setDamageValue(oldStack.getDamageValue());
-            
-            // 替换主手物品
-            player.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, newStack);
         }
 
         @SubscribeEvent

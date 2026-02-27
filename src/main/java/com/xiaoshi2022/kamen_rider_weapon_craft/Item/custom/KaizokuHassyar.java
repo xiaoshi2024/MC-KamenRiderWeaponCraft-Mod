@@ -7,6 +7,7 @@ import com.xiaoshi2022.kamen_rider_weapon_craft.entity.projectile.HassyarsEntity
 import com.xiaoshi2022.kamen_rider_weapon_craft.entity.projectile.PhotonicEntity;
 
 import com.xiaoshi2022.kamen_rider_weapon_craft.network.KaizokuHassyarModeSwitchPacket;
+import com.xiaoshi2022.kamen_rider_weapon_craft.network.KaizokuHassyarSoundPacket;
 import com.xiaoshi2022.kamen_rider_weapon_craft.network.NetworkHandler;
 import com.xiaoshi2022.kamen_rider_weapon_craft.network.SoundStopPacket;
 import com.xiaoshi2022.kamen_rider_weapon_craft.particle.ModParticles;
@@ -238,21 +239,21 @@ public class KaizokuHassyar extends SwordItem implements GeoItem {
                 triggerAnim(player, GeoItem.getOrAssignId(stack, serverLevel), cfg.animationName(), cfg.animationName());
             }
         } else {
-            // 客户端播放音效
+            // 客户端发送音效数据包到服务器
             Mode mode = getCurrentMode(stack);
-            // 播放对应的火车音效
+            // 发送对应的火车音效数据包，让周围的人也能听到
             switch (mode) {
                 case LOCAL_TRAIN:
-                    player.playSound(ModSounds.TRAIN_A.get(), 1.0F, 1.0F);
+                    NetworkHandler.sendToServer(new KaizokuHassyarSoundPacket(KaizokuHassyarSoundPacket.SoundType.TRAIN_A, player.getX(), player.getY(), player.getZ()));
                     break;
                 case EXPRESS_TRAIN:
-                    player.playSound(ModSounds.TRAIN_B.get(), 1.0F, 1.0F);
+                    NetworkHandler.sendToServer(new KaizokuHassyarSoundPacket(KaizokuHassyarSoundPacket.SoundType.TRAIN_B, player.getX(), player.getY(), player.getZ()));
                     break;
                 case RAPID_TRAIN:
-                    player.playSound(ModSounds.TRAIN_C.get(), 1.0F, 1.0F);
+                    NetworkHandler.sendToServer(new KaizokuHassyarSoundPacket(KaizokuHassyarSoundPacket.SoundType.TRAIN_C, player.getX(), player.getY(), player.getZ()));
                     break;
                 case PIRATE_TRAIN:
-                    player.playSound(ModSounds.TRAIN_D.get(), 1.0F, 1.0F);
+                    NetworkHandler.sendToServer(new KaizokuHassyarSoundPacket(KaizokuHassyarSoundPacket.SoundType.TRAIN_D, player.getX(), player.getY(), player.getZ()));
                     break;
             }
         }
@@ -343,7 +344,7 @@ public class KaizokuHassyar extends SwordItem implements GeoItem {
             triggerAnim(shooter, GeoItem.getOrAssignId(stack, serverLevel), "shoot", "shoot");
 
             // 发射远程攻击
-            shootProjectile(level, shooter, stack);
+            shootProjectile(level, shooter, stack, chargeTime);
 
             // 再次检测并停止train_A~b的音效，确保音效完全停止
             if (shooter instanceof Player player) {
@@ -351,21 +352,20 @@ public class KaizokuHassyar extends SwordItem implements GeoItem {
                 player.getCooldowns().addCooldown(this, cfg.coolDown());
             }
         } else {
-            // 客户端播放射击音效
+            // 客户端发送射击音效数据包到服务器
             if (shooter instanceof Player player) {
-                player.playSound(ModSounds.SHOOTKR.get(), 1.0F, 1.0F);
+                // 发送射击音效数据包，让周围的人也能听到
+                NetworkHandler.sendToServer(new KaizokuHassyarSoundPacket(KaizokuHassyarSoundPacket.SoundType.SHOOT, player.getX(), player.getY(), player.getZ()));
             }
         }
     }
 
-    public void shootProjectile(Level level, LivingEntity shooter, ItemStack stack) {
+    public void shootProjectile(Level level, LivingEntity shooter, ItemStack stack, float chargeTime) {
         if (level.isClientSide) return;
 
         ServerLevel serverLevel = (ServerLevel) level;
         Mode mode = getCurrentMode(stack);
         ModeConfig cfg = getConfig(mode);
-
-        float chargeTime = 0.5F;
         
         // 停止TRAIN_A~D的音效
         if (shooter instanceof Player player) {
@@ -377,14 +377,56 @@ public class KaizokuHassyar extends SwordItem implements GeoItem {
 
         // 检查是否为海盗列车模式
         if (mode == Mode.PIRATE_TRAIN) {
+            // 海盗列车模式：根据蓄力时长调整伤害
+            float damageMultiplier = 1.0f + (chargeTime * 0.1f); // 每蓄力1秒，伤害增加10%，降低伤害倍数
+            float finalDamage = (float) (cfg.damage() * damageMultiplier);
+            
             // 海盗列车模式：使用单独的建模实体弹药 - HassyarsEntity
             Vec3 look = getDirectionWithTargetChance(shooter, nearbyEntities, 0.2F, 0.4F);
             
             // 使用HassyarsEntity作为海盗列车的单独建模实体弹药
-            HassyarsEntity.spawnHassyars(level, (LivingEntity) shooter, look, (float) cfg.damage());
+            HassyarsEntity.spawnHassyars(level, (LivingEntity) shooter, look, finalDamage);
         } else {
+            // 其他模式：根据不同模式设置不同的蓄力时间阈值
+            float requiredChargeTime;
+            switch (mode) {
+                case LOCAL_TRAIN: // 各站电车
+                    requiredChargeTime = 2.0f;
+                    break;
+                case RAPID_TRAIN: // 快速电车
+                    requiredChargeTime = 4.0f;
+                    break;
+                case EXPRESS_TRAIN: // 急行电车
+                    requiredChargeTime = 6.0f;
+                    break;
+                default:
+                    requiredChargeTime = 2.0f;
+            }
+            
+            // 根据蓄力时长和模式确定实际射出的弹药数量
+            int actualBurstCount;
+            if (chargeTime < requiredChargeTime) {
+                // 蓄力不足时，根据模式设置不同的弹药数量
+                switch (mode) {
+                    case LOCAL_TRAIN: // 各站电车
+                        actualBurstCount = 1;
+                        break;
+                    case RAPID_TRAIN: // 快速电车
+                        actualBurstCount = 3;
+                        break;
+                    case EXPRESS_TRAIN: // 急行电车
+                        actualBurstCount = 4;
+                        break;
+                    default:
+                        actualBurstCount = 1;
+                }
+            } else {
+                // 蓄力足够时，射出完整数量的弹药
+                actualBurstCount = cfg.burstCount();
+            }
+            
             // 其他模式：使用PhotonicEntity作为普通弹药
-            for (int i = 0; i < cfg.burstCount(); i++) {
+            for (int i = 0; i < actualBurstCount; i++) {
                 // 获取可能朝向目标实体的随机化射击方向
                 Vec3 look = getDirectionWithTargetChance(shooter, nearbyEntities, 0.3F, 0.5F);
 

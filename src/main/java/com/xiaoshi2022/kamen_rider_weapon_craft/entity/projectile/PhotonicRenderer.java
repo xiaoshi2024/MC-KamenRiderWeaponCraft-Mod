@@ -32,8 +32,15 @@ public class PhotonicRenderer extends GeoEntityRenderer<PhotonicEntity> {
     @Override
     protected void applyRotations(PhotonicEntity entityLiving, PoseStack matrixStackIn, float ageInTicks, float rotationYaw, float partialTicks) {
         super.applyRotations(entityLiving, matrixStackIn, ageInTicks, rotationYaw, partialTicks);
-        // 缩放实体大小，1.5倍
-        matrixStackIn.scale(1.5f, 1.5f, 1.5f);
+        
+        // 检查是否为地面光弹
+        if (entityLiving.isGroundBased) {
+            // 地面光弹缩放为3倍
+            matrixStackIn.scale(3.0f, 3.0f, 3.0f);
+        } else {
+            // 普通光弹缩放为1.5倍
+            matrixStackIn.scale(1.5f, 1.5f, 1.5f);
+        }
     }
 
     @Override

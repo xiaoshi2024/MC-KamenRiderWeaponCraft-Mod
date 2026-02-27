@@ -272,6 +272,37 @@ public class BreakamnusterGun extends SwordItem implements GeoItem {
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
+        
+        /* -------- Shift + 右键：切换到剑模式 -------- */
+        if (player.isShiftKeyDown() && !player.isUsingItem()) {
+            if (!level.isClientSide) {
+                // 创建新的剑形态武器
+                ItemStack swordStack = new ItemStack(com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModItems.BREAKAMNUSTER_SWORD.get(), 1);
+                
+                // 复制耐久度等重要属性
+                if (stack.isDamageableItem()) {
+                    swordStack.setDamageValue(stack.getDamageValue());
+                }
+                
+                // 复制NBT数据
+                if (stack.hasTag()) {
+                    net.minecraft.nbt.CompoundTag tag = stack.getTag().copy();
+                    swordStack.setTag(tag);
+                }
+                
+                // 替换物品
+                player.setItemInHand(hand, swordStack);
+                
+                // 播放切换音效
+                level.playSound(null, player.blockPosition(),
+                        net.minecraft.sounds.SoundEvents.PISTON_CONTRACT, net.minecraft.sounds.SoundSource.PLAYERS, 1.0F, 0.9F);
+                level.playSound(null, player.blockPosition(),
+                        net.minecraft.sounds.SoundEvents.IRON_DOOR_OPEN, net.minecraft.sounds.SoundSource.PLAYERS, 0.7F, 1.2F);
+            }
+            return InteractionResultHolder.sidedSuccess(stack, level.isClientSide());
+        }
+        
+        // 正常使用：蓄力射击
         currentStack = stack; // 设置当前堆栈用于动画判断
         player.startUsingItem(hand);
 
@@ -348,11 +379,30 @@ public class BreakamnusterGun extends SwordItem implements GeoItem {
             }
         }
 
-        // 沿视线方向检测方块
+        // 沿视线方向检测实体和方块
         for (int i = 1; i <= range; i++) {
             Vec3 checkPos = startPos.add(look.scale(i));
             BlockPos blockPos = BlockPos.containing(checkPos.x, checkPos.y, checkPos.z);
             BlockState blockState = level.getBlockState(blockPos);
+
+            // 检测实体
+            for (LivingEntity entity : level.getEntitiesOfClass(LivingEntity.class, 
+                    new net.minecraft.world.phys.AABB(checkPos.x - rayThickness, checkPos.y - rayThickness, checkPos.z - rayThickness, 
+                    checkPos.x + rayThickness, checkPos.y + rayThickness, checkPos.z + rayThickness))) {
+                if (entity != player) {
+                    // 计算伤害
+                    float finalDamage = calculateFinalDamage(player, chargeRatio);
+                    // 造成伤害
+                    entity.hurt(level.damageSources().playerAttack(player), finalDamage);
+                    // 应用击中效果
+                    applyHitEffects(entity, chargeRatio);
+                    // 在命中点添加特效
+                    serverLevel.sendParticles(ParticleTypes.SMOKE,
+                            checkPos.x, checkPos.y, checkPos.z,
+                            10, 0.2, 0.2, 0.2, 0.1);
+                    return; // 只伤害第一个命中的实体
+                }
+            }
 
             // 如果检测到可擦除的方块
             if (isErasableBlock(blockState.getBlock())) {

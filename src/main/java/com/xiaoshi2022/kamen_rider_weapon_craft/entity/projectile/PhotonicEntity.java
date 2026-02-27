@@ -48,6 +48,24 @@ public class PhotonicEntity extends Projectile implements GeoEntity {
     private static final float MAX_FLIGHT_SPEED = 2.0f;
     // 加速率
     private static final float ACCELERATION_RATE = 0.05f;
+    
+    // 追踪目标相关字段
+    private LivingEntity trackingTarget = null;
+    private int trackingCooldown = 0;
+    private boolean isTrackingEnabled = false;
+    
+    // 最大追踪距离
+    private static final double MAX_TRACKING_DISTANCE = 20.0;
+    // 追踪速度
+    private float trackingSpeed = 1.0f;
+    // 最大追踪速度
+    private static final float MAX_TRACKING_SPEED = 2.0f;
+    
+    // 地面光弹相关字段
+    public boolean isGroundBased = false; // 是否为留在地上的光弹
+    private int groundLifeTime = 0; // 地面光弹的生命周期
+    private static final int MAX_GROUND_LIFETIME = 40; // 地面光弹最大生命周期（2秒）
+    private static final float GROUND_SCALE = 3.0f; // 地面光弹的缩放比例
 
     // 存储owner的UUID
     private UUID ownerUUID = null;
@@ -87,6 +105,9 @@ public class PhotonicEntity extends Projectile implements GeoEntity {
         this.setDeltaMovement(initialDirection.normalize().scale(flightSpeed));
         this.setDamage(damage);
         this.noPhysics = false;
+        
+        // 随机启用追踪目标（50%的几率）
+        this.isTrackingEnabled = this.random.nextBoolean();
     }
 
     // 公共构造函数，用于注册
@@ -159,6 +180,24 @@ public class PhotonicEntity extends Projectile implements GeoEntity {
         // 增加存活时间
         lifetime++;
 
+        // 检查是否为地面光弹
+        if (isGroundBased) {
+            // 地面光弹逻辑
+            groundLifeTime++;
+            
+            // 如果超过地面光弹最大生命周期，消失
+            if (groundLifeTime > MAX_GROUND_LIFETIME) {
+                this.discard();
+                return;
+            }
+            
+            // 地面光弹不移动，只播放粒子效果
+            if (this.level().isClientSide()) {
+                spawnExhaustParticles();
+            }
+            return;
+        }
+
         // 如果超过最大存活时间，自然消失
         if (lifetime > MAX_LIFETIME) {
             this.discard();
@@ -172,8 +211,14 @@ public class PhotonicEntity extends Projectile implements GeoEntity {
 
         // 服务器端处理
         if (!this.level().isClientSide()) {
-            // 直线飞行移动
-            straightFlightMovement();
+            // 如果启用了追踪，更新追踪目标
+            if (isTrackingEnabled) {
+                updateTrackingTarget();
+                enhancedTrackingMovement();
+            } else {
+                // 否则，使用直线飞行移动
+                straightFlightMovement();
+            }
             
             // 检测碰撞并给予伤害
             checkCollisionAndDamage();
@@ -203,6 +248,94 @@ public class PhotonicEntity extends Projectile implements GeoEntity {
         
         // 更新旋转角度以匹配移动方向
         updateRotation();
+    }
+    
+    // 更新追踪目标
+    private void updateTrackingTarget() {
+        // 如果冷却中，不更新目标
+        if (trackingCooldown > 0) {
+            // 检查当前目标是否仍然有效
+            if (trackingTarget != null && (!trackingTarget.isAlive() || 
+                    trackingTarget.distanceToSqr(this) > MAX_TRACKING_DISTANCE * MAX_TRACKING_DISTANCE)) {
+                trackingTarget = null;
+            }
+            trackingCooldown--;
+            return;
+        }
+        
+        LivingEntity owner = getOwner();
+        
+        // 查找所有附近的敌对生物或敌对玩家
+        List<LivingEntity> nearbyEntities = this.level().getEntitiesOfClass(LivingEntity.class, 
+                this.getBoundingBox().inflate(MAX_TRACKING_DISTANCE),
+                e -> e != owner && e.isAlive() && canAttack(e));
+        
+        // 如果有多个目标，随机选择一个，实现分头追踪
+        if (!nearbyEntities.isEmpty()) {
+            // 随机选择一个目标，而不是总是选择最近的
+            int randomIndex = this.random.nextInt(nearbyEntities.size());
+            trackingTarget = nearbyEntities.get(randomIndex);
+            trackingCooldown = 10; // 10tick冷却（0.5秒）
+        }
+    }
+    
+    // 增强的追踪移动逻辑
+    private void enhancedTrackingMovement() {
+        // 加速
+        trackingSpeed = Math.min(trackingSpeed + ACCELERATION_RATE, MAX_TRACKING_SPEED);
+        
+        Vec3 moveVec;
+        
+        if (trackingTarget != null && trackingTarget.isAlive()) {
+            // 追踪目标移动
+            Vec3 targetPos = trackingTarget.position().add(0, trackingTarget.getBbHeight() / 2, 0);
+            Vec3 entityPos = this.position();
+            
+            // 计算朝向目标的方向向量并归一化
+            Vec3 direction = targetPos.subtract(entityPos).normalize();
+            
+            // 应用追踪移动
+            moveVec = direction.scale(trackingSpeed);
+            
+            // 旋转实体朝向目标
+            lookAt(targetPos);
+        } else if (attackDirection != null) {
+            // 如果没有追踪目标，使用攻击方向继续前进
+            moveVec = attackDirection.scale(trackingSpeed);
+        } else {
+            // 如果攻击方向为null，使用当前运动方向
+            moveVec = this.getDeltaMovement();
+        }
+        
+        // 设置新的运动方向
+        this.setDeltaMovement(moveVec);
+        
+        // 应用物理移动
+        this.move(MoverType.SELF, this.getDeltaMovement());
+        
+        // 更新旋转角度以匹配移动方向
+        updateRotation();
+    }
+    
+    // 让实体朝向目标位置
+    private void lookAt(Vec3 targetPos) {
+        Vec3 entityPos = this.position();
+        double dx = targetPos.x - entityPos.x;
+        double dy = targetPos.y - entityPos.y;
+        double dz = targetPos.z - entityPos.z;
+        
+        // 计算水平方向的角度
+        double yaw = Math.atan2(dz, dx) * (180 / Math.PI) - 90.0;
+        
+        // 计算垂直方向的角度
+        double distance = Math.sqrt(dx * dx + dz * dz);
+        double pitch = Math.atan2(dy, distance) * (180 / Math.PI);
+        
+        // 设置实体的旋转角度
+        this.setYRot((float) yaw);
+        this.setXRot((float) pitch);
+        this.setYBodyRot((float) yaw);
+        this.setYHeadRot((float) yaw);
     }
 
     // 生成光子粒子效果
@@ -251,16 +384,40 @@ public class PhotonicEntity extends Projectile implements GeoEntity {
         for (Entity entity : this.level().getEntities(this, this.getBoundingBox().inflate(0.5))) {
             if (entity instanceof LivingEntity livingEntity && livingEntity != getOwner()) {
                 if (this.getBoundingBox().intersects(livingEntity.getBoundingBox())) {
-                    // 给予伤害但不爆炸，继续飞行
+                    // 给予伤害
                     LivingEntity owner = getOwner();
                     if (owner != null) {
                         livingEntity.hurt(this.damageSources().mobAttack(owner), this.getDamage());
                     } else {
                         livingEntity.hurt(this.damageSources().magic(), this.getDamage());
                     }
-                    // 可以选择在这里添加粒子效果或其他视觉反馈
+                    
+                    // 生成1-3个地面光弹
+                    spawnGroundPhotonic(livingEntity);
+                    
+                    // 击中实体后立即消失
+                    this.discard();
+                    return;
                 }
             }
+        }
+    }
+    
+    // 生成地面光弹
+    private void spawnGroundPhotonic(LivingEntity hitEntity) {
+        // 随机生成1-3个地面光弹
+        int count = this.random.nextInt(3) + 1;
+        
+        for (int i = 0; i < count; i++) {
+            // 计算地面光弹的生成位置（在击中实体周围随机位置）
+            double offsetX = (this.random.nextDouble() - 0.5) * 2.0;
+            double offsetZ = (this.random.nextDouble() - 0.5) * 2.0;
+            Vec3 spawnPos = hitEntity.position().add(offsetX, 0.1, offsetZ);
+            
+            // 创建地面光弹
+            PhotonicEntity groundPhotonic = new PhotonicEntity(this.level(), this.getOwner(), spawnPos, new Vec3(0, 0, 0), 0.0f);
+            groundPhotonic.isGroundBased = true;
+            this.level().addFreshEntity(groundPhotonic);
         }
     }
 
