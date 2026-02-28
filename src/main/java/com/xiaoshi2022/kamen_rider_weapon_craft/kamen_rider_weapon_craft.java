@@ -10,7 +10,6 @@ import com.xiaoshi2022.kamen_rider_weapon_craft.network.*;
 import com.xiaoshi2022.kamen_rider_weapon_craft.particle.ModParticles;
 import com.xiaoshi2022.kamen_rider_weapon_craft.procedures.KRWBoot;
 import com.xiaoshi2022.kamen_rider_weapon_craft.procedures.PullSounds;
-import com.xiaoshi2022.kamen_rider_weapon_craft.procedures.PullSoundsClient;
 import com.xiaoshi2022.kamen_rider_weapon_craft.recipe.ModRecipes;
 import com.xiaoshi2022.kamen_rider_weapon_craft.registry.*;
 import com.xiaoshi2022.kamen_rider_weapon_craft.rider.RiderEffectEntityRegistry;
@@ -34,8 +33,6 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.util.thread.SidedThreadGroups;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
-import org.spongepowered.asm.launch.MixinBootstrap;
-import org.spongepowered.asm.mixin.MixinEnvironment;
 import software.bernie.geckolib.GeckoLib;
 
 import java.util.AbstractMap;

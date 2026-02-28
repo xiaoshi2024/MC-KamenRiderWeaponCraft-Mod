@@ -1,8 +1,8 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.Item.client.needlekunai;
 
-import software.bernie.geckolib.model.GeoModel;
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.NeedleKunai;
 import net.minecraft.resources.ResourceLocation;
+import software.bernie.geckolib.model.GeoModel;
 
 public class NeedleKunaiModel extends GeoModel<NeedleKunai> {
     @Override

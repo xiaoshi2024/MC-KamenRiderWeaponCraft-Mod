@@ -1,7 +1,6 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.Item.client.kaizoku_hassyar;
 
 import com.xiaoshi2022.kamen_rider_weapon_craft.Item.custom.KaizokuHassyar;
-
 import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib.model.GeoModel;
 

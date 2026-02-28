@@ -1,10 +1,10 @@
 package com.xiaoshi2022.kamen_rider_weapon_craft.registry;
 
 
+import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.custom.KachidokiBataBlock;
 import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.entity.RiderFusionMachineBlockEntity;
 import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.entity.Time_traveler_studio_blockEntity;
 import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.entity.helheim_crackBlockEntity;
-import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.custom.KachidokiBataBlock;
 import com.xiaoshi2022.kamen_rider_weapon_craft.blocks.entity.lockseedIronBarsEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.registries.DeferredRegister;

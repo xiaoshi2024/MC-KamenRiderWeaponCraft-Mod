@@ -47,10 +47,6 @@ import static com.xiaoshi2022.kamen_rider_weapon_craft.registry.ModBlocks.HELHEI
 import static com.xiaoshi2022.kamen_rider_weapon_craft.util.KeyBinding.CHANGE_KEY;
 import static com.xiaoshi2022.kamen_rider_weapon_craft.util.KeyBinding.OPEN_LOCKSEED;
 
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
 // 移除了类级别的@OnlyIn注解，改为使用内部类的@Mod.EventBusSubscriber注解来控制客户端执行
 public class ClientEvents {
     // 这个内部类只在客户端执行，因为@Mod.EventBusSubscriber指定了value = Dist.CLIENT
