@@ -1,0 +1,13 @@
+{
+  "itemGroup.kamenriderweaponcraft": "Example Mod Tab",
+  "block.kamenriderweaponcraft.example_block": "Example Block",
+  "item.kamenriderweaponcraft.example_item": "Example Item",
+
+  "kamenriderweaponcraft.configuration.title": "KamenRiderWeaponCraft Configs",
+  "kamenriderweaponcraft.configuration.section.kamenriderweaponcraft.common.toml": "KamenRiderWeaponCraft Configs",
+  "kamenriderweaponcraft.configuration.section.kamenriderweaponcraft.common.toml.title": "KamenRiderWeaponCraft Configs",
+  "kamenriderweaponcraft.configuration.items": "Item List",
+  "kamenriderweaponcraft.configuration.logDirtBlock": "Log Dirt Block",
+  "kamenriderweaponcraft.configuration.magicNumberIntroduction": "Magic Number Text",
+  "kamenriderweaponcraft.configuration.magicNumber": "Magic Number"
+}
