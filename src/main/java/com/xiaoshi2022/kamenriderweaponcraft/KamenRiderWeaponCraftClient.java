@@ -1,31 +1,65 @@
 package com.xiaoshi2022.kamenriderweaponcraft;
 
+import com.mojang.blaze3d.platform.InputConstants;
+import com.xiaoshi2022.kamenriderweaponcraft.Item.custom.Heiseisword;
+import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
-import net.neoforged.neoforge.client.gui.ConfigurationScreen;
-import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
+import net.neoforged.neoforge.client.event.InputEvent;
+import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
+import net.neoforged.neoforge.client.settings.KeyConflictContext;
+import org.lwjgl.glfw.GLFW;
 
-// This class will not load on dedicated servers. Accessing client side code from here is safe.
-@Mod(value = KamenRiderWeaponCraft.MODID, dist = Dist.CLIENT)
-// You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent
 @EventBusSubscriber(modid = KamenRiderWeaponCraft.MODID, value = Dist.CLIENT)
 public class KamenRiderWeaponCraftClient {
-    public KamenRiderWeaponCraftClient(ModContainer container) {
-        // Allows NeoForge to create a config screen for this mod's configs.
-        // The config screen is accessed by going to the Mods screen > clicking on your mod > clicking on config.
-        // Do not forget to add translations for your config options to the en_us.json file.
-        container.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
+    public static KeyMapping nextRiderKey;
+    public static KeyMapping prevRiderKey;
+
+    @SubscribeEvent
+    public static void clientSetup(FMLClientSetupEvent event) {
+
     }
 
     @SubscribeEvent
-    static void onClientSetup(FMLClientSetupEvent event) {
-        // Some client setup code
-        KamenRiderWeaponCraft.LOGGER.info("HELLO FROM CLIENT SETUP");
-        KamenRiderWeaponCraft.LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());
+    public static void registerKeyMappings(RegisterKeyMappingsEvent event) {
+        nextRiderKey = new KeyMapping(
+                "key.kamenriderweaponcraft.next_rider",
+                KeyConflictContext.IN_GAME,
+                InputConstants.Type.KEYSYM,
+                GLFW.GLFW_KEY_X,
+                "key.categories.gameplay"
+        );
+        prevRiderKey = new KeyMapping(
+                "key.kamenriderweaponcraft.prev_rider",
+                KeyConflictContext.IN_GAME,
+                InputConstants.Type.KEYSYM,
+                GLFW.GLFW_KEY_C,
+                "key.categories.gameplay"
+        );
+        event.register(nextRiderKey);
+        event.register(prevRiderKey);
+    }
+
+    @EventBusSubscriber(modid = KamenRiderWeaponCraft.MODID, value = Dist.CLIENT)
+    public static class KeyInputHandler {
+        @SubscribeEvent
+        public static void onKeyInput(InputEvent.Key event) {
+            LocalPlayer player = Minecraft.getInstance().player;
+            if (player == null) return;
+
+            ItemStack stack = player.getMainHandItem();
+            if (!(stack.getItem() instanceof Heiseisword heiseisword)) return;
+
+            if (nextRiderKey.consumeClick()) {
+                heiseisword.handleClientRiderSelection(true);
+            } else if (prevRiderKey.consumeClick()) {
+                heiseisword.handleClientRiderSelection(false);
+            }
+        }
     }
 }
