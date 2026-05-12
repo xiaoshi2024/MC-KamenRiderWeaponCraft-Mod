@@ -27,18 +27,21 @@ public class KamenRiderWeaponCraftClient {
 
     @SubscribeEvent
     public static void registerKeyMappings(RegisterKeyMappingsEvent event) {
+        // 骑士选择键（原 Y 键功能）
         nextRiderKey = new KeyMapping(
-                "key.kamenriderweaponcraft.next_rider",
+                "key.kamenriderweaponcraft.select_rider",
                 KeyConflictContext.IN_GAME,
                 InputConstants.Type.KEYSYM,
-                GLFW.GLFW_KEY_X,
+                GLFW.GLFW_KEY_Y,  // 改回 Y 键
                 "key.categories.gameplay"
         );
+
+        // 超必杀修饰键（原 X 键功能）
         prevRiderKey = new KeyMapping(
-                "key.kamenriderweaponcraft.prev_rider",
+                "key.kamenriderweaponcraft.ultimate_mode",
                 KeyConflictContext.IN_GAME,
                 InputConstants.Type.KEYSYM,
-                GLFW.GLFW_KEY_C,
+                GLFW.GLFW_KEY_X,  // X 键作为超必杀修饰键
                 "key.categories.gameplay"
         );
         event.register(nextRiderKey);

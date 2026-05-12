@@ -1,6 +1,5 @@
 package com.xiaoshi2022.kamenriderweaponcraft.rider.energy;
 
-import com.xiaoshi2022.kamenriderweaponcraft.KamenRiderWeaponCraft;
 import com.xiaoshi2022.kamenriderweaponcraft.Item.custom.Heiseisword;
 import com.xiaoshi2022.kamenriderweaponcraft.network.HeiseiswordEnergySyncPacket;
 import com.xiaoshi2022.kamenriderweaponcraft.network.NetworkHandler;

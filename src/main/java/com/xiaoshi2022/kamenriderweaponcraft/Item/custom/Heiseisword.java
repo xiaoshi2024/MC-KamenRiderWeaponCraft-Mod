@@ -7,6 +7,7 @@ import com.xiaoshi2022.kamenriderweaponcraft.network.NetworkHandler;
 import com.xiaoshi2022.kamenriderweaponcraft.rider.effect.HeiseiRiderEffect;
 import com.xiaoshi2022.kamenriderweaponcraft.rider.effect.HeiseiRiderEffectManager;
 import com.xiaoshi2022.kamenriderweaponcraft.rider.energy.HeiseiswordEnergyManager;
+import com.xiaoshi2022.kamenriderweaponcraft.rider.heisei.den_o.DenOTrainEntity;
 import com.xiaoshi2022.kamenriderweaponcraft.rider.sound.RiderSounds;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.component.DataComponents;
@@ -383,6 +384,7 @@ public class Heiseisword extends SwordItem implements GeoItem {
 
     public void handleClientRiderSelection(boolean isXKeyDown) {
         if (Minecraft.getInstance().player != null) {
+            KamenRiderWeaponCraft.LOGGER.debug("发送骑士选择请求, isXKeyDown: {}", isXKeyDown);
             NetworkHandler.sendToServer(new HeiseiswordRiderSelectionPacket(isXKeyDown));
         }
     }
@@ -398,7 +400,8 @@ public class Heiseisword extends SwordItem implements GeoItem {
         }
 
         String selectedRider = getSelectedRider(stack);
-        if (selectedRider != null && selectedRider.equals("DenO")) {
+// 在 use 方法中，将 "DenO" 改为 "Den-O"
+        if (selectedRider != null && selectedRider.equals("Den-O")) {  // 改为 Den-O
             String weaponType = getDenOWeaponType(stack);
 
             if ("Sword".equals(weaponType)) {
@@ -472,18 +475,20 @@ public class Heiseisword extends SwordItem implements GeoItem {
 
     @Override
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
-        if (isSelected && entity instanceof Player player && level.isClientSide) {
-            // 按键检测逻辑 - 需要根据实际情况调整
-            // 这里简化处理
-        }
+        // 按键检测已经在 KeyInputHandler 中处理
+        // 这里不需要再做检测
         super.inventoryTick(stack, level, entity, slotId, isSelected);
     }
 
     public static void handleRiderSelectionOnServer(ServerPlayer player, ItemStack stack, boolean isXKeyDown) {
+        KamenRiderWeaponCraft.LOGGER.info("服务端收到骑士选择请求, 玩家: {}, isXKeyDown: {}", player.getName().getString(), isXKeyDown);
+
         if (stack.getItem() instanceof Heiseisword heiseisword && player.level() instanceof ServerLevel level) {
             if (!heiseisword.isRiderSelectionOnCooldown(stack, level)) {
                 heiseisword.handleRiderSelectionInternal(player, stack, isXKeyDown);
                 heiseisword.setLastRiderSelectionTime(stack, level.getGameTime());
+            } else {
+                KamenRiderWeaponCraft.LOGGER.debug("骑士选择冷却中");
             }
         }
     }
@@ -501,23 +506,26 @@ public class Heiseisword extends SwordItem implements GeoItem {
         String currentSelectedRider = getSelectedRider(stack);
         String newRider;
 
+        KamenRiderWeaponCraft.LOGGER.info("当前选择的骑士: {}", currentSelectedRider);
+
         if (currentSelectedRider == null || currentSelectedRider.isEmpty()) {
             HeiseiRiderEffectManager.playRiderTimeSound(player.level(), player);
             newRider = riderOrder.get(0);
             setSelectedRider(stack, newRider);
             setCurrentRotationPosition(stack, 0);
+            KamenRiderWeaponCraft.LOGGER.info("首次选择骑士: {}", newRider);
         } else {
             int currentIndex = riderOrder.indexOf(currentSelectedRider);
             int nextIndex = (currentIndex + 1) % riderOrder.size();
             newRider = riderOrder.get(nextIndex);
             setSelectedRider(stack, newRider);
             setCurrentRotationPosition(stack, (getCurrentRotationPosition(stack) + 1) % 4);
+            KamenRiderWeaponCraft.LOGGER.info("切换骑士: {} -> {}", currentSelectedRider, newRider);
         }
 
         HeiseiRiderEffectManager.playSelectionSound(player.level(), player, getSelectedRider(stack));
         triggerRotationAnimation(player.level(), player, stack);
 
-        // 添加 ActionBar 消息显示当前选择的骑士
         String displayName = getRiderDisplayName(newRider);
         player.displayClientMessage(Component.literal("⚔ 选择骑士: " + displayName).withStyle(net.minecraft.ChatFormatting.GOLD), true);
     }
@@ -621,8 +629,8 @@ public class Heiseisword extends SwordItem implements GeoItem {
         // 检查是否是电王剑形态且准备就绪
         String selectedRider = getSelectedRider(stack);
         String weaponType = getDenOWeaponType(stack);
-        if (selectedRider != null && selectedRider.equals("DenO") && "Sword".equals(weaponType) && isSwordProjectileReady(stack)) {
-            // 电王剑形态：右键释放时发射剑
+// 在 releaseUsing 方法中
+        if (selectedRider != null && selectedRider.equals("Den-O") && "Sword".equals(weaponType) && isSwordProjectileReady(stack)) {            // 电王剑形态：右键释放时发射剑
             spawnDenOTrainEntity(level, player, stack);
             setSwordProjectileReady(stack, false);
 
@@ -806,7 +814,7 @@ public class Heiseisword extends SwordItem implements GeoItem {
             case "W" -> "Double";
             case "Decade" -> "Decade";
             case "Kiva" -> "Kiva";
-            case "Den-O" -> "电王";
+            case "Den-O" -> "Den-O";
             case "Kabuto" -> "Kabuto";
             case "Hibiki" -> "Hibiki";
             case "Blade" -> "Blade";
@@ -820,47 +828,113 @@ public class Heiseisword extends SwordItem implements GeoItem {
 
     @Override
     public boolean onLeftClickEntity(ItemStack stack, Player player, Entity entity) {
-        if (!player.level().isClientSide) {
-            if (isAttackOnCooldown(stack, player.level())) {
-                return false;
+        // 客户端粒子反馈
+        if (player.level().isClientSide) {
+            // 添加简单的攻击粒子效果，确保有视觉反馈
+            for (int i = 0; i < 5; i++) {
+                player.level().addParticle(
+                        ParticleTypes.SWEEP_ATTACK,
+                        entity.getX() + (player.level().random.nextDouble() - 0.5) * 1.5,
+                        entity.getY() + player.level().random.nextDouble() * entity.getBoundingBox().getYsize(),
+                        entity.getZ() + (player.level().random.nextDouble() - 0.5) * 1.5,
+                        0, 0, 0
+                );
+            }
+            // 客户端不需要处理服务端逻辑，直接返回
+            return super.onLeftClickEntity(stack, player, entity);
+        }
+
+        // ========== 服务端逻辑 ==========
+        float damageDealt = 0.0f;
+        if (entity instanceof LivingEntity livingEntity) {
+            damageDealt = livingEntity.getHealth();
+        }
+
+        if (isAttackOnCooldown(stack, player.level())) {
+            return false;
+        }
+
+        boolean isXKeyUltimateReady = getBoolean(stack, "isXKeyUltimateReady");
+        boolean handled = false;
+
+        if (isXKeyUltimateReady) {
+            executeXKeyUltimateAttack(player.level(), player, stack);
+            putBoolean(stack, "isXKeyUltimateReady", false);
+            handled = true;
+        } else if (isFinishTimeMode(stack)) {
+            handled = handleFinishTimeAttack(player, stack);
+        } else {
+            String rider = getSelectedRider(stack);
+            if (rider != null && !rider.isEmpty()) {
+                handled = handleNormalAttack(player, stack);
+            }
+        }
+
+        if (handled) {
+            setLastAttackTime(stack, player.level().getGameTime());
+        }
+
+        // 攻击完成后检查实体是否被击败
+        if (entity instanceof LivingEntity livingEntity) {
+            float actualDamage = damageDealt - livingEntity.getHealth();
+            if (actualDamage > 0) {
+                // 恢复能量
+                HeiseiswordEnergyManager.recoverEnergyByDamage(player, actualDamage);
             }
 
-            boolean isXKeyUltimateReady = getBoolean(stack, "isXKeyUltimateReady");
-
-            if (isXKeyUltimateReady) {
-                executeXKeyUltimateAttack(player.level(), player, stack);
-                putBoolean(stack, "isXKeyUltimateReady", false);
-                setLastAttackTime(stack, player.level().getGameTime());
-                return true;
-            } else if (isFinishTimeMode(stack)) {
-                handleFinishTimeAttack(player, stack);
-                setLastAttackTime(stack, player.level().getGameTime());
-                return true;
-            } else {
-                String rider = getSelectedRider(stack);
-                if (rider != null && !rider.isEmpty()) {
-                    handleNormalAttack(player, stack);
-                    setLastAttackTime(stack, player.level().getGameTime());
-                    return true;
+            if (!livingEntity.isAlive() && handled) {
+                // 击败实体，播放骑士名称音效
+                if (isFinishTimeMode(stack)) {
+                    List<String> riders = getScrambleRiders(stack);
+                    HeiseiRiderEffectManager.playUltimateFinishSoundSequence(player.level(), player, riders);
+                } else {
+                    String rider = getSelectedRider(stack);
+                    if (rider != null) {
+                        net.minecraft.sounds.SoundEvent nameSound = HeiseiRiderEffectManager.getRiderNameSound(rider);
+                        if (nameSound != null) {
+                            RiderSounds.playSound(player.level(), player, nameSound);
+                            RiderSounds.playDelayedSound(player.level(), player, RiderSounds.DUAL_TIME_BREAK, 40);
+                        }
+                    }
                 }
             }
         }
-        return super.onLeftClickEntity(stack, player, entity);
+
+        // 如果已处理，返回 true；否则执行默认攻击
+        return handled ? true : super.onLeftClickEntity(stack, player, entity);
     }
 
-    private void handleNormalAttack(Player player, ItemStack stack) {
+    // 修改为返回 boolean
+    private boolean handleNormalAttack(Player player, ItemStack stack) {
+        if (isAttackOnCooldown(stack, player.level())) {
+            return false;
+        }
+
         String rider = getSelectedRider(stack);
         HeiseiRiderEffect effect = HeiseiRiderEffectManager.getRiderEffect(rider);
         if (effect != null) {
             double energyCost = HeiseiRiderEffectManager.getRiderEnergyCost(rider) * 2.0;
-            if (!HeiseiswordEnergyManager.consumeEnergy(player, energyCost)) return;  // 改为 player
+            if (!HeiseiswordEnergyManager.consumeEnergy(player, energyCost)) {
+                return false;  // 能量不足，允许默认攻击
+            }
+
+            // 执行特效
             effect.executeSpecialAttack(player.level(), player, player.getLookAngle());
+            setLastAttackTime(stack, player.level().getGameTime());
+            return true;  // 已处理，阻止默认攻击
         }
+        return false;  // 没有特效，允许默认攻击
     }
 
-    private void handleFinishTimeAttack(Player player, ItemStack stack) {
+    private boolean handleFinishTimeAttack(Player player, ItemStack stack) {
+        if (isAttackOnCooldown(stack, player.level())) {
+            return false;
+        }
+
         List<String> riders = getScrambleRiders(stack);
-        if (riders.isEmpty()) return;
+        if (riders.isEmpty()) {
+            return false;
+        }
 
         double totalEnergyCost = 0;
         for (String rider : riders) {
@@ -868,7 +942,9 @@ public class Heiseisword extends SwordItem implements GeoItem {
         }
         totalEnergyCost = Math.min(totalEnergyCost * 1.5, 100.0);
 
-        if (!HeiseiswordEnergyManager.consumeEnergy(player, totalEnergyCost)) return;  // 改为 player
+        if (!HeiseiswordEnergyManager.consumeEnergy(player, totalEnergyCost)) {
+            return false;  // 能量不足，允许默认攻击
+        }
 
         for (String rider : riders) {
             HeiseiRiderEffect effect = HeiseiRiderEffectManager.getRiderEffect(rider);
@@ -876,6 +952,8 @@ public class Heiseisword extends SwordItem implements GeoItem {
                 effect.executeSpecialAttack(player.level(), player, player.getLookAngle());
             }
         }
+        setLastAttackTime(stack, player.level().getGameTime());
+        return true;
     }
 
     private void executeXKeyUltimateAttack(Level level, Player player, ItemStack stack) {
@@ -913,16 +991,25 @@ public class Heiseisword extends SwordItem implements GeoItem {
         }
     }
 
+    /**
+     * 为玩家触发剑形态动画，供 DenOTrainEntity 调用
+     */
+    public void triggerAnimationForPlayer(Player player, ItemStack stack) {
+        if (player.level() instanceof ServerLevel serverLevel) {
+            // 触发剑形态攻击动画
+            triggerAnim(player, GeoItem.getOrAssignId(stack, serverLevel), "rotation", "pos1");
+        }
+    }
+
     private void spawnDenOTrainEntity(Level level, Player player, ItemStack stack) {
         if (level.isClientSide) return;
         ServerLevel serverLevel = (ServerLevel) level;
 
-        // 需要确保 DenOTrainEntity 类存在且被正确导入
-        // DenOTrainEntity.spawn(serverLevel, player,
-        //         player.getLookAngle().normalize().scale(1.5),
-        //         16.0f, getDenOWeaponType(stack));
+        // 取消注释这一行
+        DenOTrainEntity.spawn(serverLevel, player,
+                player.getLookAngle().normalize().scale(1.5),
+                16.0f, getDenOWeaponType(stack));
 
-        // 暂时注释，等 DenOTrainEntity 类创建后取消注释
         LOGGER.debug("Spawning Den-O train entity - weapon type: {}", getDenOWeaponType(stack));
     }
 

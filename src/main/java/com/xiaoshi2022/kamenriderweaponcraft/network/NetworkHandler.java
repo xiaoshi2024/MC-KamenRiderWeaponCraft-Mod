@@ -10,7 +10,7 @@ import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.handling.DirectionalPayloadHandler;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
-@EventBusSubscriber(modid = KamenRiderWeaponCraft.MODID, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = KamenRiderWeaponCraft.MODID)
 public class NetworkHandler {
 
     private static boolean registered = false;

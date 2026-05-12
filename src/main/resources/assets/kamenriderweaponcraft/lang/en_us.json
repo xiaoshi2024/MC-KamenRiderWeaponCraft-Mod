@@ -2,8 +2,8 @@
   "item.kamenriderweaponcraft.heiseisword": "Heisei Sword",
   "itemGroup.kamenriderweaponcraft": "Kamen Rider Weapons",
 
-  "key.kamenriderweaponcraft.next_rider": "Next Rider",
-  "key.kamenriderweaponcraft.prev_rider": "Prev Rider",
+  "key.kamenriderweaponcraft.select_rider": "Select Rider",
+  "key.kamenriderweaponcraft.ultimate_mode": "Ultimate Mode (with Select Rider)",
 
   "subtitles.hey": "Hey!",
   "subtitles.hey_say_rapid": "Hey! Say! Rapid!",

@@ -2,8 +2,8 @@
   "item.kamenriderweaponcraft.heiseisword": "平成嘿嘿剑",
   "itemGroup.kamenriderweaponcraft": "假面骑士武器",
 
-  "key.kamenriderweaponcraft.next_rider": "下一个假面骑士",
-  "key.kamenriderweaponcraft.prev_rider": "上一个假面骑士",
+  "key.kamenriderweaponcraft.select_rider": "选择骑士",
+  "key.kamenriderweaponcraft.ultimate_mode": "超必杀模式 (配合选择骑士键)",
 
   "subtitles.hey": "嘿！",
   "subtitles.hey_say_rapid": "平成！传说！",

@@ -2,8 +2,8 @@
   "item.kamenriderweaponcraft.heiseisword": "平成へいへい剣",
   "itemGroup.kamenriderweaponcraft": "仮面ライダー武器",
 
-  "key.kamenriderweaponcraft.next_rider": "次の仮面ライダー",
-  "key.kamenriderweaponcraft.prev_rider": "前の仮面ライダー",
+  "key.kamenriderweaponcraft.select_rider": "Select Rider",
+  "key.kamenriderweaponcraft.ultimate_mode": "Ultimate Mode (with Select Rider)",
 
   "subtitles.hey": "ヘイ！",
   "subtitles.hey_say_rapid": "ヘイ！セイ！ラピッド！",

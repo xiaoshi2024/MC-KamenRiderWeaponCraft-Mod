@@ -1,0 +1,49 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"animation.exaid_slash_effect.slash": {
+			"loop": "hold_on_last_frame",
+			"animation_length": 0.5,
+			"bones": {
+				"exceid": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.2917": {
+							"vector": [0, 0, 22.5]
+						},
+						"0.375": {
+							"vector": [0, 0, -52.5]
+						},
+						"0.4583": {
+							"vector": [0, 0, 0]
+						}
+					},
+					"position": {
+						"0.0": {
+							"vector": [0, 0, 0.6]
+						},
+						"0.375": {
+							"vector": [0, 0.2, 0.15]
+						},
+						"0.4167": {
+							"vector": [0, -0.02, 0.11]
+						},
+						"0.4583": {
+							"vector": [0, 0.18, 0.03]
+						},
+						"0.5": {
+							"vector": [0, 0, -0.2],
+							"easing": "easeInQuad"
+						}
+					},
+					"scale": {
+						"vector": [2.225, 2.2, 1.11]
+					}
+				}
+			}
+		}
+	},
+	"geckolib_format_version": 2
+}
