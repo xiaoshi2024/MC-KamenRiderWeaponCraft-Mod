@@ -1,4 +1,36 @@
 {
   "item.kamenriderweaponcraft.heiseisword": "平成嘿嘿剑",
-  "itemGroup.kamenriderweaponcraft": "假面骑士武器"
+  "itemGroup.kamenriderweaponcraft": "假面骑士武器",
+
+  "key.kamenriderweaponcraft.next_rider": "下一个假面骑士",
+  "key.kamenriderweaponcraft.prev_rider": "上一个假面骑士",
+
+  "subtitles.hey": "嘿！",
+  "subtitles.hey_say_rapid": "平成！传说！",
+
+  "subtitles.name_agito": "亚极陀",
+  "subtitles.name_blade": "剑",
+  "subtitles.name_build": "创骑",
+  "subtitles.name_decade": "帝骑",
+  "subtitles.name_den_o": "电王",
+  "subtitles.name_drive": "驰骑",
+  "subtitles.name_exaid": "艾克赛德",
+  "subtitles.name_faiz": "法伊兹",
+  "subtitles.name_fourze": "卌骑",
+  "subtitles.name_gaim": "铠武",
+  "subtitles.name_ghost": "幽灵",
+  "subtitles.name_hibiki": "响鬼",
+  "subtitles.name_kabuto": "甲斗",
+  "subtitles.name_kiva": "月骑",
+  "subtitles.name_kuuga": "空我",
+  "subtitles.name_ooo": "欧兹",
+  "subtitles.name_ryuki": "龙骑",
+  "subtitles.name_w": "双骑",
+  "subtitles.name_wizard": "巫骑",
+
+  "subtitles.ride_hei_saber": "平成嘿嘿剑",
+  "subtitles.finish_time": "终结时刻",
+  "subtitles.ultimate_time_break": "终极时刻粉碎",
+  "subtitles.scramble_time_break": "混战时刻粉碎",
+  "subtitles.dual_time_break": "双重时刻粉碎"
 }

@@ -1,0 +1,36 @@
+{
+  "item.kamenriderweaponcraft.heiseisword": "平成へいへい剣",
+  "itemGroup.kamenriderweaponcraft": "仮面ライダー武器",
+
+  "key.kamenriderweaponcraft.next_rider": "次の仮面ライダー",
+  "key.kamenriderweaponcraft.prev_rider": "前の仮面ライダー",
+
+  "subtitles.hey": "ヘイ！",
+  "subtitles.hey_say_rapid": "ヘイ！セイ！ラピッド！",
+
+  "subtitles.name_agito": "アギト",
+  "subtitles.name_blade": "ブレイド",
+  "subtitles.name_build": "ビルド",
+  "subtitles.name_decade": "ディケイド",
+  "subtitles.name_den_o": "電王",
+  "subtitles.name_drive": "ドライブ",
+  "subtitles.name_exaid": "エグゼイド",
+  "subtitles.name_faiz": "ファイズ",
+  "subtitles.name_fourze": "フォーゼ",
+  "subtitles.name_gaim": "鎧武",
+  "subtitles.name_ghost": "ゴースト",
+  "subtitles.name_hibiki": "響鬼",
+  "subtitles.name_kabuto": "カブト",
+  "subtitles.name_kiva": "キバ",
+  "subtitles.name_kuuga": "クウガ",
+  "subtitles.name_ooo": "オーズ",
+  "subtitles.name_ryuki": "龍騎",
+  "subtitles.name_w": "ダブル",
+  "subtitles.name_wizard": "ウィザード",
+
+  "subtitles.ride_hei_saber": "平成へいへい剣",
+  "subtitles.finish_time": "フィニッシュタイム",
+  "subtitles.ultimate_time_break": "アルティメットタイムブレイク",
+  "subtitles.scramble_time_break": "スクランブルタイムブレイク",
+  "subtitles.dual_time_break": "デュアルタイムブレイク"
+}

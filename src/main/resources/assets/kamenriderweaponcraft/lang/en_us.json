@@ -1,4 +1,36 @@
 {
   "item.kamenriderweaponcraft.heiseisword": "Heisei Sword",
-  "itemGroup.kamenriderweaponcraft": "Kamen Rider Weapons"
+  "itemGroup.kamenriderweaponcraft": "Kamen Rider Weapons",
+
+  "key.kamenriderweaponcraft.next_rider": "Next Rider",
+  "key.kamenriderweaponcraft.prev_rider": "Prev Rider",
+
+  "subtitles.hey": "Hey!",
+  "subtitles.hey_say_rapid": "Hey! Say! Rapid!",
+
+  "subtitles.name_agito": "Agito",
+  "subtitles.name_blade": "Blade",
+  "subtitles.name_build": "Build",
+  "subtitles.name_decade": "Decade",
+  "subtitles.name_den_o": "Den-O",
+  "subtitles.name_drive": "Drive",
+  "subtitles.name_exaid": "Ex-Aid",
+  "subtitles.name_faiz": "Faiz",
+  "subtitles.name_fourze": "Fourze",
+  "subtitles.name_gaim": "Gaim",
+  "subtitles.name_ghost": "Ghost",
+  "subtitles.name_hibiki": "Hibiki",
+  "subtitles.name_kabuto": "Kabuto",
+  "subtitles.name_kiva": "Kiva",
+  "subtitles.name_kuuga": "Kuuga",
+  "subtitles.name_ooo": "OOO",
+  "subtitles.name_ryuki": "Ryuki",
+  "subtitles.name_w": "Double",
+  "subtitles.name_wizard": "Wizard",
+
+  "subtitles.ride_hei_saber": "Ride Heisei Saber",
+  "subtitles.finish_time": "Finish Time",
+  "subtitles.ultimate_time_break": "Ultimate Time Break",
+  "subtitles.scramble_time_break": "Scramble Time Break",
+  "subtitles.dual_time_break": "Dual Time Break"
 }
