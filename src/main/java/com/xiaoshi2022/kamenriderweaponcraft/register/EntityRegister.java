@@ -13,6 +13,9 @@ import com.xiaoshi2022.kamenriderweaponcraft.rider.heisei.kuuga.KuugaRiderEntity
 import com.xiaoshi2022.kamenriderweaponcraft.rider.heisei.ooo.OOOGeoEntity;
 import com.xiaoshi2022.kamenriderweaponcraft.rider.heisei.w.WTornadoEntity;
 import com.xiaoshi2022.kamenriderweaponcraft.rider.heisei.wizard.WizardRiderEntity;
+import com.xiaoshi2022.kamenriderweaponcraft.rider.heisei.build.BuildRiderEntity;
+import com.xiaoshi2022.kamenriderweaponcraft.rider.heisei.exaid.ExAidSlashEffectEntity;
+import com.xiaoshi2022.kamenriderweaponcraft.rider.heisei.ghost.GhostHeroicSoulEntity;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
@@ -47,6 +50,14 @@ public class EntityRegister {
                     .clientTrackingRange(16)
                     .updateInterval(1)
                     .build("wizard_rider"));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<BuildRiderEntity>> BUILD_RIDER_EFFECT =
+            ENTITY_TYPES.register("build_rider_effect", () -> EntityType.Builder.<BuildRiderEntity>of(
+                    BuildRiderEntity::new, MobCategory.MISC)
+                    .sized(1.0F, 2.0F)
+                    .clientTrackingRange(16)
+                    .updateInterval(1)
+                    .build("build_rider_effect"));
 
     public static final DeferredHolder<EntityType<?>, EntityType<DriveRiderEntity>> DRIVE_RIDER =
             ENTITY_TYPES.register("drive_rider", () -> EntityType.Builder.<DriveRiderEntity>of(
@@ -113,6 +124,22 @@ public class EntityRegister {
                     .clientTrackingRange(16)
                     .updateInterval(1)
                     .build("faiz_empty_set"));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<ExAidSlashEffectEntity>> EXAID_SLASH_EFFECT =
+            ENTITY_TYPES.register("exaid_slash_effect", () -> EntityType.Builder.<ExAidSlashEffectEntity>of(
+                    ExAidSlashEffectEntity::new, MobCategory.MISC)
+                    .sized(1.0F, 1.0F)
+                    .clientTrackingRange(16)
+                    .updateInterval(1)
+                    .build("exaid_slash_effect"));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<GhostHeroicSoulEntity>> GHOST_HEROIC_SOUL =
+            ENTITY_TYPES.register("ghost_heroic_soul", () -> EntityType.Builder.<GhostHeroicSoulEntity>of(
+                    GhostHeroicSoulEntity::new, MobCategory.MISC)
+                    .sized(1.0F, 1.0F)
+                    .clientTrackingRange(16)
+                    .updateInterval(1)
+                    .build("ghost_heroic_soul"));
 
     public static void register(IEventBus eventBus) {
         ENTITY_TYPES.register(eventBus);

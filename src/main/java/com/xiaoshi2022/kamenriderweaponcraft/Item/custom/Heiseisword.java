@@ -655,9 +655,9 @@ public class Heiseisword extends SwordItem implements GeoItem {
         }
 
         // 添加调试输出（可选，用于测试）
-        if (chargeTime > 0.1F) {
-            KamenRiderWeaponCraft.LOGGER.debug("蓄力时间: {}%, ticksUsed: {}", (int)(chargeTime * 100), ticksUsed);
-        }
+//        if (chargeTime > 0.1F) {
+//            KamenRiderWeaponCraft.LOGGER.debug("蓄力时间: {}%, ticksUsed: {}", (int)(chargeTime * 100), ticksUsed);
+//        }
         // ========== 蓄力计算结束 ==========
 
         // 根据不同模式执行不同的远程攻击
@@ -912,6 +912,18 @@ public class Heiseisword extends SwordItem implements GeoItem {
 
         String rider = getSelectedRider(stack);
         HeiseiRiderEffect effect = HeiseiRiderEffectManager.getRiderEffect(rider);
+        
+        // 防御性检查：如果骑士名称无效或找不到效果，尝试使用第一个骑士
+        if (effect == null) {
+            List<String> riderOrder = HeiseiRiderEffectManager.getRiderOrder();
+            if (!riderOrder.isEmpty()) {
+                rider = riderOrder.get(0);
+                effect = HeiseiRiderEffectManager.getRiderEffect(rider);
+                // 更新选中的骑士
+                setSelectedRider(stack, rider);
+            }
+        }
+        
         if (effect != null) {
             double energyCost = HeiseiRiderEffectManager.getRiderEnergyCost(rider) * 2.0;
             if (!HeiseiswordEnergyManager.consumeEnergy(player, energyCost)) {

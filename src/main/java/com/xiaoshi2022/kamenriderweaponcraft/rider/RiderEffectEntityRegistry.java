@@ -14,6 +14,9 @@ import com.xiaoshi2022.kamenriderweaponcraft.rider.heisei.kuuga.KuugaRenderer;
 import com.xiaoshi2022.kamenriderweaponcraft.rider.heisei.ooo.OOOGeoEntityRenderer;
 import com.xiaoshi2022.kamenriderweaponcraft.rider.heisei.w.WTornadoRenderer;
 import com.xiaoshi2022.kamenriderweaponcraft.rider.heisei.wizard.WizardRiderRenderer;
+import com.xiaoshi2022.kamenriderweaponcraft.rider.heisei.build.BuildRiderEntityRenderer;
+import com.xiaoshi2022.kamenriderweaponcraft.rider.heisei.exaid.ExAidSlashEffectRenderer;
+import com.xiaoshi2022.kamenriderweaponcraft.rider.heisei.ghost.GhostHeroicSoulRenderer;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -37,5 +40,9 @@ public class RiderEffectEntityRegistry {
         event.registerEntityRenderer(EntityRegister.OOO_GEO_EFFECT.get(), OOOGeoEntityRenderer::new);
         event.registerEntityRenderer(EntityRegister.W_TORNADO.get(), WTornadoRenderer::new);
         event.registerEntityRenderer(EntityRegister.FAIZ_EMPTY_SET.get(), FaizEmptySetRenderer::new);
+        event.registerEntityRenderer(EntityRegister.BUILD_RIDER_EFFECT.get(), BuildRiderEntityRenderer::new);
+        event.registerEntityRenderer(EntityRegister.EXAID_SLASH_EFFECT.get(), ExAidSlashEffectRenderer::new);
+        event.registerEntityRenderer(EntityRegister.GHOST_HEROIC_SOUL.get(), GhostHeroicSoulRenderer::new);
+        
     }
 }
