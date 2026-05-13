@@ -384,7 +384,7 @@ public class Heiseisword extends SwordItem implements GeoItem {
 
     public void handleClientRiderSelection(boolean isXKeyDown) {
         if (Minecraft.getInstance().player != null) {
-            KamenRiderWeaponCraft.LOGGER.debug("发送骑士选择请求, isXKeyDown: {}", isXKeyDown);
+//            KamenRiderWeaponCraft.LOGGER.debug("发送骑士选择请求, isXKeyDown: {}", isXKeyDown);
             NetworkHandler.sendToServer(new HeiseiswordRiderSelectionPacket(isXKeyDown));
         }
     }
@@ -481,14 +481,14 @@ public class Heiseisword extends SwordItem implements GeoItem {
     }
 
     public static void handleRiderSelectionOnServer(ServerPlayer player, ItemStack stack, boolean isXKeyDown) {
-        KamenRiderWeaponCraft.LOGGER.info("服务端收到骑士选择请求, 玩家: {}, isXKeyDown: {}", player.getName().getString(), isXKeyDown);
+//        KamenRiderWeaponCraft.LOGGER.info("服务端收到骑士选择请求, 玩家: {}, isXKeyDown: {}", player.getName().getString(), isXKeyDown);
 
         if (stack.getItem() instanceof Heiseisword heiseisword && player.level() instanceof ServerLevel level) {
             if (!heiseisword.isRiderSelectionOnCooldown(stack, level)) {
                 heiseisword.handleRiderSelectionInternal(player, stack, isXKeyDown);
                 heiseisword.setLastRiderSelectionTime(stack, level.getGameTime());
             } else {
-                KamenRiderWeaponCraft.LOGGER.debug("骑士选择冷却中");
+//                KamenRiderWeaponCraft.LOGGER.debug("骑士选择冷却中");
             }
         }
     }
@@ -506,7 +506,7 @@ public class Heiseisword extends SwordItem implements GeoItem {
         String currentSelectedRider = getSelectedRider(stack);
         String newRider;
 
-        KamenRiderWeaponCraft.LOGGER.info("当前选择的骑士: {}", currentSelectedRider);
+//        KamenRiderWeaponCraft.LOGGER.info("当前选择的骑士: {}", currentSelectedRider);
 
         if (currentSelectedRider == null || currentSelectedRider.isEmpty()) {
             HeiseiRiderEffectManager.playRiderTimeSound(player.level(), player);
@@ -520,7 +520,7 @@ public class Heiseisword extends SwordItem implements GeoItem {
             newRider = riderOrder.get(nextIndex);
             setSelectedRider(stack, newRider);
             setCurrentRotationPosition(stack, (getCurrentRotationPosition(stack) + 1) % 4);
-            KamenRiderWeaponCraft.LOGGER.info("切换骑士: {} -> {}", currentSelectedRider, newRider);
+//            KamenRiderWeaponCraft.LOGGER.info("切换骑士: {} -> {}", currentSelectedRider, newRider);
         }
 
         HeiseiRiderEffectManager.playSelectionSound(player.level(), player, getSelectedRider(stack));
