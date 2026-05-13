@@ -1,6 +1,7 @@
 package com.xiaoshi2022.kamenriderweaponcraft.rider.energy;
 
 import com.xiaoshi2022.kamenriderweaponcraft.Item.custom.Heiseisword;
+import com.xiaoshi2022.kamenriderweaponcraft.KamenRiderWeaponCraft;
 import com.xiaoshi2022.kamenriderweaponcraft.network.HeiseiswordEnergySyncPacket;
 import com.xiaoshi2022.kamenriderweaponcraft.network.NetworkHandler;
 import net.minecraft.nbt.CompoundTag;
@@ -152,8 +153,17 @@ public class HeiseiswordEnergyManager {
     public static void updateEnergyRegen(Player player) {
         if (player == null || player.isCreative()) return;
 
-        if (player.getMainHandItem().getItem() instanceof Heiseisword) {
-            recoverEnergy(player, ENERGY_REGEN_RATE);
+        // 检查主手或副手是否持有平成剑
+        boolean hasHeiseisword = player.getMainHandItem().getItem() instanceof Heiseisword ||
+                player.getOffhandItem().getItem() instanceof Heiseisword;
+
+        if (hasHeiseisword) {
+            double current = getCurrentEnergy(player);
+            double max = getMaxEnergy(player);
+
+            if (current < max) {
+                recoverEnergy(player, ENERGY_REGEN_RATE);
+            }
         }
     }
 
