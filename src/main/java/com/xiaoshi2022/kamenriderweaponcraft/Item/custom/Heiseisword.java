@@ -1099,4 +1099,62 @@ public class Heiseisword extends SwordItem implements GeoItem {
         CustomData customData = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY);
         return customData.copyTag();
     }
+    
+    private static void setStaticTag(ItemStack stack, CompoundTag tag) {
+        stack.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));
+    }
+    
+    public static void setLastAttackTimeStatic(ItemStack stack, long time) {
+        CompoundTag tag = getStaticOrCreateTag(stack);
+        tag.putLong(TAG_LAST_ATTACK_TIME, time);
+        setStaticTag(stack, tag);
+    }
+    
+    public static boolean isUltimateModeStatic(ItemStack stack) {
+        CompoundTag tag = getStaticOrCreateTag(stack);
+        return tag.getBoolean(TAG_IS_ULTIMATE_MODE);
+    }
+    
+    public static void setUltimateModeStatic(ItemStack stack, boolean mode) {
+        CompoundTag tag = getStaticOrCreateTag(stack);
+        tag.putBoolean(TAG_IS_ULTIMATE_MODE, mode);
+        setStaticTag(stack, tag);
+    }
+    
+    public static boolean isFinishTimeModeStatic(ItemStack stack) {
+        CompoundTag tag = getStaticOrCreateTag(stack);
+        return tag.getBoolean(TAG_IS_FINISH_TIME_MODE);
+    }
+    
+    public static void setFinishTimeModeStatic(ItemStack stack, boolean mode) {
+        CompoundTag tag = getStaticOrCreateTag(stack);
+        tag.putBoolean(TAG_IS_FINISH_TIME_MODE, mode);
+        setStaticTag(stack, tag);
+    }
+    
+    public static List<String> getScrambleRidersStatic(ItemStack stack) {
+        List<String> riders = new ArrayList<>();
+        CompoundTag tag = getStaticOrCreateTag(stack);
+        if (!tag.contains(TAG_SCRAMBLE_RIDERS + "_size")) return riders;
+        int size = tag.getInt(TAG_SCRAMBLE_RIDERS + "_size");
+        for (int i = 0; i < size; i++) {
+            riders.add(tag.getString(TAG_SCRAMBLE_RIDERS + "_" + i));
+        }
+        return riders;
+    }
+    
+    public static void setScrambleRidersStatic(ItemStack stack, List<String> riders) {
+        CompoundTag tag = getStaticOrCreateTag(stack);
+        if (tag.contains(TAG_SCRAMBLE_RIDERS + "_size")) {
+            int oldSize = tag.getInt(TAG_SCRAMBLE_RIDERS + "_size");
+            for (int i = 0; i < oldSize; i++) {
+                tag.remove(TAG_SCRAMBLE_RIDERS + "_" + i);
+            }
+        }
+        tag.putInt(TAG_SCRAMBLE_RIDERS + "_size", riders.size());
+        for (int i = 0; i < riders.size(); i++) {
+            tag.putString(TAG_SCRAMBLE_RIDERS + "_" + i, riders.get(i));
+        }
+        setStaticTag(stack, tag);
+    }
 }

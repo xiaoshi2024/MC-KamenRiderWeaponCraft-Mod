@@ -1,7 +1,7 @@
 package com.xiaoshi2022.kamenriderweaponcraft;
 
 import com.mojang.logging.LogUtils;
-import com.xiaoshi2022.kamenriderweaponcraft.register.EntityRegister;  // 添加这个导入
+import com.xiaoshi2022.kamenriderweaponcraft.register.EntityRegister;
 import com.xiaoshi2022.kamenriderweaponcraft.register.ItemRegister;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -31,13 +31,8 @@ public class KamenRiderWeaponCraft {
                     }).build());
 
     public KamenRiderWeaponCraft(IEventBus modEventBus) {
-        // 注册物品
         ItemRegister.register(modEventBus);
-        // 注册实体 - 这个很重要！
-        EntityRegister.register(modEventBus);  // ← 添加这一行！
-        // 注册创造模式标签页
+        EntityRegister.register(modEventBus);
         CREATIVE_MODE_TABS.register(modEventBus);
-
-        // NetworkHandler 已经通过 @EventBusSubscriber 自动注册
     }
 }

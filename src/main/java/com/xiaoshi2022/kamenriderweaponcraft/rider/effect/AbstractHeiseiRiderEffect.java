@@ -10,18 +10,25 @@ public abstract class AbstractHeiseiRiderEffect implements HeiseiRiderEffect {
 
     @Override
     public void executeSpecialAttack(Level level, LivingEntity shooter, Vec3 direction) {
+        // 先播放音效（无论玩家还是非玩家）
+        playAttackSounds(level, shooter);
+        
         if (shooter instanceof Player player) {
             executePlayerSpecialAttack(level, player, direction);
         } else {
             executeNonPlayerSpecialAttack(level, shooter, direction);
         }
     }
-
-    public void executeNonPlayerSpecialAttack(Level level, LivingEntity shooter, Vec3 direction) {
+    
+    protected void playAttackSounds(Level level, LivingEntity shooter) {
         if (!level.isClientSide) {
             HeiseiRiderEffectManager.playSelectionSound(level, shooter, getRiderName());
             HeiseiRiderEffectManager.playAttackSound(level, shooter, getRiderName());
+        }
+    }
 
+    public void executeNonPlayerSpecialAttack(Level level, LivingEntity shooter, Vec3 direction) {
+        if (!level.isClientSide) {
             Vec3 attackDirection = direction != null && direction.lengthSqr() > 0 ?
                                    direction.normalize() : shooter.getLookAngle();
 
@@ -88,9 +95,6 @@ public abstract class AbstractHeiseiRiderEffect implements HeiseiRiderEffect {
 
     public void executePlayerSpecialAttack(Level level, Player player, Vec3 direction) {
         if (!level.isClientSide) {
-            HeiseiRiderEffectManager.playSelectionSound(level, player, getRiderName());
-            HeiseiRiderEffectManager.playAttackSound(level, player, getRiderName());
-
             Vec3 attackDirection = direction != null && direction.lengthSqr() > 0 ?
                                    direction.normalize() : player.getLookAngle();
 

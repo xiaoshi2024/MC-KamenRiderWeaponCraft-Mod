@@ -73,8 +73,20 @@ public class HeiseiRiderEffectManager {
             if (shooter instanceof Player player) {
                 RiderSounds.playSelectionSound(level, player, nameSound);
             } else {
+                // 为非玩家实体播放完整的音效序列："Hey!" + 骑士名称
                 level.playSound(null, shooter.getX(), shooter.getY(), shooter.getZ(),
-                    nameSound, SoundSource.HOSTILE, 1.0F, 1.0F);
+                    RiderSounds.HEY, SoundSource.HOSTILE, 1.0F, 1.0F);
+                
+                // 延迟播放骑士名称音效
+                level.getServer().execute(() -> {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    level.playSound(null, shooter.getX(), shooter.getY(), shooter.getZ(),
+                        nameSound, SoundSource.HOSTILE, 1.0F, 1.0F);
+                });
             }
         }
     }
