@@ -4,6 +4,7 @@ import com.xiaoshi2022.kamenriderweaponcraft.Item.client.Heiseisword.Heiseisword
 import com.xiaoshi2022.kamenriderweaponcraft.KamenRiderWeaponCraft;
 import com.xiaoshi2022.kamenriderweaponcraft.network.HeiseiswordRiderSelectionPacket;
 import com.xiaoshi2022.kamenriderweaponcraft.network.NetworkHandler;
+import com.xiaoshi2022.kamenriderweaponcraft.rider.core.CoreSlotManager;
 import com.xiaoshi2022.kamenriderweaponcraft.rider.effect.HeiseiRiderEffect;
 import com.xiaoshi2022.kamenriderweaponcraft.rider.effect.HeiseiRiderEffectManager;
 import com.xiaoshi2022.kamenriderweaponcraft.rider.energy.HeiseiswordEnergyManager;
@@ -14,6 +15,7 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -42,13 +44,33 @@ import software.bernie.geckolib.animation.RawAnimation;
 import software.bernie.geckolib.renderer.GeoItemRenderer;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public class Heiseisword extends SwordItem implements GeoItem {
-    // 添加私有 Logger
     private static final Logger LOGGER = LoggerFactory.getLogger(Heiseisword.class);
+
+    public static boolean isHeiseisword(ItemStack stack) {
+        return stack.getItem() instanceof Heiseisword;
+    }
+
+    public static boolean isHeiseisword(net.minecraft.world.entity.player.Player player) {
+        if (player == null) return false;
+        return isHeiseisword(player.getMainHandItem()) || isHeiseisword(player.getOffhandItem());
+    }
+
+    public static ItemStack getHeiseiswordFromPlayer(net.minecraft.world.entity.player.Player player) {
+        if (isHeiseisword(player.getMainHandItem())) {
+            return player.getMainHandItem();
+        }
+        if (isHeiseisword(player.getOffhandItem())) {
+            return player.getOffhandItem();
+        }
+        return ItemStack.EMPTY;
+    }
 
     // 定义4个方位的旋转动画
     private static final RawAnimation ROTATE_POSITION_1 = RawAnimation.begin().thenPlay("rotate_pos1");
@@ -362,6 +384,73 @@ public class Heiseisword extends SwordItem implements GeoItem {
     public void resetDenOMode(ItemStack stack) {
         setDenOWeaponType(stack, "");
         setHasAttachedEntity(stack, false);
+    }
+
+    // ==================== 外部表盘系统方法 ====================
+
+    public boolean hasExternalCoreAttached(ItemStack stack) {
+        return CoreSlotManager.hasAttachedCore(stack);
+    }
+
+    @Nullable
+    public String getAttachedCoreId(ItemStack stack) {
+        return CoreSlotManager.getAttachedCoreId(stack);
+    }
+
+    public void attachExternalCore(ItemStack stack, String coreId) {
+        CoreSlotManager.attachCore(stack, coreId);
+    }
+
+    public void detachExternalCore(ItemStack stack) {
+        CoreSlotManager.detachCore(stack);
+    }
+
+    @Nullable
+    public ResourceLocation getCurrentModelLocation(ItemStack stack) {
+        if (hasExternalCoreAttached(stack)) {
+            return CoreSlotManager.getAttachedCoreModel(stack);
+        }
+        String selectedRider = getSelectedRider(stack);
+        if (selectedRider != null) {
+            HeiseiRiderEffect effect = HeiseiRiderEffectManager.getRiderEffect(selectedRider);
+            if (effect != null) {
+                return effect.getExternalModelLocation();
+            }
+        }
+        return null;
+    }
+
+    @Nullable
+    public Supplier<ResourceLocation> getCurrentAnimController(ItemStack stack) {
+        if (hasExternalCoreAttached(stack)) {
+            return CoreSlotManager.getAttachedCoreAnimController(stack);
+        }
+        String selectedRider = getSelectedRider(stack);
+        if (selectedRider != null) {
+            HeiseiRiderEffect effect = HeiseiRiderEffectManager.getRiderEffect(selectedRider);
+            if (effect != null) {
+                return effect.getExternalAnimController();
+            }
+        }
+        return null;
+    }
+
+    @Nullable
+    public HeiseiRiderEffect getCurrentRiderEffect(ItemStack stack) {
+        if (hasExternalCoreAttached(stack)) {
+            return CoreSlotManager.getAttachedCoreEffect(stack);
+        }
+        String selectedRider = getSelectedRider(stack);
+        if (selectedRider != null) {
+            return HeiseiRiderEffectManager.getRiderEffect(selectedRider);
+        }
+        return null;
+    }
+
+    public int getTotalDurability(ItemStack stack) {
+        int baseUses = HEISEI_SWORD_TIER.getUses();
+        int coreBonus = CoreSlotManager.getTotalDurabilityBonus(stack);
+        return baseUses + coreBonus;
     }
 
     // ==================== 动画触发方法 ====================
@@ -697,32 +786,28 @@ public class Heiseisword extends SwordItem implements GeoItem {
 
     // 执行普通模式远程攻击
     private void executeNormalRangedAttack(Player player, ItemStack stack, float chargeTime) {
-        String rider = getSelectedRider(stack);
-        if (rider != null && !rider.isEmpty()) {
-            HeiseiRiderEffect effect = HeiseiRiderEffectManager.getRiderEffect(rider);
-            if (effect != null) {
-                // 远程攻击能量消耗根据充能时间调整
-                double energyCost = HeiseiRiderEffectManager.getRiderEnergyCost(rider) * (0.8 + chargeTime * 0.7);
-                energyCost = Math.min(energyCost, 40.0);
+        HeiseiRiderEffect effect = getCurrentRiderEffect(stack);
 
-                // 使用自定义的武器能量系统
-                if (!HeiseiswordEnergyManager.consumeEnergy(player, energyCost)) {
-                    return;
-                }
+        if (effect != null) {
+            String riderId = hasExternalCoreAttached(stack) ?
+                    getAttachedCoreId(stack) : getSelectedRider(stack);
 
-                // 播放远程攻击音效
-                net.minecraft.sounds.SoundEvent nameSound = HeiseiRiderEffectManager.getRiderNameSound(rider);
-                if (nameSound != null) {
-                    RiderSounds.playAttackSound(player.level(), player, nameSound);
-                }
+            double energyCost = effect.getEnergyCost() * (0.8 + chargeTime * 0.7);
+            energyCost = Math.min(energyCost, 40.0);
 
-                // 执行远程特殊攻击效果
-                Vec3 lookAngle = player.getLookAngle().scale(chargeTime * 2.0);
-                effect.executeSpecialAttack(player.level(), player, lookAngle);
-
-                // 更新上次攻击时间
-                setLastAttackTime(stack, player.level().getGameTime());
+            if (!HeiseiswordEnergyManager.consumeEnergy(player, energyCost)) {
+                return;
             }
+
+            net.minecraft.sounds.SoundEvent nameSound = HeiseiRiderEffectManager.getRiderNameSound(riderId);
+            if (nameSound != null) {
+                RiderSounds.playAttackSound(player.level(), player, nameSound);
+            }
+
+            Vec3 lookAngle = player.getLookAngle().scale(chargeTime * 2.0);
+            effect.executeSpecialAttack(player.level(), player, lookAngle);
+
+            setLastAttackTime(stack, player.level().getGameTime());
         }
     }
 

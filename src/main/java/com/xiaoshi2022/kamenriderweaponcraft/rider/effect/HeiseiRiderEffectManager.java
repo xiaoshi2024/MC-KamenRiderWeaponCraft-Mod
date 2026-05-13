@@ -43,8 +43,36 @@ public class HeiseiRiderEffectManager {
         RIDER_ORDER.add(name);
     }
 
+    public static void registerExternalRider(String riderId, ExternalRiderEffectProvider provider) {
+        ExternalRiderEffectWrapper wrapper = new ExternalRiderEffectWrapper(riderId, provider);
+        RIDER_EFFECTS.put(riderId, wrapper);
+        RIDER_ORDER.add(riderId);
+    }
+
+    public static boolean isExternalRider(String riderId) {
+        return ExternalRiderRegistry.isExternalRider(riderId);
+    }
+
     public static HeiseiRiderEffect getRiderEffect(String name) {
-        return RIDER_EFFECTS.get(name);
+        HeiseiRiderEffect effect = RIDER_EFFECTS.get(name);
+        if (effect == null && isExternalRider(name)) {
+            ExternalRiderEffectProvider provider = ExternalRiderRegistry.getExternalRider(name);
+            if (provider != null) {
+                effect = new ExternalRiderEffectWrapper(name, provider);
+                RIDER_EFFECTS.put(name, effect);
+            }
+        }
+        return effect;
+    }
+
+    public static boolean hasRider(String name) {
+        return RIDER_EFFECTS.containsKey(name) || isExternalRider(name);
+    }
+
+    public static Set<String> getAllRiderIds() {
+        Set<String> allRiders = new HashSet<>(RIDER_EFFECTS.keySet());
+        allRiders.addAll(ExternalRiderRegistry.getRegisteredRiderIds());
+        return allRiders;
     }
 
     public static double getRiderEnergyCost(String name) {
@@ -60,11 +88,17 @@ public class HeiseiRiderEffectManager {
     }
 
     public static SoundEvent getRiderNameSound(String name) {
-        return RIDER_NAME_SOUNDS.get(name);
+        SoundEvent sound = RIDER_NAME_SOUNDS.get(name);
+        if (sound == null && isExternalRider(name)) {
+            sound = ExternalRiderRegistry.getExternalRiderSound(name);
+        }
+        return sound;
     }
 
     public static List<String> getRiderOrder() {
-        return Collections.unmodifiableList(RIDER_ORDER);
+        List<String> allOrder = new ArrayList<>(RIDER_ORDER);
+        allOrder.addAll(ExternalRiderRegistry.getExternalRiderOrder());
+        return Collections.unmodifiableList(allOrder);
     }
 
     public static void playSelectionSound(Level level, LivingEntity shooter, String riderName) {

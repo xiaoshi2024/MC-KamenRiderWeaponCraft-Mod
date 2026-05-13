@@ -8,28 +8,29 @@ import net.minecraft.world.phys.Vec3;
 import javax.annotation.Nullable;
 import java.util.function.Supplier;
 
-public interface HeiseiRiderEffect {
-    void executeSpecialAttack(Level level, LivingEntity shooter, Vec3 direction);
+public interface ExternalRiderEffectProvider {
 
-    String getRiderName();
-    String getActivationSoundName();
+    String getExternalRiderId();
+
+    String getExternalRiderName();
+
     float getAttackDamage();
+
     float getEffectRange();
+
     double getEnergyCost();
 
-    @Nullable
-    default ResourceLocation getExternalModelLocation() {
-        return null;
-    }
+    String getActivationSoundName();
+
+    void executeSkill(Level level, LivingEntity shooter, Vec3 direction);
 
     @Nullable
-    default Supplier<ResourceLocation> getExternalAnimController() {
-        return null;
-    }
+    ResourceLocation getExternalModelLocation();
 
-    default boolean isExternal() {
-        return false;
-    }
+    @Nullable
+    Supplier<ResourceLocation> getExternalAnimController();
+
+    boolean isExternal();
 
     default boolean supportsScrambleMode() {
         return true;
