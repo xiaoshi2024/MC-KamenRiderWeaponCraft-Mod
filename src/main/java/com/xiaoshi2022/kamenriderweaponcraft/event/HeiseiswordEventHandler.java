@@ -18,7 +18,7 @@ import static com.xiaoshi2022.kamenriderweaponcraft.KamenRiderWeaponCraft.MODID;
  * 平成剑事件处理器
  * 用于处理能量恢复和其他相关事件
  */
-@EventBusSubscriber(modid = MODID, value = Dist.CLIENT)
+@EventBusSubscriber(modid = MODID)
 public class HeiseiswordEventHandler {
     // 用于跟踪tick计数，每20个tick（1秒）恢复一次能量
     private static int tickCounter = 0;

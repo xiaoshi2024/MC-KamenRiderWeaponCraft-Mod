@@ -10,20 +10,10 @@ public abstract class AbstractHeiseiRiderEffect implements HeiseiRiderEffect {
 
     @Override
     public void executeSpecialAttack(Level level, LivingEntity shooter, Vec3 direction) {
-        // 先播放音效（无论玩家还是非玩家）
-        playAttackSounds(level, shooter);
-        
         if (shooter instanceof Player player) {
             executePlayerSpecialAttack(level, player, direction);
         } else {
             executeNonPlayerSpecialAttack(level, shooter, direction);
-        }
-    }
-    
-    protected void playAttackSounds(Level level, LivingEntity shooter) {
-        if (!level.isClientSide) {
-            HeiseiRiderEffectManager.playSelectionSound(level, shooter, getRiderName());
-            HeiseiRiderEffectManager.playAttackSound(level, shooter, getRiderName());
         }
     }
 

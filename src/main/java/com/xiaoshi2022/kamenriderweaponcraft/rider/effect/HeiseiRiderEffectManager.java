@@ -71,22 +71,12 @@ public class HeiseiRiderEffectManager {
         SoundEvent nameSound = getRiderNameSound(riderName);
         if (nameSound != null) {
             if (shooter instanceof Player player) {
+                // 玩家：播放完整的选人音效（Hey! + 骑士名称）
                 RiderSounds.playSelectionSound(level, player, nameSound);
             } else {
-                // 为非玩家实体播放完整的音效序列："Hey!" + 骑士名称
+                // 非玩家实体：直接播放骑士名称音效，不需要延迟和阻塞
                 level.playSound(null, shooter.getX(), shooter.getY(), shooter.getZ(),
-                    RiderSounds.HEY, SoundSource.HOSTILE, 1.0F, 1.0F);
-                
-                // 延迟播放骑士名称音效
-                level.getServer().execute(() -> {
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    level.playSound(null, shooter.getX(), shooter.getY(), shooter.getZ(),
                         nameSound, SoundSource.HOSTILE, 1.0F, 1.0F);
-                });
             }
         }
     }
@@ -97,53 +87,63 @@ public class HeiseiRiderEffectManager {
             if (shooter instanceof Player player) {
                 RiderSounds.playAttackSound(level, player, nameSound);
             } else {
+                // 非玩家实体：直接播放攻击音效
                 level.playSound(null, shooter.getX(), shooter.getY(), shooter.getZ(),
-                    nameSound, SoundSource.HOSTILE, 1.0F, 1.0F);
+                        nameSound, SoundSource.HOSTILE, 1.0F, 1.0F);
             }
         }
     }
 
+    // 简化 playScrambleTimeBreakSound
     public static void playScrambleTimeBreakSound(Level level, LivingEntity shooter, List<String> selectedRiders) {
         if (selectedRiders.isEmpty()) return;
 
-        List<RiderSounds.DelayedSound> sounds = new ArrayList<>();
-        int delay = 0;
-        for (String rider : selectedRiders) {
-            SoundEvent nameSound = getRiderNameSound(rider);
-            if (nameSound != null) {
-                sounds.add(new RiderSounds.DelayedSound(nameSound, delay));
-                delay += 10;
-            }
-        }
-
         if (shooter instanceof Player player) {
+            List<RiderSounds.DelayedSound> sounds = new ArrayList<>();
+            int delay = 0;
+            for (String rider : selectedRiders) {
+                SoundEvent nameSound = getRiderNameSound(rider);
+                if (nameSound != null) {
+                    sounds.add(new RiderSounds.DelayedSound(nameSound, delay));
+                    delay += 10;
+                }
+            }
             RiderSounds.playDelayedSoundSequence(level, player, sounds);
         } else {
-            if (!sounds.isEmpty()) {
-                level.playSound(null, shooter.getX(), shooter.getY(), shooter.getZ(),
-                    sounds.get(0).soundEvent, SoundSource.HOSTILE, 1.0F, 1.0F);
+            // 非玩家实体：只播放第一个骑士的音效
+            if (!selectedRiders.isEmpty()) {
+                SoundEvent firstSound = getRiderNameSound(selectedRiders.get(0));
+                if (firstSound != null) {
+                    level.playSound(null, shooter.getX(), shooter.getY(), shooter.getZ(),
+                            firstSound, SoundSource.HOSTILE, 1.0F, 1.0F);
+                }
             }
         }
     }
 
+    // 简化 playUltimateTimeBreakNameSounds
     public static void playUltimateTimeBreakNameSounds(Level level, LivingEntity shooter, List<String> selectedRiders) {
-        List<RiderSounds.DelayedSound> sounds = new ArrayList<>();
-        int delay = 40;
-
-        for (String rider : selectedRiders) {
-            SoundEvent nameSound = getRiderNameSound(rider);
-            if (nameSound != null) {
-                sounds.add(new RiderSounds.DelayedSound(nameSound, delay));
-                delay += 8;
-            }
-        }
+        if (selectedRiders.isEmpty()) return;
 
         if (shooter instanceof Player player) {
+            List<RiderSounds.DelayedSound> sounds = new ArrayList<>();
+            int delay = 40;
+            for (String rider : selectedRiders) {
+                SoundEvent nameSound = getRiderNameSound(rider);
+                if (nameSound != null) {
+                    sounds.add(new RiderSounds.DelayedSound(nameSound, delay));
+                    delay += 8;
+                }
+            }
             RiderSounds.playDelayedSoundSequence(level, player, sounds);
         } else {
-            if (!sounds.isEmpty()) {
-                level.playSound(null, shooter.getX(), shooter.getY(), shooter.getZ(),
-                    sounds.get(0).soundEvent, SoundSource.HOSTILE, 1.0F, 1.0F);
+            // 非玩家实体：直接播放音效，不需要延迟序列
+            if (!selectedRiders.isEmpty()) {
+                SoundEvent firstSound = getRiderNameSound(selectedRiders.get(0));
+                if (firstSound != null) {
+                    level.playSound(null, shooter.getX(), shooter.getY(), shooter.getZ(),
+                            firstSound, SoundSource.HOSTILE, 1.0F, 1.0F);
+                }
             }
         }
     }
