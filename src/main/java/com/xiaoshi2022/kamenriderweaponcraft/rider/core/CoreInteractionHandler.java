@@ -73,10 +73,6 @@ public class CoreInteractionHandler {
         Player player = event.getEntity();
         if (player == null) return;
 
-        if (!player.isSecondaryUseActive()) {
-            return;
-        }
-
         ItemStack mainhand = player.getMainHandItem();
         ItemStack offhand = player.getOffhandItem();
         Level level = player.level();
