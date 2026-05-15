@@ -484,8 +484,16 @@ public class Heiseisword extends SwordItem implements GeoItem {
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
 
+
+        // ========== 修复：先处理 Shift+右键（必杀时刻模式切换） ==========
         if (player.isShiftKeyDown()) {
             return toggleFinishTimeMode(level, player, stack);
+        }
+
+        // 外部表盘：开始蓄力，技能释放由 RiderWatchCraft 处理
+        if (CoreSlotManager.hasAttachedCore(stack)) {
+            player.startUsingItem(hand);
+            return InteractionResultHolder.consume(stack);
         }
 
         String selectedRider = getSelectedRider(stack);
@@ -715,11 +723,23 @@ public class Heiseisword extends SwordItem implements GeoItem {
     public void releaseUsing(ItemStack stack, Level level, LivingEntity shooter, int ticksRemaining) {
         if (!(shooter instanceof Player player) || level.isClientSide) return;
 
+
+        // ========== 修改：必杀时刻模式下，让 RiderWatchCraft 处理叠加 ==========
+        if (CoreSlotManager.hasAttachedCore(stack)) {
+            // 如果是必杀时刻模式，让 RiderWatchCraft 处理叠加技能
+            // 不是必杀时刻模式，直接返回（只有外部表盘）
+            boolean isFinishTimeMode = isFinishTimeMode(stack);
+            if (!isFinishTimeMode) {
+                return;  // 普通模式：只有外部表盘，跳过原版
+            }
+            // 必杀时刻模式：继续执行原版必杀，让 RiderWatchCraft 也执行外部表盘技能
+            // 这样就会叠加
+        }
+
         // 检查是否是电王剑形态且准备就绪
         String selectedRider = getSelectedRider(stack);
         String weaponType = getDenOWeaponType(stack);
-// 在 releaseUsing 方法中
-        if (selectedRider != null && selectedRider.equals("Den-O") && "Sword".equals(weaponType) && isSwordProjectileReady(stack)) {            // 电王剑形态：右键释放时发射剑
+        if (selectedRider != null && selectedRider.equals("Den-O") && "Sword".equals(weaponType) && isSwordProjectileReady(stack)) {
             spawnDenOTrainEntity(level, player, stack);
             setSwordProjectileReady(stack, false);
 
