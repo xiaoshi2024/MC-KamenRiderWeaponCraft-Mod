@@ -10,10 +10,6 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.AttackEntityEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
-import java.util.Map;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
-
 import static com.xiaoshi2022.kamenriderweaponcraft.KamenRiderWeaponCraft.MODID;
 
 /**
@@ -22,8 +18,6 @@ import static com.xiaoshi2022.kamenriderweaponcraft.KamenRiderWeaponCraft.MODID;
  */
 @EventBusSubscriber(modid = MODID)
 public class HeiseiswordEventHandler {
-    // ✅ 修复：使用 Map 存储每个玩家的独立计数器
-    private static final Map<UUID, Integer> tickCounters = new ConcurrentHashMap<>();
 
     /**
      * 监听玩家tick事件，处理能量恢复
@@ -37,27 +31,21 @@ public class HeiseiswordEventHandler {
             return;
         }
 
-        // 检查是否手持平成剑
-        boolean hasHeiseisword = player.getMainHandItem().getItem() instanceof Heiseisword ||
-                player.getOffhandItem().getItem() instanceof Heiseisword;
+        // 检查玩家背包中是否有平成剑
+        boolean hasHeiseisword = false;
+        for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
+            if (player.getInventory().getItem(i).getItem() instanceof Heiseisword) {
+                hasHeiseisword = true;
+                break;
+            }
+        }
+
         if (!hasHeiseisword) {
-            // 如果玩家没有手持平成剑，清理其计数器
-            tickCounters.remove(player.getUUID());
             return;
         }
 
-        // 获取或创建玩家的 tick 计数器
-        int tickCounter = tickCounters.getOrDefault(player.getUUID(), 0);
-        tickCounter++;
-
-        // 每20个tick（1秒）恢复一次能量
-        if (tickCounter >= 20) {
-            tickCounter = 0;
-            // 更新玩家能量恢复
-            HeiseiswordEnergyManager.updateEnergyRegen(player);
-        }
-
-        tickCounters.put(player.getUUID(), tickCounter);
+        // 更新能量恢复（会扫描背包中所有平成剑）
+        HeiseiswordEnergyManager.updateEnergyRegen(player);
     }
 
     /**
