@@ -241,5 +241,14 @@
         "stream": false
       }
     ]
+  },
+  "pull_standby": {
+    "subtitle": "subtitles.pull_standby",
+    "sounds": [
+      {
+        "name": "kamenriderweaponcraft:pull_standby",
+        "stream": false
+      }
+    ]
   }
 }

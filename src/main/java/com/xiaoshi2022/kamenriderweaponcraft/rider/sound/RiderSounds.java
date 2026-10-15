@@ -43,6 +43,8 @@ public class RiderSounds {
 
     // 音速弓射击音效
     public static final SoundEvent SONICARROW_SHOOT = register("sonicarrow_shoot");
+    // 音速弓蓄力待机音（拉动 4 秒后开始循环）
+    public static final SoundEvent PULL_STANDBY = register("pull_standby");
 
     private static SoundEvent register(String name) {
         return SoundEvent.createVariableRangeEvent(
@@ -60,28 +62,19 @@ public class RiderSounds {
     }
 
     public static void playDelayedSound(Level level, Player player, SoundEvent sound, int delayTicks) {
-        if (level.isClientSide()) {
-            level.getServer().execute(() -> {
-                try {
-                    Thread.sleep(delayTicks * 50L);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+        // 注意：绝不能在服务器主线程上 Thread.sleep（getServer().execute 的任务跑在世界 tick 线程，
+        // 会把整个世界冻结 delayTicks*50 毫秒）。改用守护 Timer 线程延迟，到点后再回投主线程播放。
+        Timer timer = new Timer(true);
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                if (level.isClientSide()) {
+                    Minecraft.getInstance().execute(() -> playSound(level, player, sound));
+                } else {
+                    level.getServer().execute(() -> playSound(level, player, sound));
                 }
-                Minecraft.getInstance().execute(() -> {
-                    playSound(level, player, sound);
-                });
-            });
-        } else {
-            ServerLevel serverLevel = (ServerLevel) level;
-            serverLevel.getServer().execute(() -> {
-                try {
-                    Thread.sleep(delayTicks * 50L);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                playSound(level, player, sound);
-            });
-        }
+            }
+        }, delayTicks * 50L);
     }
 
     public static void playDelayedSoundSequence(Level level, Player player, List<DelayedSound> sounds) {
