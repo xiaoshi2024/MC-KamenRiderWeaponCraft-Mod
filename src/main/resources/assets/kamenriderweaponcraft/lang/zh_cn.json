@@ -32,5 +32,18 @@
   "subtitles.finish_time": "终结时刻",
   "subtitles.ultimate_time_break": "终极时刻粉碎",
   "subtitles.scramble_time_break": "混战时刻粉碎",
-  "subtitles.dual_time_break": "双重时刻粉碎"
+  "subtitles.dual_time_break": "双重时刻粉碎",
+  "subtitles.sonicarrow_shoot": "音速弓·射击",
+
+  "item.kamenriderweaponcraft.sonicarrow": "音速弓",
+  "container.kamenriderweaponcraft.sonic_bow": "音速弓·锁种装载",
+  "item.kamenriderweaponcraft.lockseed.desc": "装入假面骑士工艺的锁种后切换对应形态",
+
+  "item.kamenriderweaponcraft.sonicarrow.mode.default": "形态：无锁种（白色激光）",
+  "item.kamenriderweaponcraft.sonicarrow.mode.orange": "形态：橙子（橘色激光 / 击飞）",
+  "item.kamenriderweaponcraft.sonicarrow.mode.melon": "形态：甜瓜（绿色激光 / 强力击飞）",
+  "item.kamenriderweaponcraft.sonicarrow.mode.lemon": "形态：柠檬（黄色激光 / 三连射·连斩）",
+  "item.kamenriderweaponcraft.sonicarrow.mode.cherry": "形态：樱桃（绯红激光 / 流血）",
+  "item.kamenriderweaponcraft.sonicarrow.mode.peach": "形态：桃（粉色激光 / 吸血）",
+  "item.kamenriderweaponcraft.sonicarrow.mode.dragon": "形态：火龙果（红色激光 / 燃烧）"
 }

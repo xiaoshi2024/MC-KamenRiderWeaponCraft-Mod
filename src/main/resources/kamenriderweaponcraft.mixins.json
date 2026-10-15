@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "package": "com.xiaoshi2022.kamenriderweaponcraft.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "minVersion": "0.8",
+  "mixins": [
+    "RecipeManagerMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

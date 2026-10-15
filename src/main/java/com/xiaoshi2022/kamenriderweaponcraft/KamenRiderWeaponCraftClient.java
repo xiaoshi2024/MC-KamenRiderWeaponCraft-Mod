@@ -1,17 +1,28 @@
 package com.xiaoshi2022.kamenriderweaponcraft;
 
 import com.mojang.blaze3d.platform.InputConstants;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.xiaoshi2022.kamenriderweaponcraft.Item.custom.Heiseisword;
+import com.xiaoshi2022.kamenriderweaponcraft.client.render.thunder.ThunderRenderManager;
+import com.xiaoshi2022.kamenriderweaponcraft.client.screen.SonicBowScreen;
+import com.xiaoshi2022.kamenriderweaponcraft.entity.client.SonicArrowLaserRenderer;
+import com.xiaoshi2022.kamenriderweaponcraft.register.EntityRegister;
+import com.xiaoshi2022.kamenriderweaponcraft.register.MenuRegister;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.neoforge.client.event.ClientTickEvent;
+import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.InputEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
+import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
+import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import net.neoforged.neoforge.client.settings.KeyConflictContext;
 import org.lwjgl.glfw.GLFW;
 
@@ -23,6 +34,37 @@ public class KamenRiderWeaponCraftClient {
     @SubscribeEvent
     public static void clientSetup(FMLClientSetupEvent event) {
 
+    }
+
+    // ==================== 音速弓客户端 ====================
+
+    /** 注册音速弓界面与激光实体渲染器 */
+    @SubscribeEvent
+    public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
+        event.registerEntityRenderer(EntityRegister.SONIC_ARROW_LASER.get(), SonicArrowLaserRenderer::new);
+    }
+
+    @SubscribeEvent
+    public static void registerMenuScreens(RegisterMenuScreensEvent event) {
+        event.register(MenuRegister.SONIC_BOW.get(), SonicBowScreen::new);
+    }
+
+    /** 雷电弧特效每帧更新 */
+    @SubscribeEvent
+    public static void onClientTick(ClientTickEvent.Post event) {
+        ThunderRenderManager.getInstance().tick();
+    }
+
+    /** 雷电弧特效渲染（AFTER_PARTICLES 阶段） */
+    @SubscribeEvent
+    public static void onRenderLevel(RenderLevelStageEvent event) {
+        if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_PARTICLES) {
+            Minecraft mc = Minecraft.getInstance();
+            PoseStack poseStack = new PoseStack();
+            MultiBufferSource.BufferSource buffer = mc.renderBuffers().bufferSource();
+
+            ThunderRenderManager.getInstance().render(poseStack, buffer);
+        }
     }
 
     @SubscribeEvent

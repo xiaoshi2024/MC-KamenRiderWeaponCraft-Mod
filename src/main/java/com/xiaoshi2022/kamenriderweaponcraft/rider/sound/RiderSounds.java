@@ -41,6 +41,9 @@ public class RiderSounds {
     public static final SoundEvent NAME_AGITO = register("name_agito");
     public static final SoundEvent NAME_KUUGA = register("name_kuuga");
 
+    // 音速弓射击音效
+    public static final SoundEvent SONICARROW_SHOOT = register("sonicarrow_shoot");
+
     private static SoundEvent register(String name) {
         return SoundEvent.createVariableRangeEvent(
                 ResourceLocation.fromNamespaceAndPath("kamenriderweaponcraft", name));

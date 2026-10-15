@@ -1,6 +1,7 @@
 package com.xiaoshi2022.kamenriderweaponcraft.register;
 
 import com.xiaoshi2022.kamenriderweaponcraft.KamenRiderWeaponCraft;
+import com.xiaoshi2022.kamenriderweaponcraft.entity.SonicArrowLaserEntity;
 import com.xiaoshi2022.kamenriderweaponcraft.rider.heisei.faiz.FaizEmptySetEntity;
 import com.xiaoshi2022.kamenriderweaponcraft.rider.heisei.decade.DecadeRiderEntity;
 import com.xiaoshi2022.kamenriderweaponcraft.rider.heisei.den_o.DenOTrainEntity;
@@ -140,6 +141,14 @@ public class EntityRegister {
                     .clientTrackingRange(16)
                     .updateInterval(1)
                     .build("ghost_heroic_soul"));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<SonicArrowLaserEntity>> SONIC_ARROW_LASER =
+            ENTITY_TYPES.register("sonic_arrow_laser", () -> EntityType.Builder.<SonicArrowLaserEntity>of(
+                            SonicArrowLaserEntity::new, MobCategory.MISC)
+                    .sized(0.25f, 0.25f)
+                    .clientTrackingRange(4)
+                    .updateInterval(10)
+                    .build("sonic_arrow_laser"));
 
     public static void register(IEventBus eventBus) {
         ENTITY_TYPES.register(eventBus);

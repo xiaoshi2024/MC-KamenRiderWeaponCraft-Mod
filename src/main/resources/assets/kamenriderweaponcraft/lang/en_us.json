@@ -32,5 +32,18 @@
   "subtitles.finish_time": "Finish Time",
   "subtitles.ultimate_time_break": "Ultimate Time Break",
   "subtitles.scramble_time_break": "Scramble Time Break",
-  "subtitles.dual_time_break": "Dual Time Break"
+  "subtitles.dual_time_break": "Dual Time Break",
+  "subtitles.sonicarrow_shoot": "Sonic Arrow Fires",
+
+  "item.kamenriderweaponcraft.sonicarrow": "Sonic Arrow",
+  "container.kamenriderweaponcraft.sonic_bow": "Sonic Arrow - Lockseed Loader",
+  "item.kamenriderweaponcraft.lockseed.desc": "Insert a Lockseed from Kamen Rider Craft to switch forms",
+
+  "item.kamenriderweaponcraft.sonicarrow.mode.default": "Form: No Lockseed (White Laser)",
+  "item.kamenriderweaponcraft.sonicarrow.mode.orange": "Form: Orange (Orange Laser / Launch Up)",
+  "item.kamenriderweaponcraft.sonicarrow.mode.melon": "Form: Melon (Green Laser / Strong Launch)",
+  "item.kamenriderweaponcraft.sonicarrow.mode.lemon": "Form: Lemon (Yellow Laser / Triple Shot Combo)",
+  "item.kamenriderweaponcraft.sonicarrow.mode.cherry": "Form: Cherry (Crimson Laser / Bleeding)",
+  "item.kamenriderweaponcraft.sonicarrow.mode.peach": "Form: Peach (Pink Laser / Lifesteal)",
+  "item.kamenriderweaponcraft.sonicarrow.mode.dragon": "Form: Dragon Fruit (Red Laser / Ignite)"
 }

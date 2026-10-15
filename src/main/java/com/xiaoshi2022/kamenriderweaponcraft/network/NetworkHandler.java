@@ -38,6 +38,13 @@ public class NetworkHandler {
                 HeiseiswordEnergySyncPacket::handleClient
         );
 
+        // 注册音速弓激光雷电弧渲染包 (仅服务端到客户端)
+        registrar.playToClient(
+                SonicArrowLaserPacket.TYPE,
+                SonicArrowLaserPacket.STREAM_CODEC,
+                SonicArrowLaserPacket::handle
+        );
+
         registered = true;
         KamenRiderWeaponCraft.LOGGER.info("NetworkHandler registered successfully");
     }

@@ -3,6 +3,7 @@ package com.xiaoshi2022.kamenriderweaponcraft;
 import com.mojang.logging.LogUtils;
 import com.xiaoshi2022.kamenriderweaponcraft.register.EntityRegister;
 import com.xiaoshi2022.kamenriderweaponcraft.register.ItemRegister;
+import com.xiaoshi2022.kamenriderweaponcraft.register.MenuRegister;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
@@ -28,11 +29,13 @@ public class KamenRiderWeaponCraft {
                     .icon(() -> ItemRegister.HEISEISWORD.get().getDefaultInstance())
                     .displayItems((parameters, output) -> {
                         output.accept(ItemRegister.HEISEISWORD.get());
+                        output.accept(ItemRegister.SONICARROW.get());
                     }).build());
 
     public KamenRiderWeaponCraft(IEventBus modEventBus) {
         ItemRegister.register(modEventBus);
         EntityRegister.register(modEventBus);
+        MenuRegister.register(modEventBus);
         CREATIVE_MODE_TABS.register(modEventBus);
     }
 }

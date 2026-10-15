@@ -176,6 +176,12 @@ dependencies {
 
     implementation "maven.modrinth:geckolib:gFmrC8Ru"
 
+    //假面骑士工艺软联动
+    implementation "maven.modrinth:kLNLtzWr:4ZX8Z7XD"
+
+    //玩家动作api【玩家动画】
+    implementation "maven.modrinth:ha1mEyJS:yjxtkvnD"
+
     //mca联动
     implementation "maven.modrinth:minecraft-comes-alive-reborn:uZa9ZX7n"
 

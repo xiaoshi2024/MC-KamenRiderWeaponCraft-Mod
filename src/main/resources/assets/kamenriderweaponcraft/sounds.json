@@ -232,5 +232,14 @@
         "stream": false
       }
     ]
+  },
+  "sonicarrow_shoot": {
+    "subtitle": "subtitles.sonicarrow_shoot",
+    "sounds": [
+      {
+        "name": "kamenriderweaponcraft:sonicarrow_shoot",
+        "stream": false
+      }
+    ]
   }
 }
